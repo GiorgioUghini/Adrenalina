@@ -9,6 +9,7 @@ public abstract class AbstractSquare {
     }
     public AbstractSquare(Room room, Coordinate coordinates){
         this.coordinates = coordinates;
+        this.room = room;
     }
     public Coordinate getCoordinates(){
         return this.coordinates;
@@ -16,7 +17,7 @@ public abstract class AbstractSquare {
     public int getX(){
         return this.coordinates.getX();
     }
-    public int gety(){
+    public int getY(){
         return this.coordinates.getY();
     }
     public Room getRoom(){
