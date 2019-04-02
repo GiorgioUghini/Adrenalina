@@ -541,7 +541,11 @@
               "radix": [
                 {
                   "ref": "me",
-                  "area": "other_rooms|visible"
+                  "area": "other_rooms"
+                },
+                {
+                  "ref": "me",
+                  "area": "visible"
                 }
               ]
             },
