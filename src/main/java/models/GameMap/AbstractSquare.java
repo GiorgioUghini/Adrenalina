@@ -25,7 +25,7 @@ public abstract class AbstractSquare {
     }
     public boolean equals(AbstractSquare other){
         if(this==other) return true;
-        if(this.getCoordinates().equals(other.getCoordinates())) return true;
+        if(this.getCoordinates().equals(other.getCoordinates()) && this.getRoom().equals(other.getRoom())) return true;
         return false;
     }
 }
