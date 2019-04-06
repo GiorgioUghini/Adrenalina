@@ -1,4 +1,4 @@
-package models.GameMap;
+package models.map;
 
 public class Door extends SquareDecorator {
     private Door nextDoor;

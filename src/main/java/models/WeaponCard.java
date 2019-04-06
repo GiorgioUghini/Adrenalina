@@ -1,4 +1,4 @@
 package models;
 
-public class WeaponCard {
+public class WeaponCard extends EffectCard {
 }

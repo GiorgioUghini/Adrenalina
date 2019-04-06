@@ -1,4 +1,4 @@
-package models.GameMap;
+package models.map;
 
 import models.WeaponCard;
 

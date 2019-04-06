@@ -1,4 +1,11 @@
 package models;
 
-public class PowerUpDeck {
+import java.util.List;
+
+public class PowerUpDeck extends Deck {
+
+    public PowerUpDeck(List<PowerUpCard> cards){
+        super((List<Card>)(List<?>) cards);
+    }
+
 }

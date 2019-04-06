@@ -1,7 +1,6 @@
-package models.GameMap;
+package models.map;
 
 import models.AmmoCard;
-import models.Card;
 
 public class Square extends AbstractSquare{
 

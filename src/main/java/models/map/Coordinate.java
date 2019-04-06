@@ -1,4 +1,4 @@
-package models.GameMap;
+package models.map;
 
 public class Coordinate {
     private int x;

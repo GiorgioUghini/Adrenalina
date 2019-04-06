@@ -1,4 +1,4 @@
-package Errors;
+package errors;
 
 public class SquareNotInRoomException extends Error {
 

@@ -1,4 +1,4 @@
-package models.GameMap;
+package models.map;
 
 public abstract class AbstractSquare {
     private Coordinate coordinates;
