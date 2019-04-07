@@ -2,39 +2,36 @@ package models.map;
 
 import models.Player;
 
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class PlayerSquare {
-    Hashtable<Player, Square> hashtable;
+    private Map<Player, Square> hashMap;
 
     public PlayerSquare(){
-        hashtable = new Hashtable<Player, Square>();
+        hashMap = new HashMap<>();
     }
 
     public boolean addPlayer(Player player, Square square){
         if(hasPlayer(player)) return false;
-        hashtable.put(player, square);
+        hashMap.put(player, square);
         return true;
     }
 
     
     public Square movePlayer(Player player, Square newSquare){
-        return hashtable.put(player, newSquare);
+        return hashMap.put(player, newSquare);
     }
 
     public boolean hasPlayer(Player player){
-        return hashtable.containsKey(player);
+        return hashMap.containsKey(player);
     }
 
     public Square getSquare(Player player){
-        return hashtable.get(player);
+        return hashMap.get(player);
     }
     public Set<Player> getPlayers(Square square){
-        Set<Player> players = new HashSet<Player>();
-        for(Map.Entry entry : hashtable.entrySet()){
+        Set<Player> players = new HashSet<>();
+        for(Map.Entry entry : hashMap.entrySet()){
             if(entry.getValue().equals(square)){
                 players.add((Player) entry.getKey());
             }

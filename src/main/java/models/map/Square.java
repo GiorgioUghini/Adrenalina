@@ -62,4 +62,15 @@ public abstract class Square{
         }
         return false;
     }
+    @Override
+    public boolean equals(Object object){
+        if(object==null) return false;
+        if(object==this) return true;
+        try{
+            Square s = (Square)object;
+            return s.getId() == getId();
+        }catch(Exception e){
+            return false;
+        }
+    }
 }
