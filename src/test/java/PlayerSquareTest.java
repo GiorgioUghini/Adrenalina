@@ -14,7 +14,7 @@ public class PlayerSquareTest {
         playerSquare.addPlayer(player, square);
 
         assertTrue(playerSquare.hasPlayer(player));
-        assertTrue(playerSquare.getSquare(player).equals(square));
+        assertEquals(square, playerSquare.getSquare(player));
         assertTrue(playerSquare.getPlayers(square).contains(player));
     }
     @Test
