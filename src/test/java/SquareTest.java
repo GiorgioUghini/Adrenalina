@@ -78,5 +78,16 @@ public class SquareTest {
         assertTrue(s1.getLink(CardinalDirection.RIGHT).isVisible());
         assertTrue(s1.hasDoors());
     }
+    @Test
+    public void hasNextInSameRoom(){
+        Square s1 = new AmmoPoint(RoomColor.GREEN, 0);
+        Square s2 = new AmmoPoint(RoomColor.BLUE, 1);
+        s1.connectToSquare(s2, CardinalDirection.RIGHT);
+        s2.connectToSquare(s1, CardinalDirection.LEFT);
+        assertTrue(s1.hasNext(CardinalDirection.RIGHT));
+        assertTrue(s2.hasNext(CardinalDirection.LEFT));
+        assertFalse(s1.hasNext(CardinalDirection.RIGHT, true));
+        assertFalse(s2.hasNext(CardinalDirection.LEFT, true));
+    }
 
 }

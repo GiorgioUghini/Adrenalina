@@ -4,7 +4,6 @@ import errors.NotWallException;
 
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.Iterator;
 
 public abstract class Square{
@@ -49,6 +48,11 @@ public abstract class Square{
     }
     public boolean hasNext(CardinalDirection direction){
         return (this.links.get(direction) != null);
+    }
+    public boolean hasNext(CardinalDirection direction, boolean inSameRoom){
+        if(!inSameRoom) return hasNext(direction);
+        if(!hasNext(direction)) return false;
+        return this.links.get(direction).isSameRoom();
     }
     public SquareLink getLink(CardinalDirection direction){
         return this.links.get(direction);
