@@ -11,12 +11,14 @@ public class GameMap {
     private PlayerSquare positions;
     private Set<Player> players;
     private Set<SpawnPoint> spawnPoints;
+    private int squareId;
 
     public GameMap(){
         squares = new HashSet<>();
         players = new HashSet<>();
         positions = new PlayerSquare();
         spawnPoints = new HashSet<>();
+        squareId = 0;
     }
 
     //creates room using a coordinate system with (0,0) in the bottom left of the room
@@ -26,10 +28,10 @@ public class GameMap {
             for(int y=0;y<height;y++){
                 Square s;
                 if(spawnPoint.getX()==x && spawnPoint.getY() == y){
-                    s= new SpawnPoint(color);
+                    s= new SpawnPoint(color, squareId);
                     spawnPoints.add((SpawnPoint) s);
                 } else{
-                    s = new AmmoPoint(color);
+                    s = new AmmoPoint(color, squareId);
                 }
                 squares.add(s);
                 squareMatrix[x][y] = s;

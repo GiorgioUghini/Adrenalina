@@ -1,6 +1,8 @@
 package models.map;
 
 import errors.NotWallException;
+
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,17 +13,12 @@ public abstract class Square{
     private Map<CardinalDirection, SquareLink> links;
     private int id;
 
-    public Square(RoomColor color){
-        this.color = color;
-        this.isSpawnPoint = false;
-        links = new HashMap<>();
-    }
-    public Square(RoomColor color, boolean isSpawnPoint){
+    public Square(RoomColor color, boolean isSpawnPoint, int id){
         this.color = color;
         this.isSpawnPoint = isSpawnPoint;
-        links = new HashMap<>();
+        links = new EnumMap<>(CardinalDirection.class);
+        this.id = id;
     }
-
     public void connectToSquare(Square square, CardinalDirection side){
         LinkType linkType;
         if(getColor().equals(square.getColor())){
@@ -33,12 +30,10 @@ public abstract class Square{
         links.put(side, newConnection);
     }
     public void addDoor(CardinalDirection side) throws NotWallException{
+        SquareLink link = links.get(side);
         links.get(side).upgradeToDoor();
     }
 
-    public void setSpawnPoint(boolean isSpawnPoint){
-        this.isSpawnPoint = isSpawnPoint;
-    }
     public boolean isSpawnPoint(){
         return isSpawnPoint;
     }
@@ -46,14 +41,19 @@ public abstract class Square{
         return this.color;
     }
     public Square getNextSquare(CardinalDirection direction){
-        return getLink(direction).getNextSquare();
+        if(hasNext(direction)){
+            return getLink(direction).getNextSquare();
+        }
+        return null;
+
     }
     public boolean hasNext(CardinalDirection direction){
         return (this.links.get(direction) != null);
     }
-    private SquareLink getLink(CardinalDirection direction){
+    public SquareLink getLink(CardinalDirection direction){
         return this.links.get(direction);
     }
+    public int getId(){return id;}
     public boolean hasDoors(){
         Iterator iterator = links.values().iterator();
         while (iterator.hasNext()){
