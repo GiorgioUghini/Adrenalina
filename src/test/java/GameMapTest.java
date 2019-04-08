@@ -242,4 +242,66 @@ public class GameMapTest {
             assertEquals("Map does not contain this spawnPoint", e.getMessage());
         }
     }
+    @Test
+    public void getAllSquaresAtDistance1InSameRoom(){
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(3,3, RoomColor.GREEN, new Coordinate(1,1));
+        SpawnPoint startSquare = (SpawnPoint) gameMap.getSpawnPoints().toArray()[0];
+        Set<Square> squares = gameMap.getAllSquaresAtDistance(startSquare, 1);
+        assertEquals(4, squares.size());
+        assertTrue(squares.contains(gameMap.getSquareById(1)));
+        assertTrue(squares.contains(gameMap.getSquareById(5)));
+        assertTrue(squares.contains(gameMap.getSquareById(7)));
+        assertTrue(squares.contains(gameMap.getSquareById(3)));
+        assertFalse(squares.contains(startSquare));
+    }
+    @Test
+    public void getAllSquaresAtDistance2InSameRoom(){
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(3,3, RoomColor.GREEN, new Coordinate(1,1));
+        SpawnPoint startSquare = (SpawnPoint) gameMap.getSpawnPoints().toArray()[0];
+        Set<Square> squares = gameMap.getAllSquaresAtDistance(startSquare, 2);
+        assertEquals(4, squares.size());
+        assertTrue(squares.contains(gameMap.getSquareById(0)));
+        assertTrue(squares.contains(gameMap.getSquareById(2)));
+        assertTrue(squares.contains(gameMap.getSquareById(8)));
+        assertTrue(squares.contains(gameMap.getSquareById(6)));
+        assertFalse(squares.contains(startSquare));
+    }
+    @Test
+    public void getAllSquaresAtDistance3InSameRoom(){
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(7,7, RoomColor.GREEN, new Coordinate(1,1));
+        Square startSquare = gameMap.getSquareById(24);
+        Set<Square> squares = gameMap.getAllSquaresAtDistance(startSquare, 3);
+
+        assertEquals(12, squares.size());
+        int[] expectedSquareIds = {3,11,19,27,33,39,45,37,29,21,15,9};
+        for(int i=0;i<12;i++){
+            Square s = gameMap.getSquareById(expectedSquareIds[i]);
+            assertTrue(squares.contains(s));
+        }
+        assertFalse(squares.contains(startSquare));
+    }
+    @Test
+    public void getAllSquaresAtDistance3InDifferentRooms()throws NotWallException{
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(2,2, RoomColor.GREEN, new Coordinate(1,1));
+        gameMap.createRoom(1,3, RoomColor.PURPLE, null);
+
+        Set<Integer> doorOffsets = new HashSet<>();
+        doorOffsets.add(1);
+        gameMap.connectRooms(gameMap.getSquareById(1), gameMap.getSquareById(4), false, doorOffsets);
+
+        Square startSquare = gameMap.getSquareById(1);
+        Set<Square> squares = gameMap.getAllSquaresAtDistance(startSquare, 3);
+
+        assertEquals(2, squares.size());
+        int[] expectedSquareIds = {4,6};
+        for(int i=0;i<2;i++){
+            Square s = gameMap.getSquareById(expectedSquareIds[i]);
+            assertTrue(squares.contains(s));
+        }
+        assertFalse(squares.contains(startSquare));
+    }
 }

@@ -9,4 +9,12 @@ public class Coordinate {
     }
     public int getX(){return x;}
     public int getY(){return y;}
+
+    @Override
+    public boolean equals(Object object){
+        if(this==object)return true;
+        if (!(object instanceof Coordinate)) return false;
+        Coordinate other = (Coordinate) object;
+        return (other.getX() == getX() && other.getY() == getY());
+    }
 }

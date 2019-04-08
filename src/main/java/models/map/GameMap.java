@@ -3,9 +3,7 @@ package models.map;
 import errors.*;
 import models.Player;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 public class GameMap {
     private Set<Square> squares;
@@ -133,6 +131,42 @@ public class GameMap {
         if(positions.getSquare(player)!=null) throw new RuntimeException("Player has already spawned");
         positions.addPlayer(player, spawnPoint);
     }
+    public synchronized Set<Square> getAllSquaresAtDistance(Square from, int distance){
+        if(distance<0)throw new RuntimeException("Distance cannot be negative");
+        Set<Square> out = new HashSet<>();
+        Set<Square> visited = new HashSet<>();
+        Map<Square, Integer> path = new LinkedHashMap<>();
+        Map<Square, Integer> toBeAdded = new LinkedHashMap<>();
+        Square toRemove = null;
+
+        visited.add(from);
+        path.put(from, distance);
+
+        while(!path.isEmpty()){
+            for(Map.Entry<Square, Integer> p : path.entrySet()) {
+                Square s = p.getKey();
+                int d = p.getValue();
+                if(d > 0){
+                    for(CardinalDirection c : CardinalDirection.values()){
+                        if(s.hasNextWalkable(c) && !visited.contains(s.getNextSquare(c))){
+                            visited.add(s.getNextSquare(c));
+                            toBeAdded.put(s.getNextSquare(c), d-1);
+                        }
+                    }
+                }else{
+                    out.add(s);
+                }
+                toRemove = s;
+            }
+            if(toRemove!=null && path.containsKey(toRemove)){
+                path.remove(toRemove);
+            }
+            path.putAll(toBeAdded);
+            toBeAdded.clear();
+
+        }
+        return out;
+    }
     public Set<Player> getPlayersOnSquare(Square square){
         return positions.getPlayers(square);
     }
@@ -147,3 +181,5 @@ public class GameMap {
     }
     public Set<Square> getAllSquares() { return squares; }
 }
+
+

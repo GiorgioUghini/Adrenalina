@@ -54,6 +54,9 @@ public abstract class Square{
         if(!hasNext(direction)) return false;
         return this.links.get(direction).isSameRoom();
     }
+    public boolean hasNextWalkable(CardinalDirection direction){
+        return hasNext(direction) && !getLink(direction).isWall();
+    }
     public SquareLink getLink(CardinalDirection direction){
         return this.links.get(direction);
     }
