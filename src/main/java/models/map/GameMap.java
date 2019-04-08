@@ -25,7 +25,7 @@ public class GameMap {
     //creates room using a coordinate system with (0,0) in the top left of the room
     public void createRoom(int width, int height, RoomColor color, Coordinate spawnPoint){
         if(spawnPoint!=null && (spawnPoint.getX()>=width || spawnPoint.getY()>=height)) throw new RuntimeException("SpawnPoint is not in room");
-        addNewRoom(color);
+        addNewRoomIfNotExists(color);
         Square[][] squareMatrix = new Square[width][height];
         for(int y = 0;y<height;y++){
             for(int x=0;x<width;x++){
@@ -76,7 +76,7 @@ public class GameMap {
             if(tmp2==null) break;
         }while (tmp1!=null);
     }
-    private void addNewRoom(RoomColor color) {
+    private void addNewRoomIfNotExists(RoomColor color) {
         if(rooms.contains(color)) throw new RuntimeException("Room already exists");
         rooms.add(color);
     }
