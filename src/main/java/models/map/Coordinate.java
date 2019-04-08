@@ -7,19 +7,14 @@ public class Coordinate {
         this.x = x;
         this.y = y;
     }
-    public int[] getCoordinates(){
-        int[] out = {x, y};
-        return out;
-    }
-    public int getX(){
-        return x;
-    }
-    public int getY(){
-        return y;
-    }
-    public boolean equals(Coordinate other){
-        if(this==other) return true;
-        if(this.getX()==other.getX() && this.getY()==other.getY())return true;
-        return false;
+    public int getX(){return x;}
+    public int getY(){return y;}
+
+    @Override
+    public boolean equals(Object object){
+        if(this==object)return true;
+        if (!(object instanceof Coordinate)) return false;
+        Coordinate other = (Coordinate) object;
+        return (other.getX() == getX() && other.getY() == getY());
     }
 }
