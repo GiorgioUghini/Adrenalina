@@ -97,6 +97,7 @@ public class GameMap {
                 topLeft = s;
             }
         }
+        if(topLeft==null) throw new RuntimeException("No square with that color in this room");
 
         for(int x=0;x<coordinate.getX();x++){
             if(topLeft.hasNext(CardinalDirection.RIGHT, true)){
@@ -131,7 +132,7 @@ public class GameMap {
         if(positions.getSquare(player)!=null) throw new RuntimeException("Player has already spawned");
         positions.addPlayer(player, spawnPoint);
     }
-    public synchronized Set<Square> getAllSquaresAtDistance(Square from, int distance){
+    Set<Square> getAllSquaresAtDistance(Square from, int distance){
         if(distance<0)throw new RuntimeException("Distance cannot be negative");
         Set<Square> out = new HashSet<>();
         Set<Square> visited = new HashSet<>();
@@ -158,7 +159,7 @@ public class GameMap {
                 }
                 toRemove = s;
             }
-            if(toRemove!=null && path.containsKey(toRemove)){
+            if(toRemove!=null){
                 path.remove(toRemove);
             }
             path.putAll(toBeAdded);
@@ -167,6 +168,17 @@ public class GameMap {
         }
         return out;
     }
+    public Set<Square> getAllSquaresAtExactDistance(Square from, int distance){
+        return getAllSquaresAtDistance(from, distance);
+    }
+    public Set<Square> getAllSquaresAtDistanceLessThanOrEquals(Square from, int distance){
+        Set<Square> out = new HashSet<>();
+        for(int i=0;i<=distance;i++){
+            out.addAll(getAllSquaresAtDistance(from, i));
+        }
+        return out;
+    }
+
     public Set<Player> getPlayersOnSquare(Square square){
         return positions.getPlayers(square);
     }
