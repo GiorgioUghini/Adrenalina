@@ -134,6 +134,7 @@ public class GameMap {
     }
     Set<Square> getAllSquaresAtDistance(Square from, int distance){
         if(distance<0)throw new RuntimeException("Distance cannot be negative");
+        if(from == null) throw new NullPointerException("'from' square cannot be null");
         Set<Square> out = new HashSet<>();
         Set<Square> visited = new HashSet<>();
         Map<Square, Integer> path = new LinkedHashMap<>();

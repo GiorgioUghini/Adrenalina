@@ -68,12 +68,35 @@ public class GameMapTest {
         assertNotEquals(square, gameMap.getSquareById(10));
     }
     @Test
+    public void getSquareByIdInEmptyMap(){
+        GameMap gameMap = new GameMap();
+        assertNull(gameMap.getSquareById(11));
+    }
+    @Test
     public void getSquareByPositionInRoom(){
         GameMap gameMap = new GameMap();
         gameMap.createRoom(5,5, RoomColor.GREEN, new Coordinate(1,1));
         gameMap.createRoom(4,4, RoomColor.WHITE, null);
         Square square = (Square) gameMap.getSpawnPoints().toArray()[0];
         assertEquals(square, gameMap.getSquareByPositionInRoom(new Coordinate(1,1), RoomColor.GREEN));
+    }
+    @Test
+    public void getSquareByPositionInRoomThatNotExists(){
+        GameMap gameMap = new GameMap();
+        try{
+            assertNull(gameMap.getSquareByPositionInRoom(new Coordinate(1,1), RoomColor.GREEN));
+            assert false;
+        }catch (Exception e){
+            assertEquals("No square with that color in this room", e.getMessage());
+        }
+
+        gameMap.createRoom(5,5, RoomColor.GREEN, new Coordinate(1,1));
+        try{
+            assertNull(gameMap.getSquareByPositionInRoom(new Coordinate(1,1), RoomColor.PURPLE));
+            assert false;
+        }catch (Exception e){
+            assertEquals("No square with that color in this room", e.getMessage());
+        }
     }
     @Test
     public void getSquareByPositionInRoomOutOfRange(){
@@ -187,6 +210,11 @@ public class GameMapTest {
         gameMap.addPlayer(players[1]);
         gameMap.addPlayer(players[2]);
         assertEquals(3, gameMap.getPlayersNumber());
+        try{
+            gameMap.addPlayer(null);
+            assert false;
+        }catch(NullPointerException e){ }
+        catch(Exception e){ assert false; }
         try{
             gameMap.addPlayer(players[1]);
             assert false;
@@ -324,5 +352,21 @@ public class GameMapTest {
             assertTrue(squares.contains(s));
         }
         assertTrue(squares.contains(startSquare));
+    }
+    @Test
+    public void InvalidParamsInManhattanDistance(){
+        GameMap gameMap = new GameMap();
+        Square s = new AmmoPoint(RoomColor.PURPLE, 2);
+        try{
+            gameMap.getAllSquaresAtExactDistance(null, 2);
+        }catch(NullPointerException e){
+            assertEquals("'from' square cannot be null", e.getMessage());
+        }
+        try{
+            gameMap.getAllSquaresAtExactDistance(s, -1);
+        }catch (Exception e){
+            assertEquals("Distance cannot be negative", e.getMessage());
+        }
+
     }
 }
