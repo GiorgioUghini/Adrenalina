@@ -55,9 +55,7 @@ public class GameMapTest {
         try{
             gameMap.createRoom(2,2, RoomColor.WHITE, new Coordinate(0,0));
             assert false;
-        }catch(Exception e){
-            assertEquals("Room already exists", e.getMessage());
-        }
+        }catch(RoomAlreadyInMapException e){ assert true; }
     }
     @Test
     public void getSquareById(){
@@ -70,7 +68,9 @@ public class GameMapTest {
     @Test
     public void getSquareByIdInEmptyMap(){
         GameMap gameMap = new GameMap();
-        assertNull(gameMap.getSquareById(11));
+        try{
+            gameMap.getSquareById(11);
+        }catch(SquareNotInMapException e){ assert true; }
     }
     @Test
     public void getSquareByPositionInRoom(){
@@ -100,8 +100,14 @@ public class GameMapTest {
     public void getSquareByPositionInRoomOutOfRange(){
         GameMap gameMap = new GameMap();
         gameMap.createRoom(2,2, RoomColor.GREEN, new Coordinate(1,1));
-        assertNull(gameMap.getSquareByPositionInRoom(new Coordinate(3,0), RoomColor.GREEN));
-        assertNull(gameMap.getSquareByPositionInRoom(new Coordinate(0,3), RoomColor.GREEN));
+        try{
+            gameMap.getSquareByPositionInRoom(new Coordinate(3,0), RoomColor.GREEN);
+            assert false;
+        }catch(SquareNotInMapException e){ assert true; }
+        try{
+            gameMap.getSquareByPositionInRoom(new Coordinate(0,3), RoomColor.GREEN);
+            assert false;
+        }catch(SquareNotInMapException e){ assert true; }
     }
     @Test
     public void getSquareByPositionInRoomOutOfRangeInOtherRoom() throws NotWallException{
@@ -113,12 +119,18 @@ public class GameMapTest {
         Square s1 = gameMap.getSquareByPositionInRoom(new Coordinate(1,0), RoomColor.GREEN);
         Square s2 = gameMap.getSquareByPositionInRoom(new Coordinate(0,0), RoomColor.WHITE);
         gameMap.connectRooms(s1, s2, false, null);
-        assertNull(gameMap.getSquareByPositionInRoom(new Coordinate(3,0), RoomColor.GREEN));
+        try{
+            gameMap.getSquareByPositionInRoom(new Coordinate(3,0), RoomColor.GREEN);
+            assert false;
+        }catch(SquareNotInMapException e){ assert true; }
 
         s1 = gameMap.getSquareByPositionInRoom(new Coordinate(0,1), RoomColor.GREEN);
         s2 = gameMap.getSquareByPositionInRoom(new Coordinate(0,0), RoomColor.WHITE);
         gameMap.connectRooms(s1, s2, true, null);
-        assertNull(gameMap.getSquareByPositionInRoom(new Coordinate(0,3), RoomColor.GREEN));
+        try{
+            gameMap.getSquareByPositionInRoom(new Coordinate(0,3), RoomColor.GREEN);
+            assert false;
+        }catch(SquareNotInMapException e){ assert true; }
     }
     @Test
     public void connectRoomsVertically() throws NotWallException {
@@ -195,6 +207,24 @@ public class GameMapTest {
             s2 = s2.getNextSquare(CardinalDirection.RIGHT);
         }
 
+    }
+    @Test
+    public void getPlayersOnSquare(){
+        Player p1 = new Player();
+        Player p2 = new Player();
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(1,1, RoomColor.WHITE, new Coordinate(0,0));
+
+        SpawnPoint spawnPoint = (SpawnPoint)gameMap.getSpawnPoints().toArray()[0];
+        assertEquals(0, gameMap.getPlayersOnSquare(spawnPoint).size());
+
+        gameMap.spawnPlayer(p1, spawnPoint);
+        gameMap.spawnPlayer(p2,spawnPoint);
+
+        Set<Player> players = gameMap.getPlayersOnSquare(spawnPoint);
+        assertEquals(2, players.size());
+        assertTrue(players.contains(p1));
+        assertTrue(players.contains(p2));
     }
     @Test
     public void spawnPlayer(){

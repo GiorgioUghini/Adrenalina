@@ -13,6 +13,7 @@ public class GameMap {
     private int squareId;
     private Set<RoomColor> rooms;
 
+    /** Creates an empty GameMap */
     public GameMap(){
         squares = new HashSet<>();
         positions = new PlayerSquare();
@@ -54,7 +55,11 @@ public class GameMap {
             }
         }
     }
-    //Connects 2 room given the topmost or leftmost communicating square
+    /** Connects 2 room given the topmost or leftmost communicating square
+     * @param s1 the topmost square in the left room or the leftmost square in the top room
+     * @param s2 the topmost square in the right room or the leftmost square in the bottom room
+     * @param leftToRight if true connects rooms from left to right, s1 is the top room and s2 is the bottom room
+     * @param doorOffsets a set of integers containing the offsets from which to put the doors. */
     public void connectRooms(Square s1, Square s2, boolean leftToRight, Set<Integer> doorOffsets) throws NotWallException {
         if(!(squares.contains(s1) && squares.contains(s2))) throw new NullPointerException();
 
@@ -80,18 +85,31 @@ public class GameMap {
             if(tmp2==null) break;
         }while (tmp1!=null);
     }
+    /** Adds new room to the rooms' list
+     * @param color
+     * @throws RoomAlreadyInMapException if there is already a room with that color in this map*/
     private void addNewRoomIfNotExists(RoomColor color) {
-        if(rooms.contains(color)) throw new RuntimeException("Room already exists");
+        if(rooms.contains(color)) throw new RoomAlreadyInMapException();
         rooms.add(color);
     }
+    /** Gets square by id if exists, otherwise throw exception
+     * @param id
+     * @return the square with the given id. It is unique and never null
+     * @throws SquareNotInMapException if there is not a square in this map with the given Id */
     public Square getSquareById(int id){
         Iterator<Square> iterator = getAllSquares().iterator();
         while (iterator.hasNext()){
             Square s = iterator.next();
             if(s.getId()==id) return s;
         }
-        return null;
+        throw new SquareNotInMapException();
     }
+    /** finds the square using a coordinate system inside the room with (0,0) being in the top left corner. It does not check in near rooms.
+     * @param coordinate the (x, y) coordinates of the square that will return
+     * @param color the color of the room in which you are searching
+     * @return the square in the room with the given color that has the given coordinates. Cannot be null
+     * @throws RoomNotInMapException if there is not a room with the given color in the map
+     * @throws SquareNotInMapException if the x coordinate is bigger than room's width or the y coordinate is bigger than the room's height */
     public Square getSquareByPositionInRoom(Coordinate coordinate, RoomColor color){
         Square topLeft = null;
         Iterator<Square> iterator = getAllSquares().iterator();
@@ -107,19 +125,21 @@ public class GameMap {
             if(topLeft.hasNext(CardinalDirection.RIGHT, true)){
                 topLeft = topLeft.getNextSquare(CardinalDirection.RIGHT);
             }else{
-                return null;
+                throw new SquareNotInMapException();
             }
         }
         for(int y=0;y<coordinate.getY();y++){
             if(topLeft.hasNext(CardinalDirection.BOTTOM, true)){
                 topLeft = topLeft.getNextSquare(CardinalDirection.BOTTOM);
             }else{
-                return null;
+                throw new SquareNotInMapException();
             }
         }
         return topLeft;
 
     }
+    /** Get a set of all the spawnpoints on the map
+     * @return a set containing all the spawnpoints of the map */
     public Set<SpawnPoint> getSpawnPoints(){
         return spawnPoints;
     }
@@ -137,11 +157,18 @@ public class GameMap {
     }
     /** Removes player from map
      * @param player
-     * @throws PlayerNotOnMapException if player is not on this map*/
+     * @throws PlayerNotOnMapException if player is not on this map */
     public void removePlayer(Player player){
         if(!positions.hasPlayer(player)) throw new PlayerNotOnMapException();
         positions.removePlayer(player);
     }
+    /** Get all squares at distance strictly equal to "distance", not less nor more
+     * @param from the square from which to start calculating distances
+     * @param distance the exact distance
+     * @return a set containing all the squares at that distance
+     * @throws NullPointerException if 'from' is null
+     * @throws SquareNotInMapException if square is not in map
+     * @throws NegativeException if distance is < 0*/
     Set<Square> getAllSquaresAtDistance(Square from, int distance){
         checkSquareIsInMap(from);
         if(distance<0)throw new NegativeException();
@@ -179,9 +206,23 @@ public class GameMap {
         }
         return out;
     }
+    /** Get all squares at distance strictly equal to "distance", not less nor more
+     * @param from the square from which to start calculating distances
+     * @param distance the exact distance
+     * @return a set containing all the squares at that distance
+     * @throws NullPointerException if 'from' is null
+     * @throws SquareNotInMapException if square is not in map
+     * @throws NegativeException if distance is < 0*/
     public Set<Square> getAllSquaresAtExactDistance(Square from, int distance){
         return getAllSquaresAtDistance(from, distance);
     }
+    /** Get all squares at distance less than or equal to distance, including the starting square
+     * @param from the square from which to start calculating distances
+     * @param distance the maximum distance
+     * @return a set containing all the squares at distance less than or equal to distance, including the starting square
+     * @throws NullPointerException if 'from' is null
+     * @throws SquareNotInMapException if square is not in map
+     * @throws NegativeException if distance is < 0*/
     public Set<Square> getAllSquaresAtDistanceLessThanOrEquals(Square from, int distance){
         Set<Square> out = new HashSet<>();
         for(int i=0;i<=distance;i++){
@@ -189,6 +230,10 @@ public class GameMap {
         }
         return out;
     }
+    /** Gets all the squares in the same room of the given square, including the square given
+     * @param color the color of the room
+     * @throws RoomNotInMapException if there is not a square with this color in this map
+     * @return a set containing all the sets of that room. It cannot be empty */
     public Set<Square> getAllSquaresInRoom(RoomColor color){
         if(!rooms.contains(color)) throw new RoomNotInMapException();
         Set<Square> out = new HashSet<>();
@@ -199,6 +244,9 @@ public class GameMap {
         }
         return out;
     }
+    /** Gets all the squares visible from the given square according to the game rules: all the squares in the room and all the squares in the rooms that are connected through doors on the given square, if any
+     * @param from the square from which you are getting the other squares
+     * @return a set with all the visible squares */
     public Set<Square> getAllVisibleSquares(Square from){
         checkSquareIsInMap(from);
         Set<Square> out = new HashSet<>();
@@ -212,12 +260,20 @@ public class GameMap {
         }
         return out;
     }
-
+    /** Get all the players on a given square
+     * @param square the square on which the players are
+     * @throws NullPointerException if square is null
+     * @throws SquareNotInMapException if map does not have this square
+     * @return a set of players that can be empty if there are no players on the square */
     public Set<Player> getPlayersOnSquare(Square square){
         checkSquareIsInMap(square);
         return positions.getPlayers(square);
     }
+    /** Get the square containing that player or null if the player is not on the map
+     * @throws PlayerNotOnMapException if the player is not on the map
+     * @return the square on which that player lays */
     public Square getPlayerPosition(Player player){
+        if(!hasPlayer(player)) throw new PlayerNotOnMapException();
         return positions.getSquare(player);
     }
     /** get all players on map
@@ -225,11 +281,24 @@ public class GameMap {
     public Set<Player> getAllPlayers(){
         return positions.getAllPlayers();
     }
+    /** checks if map has a player
+     * @param player the player being checked
+     * @return true if the player is actually on the map */
+    public boolean hasPlayer(Player player){
+        return positions.hasPlayer(player);
+    }
+    /** return the number of players on the map
+     * @return an integer representing the number of players on the map */
     public int getPlayersNumber(){
         return getAllPlayers().size();
     }
+    /** A set of all the squares of the map, without any order
+     * @return A set of all the squares of the map, without any order */
     public Set<Square> getAllSquares() { return squares; }
 
+    /** Check that a square is in the map
+     * @param square the square being checked, cannot be null
+     * @throws NullPointerException if square is null */
     private void checkSquareIsInMap(Square square){
         if(square==null)throw new NullPointerException("Square cannot be null");
         if(!squares.contains(square)) throw new SquareNotInMapException();
