@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 public class PlayerSquareTest {
     @Test
     public void PlayerOnSquare(){
-        Player player = new Player();
+        Player player = new Player(false, "a");
         Square square = new SpawnPoint(RoomColor.GREEN, 0);
 
         PlayerSquare playerSquare = new PlayerSquare();
@@ -19,8 +19,8 @@ public class PlayerSquareTest {
     }
     @Test
     public void multiplePlayers(){
-        Player p1 = new Player();
-        Player p2 = new Player();
+        Player p1 = new Player(false, "a");
+        Player p2 = new Player(false, "a");
         Square square = new SpawnPoint(RoomColor.GREEN, 0);
 
         PlayerSquare playerSquare = new PlayerSquare();
@@ -35,7 +35,7 @@ public class PlayerSquareTest {
     }
     @Test
     public void movePlayerInSameRoom(){
-        Player p = new Player();
+        Player p = new Player(false, "a");
         Square s1 = new SpawnPoint(RoomColor.GREEN, 0);
         Square s2 = new AmmoPoint(RoomColor.GREEN, 1);
 
@@ -52,7 +52,7 @@ public class PlayerSquareTest {
     }
     @Test
     public void addSamePlayerTwice(){
-        Player p = new Player();
+        Player p = new Player(false, "a");
         Square s1 = new SpawnPoint(RoomColor.GREEN, 0);
         Square s2 = new AmmoPoint(RoomColor.PURPLE, 1);
         PlayerSquare playerSquare = new PlayerSquare();
@@ -64,5 +64,16 @@ public class PlayerSquareTest {
         assertNotEquals(s2, playerSquare.getSquare(p));
         assertTrue(playerSquare.getPlayers(s1).contains(p));
         assertFalse(playerSquare.getPlayers(s2).contains(p));
+    }
+    @Test
+    public void getPlayersNumber(){
+        PlayerSquare playerSquare = new PlayerSquare();
+        assertEquals(0, playerSquare.getPlayersNumber());
+        Player p = new Player(false, 'a');
+        Square square = new AmmoPoint(RoomColor.WHITE, 0);
+        playerSquare.addPlayer(p, square);
+        assertEquals(1, playerSquare.getPlayersNumber());
+        playerSquare.addPlayer(p, square);
+        assertEquals(1, playerSquare.getPlayersNumber());
     }
 }
