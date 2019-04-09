@@ -15,16 +15,20 @@ public class GameMap {
 
     public GameMap(){
         squares = new HashSet<>();
-        players = new HashSet<>();
         positions = new PlayerSquare();
         spawnPoints = new HashSet<>();
         rooms = new HashSet<>();
         squareId = 0;
     }
 
-    //creates room using a coordinate system with (0,0) in the top left of the room
+    /** creates room using a coordinate system with (0,0) in the top left corner of the room
+     * @param width room width
+     * @param height room height
+     * @param color the color of the room, must be unique among the different rooms
+     * @param spawnPoint the coordinates of the spawnPoint, (0,0) is the top left of the room. Can be null
+     * @throws SquareNotInMapException if the spawnpoint is not in this room */
     public void createRoom(int width, int height, RoomColor color, Coordinate spawnPoint){
-        if(spawnPoint!=null && (spawnPoint.getX()>=width || spawnPoint.getY()>=height)) throw new RuntimeException("SpawnPoint is not in room");
+        if(spawnPoint!=null && (spawnPoint.getX()>=width || spawnPoint.getY()>=height)) throw new SquareNotInMapException();
         addNewRoomIfNotExists(color);
         Square[][] squareMatrix = new Square[width][height];
         for(int y = 0;y<height;y++){
@@ -119,18 +123,24 @@ public class GameMap {
     public Set<SpawnPoint> getSpawnPoints(){
         return spawnPoints;
     }
-    public void addPlayer(Player player) {
-        if(players.size() == 5) throw new RuntimeException("Too many players on this map");
-        if(players.contains(player)) throw new RuntimeException("Player already on this map");
-        if(player==null) throw new NullPointerException();
-        players.add(player);
-    }
+    /** Spawns player on a spawnpoint if it is not already on the map
+     * @param player the player to spawn
+     * @param spawnPoint the spawnpoint on which the player will spawn
+     * @throws NullPointerException if player is null or spawnPoint is null
+     * @throws SquareNotInMapException if square is not in this map
+     * @throws PlayerAlreadyOnMapException if this map already has this player */
     public void spawnPlayer(Player player, SpawnPoint spawnPoint){
         checkSquareIsInMap(spawnPoint);
         if(player==null || spawnPoint==null) throw new NullPointerException();
-        if(!players.contains(player)) throw new RuntimeException("This player is not in this game");
-        if(positions.getSquare(player)!=null) throw new RuntimeException("Player has already spawned");
+        if(positions.hasPlayer(player)) throw new PlayerAlreadyOnMapException();
         positions.addPlayer(player, spawnPoint);
+    }
+    /** Removes player from map
+     * @param player
+     * @throws PlayerNotOnMapException if player is not on this map*/
+    public void removePlayer(Player player){
+        if(!positions.hasPlayer(player)) throw new PlayerNotOnMapException();
+        positions.removePlayer(player);
     }
     Set<Square> getAllSquaresAtDistance(Square from, int distance){
         checkSquareIsInMap(from);
@@ -210,11 +220,13 @@ public class GameMap {
     public Square getPlayerPosition(Player player){
         return positions.getSquare(player);
     }
+    /** get all players on map
+     * @return a set containing all players on map */
     public Set<Player> getAllPlayers(){
-        return players;
+        return positions.getAllPlayers();
     }
     public int getPlayersNumber(){
-        return players.size();
+        return getAllPlayers().size();
     }
     public Set<Square> getAllSquares() { return squares; }
 

@@ -1,7 +1,4 @@
-import errors.NegativeException;
-import errors.NotWallException;
-import errors.RoomNotInMapException;
-import errors.SquareNotInMapException;
+import errors.*;
 import models.Player;
 import models.map.*;
 import org.junit.Test;
@@ -200,74 +197,42 @@ public class GameMapTest {
 
     }
     @Test
-    public void addPlayer(){
-        GameMap gameMap = new GameMap();
-        gameMap.createRoom(3,4, RoomColor.WHITE, new Coordinate(0,0));
-        Player[] players = new Player[6];
-        for(int i=0;i<6;i++){
-            players[i] = new Player();
-        }
-        gameMap.addPlayer(players[0]);
-        gameMap.addPlayer(players[1]);
-        gameMap.addPlayer(players[2]);
-        assertEquals(3, gameMap.getPlayersNumber());
-        try{
-            gameMap.addPlayer(null);
-            assert false;
-        }catch(NullPointerException e){ }
-        catch(Exception e){ assert false; }
-        try{
-            gameMap.addPlayer(players[1]);
-            assert false;
-        }catch (Exception e){
-            assertEquals("Player already on this map", e.getMessage());
-        }
-        gameMap.addPlayer(players[3]);
-        gameMap.addPlayer(players[4]);
-        try{
-            gameMap.addPlayer(players[5]);
-            assert false;
-        }catch(Exception e){
-            assertEquals("Too many players on this map", e.getMessage());
-        }
-    }
-    @Test
     public void spawnPlayer(){
         GameMap gameMap = new GameMap();
         gameMap.createRoom(3,3, RoomColor.PURPLE, new Coordinate(0,0));
         SpawnPoint spawnPoint = (SpawnPoint) gameMap.getSpawnPoints().toArray()[0];
         Player pippo = new Player();
         Player pluto = new Player();
-        gameMap.addPlayer(pippo);
-        gameMap.addPlayer(pluto);
-
-        assertTrue(gameMap.getAllPlayers().contains(pippo));
-        assertTrue(gameMap.getAllPlayers().contains(pluto));
 
         gameMap.spawnPlayer(pippo, spawnPoint);
+
+        assertTrue(gameMap.getAllPlayers().contains(pippo));
+        assertFalse(gameMap.getAllPlayers().contains(pluto));
+
         assertEquals(spawnPoint, gameMap.getPlayerPosition(pippo));
         assertEquals(pippo, gameMap.getPlayersOnSquare(spawnPoint).toArray()[0]);
 
         try{
             gameMap.spawnPlayer(pippo, spawnPoint);
             assert false;
-        }catch (Exception e){
-            assertEquals("Player has already spawned", e.getMessage());
-        }
+        }catch (PlayerAlreadyOnMapException e){ assert true; }
 
-        Player notOnMap = new Player();
+        SpawnPoint spawnPointNotOnMap = new SpawnPoint(RoomColor.PURPLE, 100);
         try{
-            gameMap.spawnPlayer(notOnMap, spawnPoint);
-            assert false;
-        }catch (Exception e){
-            assertEquals("This player is not in this game", e.getMessage());
-        }
-
-        SpawnPoint stillNotOnMap = new SpawnPoint(RoomColor.PURPLE, 100);
-        try{
-            gameMap.spawnPlayer(pluto, stillNotOnMap);
+            gameMap.spawnPlayer(pluto, spawnPointNotOnMap);
             assert false;
         }catch (SquareNotInMapException e){ assert true; }
+    }
+    @Test public void removePlayer(){
+        Player player = new Player();
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(2,2, RoomColor.WHITE, new Coordinate(0,0));
+
+        SpawnPoint spawnPoint = (SpawnPoint) gameMap.getSpawnPoints().toArray()[0];
+        gameMap.spawnPlayer(player, spawnPoint);
+        assertEquals(1, gameMap.getPlayersNumber());
+        gameMap.removePlayer(player);
+        assertEquals(0, gameMap.getPlayersNumber());
     }
     @Test
     public void getAllSquaresAtDistance1SquareNotInRoom(){

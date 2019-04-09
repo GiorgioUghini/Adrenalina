@@ -65,4 +65,15 @@ public class PlayerSquareTest {
         assertTrue(playerSquare.getPlayers(s1).contains(p));
         assertFalse(playerSquare.getPlayers(s2).contains(p));
     }
+    @Test
+    public void getPlayersNumber(){
+        PlayerSquare playerSquare = new PlayerSquare();
+        assertEquals(0, playerSquare.getPlayersNumber());
+        Player p = new Player();
+        Square square = new AmmoPoint(RoomColor.WHITE, 0);
+        playerSquare.addPlayer(p, square);
+        assertEquals(1, playerSquare.getPlayersNumber());
+        playerSquare.addPlayer(p, square);
+        assertEquals(1, playerSquare.getPlayersNumber());
+    }
 }
