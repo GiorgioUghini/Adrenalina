@@ -19,4 +19,8 @@ abstract class Deck {
     public Card draw(){
         return cards.pop();
     }
+
+    public int size(){
+        return cards.size();
+    }
 }
