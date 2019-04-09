@@ -1,4 +1,7 @@
+import errors.NegativeException;
 import errors.NotWallException;
+import errors.RoomNotInMapException;
+import errors.SquareNotInMapException;
 import models.Player;
 import models.map.*;
 import org.junit.Test;
@@ -86,17 +89,15 @@ public class GameMapTest {
         try{
             assertNull(gameMap.getSquareByPositionInRoom(new Coordinate(1,1), RoomColor.GREEN));
             assert false;
-        }catch (Exception e){
-            assertEquals("No square with that color in this room", e.getMessage());
-        }
+        }catch (RoomNotInMapException e){ }
+        catch(Exception e){ assert false; }
 
         gameMap.createRoom(5,5, RoomColor.GREEN, new Coordinate(1,1));
         try{
             assertNull(gameMap.getSquareByPositionInRoom(new Coordinate(1,1), RoomColor.PURPLE));
             assert false;
-        }catch (Exception e){
-            assertEquals("No square with that color in this room", e.getMessage());
-        }
+        }catch (RoomNotInMapException e){ }
+        catch(Exception e){ assert false; }
     }
     @Test
     public void getSquareByPositionInRoomOutOfRange(){
@@ -266,9 +267,32 @@ public class GameMapTest {
         try{
             gameMap.spawnPlayer(pluto, stillNotOnMap);
             assert false;
-        }catch (Exception e){
-            assertEquals("Map does not contain this spawnPoint", e.getMessage());
+        }catch (SquareNotInMapException e){ assert true; }
+    }
+    @Test
+    public void getAllSquaresAtDistance1SquareNotInRoom(){
+        GameMap gameMap = new GameMap();
+        Square square = new AmmoPoint(RoomColor.WHITE, 0);
+        try{
+            gameMap.getAllSquaresAtExactDistance(square, 1);
+            assert false;
+        }catch (SquareNotInMapException e){ assert true; }
+        catch (Exception e){ assert false; }
+    }
+    @Test
+    public void InvalidParamsInManhattanDistance(){
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(1,1, RoomColor.WHITE, null);
+        Square s = new AmmoPoint(RoomColor.PURPLE, 2);
+        try{
+            gameMap.getAllSquaresAtExactDistance(null, 2);
+        }catch(NullPointerException e){
+            assert true;
         }
+        try{
+            gameMap.getAllSquaresAtExactDistance(gameMap.getSquareById(0), -1);
+        }catch (NegativeException e){ assert true; }
+
     }
     @Test
     public void getAllSquaresAtDistance1InSameRoom(){
@@ -354,22 +378,6 @@ public class GameMapTest {
         assertTrue(squares.contains(startSquare));
     }
     @Test
-    public void InvalidParamsInManhattanDistance(){
-        GameMap gameMap = new GameMap();
-        Square s = new AmmoPoint(RoomColor.PURPLE, 2);
-        try{
-            gameMap.getAllSquaresAtExactDistance(null, 2);
-        }catch(NullPointerException e){
-            assertEquals("'from' square cannot be null", e.getMessage());
-        }
-        try{
-            gameMap.getAllSquaresAtExactDistance(s, -1);
-        }catch (Exception e){
-            assertEquals("Distance cannot be negative", e.getMessage());
-        }
-
-    }
-    @Test
     public void getAllSquaresInRoom() throws NotWallException{
         GameMap gameMap = new GameMap();
         gameMap.createRoom(3,3, RoomColor.GREEN, null);
@@ -380,6 +388,20 @@ public class GameMapTest {
         for(Square s : squares){
             assertEquals(RoomColor.GREEN, s.getColor());
         }
+    }
+    @Test
+    public void getAllVisibleSquaresErrors(){
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(3,3,RoomColor.WHITE, null);
+        Square from = new AmmoPoint(RoomColor.WHITE, 0);
+        try{
+            gameMap.getAllVisibleSquares(null);
+            assert false;
+        }catch (NullPointerException e){assert true;}
+        try{
+            gameMap.getAllVisibleSquares(from);
+            assert false;
+        }catch (SquareNotInMapException e){assert true;}
     }
     @Test
     public void getAllVisibleSquaresNotOnDoor(){

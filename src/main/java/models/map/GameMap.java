@@ -1,7 +1,6 @@
 package models.map;
 
 import errors.*;
-import models.Card;
 import models.Player;
 
 import java.util.*;
@@ -98,7 +97,7 @@ public class GameMap {
                 topLeft = s;
             }
         }
-        if(topLeft==null) throw new RuntimeException("No square with that color in this room");
+        if(topLeft==null) throw new RoomNotInMapException();
 
         for(int x=0;x<coordinate.getX();x++){
             if(topLeft.hasNext(CardinalDirection.RIGHT, true)){
@@ -127,15 +126,15 @@ public class GameMap {
         players.add(player);
     }
     public void spawnPlayer(Player player, SpawnPoint spawnPoint){
+        checkSquareIsInMap(spawnPoint);
         if(player==null || spawnPoint==null) throw new NullPointerException();
-        if(!spawnPoints.contains(spawnPoint)) throw new RuntimeException("Map does not contain this spawnPoint");
         if(!players.contains(player)) throw new RuntimeException("This player is not in this game");
         if(positions.getSquare(player)!=null) throw new RuntimeException("Player has already spawned");
         positions.addPlayer(player, spawnPoint);
     }
     Set<Square> getAllSquaresAtDistance(Square from, int distance){
-        if(distance<0)throw new RuntimeException("Distance cannot be negative");
-        if(from == null) throw new NullPointerException("'from' square cannot be null");
+        checkSquareIsInMap(from);
+        if(distance<0)throw new NegativeException();
         Set<Square> out = new HashSet<>();
         Set<Square> visited = new HashSet<>();
         Map<Square, Integer> path = new LinkedHashMap<>();
@@ -181,6 +180,7 @@ public class GameMap {
         return out;
     }
     public Set<Square> getAllSquaresInRoom(RoomColor color){
+        if(!rooms.contains(color)) throw new RoomNotInMapException();
         Set<Square> out = new HashSet<>();
         for(Square square : squares){
             if(square.getColor().equals(color)){
@@ -190,6 +190,7 @@ public class GameMap {
         return out;
     }
     public Set<Square> getAllVisibleSquares(Square from){
+        checkSquareIsInMap(from);
         Set<Square> out = new HashSet<>();
         out.addAll(getAllSquaresInRoom(from.getColor()));
         if(from.hasDoors()){
@@ -203,6 +204,7 @@ public class GameMap {
     }
 
     public Set<Player> getPlayersOnSquare(Square square){
+        checkSquareIsInMap(square);
         return positions.getPlayers(square);
     }
     public Square getPlayerPosition(Player player){
@@ -215,6 +217,11 @@ public class GameMap {
         return players.size();
     }
     public Set<Square> getAllSquares() { return squares; }
+
+    private void checkSquareIsInMap(Square square){
+        if(square==null)throw new NullPointerException("Square cannot be null");
+        if(!squares.contains(square)) throw new SquareNotInMapException();
+    }
 }
 
 
