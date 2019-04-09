@@ -15,21 +15,21 @@ public class CardController {
     private WeaponDeck weaponDeck;
     private PowerUpDeck powerUpDeck;
 
-    private void loadWeaponCards() throws IOException{
-        String json = getJsonCardDescriptor("weapon_cards.json");
+    private List<Card> getDeserializedCards(String filename) throws IOException {
+        String json = getJsonCardDescriptor(filename);
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();
         Type type = new TypeToken<List<WeaponCard>>(){}.getType();
-        List<WeaponCard> cards = gson.fromJson(json, type);
+        return gson.fromJson(json, type);
+    }
+
+    private void loadWeaponCards() throws IOException{
+        List<Card> cards = getDeserializedCards("weapon_cards.json");
         weaponDeck = new WeaponDeck(cards);
     }
 
     private void loadPowerUpCards() throws IOException{
-        String json = getJsonCardDescriptor("powerup_cards.json");
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        Gson gson = gsonBuilder.create();
-        Type type = new TypeToken<List<PowerUpCard>>(){}.getType();
-        List<PowerUpCard> cards = gson.fromJson(json, type);
+        List<Card> cards = getDeserializedCards("powerup_cards.json");
         powerUpDeck = new PowerUpDeck(cards);
     }
 
