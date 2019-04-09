@@ -1,6 +1,7 @@
 package models.map;
 
 import errors.*;
+import models.Card;
 import models.Player;
 
 import java.util.*;
@@ -176,6 +177,27 @@ public class GameMap {
         Set<Square> out = new HashSet<>();
         for(int i=0;i<=distance;i++){
             out.addAll(getAllSquaresAtDistance(from, i));
+        }
+        return out;
+    }
+    public Set<Square> getAllSquaresInRoom(RoomColor color){
+        Set<Square> out = new HashSet<>();
+        for(Square square : squares){
+            if(square.getColor().equals(color)){
+                out.add(square);
+            }
+        }
+        return out;
+    }
+    public Set<Square> getAllVisibleSquares(Square from){
+        Set<Square> out = new HashSet<>();
+        out.addAll(getAllSquaresInRoom(from.getColor()));
+        if(from.hasDoors()){
+            for(CardinalDirection c : CardinalDirection.values()){
+                if(from.hasNext(c) && from.getLink(c).isDoor()){
+                    out.addAll(getAllSquaresInRoom(from.getNextSquare(c).getColor()));
+                }
+            }
         }
         return out;
     }

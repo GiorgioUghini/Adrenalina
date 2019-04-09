@@ -369,4 +369,50 @@ public class GameMapTest {
         }
 
     }
+    @Test
+    public void getAllSquaresInRoom() throws NotWallException{
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(3,3, RoomColor.GREEN, null);
+        gameMap.createRoom(3,4, RoomColor.WHITE, null);
+        gameMap.connectRooms(gameMap.getSquareById(2), gameMap.getSquareById(9), false, null);
+        Set<Square> squares = gameMap.getAllSquaresInRoom(RoomColor.GREEN);
+        assertEquals(9, squares.size());
+        for(Square s : squares){
+            assertEquals(RoomColor.GREEN, s.getColor());
+        }
+    }
+    @Test
+    public void getAllVisibleSquaresNotOnDoor(){
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(3,4,RoomColor.GREEN, null);
+        gameMap.createRoom(3,3, RoomColor.PURPLE, null);
+        Set<Integer> doorOffsets = new HashSet<>();
+        doorOffsets.add(0);
+        gameMap.connectRooms(gameMap.getSquareById(2), gameMap.getSquareById(12), false, doorOffsets);
+
+        Square myPosition = gameMap.getSquareById(0);
+        Set<Square> visibleSquares = gameMap.getAllVisibleSquares(myPosition);
+        assertEquals(12, visibleSquares.size());
+        for(Square s : visibleSquares){
+            assertEquals(RoomColor.GREEN, s.getColor());
+        }
+    }
+    @Test
+    public void getAllVisibleSquaresOnDoor(){
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(3,4,RoomColor.GREEN, null);
+        gameMap.createRoom(3,3, RoomColor.PURPLE, null);
+        gameMap.createRoom(2,2, RoomColor.WHITE, null);
+        Set<Integer> doorOffsets = new HashSet<>();
+        doorOffsets.add(0);
+        gameMap.connectRooms(gameMap.getSquareById(2), gameMap.getSquareById(12), false, doorOffsets);
+        gameMap.connectRooms(gameMap.getSquareById(14), gameMap.getSquareById(21), false, doorOffsets);
+
+        Square myPosition = gameMap.getSquareById(2);
+        Set<Square> visibleSquares = gameMap.getAllVisibleSquares(myPosition);
+        assertEquals(21, visibleSquares.size());
+        for(Square s : visibleSquares){
+            assertTrue(s.getColor().equals(RoomColor.GREEN) || s.getColor().equals(RoomColor.PURPLE));
+        }
+    }
 }

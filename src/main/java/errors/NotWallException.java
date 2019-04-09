@@ -1,6 +1,6 @@
 package errors;
 
-public class NotWallException extends Exception{
+public class NotWallException extends RuntimeException{
     public NotWallException(){
         super();
     }
