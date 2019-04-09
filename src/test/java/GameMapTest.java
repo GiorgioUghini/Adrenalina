@@ -210,8 +210,8 @@ public class GameMapTest {
     }
     @Test
     public void getPlayersOnSquare(){
-        Player p1 = new Player();
-        Player p2 = new Player();
+        Player p1 = new Player(false, "a");
+        Player p2 = new Player(false, "a");
         GameMap gameMap = new GameMap();
         gameMap.createRoom(1,1, RoomColor.WHITE, new Coordinate(0,0));
 
@@ -227,12 +227,12 @@ public class GameMapTest {
         assertTrue(players.contains(p2));
     }
     @Test
-    public void spawnPlayer(){
+    public void spawnPlayer(false, "a"){
         GameMap gameMap = new GameMap();
         gameMap.createRoom(3,3, RoomColor.PURPLE, new Coordinate(0,0));
         SpawnPoint spawnPoint = (SpawnPoint) gameMap.getSpawnPoints().toArray()[0];
-        Player pippo = new Player();
-        Player pluto = new Player();
+        Player pippo = new Player(false, "a");
+        Player pluto = new Player(false, "a");
 
         gameMap.spawnPlayer(pippo, spawnPoint);
 
@@ -253,8 +253,8 @@ public class GameMapTest {
             assert false;
         }catch (SquareNotInMapException e){ assert true; }
     }
-    @Test public void removePlayer(){
-        Player player = new Player();
+    @Test public void removePlayer(false, "a"){
+        Player player = new Player(false, "a");
         GameMap gameMap = new GameMap();
         gameMap.createRoom(2,2, RoomColor.WHITE, new Coordinate(0,0));
 
