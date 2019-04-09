@@ -1,6 +1,6 @@
 package models.map;
 
-import models.Player;
+import models.player.Player;
 
 import java.util.*;
 
