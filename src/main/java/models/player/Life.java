@@ -9,14 +9,12 @@ public class Life {
 
     private Map<Player, Integer> myDamages;
     private List<Player> observingPlayers;
-    private Map<Player, Integer> marks;
     private Player me;
 
     public Life(Player me) {
         this.me = me;
         myDamages = new LinkedHashMap<>();
         observingPlayers = new ArrayList<>();
-        marks = new HashMap<>();
     }
 
     public Map<Player, Integer> getMyDamages() {
@@ -37,6 +35,9 @@ public class Life {
     }
 
     public void damage(int damage, Player attacker) {
+        int additionalDamage = me.getMarksFromPlayer(attacker);
+        me.removeAllMarkFromPlayer(attacker);
+        damage = damage + additionalDamage;
         Integer totalDamage = myDamages.values().stream().mapToInt(Integer::intValue).sum();
 
         if (totalDamage+damage > 12) {

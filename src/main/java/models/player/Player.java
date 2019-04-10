@@ -15,6 +15,7 @@ public class Player implements Subscriber {
     private List<WeaponCard> weaponList;
     private List<PowerUpCard> powerUpList;
     private Life life;
+    private Mark marks;
     private int points;
     private int numerOfSkulls;
 
@@ -27,6 +28,7 @@ public class Player implements Subscriber {
         life = new Life(this);
         points = 0;
         numerOfSkulls = 0;
+        marks = new Mark(this);
     }
 
     @Override
@@ -103,5 +105,15 @@ public class Player implements Subscriber {
     public Map<Player, Integer> countPoints() { return this.life.countPoints(); }
 
     public void clearDamages() { this.life.clearDamages(); }
+
+    public int marksIDistribuited() { return this.marks.marksIDistribuited(); }
+
+    public void addMark(Player fromWho, int numberOfMarks) { this.marks.addMark(fromWho, numberOfMarks); }
+
+    public int getMarksFromPlayer(Player fromWho) { return this.marks.getMarksFromPlayer(fromWho); }
+
+    public void removeAllMarkFromPlayer(Player fromWho) { this.marks.removeAllMarkFromPlayer(fromWho); }
+
+    public void hasJustMarkedPlayer(Player who, int numberOfMarks) { this.marks.hasJustMarkedPlayer(who, numberOfMarks); }
 
  }

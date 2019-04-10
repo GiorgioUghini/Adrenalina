@@ -19,6 +19,18 @@ public class LifeTest {
     }
 
     @Test
+    public void marksAndDamage(){
+        Player pl1 = new Player(false, "Cosimo");
+        Player pl2 = new Player(false, "Giorgio");
+        pl2.addMark(pl1, 1);
+        pl2.getDamaged(2, pl1);
+        Map<Player, Integer> pl2Damages = pl2.getDamages();
+        assertEquals(3, pl2Damages.get(pl1).intValue());
+        Integer totalDamage = pl2Damages.values().stream().mapToInt(Integer::intValue).sum();
+        assertEquals(3, totalDamage.intValue());
+    }
+
+    @Test
     public void damageOverflow(){
         Player pl1 = new Player(false, "Cosimo");
         Player pl2 = new Player(false, "Giorgio");
