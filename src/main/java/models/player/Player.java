@@ -78,13 +78,30 @@ public class Player implements Subscriber {
 
     public void setPoints(int points) { this.points = points; }
 
-    public int getNumerOfSkulls() { return this.numerOfSkulls; }
+    public int getNumberOfSkulls() { return this.numerOfSkulls; }
 
     public void setNumerOfSkulls(int numerOfSkulls) { this.numerOfSkulls = numerOfSkulls; }
-
-    public void damage(int damage, Player attacker) { this.life.damage(damage, attacker); }
 
     public Map<Player, Integer> getDamages() {
         return this.life.getMyDamages();
     }
+
+    public void addObserver(Player subscriber) {
+        this.life.addObserver(subscriber);
+    }
+
+    public void removeObserver(Player subscriber) {
+        this.life.removeObserver(subscriber);
+    }
+
+    public boolean isDead() {
+        return this.life.isDead();
+    }
+
+    public void getDamaged(int damage, Player attacker) { this.life.damage(damage, attacker); }
+
+    public Map<Player, Integer> countPoints() { return this.life.countPoints(); }
+
+    public void clearDamages() { this.life.clearDamages(); }
+
  }

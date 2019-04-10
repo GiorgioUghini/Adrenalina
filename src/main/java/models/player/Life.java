@@ -32,7 +32,8 @@ public class Life {
     }
 
     public boolean isDead() {
-        return (myDamages.size() > 10);
+        Integer totalDamage = myDamages.values().stream().mapToInt(Integer::intValue).sum();
+        return (totalDamage > 10);
     }
 
     public void damage(int damage, Player attacker) {
@@ -61,7 +62,7 @@ public class Life {
             return result;
         } else {
 
-            Player firstAttacker = myDamages.entrySet().stream().reduce((first, second) -> second).orElse(null).getKey();
+            Player firstAttacker = myDamages.entrySet().stream().reduce((first, second) -> first).orElse(null).getKey();
             result.put(firstAttacker, FIRST_BLOOD_POINTS);
 
             int countingOrder = 0;
@@ -74,13 +75,19 @@ public class Life {
                     }
                 }
 
+                Optional<Integer> oldDamage = Optional.ofNullable(result.get(maxEntry.getKey()));
+                result.put(maxEntry.getKey(), assignablePoints[me.getNumberOfSkulls() + countingOrder] + oldDamage.orElse(0));
                 myDamages.remove(maxEntry.getKey());
-                Optional<Integer> oldDamage = Optional.ofNullable(myDamages.get(maxEntry.getKey()));
-                myDamages.put(maxEntry.getKey(), assignablePoints[me.getNumerOfSkulls() + countingOrder] + oldDamage.orElse(0));
+                countingOrder++;
             }
         }
         return result;
 
     }
+
+    public void clearDamages() {
+        myDamages.clear();
+    }
+
 
 }
