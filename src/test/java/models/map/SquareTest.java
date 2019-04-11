@@ -1,5 +1,6 @@
+package models.map;
+
 import errors.NotWallException;
-import models.map.*;
 
 import org.junit.Test;
 

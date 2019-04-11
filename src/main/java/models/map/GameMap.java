@@ -28,7 +28,7 @@ public class GameMap {
      * @param color the color of the room, must be unique among the different rooms
      * @param spawnPoint the coordinates of the spawnPoint, (0,0) is the top left of the room. Can be null
      * @throws SquareNotInMapException if the spawnpoint is not in this room */
-    public void createRoom(int width, int height, RoomColor color, Coordinate spawnPoint){
+    void createRoom(int width, int height, RoomColor color, Coordinate spawnPoint){
         if(spawnPoint!=null && (spawnPoint.getX()>=width || spawnPoint.getY()>=height)) throw new SquareNotInMapException();
         addNewRoomIfNotExists(color);
         Square[][] squareMatrix = new Square[width][height];
@@ -60,7 +60,7 @@ public class GameMap {
      * @param s2 the topmost square in the right room or the leftmost square in the bottom room
      * @param leftToRight if true connects rooms from left to right, s1 is the top room and s2 is the bottom room
      * @param doorOffsets a set of integers containing the offsets from which to put the doors. */
-    public void connectRooms(Square s1, Square s2, boolean leftToRight, Set<Integer> doorOffsets) throws NotWallException {
+    void connectRooms(Square s1, Square s2, boolean leftToRight, Set<Integer> doorOffsets) throws NotWallException {
         if(!(squares.contains(s1) && squares.contains(s2))) throw new NullPointerException();
 
         Square tmp1 = s1;
@@ -96,7 +96,7 @@ public class GameMap {
      * @param id
      * @return the square with the given id. It is unique and never null
      * @throws SquareNotInMapException if there is not a square in this map with the given Id */
-    public Square getSquareById(int id){
+    Square getSquareById(int id){
         Iterator<Square> iterator = getAllSquares().iterator();
         while (iterator.hasNext()){
             Square s = iterator.next();
@@ -110,7 +110,7 @@ public class GameMap {
      * @return the square in the room with the given color that has the given coordinates. Cannot be null
      * @throws RoomNotInMapException if there is not a room with the given color in the map
      * @throws SquareNotInMapException if the x coordinate is bigger than room's width or the y coordinate is bigger than the room's height */
-    public Square getSquareByPositionInRoom(Coordinate coordinate, RoomColor color){
+    Square getSquareByPositionInRoom(Coordinate coordinate, RoomColor color){
         Square topLeft = null;
         Iterator<Square> iterator = getAllSquares().iterator();
         while (iterator.hasNext()){

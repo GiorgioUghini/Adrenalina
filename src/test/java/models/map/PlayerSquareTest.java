@@ -1,5 +1,6 @@
+package models.map;
+
 import models.player.Player;
-import models.map.*;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

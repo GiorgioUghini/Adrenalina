@@ -1,5 +1,6 @@
+package models.map;
+
 import errors.*;
-import models.map.*;
 import models.player.Player;
 import org.junit.Test;
 
