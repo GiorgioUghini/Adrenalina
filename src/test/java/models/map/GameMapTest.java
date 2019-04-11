@@ -5,6 +5,7 @@ import models.player.Player;
 import org.junit.Test;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -432,5 +433,36 @@ public class GameMapTest {
         for(Square s : visibleSquares){
             assertTrue(s.getColor().equals(RoomColor.GREEN) || s.getColor().equals(RoomColor.PURPLE));
         }
+    }
+    @Test
+    public void getAllSquaresByCardinal(){
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(4,4,RoomColor.GREEN, null);
+        Square startSquare = gameMap.getSquareById(5);
+        List<Square> result = gameMap.getAllSquaresByCardinal(startSquare, CardinalDirection.RIGHT);
+        final int resultLength = 3;
+        assertEquals(3, result.size());
+        for(int i = 0; i<resultLength; i++){
+            assertEquals(i+5, result.get(i).getId());
+        }
+    }
+    @Test
+    public void getAllSquaresByCardinalWrongParams(){
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(1,1, RoomColor.GREEN, null);
+        Square inMap = gameMap.getSquareById(0);
+        Square notInMap = new AmmoPoint(RoomColor.GREEN, 0);
+        try{
+            gameMap.getAllSquaresByCardinal(null, CardinalDirection.RIGHT);
+            assert false;
+        }catch (NullPointerException e){ assert true; }
+        try{
+            gameMap.getAllSquaresByCardinal(notInMap, CardinalDirection.RIGHT);
+            assert false;
+        }catch (SquareNotInMapException e){ assert true; }
+        try{
+            gameMap.getAllSquaresByCardinal(inMap, null);
+            assert false;
+        }catch (NullPointerException e){ assert true; }
     }
 }
