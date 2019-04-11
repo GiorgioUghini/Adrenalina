@@ -2,7 +2,7 @@ package models.player;
 
 import java.util.*;
 
-public class Life {
+class Life {
     private static final int MAX_LIFEPOINTS = 12;
     private static final int FIRST_BLOOD_POINTS = 1;
     private static final int[] assignablePoints = {8, 6, 4, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
@@ -11,41 +11,45 @@ public class Life {
     private List<Player> observingPlayers;
     private Player me;
 
-    public Life(Player me) {
+    Life(Player me) {
         this.me = me;
         myDamages = new LinkedHashMap<>();
         observingPlayers = new ArrayList<>();
     }
 
-    public Map<Player, Integer> getMyDamages() {
+    Map<Player, Integer> getMyDamages() {
         return this.myDamages;
     }
 
-    public void addObserver(Player subscriber) {
+    void addObserver(Player subscriber) {
         this.observingPlayers.add(subscriber);
     }
 
-    public void removeObserver(Player subscriber) {
+    void removeObserver(Player subscriber) {
         this.observingPlayers.remove(subscriber);
     }
 
-    public boolean isDead() {
-        Integer totalDamage = myDamages.values().stream().mapToInt(Integer::intValue).sum();
+    boolean isDead() {
+        int totalDamage = myDamages.values().stream().mapToInt(Integer::intValue).sum();
         return (totalDamage > 10);
     }
 
-    public void damage(int damage, Player attacker) {
+    void damage(int damage, Player attacker) {
         int additionalDamage = me.getMarksFromPlayer(attacker);
         me.removeAllMarkFromPlayer(attacker);
         damage = damage + additionalDamage;
-        Integer totalDamage = myDamages.values().stream().mapToInt(Integer::intValue).sum();
+        int totalDamage = myDamages.values().stream().mapToInt(Integer::intValue).sum();
 
-        if (totalDamage+damage > 12) {
-            damage = 12 - totalDamage;
+        if (totalDamage+damage > MAX_LIFEPOINTS) {
+            damage = MAX_LIFEPOINTS - totalDamage;
         }
 
         Optional<Integer> oldDamage = Optional.ofNullable(myDamages.get(attacker));
         myDamages.put(attacker, damage + oldDamage.orElse(0));
+        totalDamage = damage + oldDamage.orElse(0);
+        if (totalDamage == 12) {    //Give revenge mark
+            attacker.giveMark(1, me);
+        }
 
         //Check if the player's dead
         if (totalDamage > 10) {
@@ -56,7 +60,7 @@ public class Life {
         }
     }
 
-    public Map<Player, Integer> countPoints() {
+    Map<Player, Integer> countPoints() {
         Map<Player, Integer> result = new HashMap<>();
 
         if (myDamages.isEmpty()) {
@@ -76,8 +80,8 @@ public class Life {
                     }
                 }
 
-                Optional<Integer> oldDamage = Optional.ofNullable(result.get(maxEntry.getKey()));
-                result.put(maxEntry.getKey(), assignablePoints[me.getNumberOfSkulls() + countingOrder] + oldDamage.orElse(0));
+                Optional<Integer> oldPoints = Optional.ofNullable(result.get(maxEntry.getKey()));
+                result.put(maxEntry.getKey(), assignablePoints[me.getNumberOfSkulls() + countingOrder] + oldPoints.orElse(0));
                 myDamages.remove(maxEntry.getKey());
                 countingOrder++;
             }
@@ -86,7 +90,7 @@ public class Life {
 
     }
 
-    public void clearDamages() {
+    void clearDamages() {
         myDamages.clear();
     }
 

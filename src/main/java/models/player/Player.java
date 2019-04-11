@@ -19,6 +19,10 @@ public class Player implements Subscriber {
     private int points;
     private int numerOfSkulls;
 
+    /** Creates a new player object
+     * @param isFirstPlayer the boolean witch indicates whether this player should be the one who has the "First Player Mark"
+     * @param name The name identifier for the player
+     * */
     public Player(boolean isFirstPlayer, String name){
         this.isFirstPlayer = isFirstPlayer;
         this.name = name;
@@ -84,7 +88,10 @@ public class Player implements Subscriber {
 
     public void setNumerOfSkulls(int numerOfSkulls) { this.numerOfSkulls = numerOfSkulls; }
 
-    public Map<Player, Integer> getDamages() {
+    /**
+     * @return a map between Player and the damages it made to this player
+     * */
+    public Map<Player, Integer> getDamageMap() {
         return this.life.getMyDamages();
     }
 
@@ -100,20 +107,31 @@ public class Player implements Subscriber {
         return this.life.isDead();
     }
 
-    public void getDamaged(int damage, Player attacker) { this.life.damage(damage, attacker); }
+    /** Damage this player
+     * @param damage the number of damage to give. Could be any number, without needs to check limitation of it.
+     * @param attacker the player witch is attacking
+     * */
+    public void getDamage(int damage, Player attacker) { this.life.damage(damage, attacker); }
 
+    /** Counts the points to assign to each player
+     * @return a map between Player and the points to assign him
+     * */
     public Map<Player, Integer> countPoints() { return this.life.countPoints(); }
 
+    /** Clears all the damage map of this player. */
     public void clearDamages() { this.life.clearDamages(); }
 
-    public int marksIDistribuited() { return this.marks.marksIDistribuited(); }
+    int marksDistributed() { return this.marks.marksDistributed(); }
 
-    public void addMark(Player fromWho, int numberOfMarks) { this.marks.addMark(fromWho, numberOfMarks); }
+    /** Damage this player
+     * @param numberOfMarks the number of marks to give. Could be any number, without needs to check limitation of it.
+     * @param fromWho the player witch is giveing marks */
+    public void giveMark(int numberOfMarks, Player fromWho) { this.marks.addMark(fromWho, numberOfMarks); }
 
-    public int getMarksFromPlayer(Player fromWho) { return this.marks.getMarksFromPlayer(fromWho); }
+    int getMarksFromPlayer(Player fromWho) { return this.marks.getMarksFromPlayer(fromWho); }
 
-    public void removeAllMarkFromPlayer(Player fromWho) { this.marks.removeAllMarkFromPlayer(fromWho); }
+    void removeAllMarkFromPlayer(Player fromWho) { this.marks.removeAllMarkFromPlayer(fromWho); }
 
-    public void hasJustMarkedPlayer(Player who, int numberOfMarks) { this.marks.hasJustMarkedPlayer(who, numberOfMarks); }
+    void hasJustMarkedPlayer(Player who, int numberOfMarks) { this.marks.hasJustMarkedPlayer(who, numberOfMarks); }
 
  }
