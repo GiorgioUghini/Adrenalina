@@ -266,6 +266,8 @@ public class GameMap {
     }
     /** Gets all the squares visible from the given square according to the game rules: all the squares in the room and all the squares in the rooms that are connected through doors on the given square, if any
      * @param from the square from which you are getting the other squares
+     * @throws NullPointerException if "from" is null
+     * @throws SquareNotInMapException if "from" is not in map
      * @return a set with all the visible squares */
     public Set<Square> getAllVisibleSquares(Square from){
         checkSquareIsInMap(from);
@@ -347,8 +349,19 @@ public class GameMap {
         }
         return out;
     }
-
-    //TODO getVisiblePlayers
+    /** Get all visible players from a given square
+     * @param from Square
+     * @return All visible players from the given square
+     * @throws NullPointerException if "from" is null
+     * @throws SquareNotInMapException if the map does not have this square */
+    public Set<Player> getVisiblePlayers(Square from){
+        Set<Square> visibleSquares = getAllVisibleSquares(from);
+        Set<Player> out = new HashSet<>();
+        for(Square square : visibleSquares){
+            out.addAll(getPlayersOnSquare(square));
+        }
+        return out;
+    }
 
     /** Check that a square is in the map
      * @param square the square being checked, cannot be null

@@ -485,4 +485,34 @@ public class GameMapTest {
         assertTrue(result.contains(a));
         assertTrue(result.contains(b));
     }
+    @Test
+    public void getVisiblePlayers(){
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(3,3, RoomColor.WHITE, new Coordinate(2,0));
+        gameMap.createRoom(3,3, RoomColor.GREEN, new Coordinate(1,1));
+        gameMap.createRoom(3,3, RoomColor.PURPLE, new Coordinate(0,0));
+        Square s1 = gameMap.getSquareById(2);
+        Square s2 = gameMap.getSquareById(9);
+        Square s3 = gameMap.getSquareById(11);
+        Square s4 = gameMap.getSquareById(18);
+        Set<Integer> doors = new HashSet<>();
+        doors.add(0);
+        gameMap.connectRooms(s1,s2,false, doors);
+        gameMap.connectRooms(s3,s4,false, doors);
+        Player a = new Player(false, "a");
+        Player b = new Player(false, "b");
+        Player c = new Player(false, "c");
+
+        SpawnPoint spawnPointB = (SpawnPoint) gameMap.getSquareById(13);
+
+        gameMap.spawnPlayer(a, (SpawnPoint)s1);
+        gameMap.spawnPlayer(b, spawnPointB);
+        gameMap.spawnPlayer(c, (SpawnPoint) s4);
+
+        Set<Player> result = gameMap.getVisiblePlayers(s1);
+        assertEquals(2, result.size());
+        assertTrue(result.contains(a));
+        assertTrue(result.contains(b));
+
+    }
 }
