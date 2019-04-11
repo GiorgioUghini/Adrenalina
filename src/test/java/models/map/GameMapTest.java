@@ -465,4 +465,24 @@ public class GameMapTest {
             assert false;
         }catch (NullPointerException e){ assert true; }
     }
+    @Test
+    public void getPlayersInDirection(){
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(3,3, RoomColor.GREEN, new Coordinate(1,1));
+        gameMap.createRoom(3,3, RoomColor.WHITE, new Coordinate(1,1));
+        gameMap.connectRooms(gameMap.getSquareById(2), gameMap.getSquareById(9), false, new HashSet<>());
+        Player a = new Player(false, "a");
+        Player b = new Player(false, "b");
+        Player c = new Player(false, "c");
+
+        gameMap.spawnPlayer(a, (SpawnPoint) gameMap.getSquareById(4));
+        gameMap.spawnPlayer(b, (SpawnPoint) gameMap.getSquareById(13));
+        gameMap.spawnPlayer(c, (SpawnPoint) gameMap.getSquareById(4));
+        gameMap.movePlayer(c, gameMap.getSquareById(3));
+
+        Set<Player> result = gameMap.getPlayersInDirection(gameMap.getSquareById(4), CardinalDirection.RIGHT);
+        assertEquals(2, result.size());
+        assertTrue(result.contains(a));
+        assertTrue(result.contains(b));
+    }
 }

@@ -155,12 +155,32 @@ public class GameMap {
         if(positions.hasPlayer(player)) throw new PlayerAlreadyOnMapException();
         positions.addPlayer(player, spawnPoint);
     }
+    /** Move player to a square in the map
+     * @param player
+     * @param square
+     * @throws NullPointerException if one of the params is null
+     * @throws PlayerNotOnMapException if player is not on map
+     * @throws SquareNotInMapException if map does not have this square
+     * */
+    public void movePlayer(Player player, Square square){
+        checkPlayerInMap(player);
+        checkSquareIsInMap(square);
+        positions.movePlayer(player, square);
+    }
     /** Removes player from map
      * @param player
+     * @throws NullPointerException if player is null
      * @throws PlayerNotOnMapException if player is not on this map */
     public void removePlayer(Player player){
-        if(!positions.hasPlayer(player)) throw new PlayerNotOnMapException();
+        checkPlayerInMap(player);
         positions.removePlayer(player);
+    }
+    /** Check if player is in map
+     * @throws NullPointerException if player is null
+     * @throws PlayerNotOnMapException if player is not on this map */
+    private void checkPlayerInMap(Player player){
+        if(player==null) throw new NullPointerException();
+        if(!hasPlayer(player)) throw new PlayerNotOnMapException();
     }
     /** Get all squares at distance strictly equal to "distance", not less nor more
      * @param from the square from which to start calculating distances
@@ -313,8 +333,20 @@ public class GameMap {
         }
         return out;
     }
-
-    //TODO getPlayersInRoom
+    /** Gets all players in a cardinal direction, passing through walls. Does not return them in order
+     * @param from the square from which the research start
+     * @param direction
+     * @return a set of the players in the direction, including the players on the "from" square, if any. The set could be empty. If order is needed, use getAllSquaresByCardinal method
+     * @throws SquareNotInMapException if "from" square is not in map
+     * @throws NullPointerException if one of the params is null */
+    public Set<Player> getPlayersInDirection(Square from, CardinalDirection direction){
+        List<Square> squares = getAllSquaresByCardinal(from, direction);
+        Set<Player> out = new HashSet<>();
+        for(Square square : squares){
+            out.addAll(getPlayersOnSquare(square));
+        }
+        return out;
+    }
 
     //TODO getVisiblePlayers
 
