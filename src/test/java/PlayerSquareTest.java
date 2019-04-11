@@ -1,4 +1,4 @@
-import models.Player;
+import models.player.Player;
 import models.map.*;
 import org.junit.Test;
 
@@ -69,7 +69,7 @@ public class PlayerSquareTest {
     public void getPlayersNumber(){
         PlayerSquare playerSquare = new PlayerSquare();
         assertEquals(0, playerSquare.getPlayersNumber());
-        Player p = new Player(false, 'a');
+        Player p = new Player(false, "a");
         Square square = new AmmoPoint(RoomColor.WHITE, 0);
         playerSquare.addPlayer(p, square);
         assertEquals(1, playerSquare.getPlayersNumber());
