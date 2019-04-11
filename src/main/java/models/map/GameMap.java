@@ -296,6 +296,12 @@ public class GameMap {
      * @return A set of all the squares of the map, without any order */
     public Set<Square> getAllSquares() { return squares; }
 
+    //TODO getAllSquaresByCardinal(Square from, CardinalDirection direction)
+
+    //TODO getPlayersInRoom
+
+    //TODO getVisiblePlayers
+
     /** Check that a square is in the map
      * @param square the square being checked, cannot be null
      * @throws NullPointerException if square is null */
