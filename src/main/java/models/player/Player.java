@@ -134,4 +134,6 @@ public class Player implements Subscriber {
 
     void hasJustMarkedPlayer(Player who, int numberOfMarks) { this.marks.hasJustMarkedPlayer(who, numberOfMarks); }
 
+    //TODO Override equals method
+
  }
