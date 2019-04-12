@@ -36,6 +36,22 @@ public class Player implements Subscriber {
     }
 
     @Override
+    public boolean equals(Object o) {
+        // self check
+        if (this == o)
+            return true;
+        // null check
+        if (o == null)
+            return false;
+        // type check and cast
+        if (getClass() != o.getClass())
+            return false;
+        Player player = (Player) o;
+        // field comparison
+        return name.equals(player.name);
+    }
+
+    @Override
     public void update(Object playerLife) {
         //TODO: What to do when the states changes?
     }
@@ -121,7 +137,7 @@ public class Player implements Subscriber {
     /** Clears all the damage map of this player. */
     public void clearDamages() { this.life.clearDamages(); }
 
-    int marksDistributed() { return this.marks.marksDistributed(); }
+    /* int marksDistributed() { return this.marks.marksDistributed(); } */
 
     /** Damage this player
      * @param numberOfMarks the number of marks to give. Could be any number, without needs to check limitation of it.
@@ -132,8 +148,6 @@ public class Player implements Subscriber {
 
     void removeAllMarkFromPlayer(Player fromWho) { this.marks.removeAllMarkFromPlayer(fromWho); }
 
-    void hasJustMarkedPlayer(Player who, int numberOfMarks) { this.marks.hasJustMarkedPlayer(who, numberOfMarks); }
-
-    //TODO Override equals method
+    /* void hasJustMarkedPlayer(Player who, int numberOfMarks) { this.marks.hasJustMarkedPlayer(who, numberOfMarks); } */
 
  }
