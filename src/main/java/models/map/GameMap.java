@@ -59,9 +59,13 @@ public class GameMap {
      * @param s1 the topmost square in the left room or the leftmost square in the top room
      * @param s2 the topmost square in the right room or the leftmost square in the bottom room
      * @param leftToRight if true connects rooms from left to right, s1 is the top room and s2 is the bottom room
-     * @param doorOffsets a set of integers containing the offsets from which to put the doors. */
+     * @param doorOffsets a set of integers containing the offsets from which to put the doors.
+     * @throws NullPointerException if one of the given squares is null
+     * @throws SquareNotInMapException if one of the given squares is not in map
+     * @throws NotWallException if the door is added on a link that is not a wall */
     void connectRooms(Square s1, Square s2, boolean leftToRight, Set<Integer> doorOffsets) throws NotWallException {
-        if(!(squares.contains(s1) && squares.contains(s2))) throw new NullPointerException();
+        checkSquareIsInMap(s1);
+        checkSquareIsInMap(s2);
 
         Square tmp1 = s1;
         Square tmp2 = s2;
@@ -84,6 +88,46 @@ public class GameMap {
             tmp2 = tmp2.getNextSquare(next);
             if(tmp2==null) break;
         }while (tmp1!=null);
+    }
+    /** Connects 2 rooms through a single door, given the topmost or leftmost communicating square
+     * @param s1 the topmost square in the left room or the leftmost square in the top room
+     * @param s2 the topmost square in the right room or the leftmost square in the bottom room
+     * @param leftToRight if true connects rooms from left to right, s1 is the top room and s2 is the bottom room
+     * @param doorOffset the offset of the door, 0 if it is on the connected squares
+     * @throws NullPointerException if one of the given squares is null
+     * @throws SquareNotInMapException if one of the given squares is not in map
+     * @throws NotWallException if the door is added on a link that is not a wall */
+    void connectRooms(Square s1, Square s2, boolean leftToRight, int doorOffset){
+        connectRooms(s1,s2,leftToRight,new HashSet<>(Arrays.asList(doorOffset)));
+    }
+
+    /** Connects 2 room given the topmost or leftmost communicating square ids
+     * @param s1 the id of the topmost square in the left room or the leftmost square in the top room
+     * @param s2 the id of the topmost square in the right room or the leftmost square in the bottom room
+     * @param leftToRight if true connects rooms from left to right, s1 is the top room and s2 is the bottom room
+     * @param doorOffsets a set of integers containing the offsets from which to put the doors.
+     * @throws NullPointerException if one of the given squares is null
+     * @throws SquareNotInMapException if one of the given squares is not in map
+     * @throws NotWallException if the door is added on a link that is not a wall */
+    void connectRooms(int s1, int s2, boolean leftToRight, Set<Integer> doorOffsets){
+        if(s1<0 || s2<0) throw new NegativeException();
+        connectRooms(
+                getSquareById(s1),
+                getSquareById(s2),
+                leftToRight,
+                doorOffsets
+        );
+    }
+    /** Connects 2 room given the topmost or leftmost communicating square ids
+     * @param s1 the id of the topmost square in the left room or the leftmost square in the top room
+     * @param s2 the id of the topmost square in the right room or the leftmost square in the bottom room
+     * @param leftToRight if true connects rooms from left to right, s1 is the top room and s2 is the bottom room
+     * @param doorOffset the offset of the door, 0 if it is on the connected squares
+     * @throws NullPointerException if one of the given squares is null
+     * @throws SquareNotInMapException if one of the given squares is not in map
+     * @throws NotWallException if the door is added on a link that is not a wall */
+    void connectRooms(int s1, int s2, boolean leftToRight, int doorOffset){
+        connectRooms(s1,s2,leftToRight, new HashSet<>(Arrays.asList(doorOffset)));
     }
     /** Adds new room to the rooms' list
      * @param color

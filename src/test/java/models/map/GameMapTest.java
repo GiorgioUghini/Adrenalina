@@ -277,10 +277,9 @@ public class GameMapTest {
         catch (Exception e){ assert false; }
     }
     @Test
-    public void InvalidParamsInManhattanDistance(){
+    public void invalidParamsInManhattanDistance(){
         GameMap gameMap = new GameMap();
         gameMap.createRoom(1,1, RoomColor.WHITE, null);
-        Square s = new AmmoPoint(RoomColor.PURPLE, 2);
         try{
             gameMap.getAllSquaresAtExactDistance(null, 2);
         }catch(NullPointerException e){
