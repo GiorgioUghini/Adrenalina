@@ -5,6 +5,7 @@ import models.player.Player;
 import org.junit.Test;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -276,10 +277,9 @@ public class GameMapTest {
         catch (Exception e){ assert false; }
     }
     @Test
-    public void InvalidParamsInManhattanDistance(){
+    public void invalidParamsInManhattanDistance(){
         GameMap gameMap = new GameMap();
         gameMap.createRoom(1,1, RoomColor.WHITE, null);
-        Square s = new AmmoPoint(RoomColor.PURPLE, 2);
         try{
             gameMap.getAllSquaresAtExactDistance(null, 2);
         }catch(NullPointerException e){
@@ -432,5 +432,86 @@ public class GameMapTest {
         for(Square s : visibleSquares){
             assertTrue(s.getColor().equals(RoomColor.GREEN) || s.getColor().equals(RoomColor.PURPLE));
         }
+    }
+    @Test
+    public void getAllSquaresByCardinal(){
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(4,4,RoomColor.GREEN, null);
+        Square startSquare = gameMap.getSquareById(5);
+        List<Square> result = gameMap.getAllSquaresByCardinal(startSquare, CardinalDirection.RIGHT);
+        final int resultLength = 3;
+        assertEquals(3, result.size());
+        for(int i = 0; i<resultLength; i++){
+            assertEquals(i+5, result.get(i).getId());
+        }
+    }
+    @Test
+    public void getAllSquaresByCardinalWrongParams(){
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(1,1, RoomColor.GREEN, null);
+        Square inMap = gameMap.getSquareById(0);
+        Square notInMap = new AmmoPoint(RoomColor.GREEN, 0);
+        try{
+            gameMap.getAllSquaresByCardinal(null, CardinalDirection.RIGHT);
+            assert false;
+        }catch (NullPointerException e){ assert true; }
+        try{
+            gameMap.getAllSquaresByCardinal(notInMap, CardinalDirection.RIGHT);
+            assert false;
+        }catch (SquareNotInMapException e){ assert true; }
+        try{
+            gameMap.getAllSquaresByCardinal(inMap, null);
+            assert false;
+        }catch (NullPointerException e){ assert true; }
+    }
+    @Test
+    public void getPlayersInDirection(){
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(3,3, RoomColor.GREEN, new Coordinate(1,1));
+        gameMap.createRoom(3,3, RoomColor.WHITE, new Coordinate(1,1));
+        gameMap.connectRooms(gameMap.getSquareById(2), gameMap.getSquareById(9), false, new HashSet<>());
+        Player a = new Player(false, "a");
+        Player b = new Player(false, "b");
+        Player c = new Player(false, "c");
+
+        gameMap.spawnPlayer(a, (SpawnPoint) gameMap.getSquareById(4));
+        gameMap.spawnPlayer(b, (SpawnPoint) gameMap.getSquareById(13));
+        gameMap.spawnPlayer(c, (SpawnPoint) gameMap.getSquareById(4));
+        gameMap.movePlayer(c, gameMap.getSquareById(3));
+
+        Set<Player> result = gameMap.getPlayersInDirection(gameMap.getSquareById(4), CardinalDirection.RIGHT);
+        assertEquals(2, result.size());
+        assertTrue(result.contains(a));
+        assertTrue(result.contains(b));
+    }
+    @Test
+    public void getVisiblePlayers(){
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(3,3, RoomColor.WHITE, new Coordinate(2,0));
+        gameMap.createRoom(3,3, RoomColor.GREEN, new Coordinate(1,1));
+        gameMap.createRoom(3,3, RoomColor.PURPLE, new Coordinate(0,0));
+        Square s1 = gameMap.getSquareById(2);
+        Square s2 = gameMap.getSquareById(9);
+        Square s3 = gameMap.getSquareById(11);
+        Square s4 = gameMap.getSquareById(18);
+        Set<Integer> doors = new HashSet<>();
+        doors.add(0);
+        gameMap.connectRooms(s1,s2,false, doors);
+        gameMap.connectRooms(s3,s4,false, doors);
+        Player a = new Player(false, "a");
+        Player b = new Player(false, "b");
+        Player c = new Player(false, "c");
+
+        SpawnPoint spawnPointB = (SpawnPoint) gameMap.getSquareById(13);
+
+        gameMap.spawnPlayer(a, (SpawnPoint)s1);
+        gameMap.spawnPlayer(b, spawnPointB);
+        gameMap.spawnPlayer(c, (SpawnPoint) s4);
+
+        Set<Player> result = gameMap.getVisiblePlayers(s1);
+        assertEquals(2, result.size());
+        assertTrue(result.contains(a));
+        assertTrue(result.contains(b));
+
     }
 }

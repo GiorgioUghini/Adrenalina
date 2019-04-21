@@ -59,9 +59,13 @@ public class GameMap {
      * @param s1 the topmost square in the left room or the leftmost square in the top room
      * @param s2 the topmost square in the right room or the leftmost square in the bottom room
      * @param leftToRight if true connects rooms from left to right, s1 is the top room and s2 is the bottom room
-     * @param doorOffsets a set of integers containing the offsets from which to put the doors. */
+     * @param doorOffsets a set of integers containing the offsets from which to put the doors.
+     * @throws NullPointerException if one of the given squares is null
+     * @throws SquareNotInMapException if one of the given squares is not in map
+     * @throws NotWallException if the door is added on a link that is not a wall */
     void connectRooms(Square s1, Square s2, boolean leftToRight, Set<Integer> doorOffsets) throws NotWallException {
-        if(!(squares.contains(s1) && squares.contains(s2))) throw new NullPointerException();
+        checkSquareIsInMap(s1);
+        checkSquareIsInMap(s2);
 
         Square tmp1 = s1;
         Square tmp2 = s2;
@@ -84,6 +88,46 @@ public class GameMap {
             tmp2 = tmp2.getNextSquare(next);
             if(tmp2==null) break;
         }while (tmp1!=null);
+    }
+    /** Connects 2 rooms through a single door, given the topmost or leftmost communicating square
+     * @param s1 the topmost square in the left room or the leftmost square in the top room
+     * @param s2 the topmost square in the right room or the leftmost square in the bottom room
+     * @param leftToRight if true connects rooms from left to right, s1 is the top room and s2 is the bottom room
+     * @param doorOffset the offset of the door, 0 if it is on the connected squares
+     * @throws NullPointerException if one of the given squares is null
+     * @throws SquareNotInMapException if one of the given squares is not in map
+     * @throws NotWallException if the door is added on a link that is not a wall */
+    void connectRooms(Square s1, Square s2, boolean leftToRight, int doorOffset){
+        connectRooms(s1,s2,leftToRight,new HashSet<>(Arrays.asList(doorOffset)));
+    }
+
+    /** Connects 2 room given the topmost or leftmost communicating square ids
+     * @param s1 the id of the topmost square in the left room or the leftmost square in the top room
+     * @param s2 the id of the topmost square in the right room or the leftmost square in the bottom room
+     * @param leftToRight if true connects rooms from left to right, s1 is the top room and s2 is the bottom room
+     * @param doorOffsets a set of integers containing the offsets from which to put the doors.
+     * @throws NullPointerException if one of the given squares is null
+     * @throws SquareNotInMapException if one of the given squares is not in map
+     * @throws NotWallException if the door is added on a link that is not a wall */
+    void connectRooms(int s1, int s2, boolean leftToRight, Set<Integer> doorOffsets){
+        if(s1<0 || s2<0) throw new NegativeException();
+        connectRooms(
+                getSquareById(s1),
+                getSquareById(s2),
+                leftToRight,
+                doorOffsets
+        );
+    }
+    /** Connects 2 room given the topmost or leftmost communicating square ids
+     * @param s1 the id of the topmost square in the left room or the leftmost square in the top room
+     * @param s2 the id of the topmost square in the right room or the leftmost square in the bottom room
+     * @param leftToRight if true connects rooms from left to right, s1 is the top room and s2 is the bottom room
+     * @param doorOffset the offset of the door, 0 if it is on the connected squares
+     * @throws NullPointerException if one of the given squares is null
+     * @throws SquareNotInMapException if one of the given squares is not in map
+     * @throws NotWallException if the door is added on a link that is not a wall */
+    void connectRooms(int s1, int s2, boolean leftToRight, int doorOffset){
+        connectRooms(s1,s2,leftToRight, new HashSet<>(Arrays.asList(doorOffset)));
     }
     /** Adds new room to the rooms' list
      * @param color
@@ -155,12 +199,32 @@ public class GameMap {
         if(positions.hasPlayer(player)) throw new PlayerAlreadyOnMapException();
         positions.addPlayer(player, spawnPoint);
     }
+    /** Move player to a square in the map
+     * @param player
+     * @param square
+     * @throws NullPointerException if one of the params is null
+     * @throws PlayerNotOnMapException if player is not on map
+     * @throws SquareNotInMapException if map does not have this square
+     * */
+    public void movePlayer(Player player, Square square){
+        checkPlayerInMap(player);
+        checkSquareIsInMap(square);
+        positions.movePlayer(player, square);
+    }
     /** Removes player from map
      * @param player
+     * @throws NullPointerException if player is null
      * @throws PlayerNotOnMapException if player is not on this map */
     public void removePlayer(Player player){
-        if(!positions.hasPlayer(player)) throw new PlayerNotOnMapException();
+        checkPlayerInMap(player);
         positions.removePlayer(player);
+    }
+    /** Check if player is in map
+     * @throws NullPointerException if player is null
+     * @throws PlayerNotOnMapException if player is not on this map */
+    private void checkPlayerInMap(Player player){
+        if(player==null) throw new NullPointerException();
+        if(!hasPlayer(player)) throw new PlayerNotOnMapException();
     }
     /** Get all squares at distance strictly equal to "distance", not less nor more
      * @param from the square from which to start calculating distances
@@ -246,6 +310,8 @@ public class GameMap {
     }
     /** Gets all the squares visible from the given square according to the game rules: all the squares in the room and all the squares in the rooms that are connected through doors on the given square, if any
      * @param from the square from which you are getting the other squares
+     * @throws NullPointerException if "from" is null
+     * @throws SquareNotInMapException if "from" is not in map
      * @return a set with all the visible squares */
     public Set<Square> getAllVisibleSquares(Square from){
         checkSquareIsInMap(from);
@@ -296,11 +362,50 @@ public class GameMap {
      * @return A set of all the squares of the map, without any order */
     public Set<Square> getAllSquares() { return squares; }
 
-    //TODO getAllSquaresByCardinal(Square from, CardinalDirection direction)
-
-    //TODO getPlayersInRoom
-
-    //TODO getVisiblePlayers
+    /** Returns in a list all squares in a given cardinal direction until the end of the map. Does not stop on walls
+     * @param from the starting square, will return as the first element of the list
+     * @param direction the cardinal direction
+     * @throws NullPointerException if one of the params is null
+     * @throws SquareNotInMapException if map does not have that square
+     * @return a List containing the squares in the order in which they are walked in the path */
+    public List<Square> getAllSquaresByCardinal(Square from, CardinalDirection direction){
+        checkSquareIsInMap(from);
+        if(direction==null) throw new NullPointerException();
+        List<Square> out = new ArrayList<>();
+        Square tmp = from;
+        while(tmp!=null){
+            out.add(tmp);
+            tmp = tmp.getNextSquare(direction);
+        }
+        return out;
+    }
+    /** Gets all players in a cardinal direction, passing through walls. Does not return them in order
+     * @param from the square from which the research start
+     * @param direction
+     * @return a set of the players in the direction, including the players on the "from" square, if any. The set could be empty. If order is needed, use getAllSquaresByCardinal method
+     * @throws SquareNotInMapException if "from" square is not in map
+     * @throws NullPointerException if one of the params is null */
+    public Set<Player> getPlayersInDirection(Square from, CardinalDirection direction){
+        List<Square> squares = getAllSquaresByCardinal(from, direction);
+        Set<Player> out = new HashSet<>();
+        for(Square square : squares){
+            out.addAll(getPlayersOnSquare(square));
+        }
+        return out;
+    }
+    /** Get all visible players from a given square
+     * @param from Square
+     * @return All visible players from the given square
+     * @throws NullPointerException if "from" is null
+     * @throws SquareNotInMapException if the map does not have this square */
+    public Set<Player> getVisiblePlayers(Square from){
+        Set<Square> visibleSquares = getAllVisibleSquares(from);
+        Set<Player> out = new HashSet<>();
+        for(Square square : visibleSquares){
+            out.addAll(getPlayersOnSquare(square));
+        }
+        return out;
+    }
 
     /** Check that a square is in the map
      * @param square the square being checked, cannot be null
