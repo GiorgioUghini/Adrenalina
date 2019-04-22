@@ -34,6 +34,10 @@ class Life {
         return (totalDamage > 10);
     }
 
+    int getTotalDamage() {
+        return myDamages.values().stream().mapToInt(Integer::intValue).sum();
+    }
+
     void damage(int damage, Player attacker) {
         int additionalDamage = me.getMarksFromPlayer(attacker);
         me.removeAllMarkFromPlayer(attacker);

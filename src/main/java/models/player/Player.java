@@ -148,6 +148,9 @@ public class Player implements Subscriber {
 
     void removeAllMarkFromPlayer(Player fromWho) { this.marks.removeAllMarkFromPlayer(fromWho); }
 
+    /** Returns all the damages of this player. */
+    public int getTotalDamage() { return this.life.getTotalDamage(); }
+
     /* void hasJustMarkedPlayer(Player who, int numberOfMarks) { this.marks.hasJustMarkedPlayer(who, numberOfMarks); } */
 
  }
