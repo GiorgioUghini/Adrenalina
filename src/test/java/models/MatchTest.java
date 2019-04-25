@@ -76,9 +76,28 @@ public class MatchTest {
         // [GRAB, RUN] not permitted in this stage (order not correct)
         assertFalse(confirmation);
 
+        pl3.getDamage(3, pl2);
+
+        wantsToDoList.clear();
+        wantsToDoList.add(ActionElement.RUN);
+        wantsToDoList.add(ActionElement.RUN);
+        wantsToDoList.add(ActionElement.GRAB);
+        confirmation = m.confirmActions(pl2, wantsToDoList);
+        // [RUN, RUN, GRAB] not permitted in this stage (Giorgio has full life)
+        assertFalse(confirmation);
+
         m.endTurn(); //End Giorgio
 
         m.nextTurn(); //Start Vila
+        wantsToDoList.clear();
+        wantsToDoList.add(ActionElement.RUN);
+        wantsToDoList.add(ActionElement.RUN);
+        wantsToDoList.add(ActionElement.GRAB);
+        confirmation = m.confirmActions(pl3, wantsToDoList);
+        // [RUN, RUN, GRAB] permitted in this stage (Vila has three damages)
+        assertTrue(confirmation);
+
+        // Frenzy enabled!!!
         m.activateFrenzy(pl3);
         m.endTurn(); //End Vila
 
@@ -89,26 +108,28 @@ public class MatchTest {
         wantsToDoList.add(ActionElement.RELOAD);
         wantsToDoList.add(ActionElement.SHOOT);
         confirmation = m.confirmActions(pl1, wantsToDoList);
-        // [RUN, RUN, RELOAD, SHOOT] not permitted in this stage (Not type 1)
+        // [RUN, RUN, RELOAD, SHOOT] not permitted in this stage (Not type 2)
         assertFalse(confirmation);
         wantsToDoList.remove(ActionElement.RUN);
         confirmation = m.confirmActions(pl1, wantsToDoList);
-        // [RUN, RELOAD, SHOOT] permitted in this stage (Not type 1)
+        // [RUN, RELOAD, SHOOT] permitted in this stage (Not type 2)
         assertTrue(confirmation);
         m.endTurn(); //End Cosimo
 
         m.nextTurn(); //Start Giorgio
         confirmation = m.confirmActions(pl2, wantsToDoList);
-        // [RUN, RELOAD, SHOOT] permitted in this stage (Not type 1)
+        // [RUN, RELOAD, SHOOT] permitted in this stage as subset of [RUN, RUN, RELOAD, SHOOT] (Type 2)
         assertTrue(confirmation);
         wantsToDoList.clear();
         wantsToDoList.add(ActionElement.RUN);
+        confirmation = m.confirmActions(pl1, wantsToDoList);
+        // Player2 ("Vila"), it's not your turn!
+        assertFalse(confirmation);
         wantsToDoList.add(ActionElement.RUN);
         wantsToDoList.add(ActionElement.RELOAD);
         wantsToDoList.add(ActionElement.SHOOT);
-        //TODO: Double check this last confirmation
         confirmation = m.confirmActions(pl2, wantsToDoList);
-        // [RUN, RUN, RELOAD, SHOOT] permitted in this stage (Not type 1)
+        // [RUN, RUN, RELOAD, SHOOT] permitted in this stage (Type 2)
         assertTrue(confirmation);
     }
 }

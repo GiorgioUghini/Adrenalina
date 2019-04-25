@@ -19,11 +19,12 @@ public class Match {
     private GameMap gameMap;
     private Turn actualTurn;
     private boolean frenzy;
+    //Dont' worry, (frenzy = false) ==> (frenzyType1 = DC)
     private boolean frenzyType1 = true;
 
     public Match(){
         playerList = new ArrayList<>();
-        actualTurn  = new Turn(true);
+        actualTurn  = new Turn();
     }
 
     @Override
@@ -37,10 +38,9 @@ public class Match {
         // type check and cast
         if (getClass() != o.getClass())
             return false;
-        //Match match = (Match) o;
+        Match match = (Match) o;
         // field comparison
-        //return firstPlayer.equals(match.firstPlayer);
-        return true;
+        return playerList.equals(match.playerList);
     }
 
     /** Activate frenzy from now on
@@ -106,33 +106,33 @@ public class Match {
     }
 
     /** given an integer from 0 to 3, generates a map based on the order on which they appear on the instructions. Map 3 is the map that is not shown in the instructions
-     * @param mapID from 0 to 3
-     * @throws MapNotExistsException if mapNumber is not in {0,1,2,3} */
-    public void createMap(int mapID)  throws MapNotExistsException {
+     * @param mapID from 0 to 3 */
+    public void createMap(int mapID)  {
         gameMap = MapGenerator.generate(mapID);
     }
 
+    /** Method that signal the start of the match. This method SHOULD be called once when the match is ready to start.*/
     public void startMatch() {
-        actualTurn = new Turn();
         actualPlayerIndex = playerList.indexOf(firstPlayer);
     }
 
     /** Method that signal the start of the turn of a player. This method SHOULD be called each time a player starts his turn*/
     public void nextTurn() {
         if (actualTurn.hasFinished()) {
+            actualPlayerIndex = (actualPlayerIndex == playerList.size() - 1) ? 0 : actualPlayerIndex + 1 ;
             if (frenzy && (playerList.indexOf(firstPlayer) == actualPlayerIndex)) {
                 frenzyType1 = false;
             }
-            actualPlayerIndex = (actualPlayerIndex == playerList.size() - 1) ? 0 : actualPlayerIndex + 1 ;
             actualTurn = new Turn();
         }
     }
 
+    /** Method that signal the end of the turn.*/
     public void endTurn() {
         actualTurn.endTurn();
     }
 
-    /** given an integer from 0 to 3, generates a map based on the order on which they appear on the instructions. Map 3 is the map that is not shown in the instructions
+    /** returns the set of possible moves (as a list) of the given player.
      * @param p any player
      * @return a Set of possible moves of the player */
     public Set getPossibleAction(Player p) {
@@ -154,6 +154,33 @@ public class Match {
             default:
                 return (HashSet<LinkedList<ActionElement>>) actualTurn.getCompositions().get(ActionGroup.NORMAL);
         }
+    }
+
+    /** given a player object and the list of moves he wants to do, returns true if he's allowed to do this moves
+     * @param p any player
+     * @param actionList list of action the players wants to do
+     * @return true if he's allowed, false otherwise */
+    //TODO: Check if player has already finished his actions or can reload (Remember frenzytype2 has only one action, others has two)
+    public boolean confirmActions(Player p, List actionList) {
+        Set possibleActions = this.getPossibleAction(p);
+        for (Object o : possibleActions) {
+            if (isOrderedSubset(actionList, (List) o)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isOrderedSubset(List biggerList, List smallerList) {
+        int indexSmaller = 0, indexBigger = 0;
+        while (indexSmaller < smallerList.size() && indexBigger < biggerList.size()) {
+            if (smallerList.get(indexSmaller) == biggerList.get(indexBigger)) {
+                indexBigger += 1;
+            }
+            indexSmaller += 1;
+        }
+
+        return (indexBigger == biggerList.size());
     }
 
 }
