@@ -18,9 +18,8 @@ public class Match {
     private WeaponDeck weaponDeck;
     private GameMap gameMap;
     private Turn actualTurn;
-    private boolean frenzy;
-    //Dont' worry, (frenzy = false) ==> (frenzyType1 = DC)
-    private boolean frenzyType1 = true;
+    private ActionGroup frenzy = null;
+    //null -> noFrenzy, Type1, Type2
 
     public Match(){
         playerList = new ArrayList<>();
@@ -46,7 +45,7 @@ public class Match {
     /** Activate frenzy from now on
      * @param player the player who is activating frenzy mode.*/
     public void activateFrenzy(Player player) {
-        frenzy = true;
+        frenzy = ActionGroup.FRENZY_TYPE_1;
     }
 
     /** Get the first player on this match
@@ -120,8 +119,8 @@ public class Match {
     public void nextTurn() {
         if (actualTurn.hasFinished()) {
             actualPlayerIndex = (actualPlayerIndex == playerList.size() - 1) ? 0 : actualPlayerIndex + 1 ;
-            if (frenzy && (playerList.indexOf(firstPlayer) == actualPlayerIndex)) {
-                frenzyType1 = false;
+            if ((frenzy != null) && (playerList.indexOf(firstPlayer) == actualPlayerIndex)) {
+                frenzy = ActionGroup.FRENZY_TYPE_2;
             }
             actualTurn = new Turn();
         }
@@ -139,28 +138,18 @@ public class Match {
         if (!p.equals(playerList.get(actualPlayerIndex))) {
             return new HashSet<>();
         }
-        if (frenzy) {
-            if (frenzyType1) {
-                return (HashSet<LinkedList<ActionElement>>) actualTurn.getCompositions().get(ActionGroup.FRENZY_TYPE_1);
-            } else {
-                return (HashSet<LinkedList<ActionElement>>) actualTurn.getCompositions().get(ActionGroup.FRENZY_TYPE_2);
-            }
+        if (frenzy != null) {
+            return (HashSet<LinkedList<ActionElement>>) actualTurn.getCompositions().get(frenzy);
         }
-        switch (p.getTotalDamage()) {
-            case 3: case 4: case 5:
-                return (HashSet<LinkedList<ActionElement>>) actualTurn.getCompositions().get(ActionGroup.LOW_LIFE);
-            case 6: case 7: case 8: case 9:
-                return (HashSet<LinkedList<ActionElement>>) actualTurn.getCompositions().get(ActionGroup.VERY_LOW_LIFE);
-            default:
-                return (HashSet<LinkedList<ActionElement>>) actualTurn.getCompositions().get(ActionGroup.NORMAL);
-        }
+
+        return (HashSet<LinkedList<ActionElement>>) actualTurn.getCompositions().get(p.getLifeState());
+
     }
 
     /** given a player object and the list of moves he wants to do, returns true if he's allowed to do this moves
      * @param p any player
      * @param actionList list of action the players wants to do
      * @return true if he's allowed, false otherwise */
-    //TODO: Check if player has already finished his actions or can reload (Remember frenzytype2 has only one action, others has two)
     public boolean confirmActions(Player p, List actionList) {
         Set possibleActions = this.getPossibleAction(p);
         for (Object o : possibleActions) {

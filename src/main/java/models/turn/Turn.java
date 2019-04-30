@@ -5,9 +5,6 @@ import java.util.*;
 public class Turn {
     HashMap<ActionGroup, HashSet<LinkedList<ActionElement>>> compositions = new HashMap<>();
     private boolean finished;
-    private boolean hasDoneFirstAction = false;
-    private boolean hasDoneSecondAction = false;
-    private boolean hasDoneReloading = false;
 
     public Turn() {
         finished = false;
@@ -40,30 +37,6 @@ public class Turn {
 
     public boolean hasFinished() {
         return finished;
-    }
-
-    public void FinishedFirstAction() {
-        hasDoneFirstAction = true;
-    }
-
-    public boolean getHasDoneFirstAction() {
-        return hasDoneFirstAction;
-    }
-
-    public void FinishedSecondAction() {
-        hasDoneSecondAction = true;
-    }
-
-    public boolean getHasDoneSecondAction() {
-        return hasDoneSecondAction;
-    }
-
-    public void FinishedReloading() {
-        hasDoneReloading = true;
-    }
-
-    public boolean getHasDoneReloaoding() {
-        return hasDoneReloading;
     }
 
     public void endTurn() {
