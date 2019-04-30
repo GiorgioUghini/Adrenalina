@@ -9,7 +9,7 @@ public class MapGenerator {
     /** given an integer from 0 to 3, generates a map based on the order on which they appear on the instructions. Map 3 is the map that is not shown in the instructions
      * @param mapNumber from 0 to 3
      * @throws MapNotExistsException if mapNumber is not in {0,1,2,3} */
-    public static GameMap generate(int mapNumber){
+    public static GameMap generate(int mapNumber) throws MapNotExistsException{
         GameMap gameMap = new GameMap();
         switch (mapNumber){
             case 0:

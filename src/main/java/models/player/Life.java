@@ -1,5 +1,8 @@
 package models.player;
 
+import models.turn.ActionElement;
+import models.turn.ActionGroup;
+
 import java.util.*;
 
 class Life {
@@ -34,6 +37,10 @@ class Life {
         return (totalDamage > 10);
     }
 
+    int getTotalDamage() {
+        return myDamages.values().stream().mapToInt(Integer::intValue).sum();
+    }
+
     void damage(int damage, Player attacker) {
         int additionalDamage = me.getMarksFromPlayer(attacker);
         me.removeAllMarkFromPlayer(attacker);
@@ -50,6 +57,18 @@ class Life {
         if (totalDamage == 12) {    //Give revenge mark
             attacker.giveMark(1, me);
         }
+
+        switch (totalDamage) {
+            case 3: case 4: case 5:
+                me.setLifeState(ActionGroup.LOW_LIFE);
+                break;
+            case 6: case 7: case 8: case 9:
+                me.setLifeState(ActionGroup.VERY_LOW_LIFE);
+                break;
+            default:
+                break;
+        }
+
 
         //Check if the player's dead
         if (totalDamage > 10) {

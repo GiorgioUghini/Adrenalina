@@ -2,6 +2,7 @@ package models.player;
 
 import models.PowerUpCard;
 import models.WeaponCard;
+import models.turn.ActionGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ public class Player implements Subscriber {
     private Mark marks;
     private int points;
     private int numerOfSkulls;
+    private ActionGroup lifeState = ActionGroup.NORMAL;
 
     /** Creates a new player object
      * @param isFirstPlayer the boolean witch indicates whether this player should be the one who has the "First Player Mark"
@@ -148,6 +150,16 @@ public class Player implements Subscriber {
 
     void removeAllMarkFromPlayer(Player fromWho) { this.marks.removeAllMarkFromPlayer(fromWho); }
 
+    /** Returns all the damages of this player. */
+    public int getTotalDamage() { return this.life.getTotalDamage(); }
+
     /* void hasJustMarkedPlayer(Player who, int numberOfMarks) { this.marks.hasJustMarkedPlayer(who, numberOfMarks); } */
 
- }
+    void setLifeState(ActionGroup lifeState) {
+        this.lifeState = lifeState;
+    }
+
+    public ActionGroup getLifeState() {
+        return this.lifeState;
+    }
+}

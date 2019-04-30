@@ -3,9 +3,11 @@ package models.turn;
 import java.util.*;
 
 public class Turn {
-    HashMap<ActionGroup, HashSet<LinkedList<ActionGroup>>> compositions = new HashMap<>();
+    HashMap<ActionGroup, HashSet<LinkedList<ActionElement>>> compositions = new HashMap<>();
+    private boolean finished;
 
     public Turn() {
+        finished = false;
         LinkedList actionGroupRunNormal = new LinkedList<>(Arrays.asList(ActionElement.RUN, ActionElement.RUN));
         LinkedList actionGroupGrabNormal = new LinkedList<>(Arrays.asList(ActionElement.RUN, ActionElement.GRAB));
         LinkedList actionGroupShootNormal = new LinkedList<>(Arrays.asList(ActionElement.SHOOT));
@@ -32,4 +34,13 @@ public class Turn {
     {
         return compositions;
     }
+
+    public boolean hasFinished() {
+        return finished;
+    }
+
+    public void endTurn() {
+        finished = true;
+    }
+
 }
