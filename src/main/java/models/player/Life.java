@@ -1,6 +1,5 @@
 package models.player;
 
-import models.turn.ActionElement;
 import models.turn.ActionGroup;
 
 import java.util.*;
@@ -86,12 +85,16 @@ class Life {
             return result;
         } else {
 
-            Player firstAttacker = myDamages.entrySet().stream().reduce((first, second) -> first).orElse(null).getKey();
+            Player firstAttacker = myDamages.entrySet()
+                    .stream()
+                    .reduce((first, second) -> first)
+                    .orElse(myDamages.entrySet().iterator().next())
+                    .getKey();
             result.put(firstAttacker, FIRST_BLOOD_POINTS);
 
             int countingOrder = 0;
             while (!myDamages.isEmpty()) {
-                Map.Entry<Player, Integer> maxEntry = null;
+                Map.Entry<Player, Integer> maxEntry = myDamages.entrySet().iterator().next();
 
                 for (Map.Entry<Player, Integer> entry : myDamages.entrySet()) {
                     if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0) {

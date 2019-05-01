@@ -42,6 +42,11 @@ public class Match {
         return playerList.equals(match.playerList);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(playerList);
+    }
+
     /** Activate frenzy from now on
      * @param player the player who is activating frenzy mode.*/
     public void activateFrenzy(Player player) {
@@ -93,11 +98,6 @@ public class Match {
         return weaponDeck.draw();
     }
 
-    /*NOT POSSIBLE:
-    public void shuffleWeaponDeck() {
-        weaponDeck.shuffle();
-    }*/
-
     /** Get how many cards remains into this match' weapons deck
      * @return how many cards remains into this match' weapons deck.*/
     public int getSizeWeaponDeck() {
@@ -139,10 +139,10 @@ public class Match {
             return new HashSet<>();
         }
         if (frenzy != null) {
-            return (HashSet<LinkedList<ActionElement>>) actualTurn.getCompositions().get(frenzy);
+            return (HashSet) actualTurn.getCompositions().get(frenzy);
         }
 
-        return (HashSet<LinkedList<ActionElement>>) actualTurn.getCompositions().get(p.getLifeState());
+        return (HashSet) actualTurn.getCompositions().get(p.getLifeState());
 
     }
 
@@ -161,7 +161,8 @@ public class Match {
     }
 
     private boolean isOrderedSubset(List biggerList, List smallerList) {
-        int indexSmaller = 0, indexBigger = 0;
+        int indexSmaller = 0;
+        int indexBigger = 0;
         while (indexSmaller < smallerList.size() && indexBigger < biggerList.size()) {
             if (smallerList.get(indexSmaller) == biggerList.get(indexBigger)) {
                 indexBigger += 1;

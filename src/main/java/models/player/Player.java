@@ -7,6 +7,7 @@ import models.turn.ActionGroup;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class Player implements Subscriber {
 
@@ -34,7 +35,7 @@ public class Player implements Subscriber {
         life = new Life(this);
         points = 0;
         numerOfSkulls = 0;
-        marks = new Mark(this);
+        marks = new Mark();
     }
 
     @Override
@@ -51,6 +52,11 @@ public class Player implements Subscriber {
         Player player = (Player) o;
         // field comparison
         return name.equals(player.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 
     @Override
@@ -139,8 +145,6 @@ public class Player implements Subscriber {
     /** Clears all the damage map of this player. */
     public void clearDamages() { this.life.clearDamages(); }
 
-    /* int marksDistributed() { return this.marks.marksDistributed(); } */
-
     /** Damage this player
      * @param numberOfMarks the number of marks to give. Could be any number, without needs to check limitation of it.
      * @param fromWho the player witch is giveing marks */
@@ -152,8 +156,6 @@ public class Player implements Subscriber {
 
     /** Returns all the damages of this player. */
     public int getTotalDamage() { return this.life.getTotalDamage(); }
-
-    /* void hasJustMarkedPlayer(Player who, int numberOfMarks) { this.marks.hasJustMarkedPlayer(who, numberOfMarks); } */
 
     void setLifeState(ActionGroup lifeState) {
         this.lifeState = lifeState;
