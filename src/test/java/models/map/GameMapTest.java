@@ -212,8 +212,8 @@ public class GameMapTest {
     }
     @Test
     public void getPlayersOnSquare(){
-        Player p1 = new Player(false, "a");
-        Player p2 = new Player(false, "a");
+        Player p1 = new Player(false, "p1");
+        Player p2 = new Player(false, "p2");
         GameMap gameMap = new GameMap();
         gameMap.createRoom(1,1, RoomColor.WHITE, new Coordinate(0,0));
 
@@ -233,8 +233,8 @@ public class GameMapTest {
         GameMap gameMap = new GameMap();
         gameMap.createRoom(3,3, RoomColor.PURPLE, new Coordinate(0,0));
         SpawnPoint spawnPoint = (SpawnPoint) gameMap.getSpawnPoints().toArray()[0];
-        Player pippo = new Player(false, "a");
-        Player pluto = new Player(false, "a");
+        Player pippo = new Player(false, "Pippo");
+        Player pluto = new Player(false, "Pluto");
 
         gameMap.spawnPlayer(pippo, spawnPoint);
 
