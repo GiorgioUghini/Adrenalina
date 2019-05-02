@@ -1,6 +1,8 @@
 package models.card;
 
-public class Damage{
+import java.io.Serializable;
+
+public class Damage implements Serializable {
     public TargetType type;
     public String target;
     public Integer value;

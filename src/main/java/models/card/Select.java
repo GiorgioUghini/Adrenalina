@@ -1,6 +1,8 @@
 package models.card;
 
-public class Select{
+import java.io.Serializable;
+
+public class Select implements Serializable {
     public TargetType type;
     public String id;
     public Integer max;

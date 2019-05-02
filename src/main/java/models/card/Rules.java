@@ -1,6 +1,8 @@
 package models.card;
 
-public class Rules{
+import java.io.Serializable;
+
+public class Rules implements Serializable {
     public String[] includes;
     public String[] excludes;
 }

@@ -2,7 +2,9 @@ package models.card;
 
 import com.google.gson.annotations.SerializedName;
 
-public enum TargetType{
+import java.io.Serializable;
+
+public enum TargetType implements Serializable {
     @SerializedName("player")
     PLAYER,
 

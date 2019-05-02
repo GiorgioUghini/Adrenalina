@@ -2,7 +2,9 @@ package models.card;
 
 import com.google.gson.annotations.SerializedName;
 
-public enum AreaType{
+import java.io.Serializable;
+
+public enum AreaType implements Serializable {
     @SerializedName("visible")
     VISIBLE,
 

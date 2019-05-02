@@ -1,6 +1,8 @@
 package models.card;
 
-public class Radix{
+import java.io.Serializable;
+
+public class Radix implements Serializable {
     public String ref;
     public String area;
     public Integer min;

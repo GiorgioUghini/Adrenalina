@@ -1,10 +1,11 @@
 package models.player;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-class Mark {
+class Mark implements Serializable {
     //In the english rules a player is allowed to distribute a total of 3 marks on each player and not 3 marks in general... And we are following there rules
 
     private Map<Player, Integer> otherPlayersMarksOnMyLife;

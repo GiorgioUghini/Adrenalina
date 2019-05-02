@@ -1,6 +1,8 @@
 package models.player;
 
-public class Ammo {
+import java.io.Serializable;
+
+public class Ammo implements Serializable {
     public Ammo() {
         red = 0;
         green = 0;

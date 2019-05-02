@@ -1,6 +1,8 @@
 package models.turn;
 
-public enum ActionGroup {
+import java.io.Serializable;
+
+public enum ActionGroup implements Serializable {
     NORMAL,
     LOW_LIFE,
     VERY_LOW_LIFE,

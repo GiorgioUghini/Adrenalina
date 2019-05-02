@@ -2,9 +2,10 @@ package models.player;
 
 import models.turn.ActionGroup;
 
+import java.io.Serializable;
 import java.util.*;
 
-class Life {
+class Life implements Serializable {
     private static final int MAX_LIFEPOINTS = 12;
     private static final int FIRST_BLOOD_POINTS = 1;
     private static final int[] assignablePoints = {8, 6, 4, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};

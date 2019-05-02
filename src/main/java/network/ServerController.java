@@ -1,10 +1,12 @@
 package network;
 
+import java.rmi.RemoteException;
+
 public class ServerController implements RequestHandler {
 
     private RemoteMethods remoteMethods;
 
-    public ServerController(){
+    public ServerController() throws RemoteException {
         remoteMethods = new RemoteMethods();
     }
 
@@ -15,7 +17,12 @@ public class ServerController implements RequestHandler {
 
     @Override
     public Response handle(RegisterPlayerRequest request) {
-        String token = remoteMethods.registerPlayer(request.username);
+        String token = null;
+        try {
+            token = remoteMethods.registerPlayer(request.username);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         RegisterPlayerResponse response = new RegisterPlayerResponse(token);
         return response;
     }
