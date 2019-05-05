@@ -1,6 +1,6 @@
 package network;
 
-public class RegisterPlayerResponse implements  Response {
+public class RegisterPlayerResponse implements Response {
 
     public String token;
 

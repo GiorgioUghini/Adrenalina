@@ -3,12 +3,10 @@ package models.player;
 import models.PowerUpCard;
 import models.WeaponCard;
 import models.turn.ActionGroup;
+import network.TokenGenerator;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class Player implements Subscriber, Serializable {
 
@@ -20,8 +18,9 @@ public class Player implements Subscriber, Serializable {
     private Life life;
     private Mark marks;
     private int points;
-    private int numerOfSkulls;
+    private int numberOfSkulls;
     private ActionGroup lifeState = ActionGroup.NORMAL;
+    private String token;
 
     /** Creates a new player object
      * @param isFirstPlayer the boolean witch indicates whether this player should be the one who has the "First Player Mark"
@@ -35,8 +34,10 @@ public class Player implements Subscriber, Serializable {
         powerUpList = new ArrayList<>();
         life = new Life(this);
         points = 0;
-        numerOfSkulls = 0;
+        numberOfSkulls = 0;
         marks = new Mark();
+        //token generation
+        this.token = TokenGenerator.nextToken();
     }
 
     @Override
@@ -109,9 +110,9 @@ public class Player implements Subscriber, Serializable {
 
     public void setPoints(int points) { this.points = points; }
 
-    public int getNumberOfSkulls() { return this.numerOfSkulls; }
+    public int getNumberOfSkulls() { return this.numberOfSkulls; }
 
-    public void setNumerOfSkulls(int numerOfSkulls) { this.numerOfSkulls = numerOfSkulls; }
+    public void setNumberOfSkulls(int numberOfSkulls) { this.numberOfSkulls = numberOfSkulls; }
 
     /**
      * @return a map between Player and the damages it made to this player
@@ -164,5 +165,9 @@ public class Player implements Subscriber, Serializable {
 
     public ActionGroup getLifeState() {
         return this.lifeState;
+    }
+
+    public String getToken() {
+        return this.token;
     }
 }

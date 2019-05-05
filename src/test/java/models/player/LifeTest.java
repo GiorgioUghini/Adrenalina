@@ -94,7 +94,7 @@ public class LifeTest {
 
         for (int skull = 0; skull <5; skull++) {
             pl2.clearDamages();
-            pl2.setNumerOfSkulls(skull); //I'm dead some times before this
+            pl2.setNumberOfSkulls(skull); //I'm dead some times before this
             pl2.getDamage(2, pl1);
             pl2.getDamage(4, pl3);
             pl2.getDamage(2, pl1);
@@ -121,7 +121,7 @@ public class LifeTest {
         assertEquals(1, pl1.getMarksFromPlayer(pl2));
 
         pl2.clearDamages();
-        pl2.setNumerOfSkulls(1); //I'm dead one time before this
+        pl2.setNumberOfSkulls(1); //I'm dead one time before this
         pl1.getDamage(5, pl2);
         pl1.getDamage(6, pl3);
         Map<Player, Integer> pl1CountedPoints = pl1.countPoints();
