@@ -32,7 +32,7 @@ public class Connection {
     private Connection() {
     }
 
-    public static Connection getIstance() {
+    public static Connection getInstance() {
         if (istance == null)
             istance = new Connection();
         return istance;
@@ -90,5 +90,9 @@ public class Connection {
             return remoteMethods;
         else
             throw new InvalidConnectionTypeException();
+    }
+
+    public ConnectionType getType(){
+        return type;
     }
 }

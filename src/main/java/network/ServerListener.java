@@ -14,7 +14,7 @@ public class ServerListener implements Runnable{
     @Override
     public void run() {
         try {
-            Response response = (Response) Connection.getIstance().getInputStream().readObject();
+            Response response = (Response) Connection.getInstance().getInputStream().readObject();
             response.handle(responseHandler);
         } catch (Exception e) {
             Logger logger = Logger.getAnonymousLogger();
