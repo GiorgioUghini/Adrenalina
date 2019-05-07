@@ -1,6 +1,8 @@
 package network;
 
 import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ServerController implements RequestHandler {
 
@@ -21,9 +23,9 @@ public class ServerController implements RequestHandler {
         try {
             token = remoteMethods.registerPlayer(request.username);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Logger logger = Logger.getAnonymousLogger();
+            logger.log(Level.SEVERE, "an exception was thrown", e);
         }
-        RegisterPlayerResponse response = new RegisterPlayerResponse(token);
-        return response;
+        return new RegisterPlayerResponse(token);
     }
 }

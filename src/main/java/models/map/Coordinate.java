@@ -1,5 +1,7 @@
 package models.map;
 
+import java.util.Objects;
+
 public class Coordinate {
     private int x;
     private int y;
@@ -16,5 +18,11 @@ public class Coordinate {
         if (!(object instanceof Coordinate)) return false;
         Coordinate other = (Coordinate) object;
         return (other.getX() == getX() && other.getY() == getY());
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this);
     }
 }

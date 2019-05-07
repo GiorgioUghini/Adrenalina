@@ -5,6 +5,7 @@ import errors.NotWallException;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Iterator;
+import java.util.Objects;
 
 public abstract class Square{
     private RoomColor color;
@@ -69,15 +70,25 @@ public abstract class Square{
         }
         return false;
     }
+
     @Override
-    public boolean equals(Object object){
-        if(object==null) return false;
-        if(object==this) return true;
-        try{
-            Square s = (Square)object;
-            return s.getId() == getId();
-        }catch(Exception e){
+    public boolean equals(Object o) {
+        // self check
+        if (this == o)
+            return true;
+        // null check
+        if (o == null)
             return false;
-        }
+        // type check and cast
+        if (getClass() != o.getClass())
+            return false;
+        Square sq = (Square) o;
+        // field comparison
+        return (getId() == (sq.getId()));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

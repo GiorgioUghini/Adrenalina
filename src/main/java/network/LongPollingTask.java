@@ -1,11 +1,11 @@
 package network;
 
-import java.awt.*;
-import java.io.ObjectInputStream;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LongPollingTask extends TimerTask {
 
@@ -24,7 +24,8 @@ public class LongPollingTask extends TimerTask {
             if(updates != null)
                 queue.addAll(updates);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Logger logger = Logger.getAnonymousLogger();
+            logger.log(Level.SEVERE, "an exception was thrown", e);
         }
     }
 }
