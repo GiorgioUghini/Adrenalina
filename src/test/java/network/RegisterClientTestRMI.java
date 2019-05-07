@@ -33,14 +33,14 @@ public class RegisterClientTestRMI {
 
         new Thread(() -> {
             try {
-                Connection.getIstance().initRMI();
+                Connection.getInstance().initRMI();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }).start();
 
         Thread.sleep(200);
-        RegisterPlayerResponse res = Connection.getIstance().getRemoteMethods().registerPlayer("Furlan");
+        RegisterPlayerResponse res = Connection.getInstance().getRemoteMethods().registerPlayer("Furlan");
         res.handle(new ResponseHandler());
         Lobby mainLobby = Lobby.getInstance();
         assertEquals("Furlan", mainLobby.getPlayerWaiting().get(0).getName());

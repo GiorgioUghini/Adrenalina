@@ -31,8 +31,8 @@ public class RegisterClientTestSocket {
                 e.printStackTrace();
             }
         }).start();
-        Connection.getIstance().initSocket(Constants.HOSTNAME, Constants.PORT);
-        ObjectOutputStream out = Connection.getIstance().getOutputStream();
+        Connection.getInstance().initSocket(Constants.HOSTNAME, Constants.PORT);
+        ObjectOutputStream out = Connection.getInstance().getOutputStream();
         RegisterPlayerRequest request = new RegisterPlayerRequest("Furlan");
         out.writeObject(request);
         Thread.sleep(250); //Do not remove
