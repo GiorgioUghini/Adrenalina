@@ -25,6 +25,7 @@ public class LobbyController {
         {
             throw new InvalidConnectionTypeException();
         }
+
     }
 
     public void registerPlayer(String username) throws IOException {
