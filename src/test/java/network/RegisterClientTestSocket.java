@@ -1,5 +1,6 @@
 package network;
 
+import config.Constants;
 import models.Lobby;
 import network.requests.RegisterPlayerRequest;
 import org.junit.Test;
@@ -14,8 +15,7 @@ public class RegisterClientTestSocket {
 
     @Test
     public void registerClientSocket() throws IOException, InterruptedException, NotBoundException {
-        /*
-        final Server server = new Server(3000);
+        final Server server = new Server(Constants.PORT);
         new Thread(() -> {
             try {
                 server.start();
@@ -23,7 +23,7 @@ public class RegisterClientTestSocket {
                 e.printStackTrace();
             }
         }).start();
-        final Client client = new Client("localhost", 3000);
+        final Client client = new Client(Constants.HOSTNAME, Constants.PORT);
         new Thread(() -> {
             try {
                 client.start();
@@ -31,8 +31,8 @@ public class RegisterClientTestSocket {
                 e.printStackTrace();
             }
         }).start();
-
-        ObjectOutputStream out = client.getOutputStream();
+        Connection.getIstance().initSocket(Constants.HOSTNAME, Constants.PORT);
+        ObjectOutputStream out = Connection.getIstance().getOutputStream();
         RegisterPlayerRequest request = new RegisterPlayerRequest("Furlan");
         out.writeObject(request);
         Thread.sleep(250); //Do not remove
@@ -41,7 +41,6 @@ public class RegisterClientTestSocket {
         assertEquals("Furlan", mainLobby.getPlayerWaiting().get(0).getName());
         assertEquals(1, mainLobby.getPlayerWaiting().size());
         assertEquals(64, mainLobby.getPlayerWaiting().get(0).getToken().length());
-        */
     }
 
 }

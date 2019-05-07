@@ -1,6 +1,8 @@
 package network;
 
+import config.Constants;
 import models.Lobby;
+import network.responses.RegisterPlayerResponse;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -11,9 +13,8 @@ import static org.junit.Assert.*;
 public class RegisterClientTestRMI {
 
     @Test
-    public void registerClientRMI() throws IOException, InterruptedException, NotBoundException {
-        /*
-        final Server server = new Server(3000);
+    public void registerClientRMI() throws IOException, NotBoundException, InterruptedException {
+        final Server server = new Server(Constants.PORT);
         new Thread(() -> {
             try {
                 server.start();
@@ -21,7 +22,7 @@ public class RegisterClientTestRMI {
                 e.printStackTrace();
             }
         }).start();
-        final Client client = new Client("localhost", 3000);
+        final Client client = new Client(Constants.HOSTNAME, Constants.PORT);
         new Thread(() -> {
             try {
                 client.start();
@@ -30,11 +31,20 @@ public class RegisterClientTestRMI {
             }
         }).start();
 
-        String token = client.getRemoteMethods().registerPlayer("Giorgio");
+        new Thread(() -> {
+            try {
+                Connection.getIstance().initRMI();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+        Thread.sleep(200);
+        RegisterPlayerResponse res = Connection.getIstance().getRemoteMethods().registerPlayer("Furlan");
+        res.handle(new ResponseHandler());
         Lobby mainLobby = Lobby.getInstance();
-        assertEquals("Giorgio", mainLobby.getPlayerWaiting().get(0).getName());
+        assertEquals("Furlan", mainLobby.getPlayerWaiting().get(0).getName());
         assertEquals(1, mainLobby.getPlayerWaiting().size());
-        assertEquals(64, token.length());
-*/
+        assertEquals(64, mainLobby.getPlayerWaiting().get(0).getToken().length());
     }
 }
