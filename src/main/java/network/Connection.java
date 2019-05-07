@@ -16,7 +16,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class Connection {
 
-    private static Connection istance = null;
+    private static Connection instance = null;
 
     private ConnectionType type;
 
@@ -33,9 +33,9 @@ public class Connection {
     }
 
     public static Connection getInstance() {
-        if (istance == null)
-            istance = new Connection();
-        return istance;
+        if (instance == null)
+            instance = new Connection();
+        return instance;
     }
 
     public void initSocket(String host, int port) throws IOException {
