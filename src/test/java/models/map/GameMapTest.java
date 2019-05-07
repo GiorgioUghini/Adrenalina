@@ -385,6 +385,7 @@ public class GameMapTest {
             assertEquals(RoomColor.GREEN, s.getColor());
         }
     }
+
     @Test
     public void getAllVisibleSquaresErrors(){
         GameMap gameMap = new GameMap();
@@ -399,6 +400,7 @@ public class GameMapTest {
             assert false;
         }catch (SquareNotInMapException e){assert true;}
     }
+
     @Test
     public void getAllVisibleSquaresNotOnDoor(){
         GameMap gameMap = new GameMap();
