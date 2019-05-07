@@ -3,14 +3,13 @@ package models;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
 
 import static org.junit.Assert.*;
 
 public class LobbyTimerTest {
 
     @Test
-    public synchronized void lobbyTimerAbortTest() throws InterruptedException {
+    public void lobbyTimerAbortTest() {
         Lobby lobby = Lobby.getInstance();
         lobby.registerPlayer("Cosimo");
         lobby.registerPlayer("Giorgio");

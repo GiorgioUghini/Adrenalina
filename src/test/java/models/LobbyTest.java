@@ -1,69 +1,25 @@
 package models;
 
-import models.player.Player;
 import org.junit.Test;
 
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.Assert.*;
 
 public class LobbyTest {
 
     @Test
-    public void lobbyTimerTest() throws InterruptedException {
-        Lobby.getInstance().registerPlayer("Cosimo");
-        Lobby.getInstance().registerPlayer("Giorgio");
-        Lobby.getInstance().registerPlayer("Vila");
+    public void lobbyTimerTest() {
         Lobby lobby = Lobby.getInstance();
+        lobby.registerPlayer("Cosimo");
+        lobby.registerPlayer("Giorgio");
+        lobby.registerPlayer("Vila");
         List activeMatches = lobby.getActiveMatches();
         assertEquals(activeMatches.size(), 0);
-        Thread.sleep(5100);
+        long actualTime = System.currentTimeMillis();
+        while (System.currentTimeMillis() - actualTime < 5.1 * 1000); //It's like Thread.sleep(5100); but in this way I stop sonar here, without going to other tests.
         activeMatches = lobby.getActiveMatches();
         assertEquals(activeMatches.size(), 1);
     }
 
-    @Test
-    public void lobbyTimerAbortTest() throws InterruptedException {
-        Lobby.getInstance().registerPlayer("Cosimo");
-        Lobby.getInstance().registerPlayer("Giorgio");
-        Lobby.getInstance().registerPlayer("Vila");
-        Lobby lobby = Lobby.getInstance();
-        List activeMatches = lobby.getActiveMatches();
-        assertEquals(0, activeMatches.size());
-
-        Thread.sleep(2550);
-        lobby.disconnectPlayer(lobby.getPlayerWaiting().get(1));
-
-        Thread.sleep(2550);
-        activeMatches = lobby.getActiveMatches();
-        assertEquals(0, activeMatches.size());
-
-        Thread.sleep(2550);
-        activeMatches = lobby.getActiveMatches();
-        assertEquals(0, activeMatches.size());
-    }
-
-    @Test
-    public void lobbyStartMatchTest() throws InterruptedException {
-        Lobby lobby = Lobby.getInstance();
-
-        lobby.registerPlayer("Cosimo");
-        lobby.registerPlayer("Giorgio");
-        lobby.registerPlayer("Vila");   //Three player, timer starts
-
-        Thread.sleep(1000);
-
-        lobby.disconnectPlayer(lobby.getPlayerWaiting().get(1));    //Two player remaining, timer aborts
-
-        Thread.sleep(1000);
-        lobby.registerPlayer("Cosimo");
-        lobby.registerPlayer("Giorgio");
-        lobby.registerPlayer("Vila");   //Five player, match starts ASAP
-
-        List activeMatches = lobby.getActiveMatches();
-        assertEquals(1, activeMatches.size());
-    }
 }

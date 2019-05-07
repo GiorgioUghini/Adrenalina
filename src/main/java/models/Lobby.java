@@ -12,11 +12,11 @@ import java.util.concurrent.TimeUnit;
 
 public class Lobby {
     private static Lobby instance = null;
-    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    private static ScheduledFuture<?> activeCountdown;
-    private static List<Match> activeMatches = new ArrayList<>();
+    private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private ScheduledFuture<?> activeCountdown;
+    private List<Match> activeMatches = new ArrayList<>();
 
-    private static final List<Player> waitingPlayerList = new ArrayList<>();
+    private List<Player> waitingPlayerList = new ArrayList<>();
 
     private Lobby(){
     }
@@ -31,6 +31,11 @@ public class Lobby {
             instance = new Lobby();
         }
         return instance;
+    }
+
+    public synchronized void resetInstance() {    //Only for testing purpose
+        waitingPlayerList.clear();
+        activeMatches.clear();
     }
 
     /**
@@ -66,7 +71,7 @@ public class Lobby {
         }
     }
 
-    public List<Player> getPlayerWaiting() {
+    public synchronized List<Player> getPlayerWaiting() {
         return new ArrayList<>(waitingPlayerList);
     }
 
@@ -86,17 +91,17 @@ public class Lobby {
         return newMatch;
     }
 
-    public static void startCountdown() {
+    public synchronized void startCountdown() {
         //Starting countdown now...
         activeCountdown = scheduler.schedule(new Runnable() {
             @Override
             public void run() {
-                Lobby.activeCountdown = null;
+                Lobby.getInstance().activeCountdown = null;
                 Lobby.getInstance().startMatch();
             }}, Constants.DELAY_SECONDS, TimeUnit.SECONDS);
     }
 
-    public List<Match> getActiveMatches() {
+    public synchronized List<Match> getActiveMatches() {
         return new ArrayList<>(activeMatches);
     }
 
