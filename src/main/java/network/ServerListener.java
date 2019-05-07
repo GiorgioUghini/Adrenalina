@@ -1,23 +1,20 @@
 package network;
 
-import java.io.ObjectInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ServerListener implements Runnable{
 
-    private ObjectInputStream in;
-    private ResponseHandler responseHandler;
+    private ResponseHandlerInterface responseHandler;
 
-    public ServerListener(ObjectInputStream in) {
-        this.in = in;
-        this.responseHandler = new ClientController();
+    public ServerListener() {
+        this.responseHandler = new ResponseHandler();
     }
 
     @Override
     public void run() {
         try {
-            Response response = (Response) in.readObject();
+            Response response = (Response) Connection.getIstance().getInputStream().readObject();
             response.handle(responseHandler);
         } catch (Exception e) {
             Logger logger = Logger.getAnonymousLogger();

@@ -1,6 +1,7 @@
 package network;
 
 import models.Lobby;
+import network.responses.RegisterPlayerResponse;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -23,9 +24,9 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public String registerPlayer(String username) throws RemoteException  {
+    public RegisterPlayerResponse registerPlayer(String username) throws RemoteException  {
         Lobby mainLobby = Lobby.getInstance();
         String token = mainLobby.registerPlayer(username);
-        return token;
+        return new RegisterPlayerResponse(token);
     }
 }

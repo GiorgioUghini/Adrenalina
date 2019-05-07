@@ -1,4 +1,10 @@
-package network;
+package network.requests;
+
+import network.Request;
+import network.RequestHandlerInterface;
+import network.Response;
+
+import java.rmi.RemoteException;
 
 public class RegisterPlayerRequest implements Request {
 
@@ -9,7 +15,7 @@ public class RegisterPlayerRequest implements Request {
     }
 
     @Override
-    public Response handle(RequestHandler handler) {
+    public Response handle(RequestHandlerInterface handler) throws RemoteException {
         return handler.handle(this);
     }
 }

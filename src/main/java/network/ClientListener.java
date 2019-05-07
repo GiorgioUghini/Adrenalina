@@ -12,13 +12,13 @@ public class ClientListener implements Runnable{
     private Socket socket;
     private ObjectInputStream in;
     private ObjectOutputStream out;
-    private RequestHandler requestHandler;
+    private RequestHandlerInterface requestHandler;
 
     public ClientListener(Socket socket) throws IOException {
         this.socket = socket;
         this.out = new ObjectOutputStream(socket.getOutputStream());
         this.in = new ObjectInputStream(socket.getInputStream());
-        this.requestHandler = new ServerController();
+        this.requestHandler = new RequestHandler();
     }
 
     @Override

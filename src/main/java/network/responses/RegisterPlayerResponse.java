@@ -1,4 +1,7 @@
-package network;
+package network.responses;
+
+import network.Response;
+import network.ResponseHandlerInterface;
 
 public class RegisterPlayerResponse implements Response {
 
@@ -9,7 +12,7 @@ public class RegisterPlayerResponse implements Response {
     }
 
     @Override
-    public void handle(ResponseHandler handler) {
+    public void handle(ResponseHandlerInterface handler) {
         handler.handle(this);
     }
 }

@@ -11,7 +11,7 @@ public class PlayerDisconnectUpdate implements Update {
     }
 
     @Override
-    public void handle(UpdateHandler handler) {
+    public void handle(UpdateHandlerInterface handler) {
         handler.handle(this);
     }
 }
