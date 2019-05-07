@@ -12,6 +12,7 @@ public class GameMap {
     private Set<SpawnPoint> spawnPoints;
     private int squareId;
     private Set<RoomColor> rooms;
+    private UUID id;
 
     /** Creates an empty GameMap */
     public GameMap(){
@@ -20,6 +21,7 @@ public class GameMap {
         spawnPoints = new HashSet<>();
         rooms = new HashSet<>();
         squareId = 0;
+        this.id = UUID.randomUUID();
     }
 
     /** creates room using a coordinate system with (0,0) in the top left corner of the room
@@ -36,10 +38,10 @@ public class GameMap {
             for(int x=0;x<width;x++){
                 Square s;
                 if(spawnPoint!=null && spawnPoint.getX()==x && spawnPoint.getY() == y){
-                    s= new SpawnPoint(color, squareId);
+                    s= new SpawnPoint(color, squareId, getId());
                     spawnPoints.add((SpawnPoint) s);
                 } else{
-                    s = new AmmoPoint(color, squareId);
+                    s = new AmmoPoint(color, squareId, getId());
                 }
                 squares.add(s);
                 squareMatrix[x][y] = s;
@@ -414,6 +416,8 @@ public class GameMap {
         if(square==null)throw new NullPointerException("Square cannot be null");
         if(!squares.contains(square)) throw new SquareNotInMapException();
     }
+
+    public UUID getId(){return this.id;}
 }
 
 

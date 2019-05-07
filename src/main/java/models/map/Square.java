@@ -2,22 +2,21 @@ package models.map;
 
 import errors.NotWallException;
 
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
 
 public abstract class Square{
     private RoomColor color;
     private boolean isSpawnPoint;
     private Map<CardinalDirection, SquareLink> links;
     private int id;
+    private UUID mapId;
 
-    public Square(RoomColor color, boolean isSpawnPoint, int id){
+    public Square(RoomColor color, boolean isSpawnPoint, int id, UUID mapId){
         this.color = color;
         this.isSpawnPoint = isSpawnPoint;
         links = new EnumMap<>(CardinalDirection.class);
         this.id = id;
+        this.mapId = mapId;
     }
     public void connectToSquare(Square square, CardinalDirection side){
         LinkType linkType;
@@ -62,6 +61,7 @@ public abstract class Square{
         return this.links.get(direction);
     }
     public int getId(){return id;}
+    public UUID getMapId(){return mapId;}
     public boolean hasDoors(){
         Iterator iterator = links.values().iterator();
         while (iterator.hasNext()){
@@ -84,11 +84,11 @@ public abstract class Square{
             return false;
         Square sq = (Square) o;
         // field comparison
-        return (getId() == (sq.getId()));
+        return (getId() == (sq.getId()) && (getMapId().equals(sq.getMapId())) );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId());
+        return Objects.hashCode(getId()) * getMapId().hashCode();
     }
 }
