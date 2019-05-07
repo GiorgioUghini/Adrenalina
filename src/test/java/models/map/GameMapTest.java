@@ -7,10 +7,12 @@ import org.junit.Test;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 
 public class GameMapTest {
+    private UUID uuid = UUID.randomUUID();
     @Test
     public void allSquaresInRoomAreConnected(){
         final int width = 2;
@@ -249,7 +251,7 @@ public class GameMapTest {
             assert false;
         }catch (PlayerAlreadyOnMapException e){ assert true; }
 
-        SpawnPoint spawnPointNotOnMap = new SpawnPoint(RoomColor.PURPLE, 100);
+        SpawnPoint spawnPointNotOnMap = new SpawnPoint(RoomColor.PURPLE, 100, uuid);
         try{
             gameMap.spawnPlayer(pluto, spawnPointNotOnMap);
             assert false;
@@ -269,7 +271,7 @@ public class GameMapTest {
     @Test
     public void getAllSquaresAtDistance1SquareNotInRoom(){
         GameMap gameMap = new GameMap();
-        Square square = new AmmoPoint(RoomColor.WHITE, 0);
+        Square square = new AmmoPoint(RoomColor.WHITE, 0, uuid);
         try{
             gameMap.getAllSquaresAtExactDistance(square, 1);
             assert false;
@@ -390,7 +392,7 @@ public class GameMapTest {
     public void getAllVisibleSquaresErrors(){
         GameMap gameMap = new GameMap();
         gameMap.createRoom(3,3,RoomColor.WHITE, null);
-        Square from = new AmmoPoint(RoomColor.WHITE, 0);
+        Square from = new AmmoPoint(RoomColor.WHITE, 0, uuid);
         try{
             gameMap.getAllVisibleSquares(null);
             assert false;
@@ -452,7 +454,7 @@ public class GameMapTest {
         GameMap gameMap = new GameMap();
         gameMap.createRoom(1,1, RoomColor.GREEN, null);
         Square inMap = gameMap.getSquareById(0);
-        Square notInMap = new AmmoPoint(RoomColor.GREEN, 0);
+        Square notInMap = new AmmoPoint(RoomColor.GREEN, 0, uuid);
         try{
             gameMap.getAllSquaresByCardinal(null, CardinalDirection.RIGHT);
             assert false;
