@@ -3,13 +3,16 @@ package models.map;
 import models.player.Player;
 import org.junit.Test;
 
+import java.util.UUID;
+
 import static org.junit.Assert.*;
 
 public class PlayerSquareTest {
+    private UUID uuid = UUID.randomUUID();
     @Test
     public void PlayerOnSquare(){
         Player player = new Player(false, "a");
-        Square square = new SpawnPoint(RoomColor.GREEN, 0);
+        Square square = new SpawnPoint(RoomColor.GREEN, 0, uuid);
 
         PlayerSquare playerSquare = new PlayerSquare();
         playerSquare.addPlayer(player, square);
@@ -22,7 +25,7 @@ public class PlayerSquareTest {
     public void multiplePlayers(){
         Player p1 = new Player(false, "a");
         Player p2 = new Player(false, "a");
-        Square square = new SpawnPoint(RoomColor.GREEN, 0);
+        Square square = new SpawnPoint(RoomColor.GREEN, 0, uuid);
 
         PlayerSquare playerSquare = new PlayerSquare();
         playerSquare.addPlayer(p1, square);
@@ -37,8 +40,8 @@ public class PlayerSquareTest {
     @Test
     public void movePlayerInSameRoom(){
         Player p = new Player(false, "a");
-        Square s1 = new SpawnPoint(RoomColor.GREEN, 0);
-        Square s2 = new AmmoPoint(RoomColor.GREEN, 1);
+        Square s1 = new SpawnPoint(RoomColor.GREEN, 0, uuid);
+        Square s2 = new AmmoPoint(RoomColor.GREEN, 1, uuid);
 
         PlayerSquare playerSquare = new PlayerSquare();
 
@@ -54,8 +57,8 @@ public class PlayerSquareTest {
     @Test
     public void addSamePlayerTwice(){
         Player p = new Player(false, "a");
-        Square s1 = new SpawnPoint(RoomColor.GREEN, 0);
-        Square s2 = new AmmoPoint(RoomColor.PURPLE, 1);
+        Square s1 = new SpawnPoint(RoomColor.GREEN, 0, uuid);
+        Square s2 = new AmmoPoint(RoomColor.PURPLE, 1, uuid);
         PlayerSquare playerSquare = new PlayerSquare();
         boolean added1 = playerSquare.addPlayer(p, s1);
         boolean added2 = playerSquare.addPlayer(p, s2);
@@ -71,7 +74,7 @@ public class PlayerSquareTest {
         PlayerSquare playerSquare = new PlayerSquare();
         assertEquals(0, playerSquare.getPlayersNumber());
         Player p = new Player(false, "a");
-        Square square = new AmmoPoint(RoomColor.WHITE, 0);
+        Square square = new AmmoPoint(RoomColor.WHITE, 0, uuid);
         playerSquare.addPlayer(p, square);
         assertEquals(1, playerSquare.getPlayersNumber());
         playerSquare.addPlayer(p, square);

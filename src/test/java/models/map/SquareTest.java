@@ -4,27 +4,30 @@ import errors.NotWallException;
 
 import org.junit.Test;
 
+import java.util.UUID;
+
 import static org.junit.Assert.*;
 
 public class SquareTest {
     private Square square;
+    private UUID uuid = UUID.randomUUID();
 
     @Test
     public void ammoPoint(){
-        square = new AmmoPoint(RoomColor.BLUE, 0);
+        square = new AmmoPoint(RoomColor.BLUE, 0, UUID.randomUUID());
         assertEquals(square.getColor(), RoomColor.BLUE);
         assertFalse(square.isSpawnPoint());
     }
     @Test
     public void spawnPoint(){
-        square = new SpawnPoint(RoomColor.GREEN, 0);
+        square = new SpawnPoint(RoomColor.GREEN, 0, UUID.randomUUID());
         assertEquals(square.getColor(), RoomColor.GREEN);
         assertTrue(square.isSpawnPoint());
     }
     @Test
     public void connectSameRoom(){
-        Square s1 = new AmmoPoint(RoomColor.GREEN, 0);
-        Square s2 = new AmmoPoint(RoomColor.GREEN, 1);
+        Square s1 = new AmmoPoint(RoomColor.GREEN, 0, uuid);
+        Square s2 = new AmmoPoint(RoomColor.GREEN, 1, uuid);
 
         s1.connectToSquare(s2, CardinalDirection.RIGHT);
         s2.connectToSquare(s1, CardinalDirection.LEFT);
@@ -44,8 +47,8 @@ public class SquareTest {
     }
     @Test
     public void connectDifferentRoomThroughWall(){
-        Square s1 = new AmmoPoint(RoomColor.GREEN, 0);
-        Square s2 = new AmmoPoint(RoomColor.BLUE, 1);
+        Square s1 = new AmmoPoint(RoomColor.GREEN, 0, uuid);
+        Square s2 = new AmmoPoint(RoomColor.BLUE, 1, uuid);
 
         s1.connectToSquare(s2, CardinalDirection.RIGHT);
         s2.connectToSquare(s1, CardinalDirection.LEFT);
@@ -62,8 +65,8 @@ public class SquareTest {
 
     @Test
     public void connectDifferentRoomsThroughDoor() throws NotWallException {
-        Square s1 = new AmmoPoint(RoomColor.GREEN, 0);
-        Square s2 = new AmmoPoint(RoomColor.BLUE, 1);
+        Square s1 = new AmmoPoint(RoomColor.GREEN, 0, uuid);
+        Square s2 = new AmmoPoint(RoomColor.BLUE, 1, uuid);
 
         s1.connectToSquare(s2, CardinalDirection.RIGHT);
         s2.connectToSquare(s1, CardinalDirection.LEFT);
@@ -81,8 +84,8 @@ public class SquareTest {
     }
     @Test
     public void hasNextInSameRoom(){
-        Square s1 = new AmmoPoint(RoomColor.GREEN, 0);
-        Square s2 = new AmmoPoint(RoomColor.BLUE, 1);
+        Square s1 = new AmmoPoint(RoomColor.GREEN, 0, uuid);
+        Square s2 = new AmmoPoint(RoomColor.BLUE, 1, uuid);
         s1.connectToSquare(s2, CardinalDirection.RIGHT);
         s2.connectToSquare(s1, CardinalDirection.LEFT);
         assertTrue(s1.hasNext(CardinalDirection.RIGHT));
