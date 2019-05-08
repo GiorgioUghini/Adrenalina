@@ -18,6 +18,7 @@ public class LobbyViewCLI implements LobbyView {
         this.lobbyController = new LobbyController();
     }
 
+    /**{@inheritDoc}*/
     @Override
     public void createConnection() {
         print("Choose connection type:\n1: Socket\n2: rmi\nyour choice: ");
@@ -32,6 +33,7 @@ public class LobbyViewCLI implements LobbyView {
         registerPlayer();
     }
 
+    /**{@inheritDoc}*/
     @Override
     public void registerPlayer(){
         print("Insert username: ");
@@ -47,6 +49,7 @@ public class LobbyViewCLI implements LobbyView {
         }
     }
 
+    /**{@inheritDoc}*/
     @Override
     public void registrationCompleted(ArrayList<String> players){
         println("You joined a lobby!\nOther players in this lobby: ");
@@ -57,6 +60,7 @@ public class LobbyViewCLI implements LobbyView {
         printGameSituation();
     }
 
+    /**{@inheritDoc}*/
     @Override
     public void onNewPlayer(String playerName){
         println(playerName + " joined the Lobby");
@@ -64,6 +68,7 @@ public class LobbyViewCLI implements LobbyView {
         printGameSituation();
     }
 
+    /**{@inheritDoc}*/
     @Override
     public void onPlayerDisconnected(String name){
         println(name + "left the room");
@@ -71,11 +76,13 @@ public class LobbyViewCLI implements LobbyView {
         printGameSituation();
     }
 
+    /**{@inheritDoc}*/
     @Override
     public void startGame() {
         println("The game is starting");
     }
 
+    /**{@inheritDoc}*/
     @Override
     public void printError(String error) {
         println(error);
