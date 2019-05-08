@@ -1,3 +1,4 @@
+import errors.NotImplementedException;
 import views.LobbyView;
 import views.LobbyViewCLI;
 import views.ViewType;
@@ -16,7 +17,7 @@ public class StartClient {
         if(viewType==ViewType.CLI){
             lobbyView = new LobbyViewCLI();
         }else{
-            throw new RuntimeException("Sorry mate, wrong path");
+            throw new NotImplementedException();
         }
         lobbyView.createConnection();
     }
