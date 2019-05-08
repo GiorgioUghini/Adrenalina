@@ -4,7 +4,6 @@ import controllers.LobbyController;
 import network.ConnectionType;
 
 import java.io.IOException;
-import java.rmi.NotBoundException;
 import java.util.Scanner;
 
 public class LobbyViewCLI implements LobbyView {
