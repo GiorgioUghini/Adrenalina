@@ -34,6 +34,7 @@ public class LobbyTimerTest {
 
         activeMatches = lobby.getActiveMatches();
         assertEquals(0, activeMatches.size());
+        lobby.resetInstance();
     }
 
     private Callable<Boolean> retFalse() {

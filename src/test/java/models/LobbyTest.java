@@ -29,6 +29,7 @@ public class LobbyTest {
         }
 
         assert true;
+        lobby.resetInstance();
     }
 
     private Callable<Boolean> matchStarted() {

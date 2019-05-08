@@ -37,6 +37,7 @@ public class LobbyStartMatchTest {
 
         List activeMatches = lobby.getActiveMatches();
         assertEquals(1, activeMatches.size());
+        lobby.resetInstance();
     }
 
     private Callable<Boolean> retFalse() {

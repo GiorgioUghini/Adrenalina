@@ -36,6 +36,12 @@ public class Lobby {
     public synchronized void resetInstance() {    //Only for testing purpose
         waitingPlayerList.clear();
         activeMatches.clear();
+        if(activeCountdown!=null) {
+            activeCountdown.cancel(true);
+            activeCountdown = null;
+        }
+        scheduler.shutdownNow();
+        scheduler = Executors.newScheduledThreadPool(1);
     }
 
     /**
