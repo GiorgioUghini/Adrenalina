@@ -3,8 +3,6 @@ import views.LobbyView;
 import views.LobbyViewCLI;
 import views.ViewType;
 
-import java.io.IOException;
-import java.rmi.NotBoundException;
 import java.util.Scanner;
 
 public class StartClient {
