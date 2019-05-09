@@ -56,7 +56,7 @@ public class LobbyViewCLI implements LobbyView {
 
     /**{@inheritDoc}*/
     @Override
-    public void registrationCompleted(ArrayList<String> players){
+    public void registrationCompleted(List<String> players){
         println("You joined a lobby!\nOther players in this lobby: ");
         for(String name : players){
             if(!name.equals(username)) println(name);

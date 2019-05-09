@@ -2,6 +2,7 @@ package views;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public interface LobbyView {
     /** ask if socket or rmi, then calls the controller */
@@ -10,7 +11,7 @@ public interface LobbyView {
     void registerPlayer() throws IOException;
     /** After a successful registration of the user, receive a complete list of the users in the lobby
      * @param players a list of all the users in the lobby, included myself */
-    void registrationCompleted(ArrayList<String> players);
+    void registrationCompleted(List<String> players);
     /** Event when a new player joins the lobby
      * @param playerName the name of the player that just joined */
     void onNewPlayer(String playerName);
