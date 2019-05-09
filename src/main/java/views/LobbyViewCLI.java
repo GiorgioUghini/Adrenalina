@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class LobbyViewCLI implements LobbyView {
     private LobbyController lobbyController;
     private Scanner scanner = new Scanner(System.in);
@@ -28,7 +31,8 @@ public class LobbyViewCLI implements LobbyView {
         try{
             lobbyController.createConnection(type);
         }catch (Exception e) {
-            e.printStackTrace();
+            Logger logger = Logger.getAnonymousLogger();
+            logger.log(Level.SEVERE, "an exception was thrown", e);
         }
         registerPlayer();
     }
@@ -45,7 +49,8 @@ public class LobbyViewCLI implements LobbyView {
         try {
             lobbyController.registerPlayer(username);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger logger = Logger.getAnonymousLogger();
+            logger.log(Level.SEVERE, "an exception was thrown", e);
         }
     }
 
