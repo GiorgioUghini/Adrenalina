@@ -1,6 +1,6 @@
 package models;
 
-import config.Constants;
+import utils.Constants;
 import models.player.Player;
 
 import java.util.ArrayList;

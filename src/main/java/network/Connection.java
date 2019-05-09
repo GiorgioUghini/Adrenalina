@@ -65,12 +65,8 @@ public class Connection {
         LongPollingTask longPollingTask = new LongPollingTask(remoteMethods, queue);
         Timer timer = new Timer();
         timer.schedule(longPollingTask, 0, 2);
-        updateHandler = new UpdateHandler();
-        Update update = null;
-        while (true) {
-            update = queue.take();
-            update.handle(updateHandler);
-        }
+        PollingQueueListener pollingQueueListener = new PollingQueueListener();
+        (new Thread(pollingQueueListener)).start();
     }
 
     public ObjectOutputStream getOutputStream() {

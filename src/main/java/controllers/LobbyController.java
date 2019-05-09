@@ -1,6 +1,6 @@
 package controllers;
 
-import config.Constants;
+import utils.Constants;
 import errors.InvalidConnectionTypeException;
 import network.Connection;
 import network.ConnectionType;

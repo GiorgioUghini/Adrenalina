@@ -1,6 +1,6 @@
 package models;
 
-import config.Constants;
+import utils.Constants;
 import org.awaitility.core.ConditionTimeoutException;
 import org.junit.Test;
 
