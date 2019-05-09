@@ -29,7 +29,17 @@ public class Connection {
     private Registry registry;
     private BlockingQueue<Update> queue;
 
+    private String token;
+
     private Connection() {
+    }
+
+    void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getToken() {
+        return this.token;
     }
 
     public static Connection getInstance() {

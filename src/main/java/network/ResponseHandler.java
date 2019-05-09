@@ -6,8 +6,7 @@ import network.responses.RegisterPlayerResponse;
 public class ResponseHandler implements ResponseHandlerInterface {
     @Override
     public void handle(RegisterPlayerResponse response) {
-        // TODO store auth token
-        //System.out.println(response.token); // Placeholder
+        Connection.getInstance().setToken(response.token);
     }
 
     @Override
