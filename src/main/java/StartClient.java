@@ -22,7 +22,7 @@ public class StartClient {
                     viewType = ViewType.CLI;
             }
         }
-        Client client = new Client(viewType);
+        Client client = Client.createInstance(viewType);
         client.start();
     }
 }

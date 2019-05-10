@@ -2,6 +2,7 @@ package network;
 
 import network.requests.LongPollingRequest;
 import network.requests.RegisterPlayerRequest;
+import network.responses.ErrorResponse;
 import network.responses.RegisterPlayerResponse;
 
 import java.rmi.RemoteException;

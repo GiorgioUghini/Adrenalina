@@ -3,6 +3,7 @@ package views;
 import controllers.LobbyController;
 import network.ConnectionType;
 import utils.Console;
+import utils.Constants;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -94,6 +95,11 @@ public class LobbyViewCLI implements LobbyView {
     @Override
     public void printError(String error) {
         Console.println(error);
+    }
+
+    @Override
+    public void showMessage(String message) {
+        Console.println(message);
     }
 
     private void printGameSituation(){

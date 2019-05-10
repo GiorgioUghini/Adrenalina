@@ -1,5 +1,5 @@
 package views;
 
-public interface GameView {
+public interface GameView extends View {
 
 }

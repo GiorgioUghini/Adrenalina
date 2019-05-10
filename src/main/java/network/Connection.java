@@ -16,8 +16,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class Connection {
 
-    private static Connection instance = null;
-
     private ConnectionType type;
 
     private Socket socket;
@@ -31,7 +29,7 @@ public class Connection {
 
     private String token;
 
-    private Connection() {
+    public Connection() {
     }
 
     void setToken(String token) {
@@ -40,12 +38,6 @@ public class Connection {
 
     public String getToken() {
         return this.token;
-    }
-
-    public static Connection getInstance() {
-        if (instance == null)
-            instance = new Connection();
-        return instance;
     }
 
     public void initSocket(String host, int port) throws IOException {

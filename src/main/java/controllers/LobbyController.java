@@ -1,11 +1,8 @@
 package controllers;
 
+import network.*;
 import utils.Constants;
 import errors.InvalidConnectionTypeException;
-import network.Connection;
-import network.ConnectionType;
-import network.RemoteMethodsInterface;
-import network.ResponseHandler;
 import network.requests.RegisterPlayerRequest;
 import network.responses.RegisterPlayerResponse;
 
@@ -14,7 +11,8 @@ import java.rmi.NotBoundException;
 
 public class LobbyController {
     public void createConnection(ConnectionType type) throws IOException, NotBoundException, InterruptedException {
-        Connection connection = Connection.getInstance();
+        Connection connection = new Connection();
+        Client.getInstance().setConnection(connection);
         if(type == ConnectionType.Socket){
             connection.initSocket(Constants.HOSTNAME, Constants.PORT);
         }
@@ -29,12 +27,13 @@ public class LobbyController {
     }
 
     public void registerPlayer(String username) throws IOException {
-        if(Connection.getInstance().getType() == ConnectionType.Socket){
+        Connection connection  = Client.getInstance().getConnection();
+        if(connection.getType() == ConnectionType.Socket){
             RegisterPlayerRequest request = new RegisterPlayerRequest(username);
-            Connection.getInstance().getOutputStream().writeObject(request);
+            connection.getOutputStream().writeObject(request);
         }
-        else if(Connection.getInstance().getType() == ConnectionType.RMI){
-            RemoteMethodsInterface remoteMethods = Connection.getInstance().getRemoteMethods();
+        else if(connection.getType() == ConnectionType.RMI){
+            RemoteMethodsInterface remoteMethods = connection.getRemoteMethods();
             RegisterPlayerResponse response = remoteMethods.registerPlayer(username);
             response.handle(new ResponseHandler());
         }

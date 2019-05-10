@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface LobbyView {
+public interface LobbyView extends View {
     /** ask if socket or rmi, then calls the controller */
     void createConnection();
     /** Continue asking for the username until it matches the requirements, then sends it to server */
@@ -20,6 +20,4 @@ public interface LobbyView {
     void onPlayerDisconnected(String name);
     /** Notify the user that game is starting, the controller will close this view and create a gameView */
     void startGame();
-    /** Prints an error */
-    void printError(String error);
 }

@@ -2,10 +2,8 @@ package network;
 
 import errors.InvalidViewTypeException;
 import errors.NotImplementedException;
-import views.GameView;
-import views.LobbyView;
-import views.LobbyViewCLI;
-import views.ViewType;
+import errors.SingletionViolationException;
+import views.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -20,20 +18,35 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class Client {
 
-    ViewType viewType;
-    LobbyView lobbyView;
-    GameView gameView;
+    private static Client instance = null;
 
-    public Client(ViewType viewType) throws IOException, NotBoundException {
+    private Connection connection;
+    private ViewType viewType;
+    private LobbyView lobbyView;
+    private GameView gameView;
+    private View currentView;
+
+    public static Client createInstance(ViewType viewType) {
+        if (instance == null){
+            instance = new Client(viewType);
+            return instance;
+        }
+        throw new SingletionViolationException();
+    }
+
+    public static Client getInstance() {
+        return instance;
+    }
+
+    private Client(ViewType viewType) {
         this.viewType = viewType;
     }
 
-    public void start() throws IOException, InterruptedException {
+    public void start() throws InterruptedException {
         if(viewType == ViewType.CLI){
             lobbyView = new LobbyViewCLI();
             //gameView = new GameViewCLI(); Later
-            lobbyView.createConnection();
-            Thread.currentThread().join(); // ??
+
         }
         else if(viewType == ViewType.GUI){
             //TODO implementation GUI
@@ -42,5 +55,20 @@ public class Client {
         else{
             throw new InvalidViewTypeException();
         }
+        currentView = lobbyView;
+        lobbyView.createConnection();
+        Thread.currentThread().join();
+    }
+
+    public void setConnection(Connection connection){
+        this.connection = connection;
+    }
+
+    public Connection getConnection(){
+        return connection;
+    }
+
+    public View getCurrentView(){
+        return currentView;
     }
 }

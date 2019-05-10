@@ -3,7 +3,7 @@ package models.player;
 import models.PowerUpCard;
 import models.WeaponCard;
 import models.turn.ActionGroup;
-import network.TokenGenerator;
+import utils.TokenGenerator;
 
 import java.io.Serializable;
 import java.util.*;
