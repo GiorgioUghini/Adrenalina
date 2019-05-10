@@ -1,25 +1,23 @@
 package views;
 
-import controllers.LobbyController;
+import controllers.MenuController;
 import network.ConnectionType;
 import utils.Console;
-import utils.Constants;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class LobbyViewCLI implements LobbyView {
-    private LobbyController lobbyController;
+public class MenuViewCLI implements MenuView {
+    private MenuController menuController;
     private List<String> players = new ArrayList<>();
     private String username = "";
 
-    public LobbyViewCLI(){
-        this.lobbyController = new LobbyController();
+    public MenuViewCLI(){
+        this.menuController = new MenuController();
     }
 
     /**{@inheritDoc}*/
@@ -32,7 +30,7 @@ public class LobbyViewCLI implements LobbyView {
         int connType = Console.nextInt() - 1;
         ConnectionType type = ConnectionType.values()[connType];
         try{
-            lobbyController.createConnection(type);
+            menuController.createConnection(type);
         }catch (Exception e) {
             Logger logger = Logger.getAnonymousLogger();
             logger.log(Level.SEVERE, "an exception was thrown", e);
@@ -50,7 +48,7 @@ public class LobbyViewCLI implements LobbyView {
         }
         Console.println("Welcome, " + username);
         try {
-            lobbyController.registerPlayer(username);
+            menuController.registerPlayer(username);
         } catch (IOException e) {
             Logger logger = Logger.getAnonymousLogger();
             logger.log(Level.SEVERE, "an exception was thrown", e);

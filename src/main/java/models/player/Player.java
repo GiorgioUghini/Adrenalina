@@ -3,6 +3,7 @@ package models.player;
 import models.PowerUpCard;
 import models.WeaponCard;
 import models.turn.ActionGroup;
+import network.Update;
 import utils.TokenGenerator;
 
 import java.io.Serializable;
@@ -21,6 +22,7 @@ public class Player implements Subscriber, Serializable {
     private int numberOfSkulls;
     private ActionGroup lifeState = ActionGroup.NORMAL;
     private String token;
+    private List<Update> updates;
 
     /** Creates a new player object
      * @param isFirstPlayer the boolean witch indicates whether this player should be the one who has the "First Player Mark"
@@ -38,6 +40,7 @@ public class Player implements Subscriber, Serializable {
         marks = new Mark();
         //token generation
         this.token = TokenGenerator.nextToken();
+        updates = new LinkedList<>();
     }
 
     @Override
@@ -169,5 +172,13 @@ public class Player implements Subscriber, Serializable {
 
     public String getToken() {
         return this.token;
+    }
+
+    public void addUpdate(Update update){
+        updates.add(update);
+    }
+
+    public void clearUpdates(){
+        updates.clear();
     }
 }

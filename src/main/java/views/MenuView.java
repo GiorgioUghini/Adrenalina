@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface LobbyView extends View {
+public interface MenuView extends View {
     /** ask if socket or rmi, then calls the controller */
     void createConnection();
     /** Continue asking for the username until it matches the requirements, then sends it to server */

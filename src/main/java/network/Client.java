@@ -5,24 +5,13 @@ import errors.NotImplementedException;
 import errors.SingletionViolationException;
 import views.*;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.rmi.NotBoundException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.util.Timer;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-
 public class Client {
 
     private static Client instance = null;
 
     private Connection connection;
     private ViewType viewType;
-    private LobbyView lobbyView;
+    private MenuView menuView;
     private GameView gameView;
     private View currentView;
 
@@ -44,7 +33,7 @@ public class Client {
 
     public void start() throws InterruptedException {
         if(viewType == ViewType.CLI){
-            lobbyView = new LobbyViewCLI();
+            menuView = new MenuViewCLI();
             //gameView = new GameViewCLI(); Later
 
         }
@@ -55,8 +44,8 @@ public class Client {
         else{
             throw new InvalidViewTypeException();
         }
-        currentView = lobbyView;
-        lobbyView.createConnection();
+        currentView = menuView;
+        menuView.createConnection();
         Thread.currentThread().join();
     }
 

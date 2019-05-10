@@ -1,12 +1,14 @@
-package network;
+package network.updates;
 
 import models.player.Player;
+import network.Update;
+import network.UpdateHandlerInterface;
 
-public class PlayerDisconnectUpdate implements Update {
+public class StartGameUpdate implements Update {
 
     public Player player;
 
-    public PlayerDisconnectUpdate(Player player){
+    public StartGameUpdate(Player player){
         this.player = player;
     }
 

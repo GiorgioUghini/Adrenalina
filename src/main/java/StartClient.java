@@ -1,13 +1,9 @@
-import errors.NotImplementedException;
 import network.Client;
 import utils.Constants;
-import views.LobbyView;
-import views.LobbyViewCLI;
 import views.ViewType;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
-import java.util.Scanner;
 
 public class StartClient {
     public static void main(String[] args) throws IOException, NotBoundException, InterruptedException {
