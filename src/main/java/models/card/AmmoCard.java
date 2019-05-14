@@ -12,7 +12,8 @@ public class AmmoCard extends Card {
      * @param red number of red ammos to draw, must be between 0 and 3
      * @param yellow number of red ammos to draw, must be between 0 and 3
      * @param blue number of red ammos to draw, must be between 0 and 3
-     * @param drawPowerup if true you can draw a powerup from the deck */
+     * @param drawPowerup if true you can draw a powerup from the deck
+     * @throws InvalidAmmoException if one of the ammos is not between 0 and 3 */
     public AmmoCard(int red, int yellow, int blue, boolean drawPowerup){
         if(!(validateAmmo(red) && validateAmmo(yellow) && validateAmmo(blue))) throw new InvalidAmmoException();
         this.red = red;
