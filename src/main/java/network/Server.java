@@ -14,7 +14,6 @@ import java.util.concurrent.Executors;
 public class Server {
     private static Server instance = null;
     private ServerConnection connection;
-    private Lobby lobby;
 
     private Server() {}
 
@@ -30,12 +29,7 @@ public class Server {
         return instance;
     }
 
-    public Lobby getLobby(){
-        return lobby;
-    }
-
     public void start() throws IOException {
-        lobby = new Lobby();
         connection = new ServerConnection();
         connection.init();
     }

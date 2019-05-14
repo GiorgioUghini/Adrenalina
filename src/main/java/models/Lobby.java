@@ -16,10 +16,28 @@ public class Lobby {
     private ScheduledFuture<?> activeCountdown;
     private List<Match> activeMatches = new ArrayList<>();
 
-    private List<Player> waitingPlayerList = new ArrayList<>();
+    private Match waitingMatch = new Match();
+
+    public Match getWaitingMatch() {
+        return waitingMatch;
+    }
+
+    private Lobby(){
+    }
+
+    /**
+     * Method that creates or directly return the singleton instance
+     * @return the instance of the singleton class "Lobby"
+     */
+    public static Lobby getInstance()
+    {
+        if (instance == null) {
+            instance = new Lobby();
+        }
+        return instance;
+    }
 
     public synchronized void resetInstance() {    //Only for testing purpose
-        waitingPlayerList.clear();
         activeMatches.clear();
         if(activeCountdown!=null) {
             activeCountdown.cancel(true);
@@ -36,50 +54,39 @@ public class Lobby {
      */
     public synchronized String registerPlayer(String username) {
         Player p;
-        if (waitingPlayerList.isEmpty()) {
+        if (waitingMatch.getPlayersNumber() == 0) {
             p = new Player(true, username);
         }
         else {
             p = new Player(false, username);
         }
-        waitingPlayerList.add(p);
-        if (waitingPlayerList.size() == 5) {
+        waitingMatch.addPlayer(p);
+
+        if (waitingMatch.getPlayersNumber() == 5) {
             activeCountdown.cancel(true);
             activeCountdown = null;
             startMatch();
         }
-        if (waitingPlayerList.size() >= 3) {
+        if (waitingMatch.getPlayersNumber() >= 3) {
             startCountdown();
         }
         return p.getToken();
     }
 
     public synchronized void disconnectPlayer(Player player) {
-        waitingPlayerList.remove(player);
-        if ((activeCountdown != null) && waitingPlayerList.size() < 3) {
+        waitingMatch.removePlayer(player);
+        //TODO: was first player?
+        if ((activeCountdown != null) && waitingMatch.getPlayersNumber() < 3) {
             activeCountdown.cancel(true);
             activeCountdown = null;
         }
     }
 
-    public synchronized List<Player> getPlayerWaiting() {
-        return new ArrayList<>(waitingPlayerList);
-    }
+    public void startMatch() {
+        waitingMatch.startMatch();  //Call this method when you want to start the match
+        activeMatches.add(waitingMatch);
 
-    public Match startMatch() {
-        Match newMatch = new Match();
-        synchronized (waitingPlayerList) {
-            for (Player p : waitingPlayerList) {
-                newMatch.addPlayer(p);
-                if (p.isFirstPlayer()) {
-                    newMatch.setFirstPlayer(p);
-                }
-            }
-        }
-        newMatch.startMatch();  //Call this method when you want to start the match
-        waitingPlayerList.clear();
-        activeMatches.add(newMatch);
-        return newMatch;
+        waitingMatch = new Match();
     }
 
     public synchronized void startCountdown() {
@@ -87,8 +94,8 @@ public class Lobby {
         activeCountdown = scheduler.schedule(new Runnable() {
             @Override
             public void run() {
-                activeCountdown = null;
-                startMatch();
+                Lobby.getInstance().activeCountdown = null;
+                Lobby.getInstance().startMatch();
             }}, Constants.DELAY_SECONDS, TimeUnit.SECONDS);
     }
 

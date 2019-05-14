@@ -56,9 +56,8 @@ public class MatchTest {
         assertEquals(pl2, m.getFirstPlayer());
 
         m.startMatch();
-        Set possibleActions = m.getPossibleAction(pl2);
 
-        LinkedList<ActionElement> wantsToDoList = new LinkedList<ActionElement>();
+        LinkedList<ActionElement> wantsToDoList = new LinkedList<>();
         wantsToDoList.add(ActionElement.RUN);
         wantsToDoList.add(ActionElement.SHOOT);
         boolean confirmation = m.confirmActions(pl2, wantsToDoList);
@@ -88,6 +87,9 @@ public class MatchTest {
 
         m.endTurn(); //End Giorgio
 
+        m.nextTurn();   //Start Cosimo
+        m.endTurn();    //End Cosimo
+
         m.nextTurn(); //Start Vila
         wantsToDoList.clear();
         wantsToDoList.add(ActionElement.RUN);
@@ -100,6 +102,9 @@ public class MatchTest {
         // Frenzy enabled!!!
         m.activateFrenzy(pl3);
         m.endTurn(); //End Vila
+
+        m.nextTurn();   //Start Giorgio
+        m.endTurn();    //End Giorgio
 
         m.nextTurn(); //Start Cosimo
         wantsToDoList.clear();
@@ -115,6 +120,9 @@ public class MatchTest {
         // [RUN, RELOAD, SHOOT] permitted in this stage (Not type 2)
         assertTrue(confirmation);
         m.endTurn(); //End Cosimo
+
+        m.nextTurn();   //Start Vila
+        m.endTurn();    //End Vila
 
         m.nextTurn(); //Start Giorgio
         confirmation = m.confirmActions(pl2, wantsToDoList);

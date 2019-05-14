@@ -12,7 +12,6 @@ import network.updates.StartGameUpdate;
 import java.util.*;
 
 public class Match {
-    private Player firstPlayer;
     private List<Player> playerList;
     private int actualPlayerIndex = 0;
     private PowerUpDeck powerUpDeck;
@@ -48,6 +47,10 @@ public class Match {
         return Objects.hash(playerList);
     }
 
+    public int getPlayersNumber() {
+        return playerList.size();
+    }
+
     /** Activate frenzy from now on
      * @param player the player who is activating frenzy mode.*/
     public void activateFrenzy(Player player) {
@@ -57,7 +60,7 @@ public class Match {
     /** Get the first player on this match
      * @return the first player.*/
     public Player getFirstPlayer() {
-        return firstPlayer;
+        return playerList.get(0);
     }
 
     public Player getPlayerByToken(String token) {
@@ -70,7 +73,8 @@ public class Match {
     }
 
     public void setFirstPlayer(Player firstPlayer) {
-        this.firstPlayer = firstPlayer;
+        playerList.remove(firstPlayer);
+        playerList.add(0, firstPlayer);
     }
 
     /** Add a player into this match
@@ -122,7 +126,7 @@ public class Match {
 
     /** Method that signal the start of the match. This method SHOULD be called once when the match is ready to start.*/
     public void startMatch() {
-        actualPlayerIndex = playerList.indexOf(firstPlayer);
+        actualPlayerIndex = 0;
         for(Player player : playerList){
             StartGameUpdate update = new StartGameUpdate();
             player.addUpdate(update);
@@ -133,7 +137,7 @@ public class Match {
     public void nextTurn() {
         if (actualTurn.hasFinished()) {
             actualPlayerIndex = (actualPlayerIndex == playerList.size() - 1) ? 0 : actualPlayerIndex + 1 ;
-            if ((frenzy != null) && (playerList.indexOf(firstPlayer) == actualPlayerIndex)) {
+            if ((frenzy != null) && (actualPlayerIndex == 0)) { //actualPlayerIndex == firstPlayerIndex
                 frenzy = ActionGroup.FRENZY_TYPE_2;
             }
             actualTurn = new Turn();
