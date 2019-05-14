@@ -32,7 +32,6 @@ public class Client {
         if(viewType == ViewType.CLI){
             menuView = new MenuViewCLI();
             //gameView = new GameViewCLI(); Later
-
         }
         else if(viewType == ViewType.GUI){
             //TODO implementation GUI

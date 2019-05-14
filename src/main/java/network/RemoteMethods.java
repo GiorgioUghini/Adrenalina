@@ -28,7 +28,6 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         else{
             return new LinkedList<Update>();
         }
-
     }
 
     @Override

@@ -1,5 +1,6 @@
 package network.requests;
 
+import network.Client;
 import network.Request;
 import network.RequestHandlerInterface;
 import network.Response;
@@ -12,16 +13,12 @@ public class RegisterPlayerRequest implements Request {
     public String username;
 
     @Override
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    @Override
     public String getToken() {
         return token;
     }
 
     public RegisterPlayerRequest(String username){
+        this.token = Client.getInstance().getConnection().getToken();
         this.username = username;
     }
 
