@@ -1,6 +1,8 @@
 package models.map;
 
 import errors.MapNotExistsException;
+import models.AmmoCard;
+import models.Deck;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -94,5 +96,25 @@ public class MapGenerator {
                 throw new MapNotExistsException();
         }
         return gameMap;
+    }
+
+    /**
+     * Fill map with cards, draws 3 cards from the weapon deck on spawn points and one card from ammo deck from ammo deck
+     * @param ammoDeck the deck with ammos
+     * @param weaponDeck the deck with weapons
+     * @param gameMap the map of the game
+     * */
+    public static void initCards(Deck ammoDeck, Deck weaponDeck, GameMap gameMap){
+        gameMap.getAllSquares()
+                .stream()
+                .forEach(s -> {
+                    if(s.isSpawnPoint()){
+                        for(int i=0; i<3;i++){
+                            s.addCard(weaponDeck.draw());
+                        }
+                    }else{
+                        s.addCard(ammoDeck.draw());
+                    }
+                });
     }
 }

@@ -1,6 +1,7 @@
 package models.map;
 
 import errors.NotWallException;
+import models.Card;
 
 import java.util.*;
 
@@ -70,6 +71,8 @@ public abstract class Square{
         }
         return false;
     }
+
+    public abstract void addCard(Card card);
 
     @Override
     public boolean equals(Object o) {
