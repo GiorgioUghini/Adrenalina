@@ -16,7 +16,7 @@ public class AmmoCardTest {
     @Test
     public void testCreationWithErrors(){
         try{
-            Card a = new AmmoCard(4,3,3, true);
+            new AmmoCard(4,3,3, true);
             assert false;
         }catch(InvalidAmmoException e){
             assert  true;
