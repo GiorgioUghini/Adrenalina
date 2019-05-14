@@ -7,6 +7,7 @@ import models.player.Player;
 import models.turn.ActionElement;
 import models.turn.ActionGroup;
 import models.turn.Turn;
+import network.updates.StartGameUpdate;
 
 import java.util.*;
 
@@ -57,6 +58,15 @@ public class Match {
      * @return the first player.*/
     public Player getFirstPlayer() {
         return firstPlayer;
+    }
+
+    public Player getPlayerByToken(String token) {
+       for(Player player : playerList){
+           if(player.getToken().equals(token)){
+               return player;
+           }
+       }
+       return null;
     }
 
     public void setFirstPlayer(Player firstPlayer) {
@@ -113,6 +123,10 @@ public class Match {
     /** Method that signal the start of the match. This method SHOULD be called once when the match is ready to start.*/
     public void startMatch() {
         actualPlayerIndex = playerList.indexOf(firstPlayer);
+        for(Player player : playerList){
+            StartGameUpdate update = new StartGameUpdate();
+            player.addUpdate(update);
+        }
     }
 
     /** Method that signal the start of the turn of a player. This method SHOULD be called each time a player starts his turn*/

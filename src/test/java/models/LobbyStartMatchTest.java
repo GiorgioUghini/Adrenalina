@@ -17,7 +17,7 @@ public class LobbyStartMatchTest {
 
     @Test
     public void lobbyStartMatchTest() throws InterruptedException {
-        Lobby lobby = Lobby.getInstance();
+        Lobby lobby = new Lobby();
 
         lobby.registerPlayer("Cosimo");
         lobby.registerPlayer("Giorgio");

@@ -1,5 +1,7 @@
 package network;
 
+import models.Lobby;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -10,32 +12,31 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
+    private static Server instance = null;
+    private ServerConnection connection;
+    private Lobby lobby;
 
-    private ServerSocket serverSocket;
-    private ExecutorService pool;
-    private Registry registry;
-    private boolean stop;
+    private Server() {}
 
-    public Server(int port) throws IOException {
-        stop = false;
-        pool = Executors.newCachedThreadPool();
-        serverSocket = new ServerSocket(port);
+    /**
+     * Method that creates or directly return the singleton instance
+     * @return the instance of the singleton class "Server"
+     */
+    public static Server getInstance()
+    {
+        if (instance == null) {
+            instance = new Server();
+        }
+        return instance;
+    }
 
-        registry = LocateRegistry.createRegistry(1099);
-        registry.rebind("RemoteMethods", new RemoteMethods());
+    public Lobby getLobby(){
+        return lobby;
     }
 
     public void start() throws IOException {
-        while (!stop) {
-            Socket clientSocket = serverSocket.accept();
-            pool.submit(new ClientListener(clientSocket));
-        }
-    }
-
-    public void stop() throws IOException {
-        stop = true;
-        serverSocket.close();
-        pool.shutdown();
-        UnicastRemoteObject.unexportObject(registry, true);
+        lobby = new Lobby();
+        connection = new ServerConnection();
+        connection.init();
     }
 }

@@ -14,7 +14,7 @@ public class LobbyTimerTest {
 
     @Test
     public void lobbyTimerAbortTest() {
-        Lobby lobby = Lobby.getInstance();
+        Lobby lobby = new Lobby();
         lobby.registerPlayer("Cosimo");
         lobby.registerPlayer("Giorgio");
         lobby.registerPlayer("Vila");

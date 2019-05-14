@@ -2,8 +2,8 @@ package network;
 
 import errors.InvalidInputException;
 import network.responses.ErrorResponse;
-import network.responses.LongPollingResponse;
 import network.responses.RegisterPlayerResponse;
+import network.responses.ValidActionsResponse;
 
 public class ResponseHandler implements ResponseHandlerInterface {
     @Override
@@ -13,7 +13,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
     }
 
     @Override
-    public void handle(LongPollingResponse response) {
+    public void handle(ValidActionsResponse response) {
 
     }
 

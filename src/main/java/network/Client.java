@@ -15,23 +15,20 @@ public class Client {
     private GameView gameView;
     private View currentView;
 
-    public static Client createInstance(ViewType viewType) {
-        if (instance == null){
-            instance = new Client(viewType);
-            return instance;
+    public static Client getInstance()
+    {
+        if (instance == null) {
+            instance = new Client();
         }
-        throw new SingletionViolationException();
-    }
-
-    public static Client getInstance() {
         return instance;
     }
 
-    private Client(ViewType viewType) {
-        this.viewType = viewType;
+    private Client() {
+
     }
 
-    public void start() throws InterruptedException {
+    public void start(ViewType viewType) throws InterruptedException {
+        this.viewType = viewType;
         if(viewType == ViewType.CLI){
             menuView = new MenuViewCLI();
             //gameView = new GameViewCLI(); Later

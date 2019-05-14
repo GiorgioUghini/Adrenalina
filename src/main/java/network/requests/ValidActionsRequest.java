@@ -6,10 +6,9 @@ import network.Response;
 
 import java.rmi.RemoteException;
 
-public class RegisterPlayerRequest implements Request {
+public class ValidActionsRequest implements Request {
 
     private String token;
-    public String username;
 
     @Override
     public void setToken(String token) {
@@ -19,10 +18,6 @@ public class RegisterPlayerRequest implements Request {
     @Override
     public String getToken() {
         return token;
-    }
-
-    public RegisterPlayerRequest(String username){
-        this.username = username;
     }
 
     @Override

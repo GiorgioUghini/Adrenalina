@@ -15,7 +15,7 @@ public class LobbyTest {
 
     @Test
     public void lobbyTimerTest() {
-        Lobby lobby = Lobby.getInstance();
+        Lobby lobby = new Lobby();
         lobby.registerPlayer("Cosimo");
         lobby.registerPlayer("Giorgio");
         lobby.registerPlayer("Vila");
@@ -23,7 +23,7 @@ public class LobbyTest {
         assertEquals(0, activeMatches.size());
 
         try {
-            await().atMost(Constants.DELAY_SECONDS + 1, SECONDS).until(matchStarted());
+            await().atMost(Constants.DELAY_SECONDS + 1, SECONDS).until(matchStarted(lobby));
         } catch (ConditionTimeoutException e) {
             assert false;
         }
@@ -32,10 +32,10 @@ public class LobbyTest {
         lobby.resetInstance();
     }
 
-    private Callable<Boolean> matchStarted() {
+    private Callable<Boolean> matchStarted(Lobby lobby) {
         return new Callable<Boolean>() {
             public Boolean call() throws Exception {
-                List activeMatches = Lobby.getInstance().getActiveMatches();
+                List activeMatches = lobby.getActiveMatches();
                 return (activeMatches.size() == 1);
             }
         };

@@ -18,21 +18,6 @@ public class Lobby {
 
     private List<Player> waitingPlayerList = new ArrayList<>();
 
-    private Lobby(){
-    }
-
-    /**
-     * Method that creates or directly return the singleton instance
-     * @return the instance of the singleton class "Lobby"
-     */
-    public static Lobby getInstance()
-    {
-        if (instance == null) {
-            instance = new Lobby();
-        }
-        return instance;
-    }
-
     public synchronized void resetInstance() {    //Only for testing purpose
         waitingPlayerList.clear();
         activeMatches.clear();
@@ -102,13 +87,22 @@ public class Lobby {
         activeCountdown = scheduler.schedule(new Runnable() {
             @Override
             public void run() {
-                Lobby.getInstance().activeCountdown = null;
-                Lobby.getInstance().startMatch();
+                activeCountdown = null;
+                startMatch();
             }}, Constants.DELAY_SECONDS, TimeUnit.SECONDS);
     }
 
     public synchronized List<Match> getActiveMatches() {
         return new ArrayList<>(activeMatches);
+    }
+
+    public Match getMatchByToken(String token) {
+        for(Match match : getActiveMatches()){
+            Player player = match.getPlayerByToken(token);
+            if(player != null)
+                return match;
+        }
+        return null;
     }
 
 }

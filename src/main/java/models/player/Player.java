@@ -178,6 +178,10 @@ public class Player implements Subscriber, Serializable {
         updates.add(update);
     }
 
+    public List<Update> getUpdates(){
+        return updates;
+    }
+
     public void clearUpdates(){
         updates.clear();
     }

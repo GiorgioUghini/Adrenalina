@@ -20,7 +20,8 @@ public class LongPollingTask extends TimerTask {
     @Override
     public void run() {
         try {
-            List<Update> updates = remoteMethods.longPolling();
+            String token = Client.getInstance().getConnection().getToken();
+            List<Update> updates = remoteMethods.longPolling(token);
             if(updates != null)
                 queue.addAll(updates);
         } catch (RemoteException e) {

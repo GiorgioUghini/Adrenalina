@@ -11,13 +11,13 @@ public class ServerListener implements Runnable{
 
     public ServerListener() {
         this.responseHandler = new ResponseHandler();
-        this.in = Client.getInstance().getConnection().getInputStream();
+        this.in = ((SocketConnection) Client.getInstance().getConnection()).getInputStream();
     }
 
     @Override
     public void run() {
         try {
-            Response response = (Response) Client.getInstance().getConnection().getInputStream().readObject();
+            Response response = (Response) in.readObject();
             response.handle(responseHandler);
         } catch (Exception e) {
             Logger logger = Logger.getAnonymousLogger();

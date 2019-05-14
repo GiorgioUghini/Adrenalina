@@ -11,31 +11,12 @@ import java.rmi.NotBoundException;
 
 public class MenuController {
     public void createConnection(ConnectionType type) throws IOException, NotBoundException, InterruptedException {
-        Connection connection = new Connection();
+        Connection connection = new ConnectionFactory().getConnection(type);
         Client.getInstance().setConnection(connection);
-        if(type == ConnectionType.Socket){
-            connection.initSocket(Constants.HOSTNAME, Constants.PORT);
-        }
-        else if(type == ConnectionType.RMI){
-            connection.initRMI();
-        }
-        else
-        {
-            throw new InvalidConnectionTypeException();
-        }
-
+        connection.init();
     }
 
-    public void registerPlayer(String username) throws IOException {
-        Connection connection  = Client.getInstance().getConnection();
-        if(connection.getType() == ConnectionType.Socket){
-            RegisterPlayerRequest request = new RegisterPlayerRequest(username);
-            connection.getOutputStream().writeObject(request);
-        }
-        else if(connection.getType() == ConnectionType.RMI){
-            RemoteMethodsInterface remoteMethods = connection.getRemoteMethods();
-            RegisterPlayerResponse response = remoteMethods.registerPlayer(username);
-            response.handle(new ResponseHandler());
-        }
+    public void registerPlayer(String username) {
+        Client.getInstance().getConnection().registerPlayer(username);
     }
 }

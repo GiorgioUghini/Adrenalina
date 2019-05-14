@@ -47,12 +47,7 @@ public class MenuViewCLI implements MenuView {
             Console.print("Insert username: ");
         }
         Console.println("Welcome, " + username);
-        try {
-            menuController.registerPlayer(username);
-        } catch (IOException e) {
-            Logger logger = Logger.getAnonymousLogger();
-            logger.log(Level.SEVERE, "an exception was thrown", e);
-        }
+        menuController.registerPlayer(username);
     }
 
     /**{@inheritDoc}*/
