@@ -1,8 +1,8 @@
 package models.map;
 
 import errors.CardAlreadyExistsException;
-import models.AmmoCard;
-import models.Card;
+import models.card.AmmoCard;
+import models.card.Card;
 import java.util.UUID;
 
 public class AmmoPoint extends Square {

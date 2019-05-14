@@ -1,4 +1,4 @@
-package models;
+package models.card;
 
 public class PowerUpCard extends EffectCard {
 }

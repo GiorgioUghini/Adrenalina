@@ -1,6 +1,9 @@
 package models;
 
-import controllers.CardController;
+import models.card.Card;
+import models.card.Deck;
+import models.card.EffectCard;
+import models.card.WeaponDeck;
 import org.junit.Test;
 
 import java.io.IOException;

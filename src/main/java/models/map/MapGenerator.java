@@ -1,8 +1,7 @@
 package models.map;
 
 import errors.MapNotExistsException;
-import models.AmmoCard;
-import models.Deck;
+import models.card.Deck;
 
 import java.util.Arrays;
 import java.util.HashSet;

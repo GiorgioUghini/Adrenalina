@@ -1,6 +1,5 @@
-package models;
+package models.card;
 
-import models.card.Effect;
 import java.util.List;
 
 public class EffectCard extends Card  {

@@ -1,7 +1,7 @@
 package models.player;
 
-import models.PowerUpCard;
-import models.WeaponCard;
+import models.card.PowerUpCard;
+import models.card.WeaponCard;
 import models.turn.ActionGroup;
 import network.Update;
 import utils.TokenGenerator;

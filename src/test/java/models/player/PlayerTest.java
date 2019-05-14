@@ -1,12 +1,11 @@
 package models.player;
 
-import models.PowerUpCard;
-import models.WeaponCard;
+import models.card.PowerUpCard;
+import models.card.WeaponCard;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 

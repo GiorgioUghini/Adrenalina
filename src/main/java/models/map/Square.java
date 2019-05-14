@@ -1,7 +1,7 @@
 package models.map;
 
 import errors.NotWallException;
-import models.Card;
+import models.card.Card;
 
 import java.util.*;
 

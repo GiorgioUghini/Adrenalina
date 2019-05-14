@@ -1,4 +1,4 @@
-package models;
+package models.card;
 
 import java.util.Collections;
 import java.util.LinkedList;
