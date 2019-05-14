@@ -17,9 +17,9 @@ public class MatchTest {
         Player pl1 = new Player(false, "Cosimo");
         Player pl2 = new Player(false, "Giorgio");
         Player pl3 = new Player(false, "Vila");
-        m.addPlayer(pl1);
-        m.addPlayer(pl2);
         m.addPlayer(pl3);
+        m.addPlayer(pl2);
+        m.addPlayer(pl1);
         m.setFirstPlayer(pl2);
         assertEquals(pl2, m.getFirstPlayer());
 
@@ -49,9 +49,9 @@ public class MatchTest {
         Player pl1 = new Player(false, "Cosimo");
         Player pl2 = new Player(false, "Giorgio");
         Player pl3 = new Player(false, "Vila");
-        m.addPlayer(pl1);
-        m.addPlayer(pl2);
         m.addPlayer(pl3);
+        m.addPlayer(pl2);
+        m.addPlayer(pl1);
         m.setFirstPlayer(pl2);
         assertEquals(pl2, m.getFirstPlayer());
 
@@ -87,9 +87,6 @@ public class MatchTest {
 
         m.endTurn(); //End Giorgio
 
-        m.nextTurn();   //Start Cosimo
-        m.endTurn();    //End Cosimo
-
         m.nextTurn(); //Start Vila
         wantsToDoList.clear();
         wantsToDoList.add(ActionElement.RUN);
@@ -102,9 +99,6 @@ public class MatchTest {
         // Frenzy enabled!!!
         m.activateFrenzy(pl3);
         m.endTurn(); //End Vila
-
-        m.nextTurn();   //Start Giorgio
-        m.endTurn();    //End Giorgio
 
         m.nextTurn(); //Start Cosimo
         wantsToDoList.clear();
@@ -120,9 +114,6 @@ public class MatchTest {
         // [RUN, RELOAD, SHOOT] permitted in this stage (Not type 2)
         assertTrue(confirmation);
         m.endTurn(); //End Cosimo
-
-        m.nextTurn();   //Start Vila
-        m.endTurn();    //End Vila
 
         m.nextTurn(); //Start Giorgio
         confirmation = m.confirmActions(pl2, wantsToDoList);

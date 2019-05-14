@@ -38,6 +38,7 @@ public class Lobby {
     }
 
     public synchronized void resetInstance() {    //Only for testing purpose
+        instance = null;
         activeMatches.clear();
         if(activeCountdown!=null) {
             activeCountdown.cancel(true);

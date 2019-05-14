@@ -23,7 +23,6 @@ public class Match {
 
     public Match(){
         playerList = new ArrayList<>();
-        actualTurn  = new Turn();
     }
 
     @Override
@@ -127,6 +126,7 @@ public class Match {
     /** Method that signal the start of the match. This method SHOULD be called once when the match is ready to start.*/
     public void startMatch() {
         actualPlayerIndex = 0;
+        actualTurn = new Turn();
         for(Player player : playerList){
             StartGameUpdate update = new StartGameUpdate();
             player.addUpdate(update);
@@ -153,7 +153,7 @@ public class Match {
      * @param p any player
      * @return a Set of possible moves of the player */
     public Set getPossibleAction(Player p) {
-        if (!p.equals(playerList.get(actualPlayerIndex))) {
+        if ((!p.equals(playerList.get(actualPlayerIndex))) || actualTurn == null) {
             return new HashSet<>();
         }
         if (frenzy != null) {
