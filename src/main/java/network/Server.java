@@ -33,4 +33,8 @@ public class Server {
         connection = new ServerConnection();
         connection.init();
     }
+
+    public ServerConnection getConnection(){
+        return connection;
+    }
 }

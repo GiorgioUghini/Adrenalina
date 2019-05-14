@@ -1,7 +1,9 @@
 package network;
 
 import errors.InvalidConnectionTypeException;
+import network.requests.ValidActionsRequest;
 import network.responses.RegisterPlayerResponse;
+import network.responses.ValidActionsResponse;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -14,9 +16,36 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class RMIConnection implements Connection {
 
     private RemoteMethodsInterface remoteMethods;
+    private ResponseHandler responseHandler;
     private Registry registry;
     private BlockingQueue<Update> queue;
     private String token;
+
+    @Override
+    public void registerPlayer(String username) {
+        try {
+            RegisterPlayerResponse response = remoteMethods.registerPlayer(username);
+            Client.getInstance().getConnection().receiveResponse(response);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void validActions() {
+        try {
+            String token = Client.getInstance().getConnection().getToken();
+            ValidActionsResponse response = remoteMethods.validActions(token);
+            Client.getInstance().getConnection().receiveResponse(response);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void receiveResponse(Response response) {
+        response.handle(responseHandler);
+    }
 
     @Override
     public void init() {
@@ -24,6 +53,7 @@ public class RMIConnection implements Connection {
             registry = LocateRegistry.getRegistry();
             remoteMethods = (RemoteMethodsInterface) registry.lookup("RemoteMethods");
             queue = new LinkedBlockingQueue<>(100);
+            responseHandler = new ResponseHandler();
             LongPollingTask longPollingTask = new LongPollingTask(remoteMethods, queue);
             Timer timer = new Timer();
             timer.schedule(longPollingTask, 0, 2);
@@ -41,31 +71,9 @@ public class RMIConnection implements Connection {
         this.token = token;
     }
 
-
     @Override
     public String getToken() {
         return token;
-    }
-
-    @Override
-    public void sendRequest(Request request) {
-
-    }
-
-    @Override
-    public void registerPlayer(String username) {
-        try {
-            RegisterPlayerResponse response = remoteMethods.registerPlayer(username);
-            response.handle(new ResponseHandler());
-
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void receiveResponse(Response response) {
-
     }
 
     public RemoteMethodsInterface getRemoteMethods() {

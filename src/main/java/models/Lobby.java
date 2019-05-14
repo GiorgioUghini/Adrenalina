@@ -22,15 +22,15 @@ public class Lobby {
         return waitingMatch;
     }
 
-    private Lobby(){
+    private Lobby() {
     }
 
     /**
      * Method that creates or directly return the singleton instance
+     *
      * @return the instance of the singleton class "Lobby"
      */
-    public static Lobby getInstance()
-    {
+    public static Lobby getInstance() {
         if (instance == null) {
             instance = new Lobby();
         }
@@ -40,7 +40,7 @@ public class Lobby {
     public synchronized void resetInstance() {    //Only for testing purpose
         instance = null;
         activeMatches.clear();
-        if(activeCountdown!=null) {
+        if (activeCountdown != null) {
             activeCountdown.cancel(true);
             activeCountdown = null;
         }
@@ -50,6 +50,7 @@ public class Lobby {
 
     /**
      * Method that register a player into the lobby of the server, waiting to start his match
+     *
      * @param username the username of the player to register
      * @return a String that contains the player token
      */
@@ -57,8 +58,7 @@ public class Lobby {
         Player p;
         if (waitingMatch.getPlayersNumber() == 0) {
             p = new Player(true, username);
-        }
-        else {
+        } else {
             p = new Player(false, username);
         }
         waitingMatch.addPlayer(p);
@@ -97,7 +97,8 @@ public class Lobby {
             public void run() {
                 Lobby.getInstance().activeCountdown = null;
                 Lobby.getInstance().startMatch();
-            }}, Constants.DELAY_SECONDS, TimeUnit.SECONDS);
+            }
+        }, Constants.DELAY_SECONDS, TimeUnit.SECONDS);
     }
 
     public synchronized List<Match> getActiveMatches() {
@@ -105,11 +106,14 @@ public class Lobby {
     }
 
     public Match getMatchByToken(String token) {
-        for(Match match : getActiveMatches()){
+        for (Match match : getActiveMatches()) {
             Player player = match.getPlayerByToken(token);
-            if(player != null)
+            if (player != null)
                 return match;
         }
+        Player player = waitingMatch.getPlayerByToken(token);
+        if (player != null)
+            return waitingMatch;
         return null;
     }
 

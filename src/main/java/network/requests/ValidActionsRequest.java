@@ -1,5 +1,6 @@
 package network.requests;
 
+import network.Client;
 import network.Request;
 import network.RequestHandlerInterface;
 import network.Response;
@@ -10,9 +11,8 @@ public class ValidActionsRequest implements Request {
 
     private String token;
 
-    @Override
-    public void setToken(String token) {
-        this.token = token;
+    public ValidActionsRequest(){
+        this.token = Client.getInstance().getConnection().getToken();
     }
 
     @Override
