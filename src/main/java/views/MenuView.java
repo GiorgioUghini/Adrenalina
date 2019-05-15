@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface MenuView extends View {
+    /** starts the menu view **/
+    void startView();
     /** ask if socket or rmi, then calls the controller */
     void createConnection();
     /** Continue asking for the username until it matches the requirements, then sends it to server */

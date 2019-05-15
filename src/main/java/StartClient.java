@@ -2,20 +2,14 @@ import network.Client;
 import utils.Constants;
 import views.ViewType;
 
-import java.io.IOException;
-import java.rmi.NotBoundException;
-
 public class StartClient {
     public static void main(String[] args) throws InterruptedException {
         ViewType viewType = ViewType.CLI;
+        args = new String[] {"gui"};    //I'M STARTING GUI!!!
         for (String s: args) {
             s = s.replace(Constants.ARG_PREFIX, "").toLowerCase();
-            switch (s){
-                case "gui":
-                    viewType = ViewType.GUI;
-                    break;
-                case "cli":
-                    viewType = ViewType.CLI;
+            if (s.equals("gui")) {
+                viewType = ViewType.GUI;
             }
         }
         Client client = Client.getInstance();

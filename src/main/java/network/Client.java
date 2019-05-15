@@ -34,15 +34,14 @@ public class Client {
             //gameView = new GameViewCLI(); Later
         }
         else if(viewType == ViewType.GUI){
-            //TODO implementation GUI
-            throw new NotImplementedException();
+            menuView = new MenuViewGUI();
         }
         else{
             throw new InvalidViewTypeException();
         }
         currentView = menuView;
-        menuView.createConnection();
-        Thread.currentThread().join();
+        menuView.startView();
+        //Thread.currentThread().join();
     }
 
     public void setConnection(Connection connection){
