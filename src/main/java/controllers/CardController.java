@@ -3,7 +3,8 @@ package controllers;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import models.*;
+import models.card.*;
+import network.Server;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,23 +15,42 @@ import java.util.List;
 public class CardController {
     private WeaponDeck weaponDeck;
     private PowerUpDeck powerUpDeck;
+    private AmmoDeck ammoDeck;
 
-    private List<Card> getDeserializedCards(String filename) throws IOException {
-        String json = getJsonCardDescriptor(filename);
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        Gson gson = gsonBuilder.create();
-        Type type = new TypeToken<List<WeaponCard>>(){}.getType();
-        return gson.fromJson(json, type);
+    private List<Card> getDeserializedCards(String filename, CardType cardType) {
+        try{
+            String json = getJsonCardDescriptor(filename);
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            Gson gson = gsonBuilder.create();
+            Type type = getType(cardType);
+            return gson.fromJson(json, type);
+        }catch(IOException e){
+            //fatal error, close the server
+            Server.getInstance().fatalError(e);
+        }
+        return null;
     }
 
-    private void loadWeaponCards() throws IOException{
-        List<Card> cards = getDeserializedCards("weapon_cards.json");
+    private Type getType(CardType cardType){
+        if(cardType.equals(CardType.AMMO))
+            return new TypeToken<List<AmmoCard>>(){}.getType();
+        else
+            return new TypeToken<List<WeaponCard>>(){}.getType();
+    }
+
+    private void loadWeaponCards(){
+        List<Card> cards = getDeserializedCards("weapon_cards.json", CardType.WEAPON);
         weaponDeck = new WeaponDeck(cards);
     }
 
-    private void loadPowerUpCards() throws IOException{
-        List<Card> cards = getDeserializedCards("powerup_cards.json");
+    private void loadPowerUpCards(){
+        List<Card> cards = getDeserializedCards("powerup_cards.json", CardType.POWERUP);
         powerUpDeck = new PowerUpDeck(cards);
+    }
+
+    private void loadAmmoCards(){
+        List<Card> cards = getDeserializedCards("ammo_cards.json", CardType.AMMO);
+        ammoDeck = new AmmoDeck(cards);
     }
 
     private String getJsonCardDescriptor(String filename) throws IOException {
@@ -38,9 +58,10 @@ public class CardController {
         return new String(Files.readAllBytes(file.toPath()));
     }
 
-    public CardController() throws IOException{
+    public CardController(){
         loadWeaponCards();
         loadPowerUpCards();
+        loadAmmoCards();
     }
 
     public WeaponDeck getWeaponDeck(){
@@ -49,5 +70,9 @@ public class CardController {
 
     public PowerUpDeck getPowerUpDeck(){
         return powerUpDeck;
+    }
+
+    public AmmoDeck getAmmoDeck(){
+        return ammoDeck;
     }
 }

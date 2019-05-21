@@ -1,12 +1,12 @@
-package models;
+package models.card;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-abstract class Deck {
+public abstract class Deck {
 
-    LinkedList<Card> cards = new LinkedList<>();
+    private LinkedList<Card> cards = new LinkedList<>();
 
     Deck(List<Card> cards){
         this.cards.addAll(cards);
