@@ -1,7 +1,11 @@
 package models.card;
 
+import controllers.CardController;
 import errors.InvalidAmmoException;
 import org.junit.Test;
+
+import java.io.IOException;
+
 import static org.junit.Assert.*;
 
 public class AmmoCardTest {
@@ -21,5 +25,15 @@ public class AmmoCardTest {
         }catch(InvalidAmmoException e){
             assert  true;
         }
+    }
+    @Test
+    public void testDeck() {
+        CardController controller = new CardController();
+        AmmoDeck deck = controller.getAmmoDeck();
+        for(int i=0; i<deck.size(); i++){
+            AmmoCard card = (AmmoCard) deck.draw();
+            assertTrue(card.getBlue()>-1 && card.getBlue()<4);
+        }
+
     }
 }

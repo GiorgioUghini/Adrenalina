@@ -1,5 +1,7 @@
 package models;
 
+import controllers.CardController;
+import models.card.AmmoDeck;
 import models.card.Card;
 import models.card.PowerUpDeck;
 import models.card.WeaponDeck;
@@ -18,14 +20,20 @@ public class Match {
     private int actualPlayerIndex = 0;
     private PowerUpDeck powerUpDeck;
     private WeaponDeck weaponDeck;
+    private AmmoDeck ammoDeck;
     private GameMap gameMap;
     private Turn actualTurn;
     private ActionGroup frenzy = null;
+    private CardController cardController;
     //null -> noFrenzy, Type1, Type2
 
     public Match(){
         playerList = new ArrayList<>();
         actualTurn  = new Turn();
+        cardController = new CardController();
+        powerUpDeck = cardController.getPowerUpDeck();
+        weaponDeck = cardController.getWeaponDeck();
+        ammoDeck = cardController.getAmmoDeck();
     }
 
     @Override
@@ -119,6 +127,7 @@ public class Match {
      * @param mapID from 0 to 3 */
     public void createMap(int mapID)  {
         gameMap = MapGenerator.generate(mapID);
+        MapGenerator.initCards(ammoDeck, weaponDeck, gameMap);
     }
 
     /** Method that signal the start of the match. This method SHOULD be called once when the match is ready to start.*/
