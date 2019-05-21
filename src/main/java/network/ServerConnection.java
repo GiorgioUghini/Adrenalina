@@ -18,8 +18,8 @@ public class ServerConnection {
     private ServerSocket serverSocket;
     private ExecutorService pool;
     private Registry registry;
-    private Map<String, Socket> tokenSocketMap;
-    private Map<Socket, String> socketTokenMap;
+    private Map<String, SocketWrapper> tokenSocketMap;
+    private Map<SocketWrapper, String> socketTokenMap;
     private boolean close;
 
     public ServerConnection() throws IOException {
@@ -36,8 +36,6 @@ public class ServerConnection {
     public void init() throws IOException {
         while (!close) {
             Socket clientSocket = serverSocket.accept();
-            String token = TokenGenerator.nextToken();
-            addSocket(token, clientSocket);
             pool.submit(new ClientListener(clientSocket));
         }
     }
@@ -49,13 +47,13 @@ public class ServerConnection {
         UnicastRemoteObject.unexportObject(registry, true);
     }
 
-    public void addSocket(String token, Socket socket){
+    public void addSocket(String token, SocketWrapper socket){
         tokenSocketMap.put(token, socket);
         socketTokenMap.put(socket, token);
     }
 
-    public Socket getSocket(String token){
-        Socket socket = tokenSocketMap.get(token);
+    public SocketWrapper getSocket(String token){
+        SocketWrapper socket = tokenSocketMap.get(token);
         return socket;
     }
 

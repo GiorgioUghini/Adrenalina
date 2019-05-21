@@ -1,5 +1,7 @@
 package network;
 
+import utils.TokenGenerator;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -9,15 +11,17 @@ import java.util.logging.Logger;
 
 public class ClientListener implements Runnable{
 
-    private Socket socket;
     private ObjectInputStream in;
     private ObjectOutputStream out;
     private RequestHandlerInterface requestHandler;
+    private String token;
 
     public ClientListener(Socket socket) throws IOException {
-        this.socket = socket;
-        this.out = new ObjectOutputStream(socket.getOutputStream());
-        this.in = new ObjectInputStream(socket.getInputStream());
+        SocketWrapper socketWrapper = new SocketWrapper(socket);
+        this.token = TokenGenerator.nextToken();
+        Server.getInstance().getConnection().addSocket(token, socketWrapper);
+        this.out = socketWrapper.getOutputStream();
+        this.in = socketWrapper.getInputStream();
         this.requestHandler = new RequestHandler();
     }
 
@@ -25,7 +29,6 @@ public class ClientListener implements Runnable{
     public void run() {
         try {
             Request request = (Request) in.readObject();
-            String token = Server.getInstance().getConnection().getToken(socket);
             request.setToken(token);
             Response response = request.handle(requestHandler);
             out.writeObject(response);
