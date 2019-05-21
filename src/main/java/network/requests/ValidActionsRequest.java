@@ -21,6 +21,11 @@ public class ValidActionsRequest implements Request {
     }
 
     @Override
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    @Override
     public Response handle(RequestHandlerInterface handler) throws RemoteException {
         return handler.handle(this);
     }

@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface RemoteMethodsInterface extends Remote {
     List<Update> longPolling(String token) throws RemoteException;
-    RegisterPlayerResponse registerPlayer(String username) throws RemoteException;
+    RegisterPlayerResponse registerPlayer(String username, String token) throws RemoteException;
     ValidActionsResponse validActions(String token) throws RemoteException;
 }

@@ -31,10 +31,10 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public RegisterPlayerResponse registerPlayer(String username)  {
+    public RegisterPlayerResponse registerPlayer(String username, String token)  {
         Lobby mainLobby = Lobby.getInstance();
-        String token = mainLobby.registerPlayer(username);
-        return new RegisterPlayerResponse(token);
+        String returnToken = mainLobby.registerPlayer(username, token);
+        return new RegisterPlayerResponse(returnToken);
     }
 
     @Override

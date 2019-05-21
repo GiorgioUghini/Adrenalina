@@ -25,6 +25,8 @@ public class ClientListener implements Runnable{
     public void run() {
         try {
             Request request = (Request) in.readObject();
+            String token = Server.getInstance().getConnection().getToken(socket);
+            request.setToken(token);
             Response response = request.handle(requestHandler);
             out.writeObject(response);
         } catch (Exception e) {

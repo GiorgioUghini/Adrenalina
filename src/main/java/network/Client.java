@@ -2,7 +2,6 @@ package network;
 
 import errors.InvalidViewTypeException;
 import errors.NotImplementedException;
-import errors.SingletionViolationException;
 import views.*;
 
 public class Client {

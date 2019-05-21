@@ -14,9 +14,9 @@ public class MatchTest {
     @Test
     public void startTurnNextTurnEndTurnPossibleActions() {
         Match m = new Match();
-        Player pl1 = new Player(false, "Cosimo");
-        Player pl2 = new Player(false, "Giorgio");
-        Player pl3 = new Player(false, "Vila");
+        Player pl1 = new Player("Cosimo");
+        Player pl2 = new Player( "Giorgio");
+        Player pl3 = new Player( "Vila");
         m.addPlayer(pl3);
         m.addPlayer(pl2);
         m.addPlayer(pl1);
@@ -46,9 +46,9 @@ public class MatchTest {
     @Test
     public void confirmActions() {
         Match m = new Match();
-        Player pl1 = new Player(false, "Cosimo");
-        Player pl2 = new Player(false, "Giorgio");
-        Player pl3 = new Player(false, "Vila");
+        Player pl1 = new Player( "Cosimo");
+        Player pl2 = new Player("Giorgio");
+        Player pl3 = new Player("Vila");
         m.addPlayer(pl3);
         m.addPlayer(pl2);
         m.addPlayer(pl1);
