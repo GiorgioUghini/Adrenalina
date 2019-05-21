@@ -5,6 +5,6 @@ public interface Connection {
     String getToken();
     void setToken(String token);
     void registerPlayer(String username);
-    void sendRequest(Request request);
+    void validActions();
     void receiveResponse(Response response);
 }

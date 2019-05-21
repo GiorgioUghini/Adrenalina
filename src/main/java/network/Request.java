@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 
 public interface Request extends Serializable {
-    void setToken(String token);
     String getToken();
+    void setToken(String token);
     Response handle(RequestHandlerInterface handler) throws RemoteException;
 }

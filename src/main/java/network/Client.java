@@ -2,7 +2,6 @@ package network;
 
 import errors.InvalidViewTypeException;
 import errors.NotImplementedException;
-import errors.SingletionViolationException;
 import views.*;
 
 public class Client {
@@ -32,7 +31,6 @@ public class Client {
         if(viewType == ViewType.CLI){
             menuView = new MenuViewCLI();
             //gameView = new GameViewCLI(); Later
-
         }
         else if(viewType == ViewType.GUI){
             //TODO implementation GUI

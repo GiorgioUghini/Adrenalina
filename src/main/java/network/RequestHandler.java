@@ -27,7 +27,7 @@ public class RequestHandler implements RequestHandlerInterface {
 
     @Override
     public Response handle(RegisterPlayerRequest request) throws RemoteException {
-        return remoteMethods.registerPlayer(request.username);
+        return remoteMethods.registerPlayer(request.username, request.getToken());
     }
 
 

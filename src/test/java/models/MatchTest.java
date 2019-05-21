@@ -14,12 +14,12 @@ public class MatchTest {
     @Test
     public void startTurnNextTurnEndTurnPossibleActions() {
         Match m = new Match();
-        Player pl1 = new Player(false, "Cosimo");
-        Player pl2 = new Player(false, "Giorgio");
-        Player pl3 = new Player(false, "Vila");
-        m.addPlayer(pl1);
-        m.addPlayer(pl2);
+        Player pl1 = new Player("Cosimo");
+        Player pl2 = new Player( "Giorgio");
+        Player pl3 = new Player( "Vila");
         m.addPlayer(pl3);
+        m.addPlayer(pl2);
+        m.addPlayer(pl1);
         m.setFirstPlayer(pl2);
         assertEquals(pl2, m.getFirstPlayer());
 
@@ -46,19 +46,18 @@ public class MatchTest {
     @Test
     public void confirmActions() {
         Match m = new Match();
-        Player pl1 = new Player(false, "Cosimo");
-        Player pl2 = new Player(false, "Giorgio");
-        Player pl3 = new Player(false, "Vila");
-        m.addPlayer(pl1);
-        m.addPlayer(pl2);
+        Player pl1 = new Player( "Cosimo");
+        Player pl2 = new Player("Giorgio");
+        Player pl3 = new Player("Vila");
         m.addPlayer(pl3);
+        m.addPlayer(pl2);
+        m.addPlayer(pl1);
         m.setFirstPlayer(pl2);
         assertEquals(pl2, m.getFirstPlayer());
 
         m.startMatch();
-        Set possibleActions = m.getPossibleAction(pl2);
 
-        LinkedList<ActionElement> wantsToDoList = new LinkedList<ActionElement>();
+        LinkedList<ActionElement> wantsToDoList = new LinkedList<>();
         wantsToDoList.add(ActionElement.RUN);
         wantsToDoList.add(ActionElement.SHOOT);
         boolean confirmation = m.confirmActions(pl2, wantsToDoList);

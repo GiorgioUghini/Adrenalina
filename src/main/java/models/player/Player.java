@@ -11,7 +11,6 @@ import java.util.*;
 
 public class Player implements Subscriber, Serializable {
 
-    private boolean isFirstPlayer;
     private String name;
     private Ammo ammo;
     private List<WeaponCard> weaponList;
@@ -25,11 +24,9 @@ public class Player implements Subscriber, Serializable {
     private List<Update> updates;
 
     /** Creates a new player object
-     * @param isFirstPlayer the boolean witch indicates whether this player should be the one who has the "First Player Mark"
      * @param name The name identifier for the player
      * */
-    public Player(boolean isFirstPlayer, String name){
-        this.isFirstPlayer = isFirstPlayer;
+    public Player(String name){
         this.name = name;
         ammo = new Ammo();
         weaponList = new ArrayList<>();
@@ -41,6 +38,11 @@ public class Player implements Subscriber, Serializable {
         //token generation
         this.token = TokenGenerator.nextToken();
         updates = new LinkedList<>();
+    }
+
+    public Player(String name, String token){
+        this(name);
+        this.token = token;
     }
 
     @Override
@@ -67,14 +69,6 @@ public class Player implements Subscriber, Serializable {
     @Override
     public void update(Object playerLife) {
         //TODO: What to do when the states changes?
-    }
-
-    public void setFirstPlayer(boolean firstPlayer) {
-        isFirstPlayer = firstPlayer;
-    }
-
-    public boolean isFirstPlayer() {
-        return isFirstPlayer;
     }
 
     public void setName(String name) {

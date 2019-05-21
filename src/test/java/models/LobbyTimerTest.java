@@ -14,14 +14,14 @@ public class LobbyTimerTest {
 
     @Test
     public void lobbyTimerAbortTest() {
-        Lobby lobby = new Lobby();
+        Lobby lobby = Lobby.getInstance();
         lobby.registerPlayer("Cosimo");
-        lobby.registerPlayer("Giorgio");
+        String token1 = lobby.registerPlayer("Giorgio");
         lobby.registerPlayer("Vila");
         List activeMatches = lobby.getActiveMatches();
         assertEquals(0, activeMatches.size());
 
-        lobby.disconnectPlayer(lobby.getPlayerWaiting().get(1));
+        lobby.disconnectPlayer(lobby.getWaitingMatch().getPlayerByToken(token1));
 
         activeMatches = lobby.getActiveMatches();
         assertEquals(0, activeMatches.size());
