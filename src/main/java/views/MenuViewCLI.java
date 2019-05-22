@@ -20,6 +20,11 @@ public class MenuViewCLI implements MenuView {
         this.menuController = new MenuController();
     }
 
+    @Override
+    public void startView() {
+        this.createConnection();
+    }
+
     /**{@inheritDoc}*/
     @Override
     public void createConnection() {

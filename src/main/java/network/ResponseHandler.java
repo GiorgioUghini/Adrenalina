@@ -5,6 +5,8 @@ import network.responses.ErrorResponse;
 import network.responses.RegisterPlayerResponse;
 import network.responses.ValidActionsResponse;
 
+import java.util.List;
+
 public class ResponseHandler implements ResponseHandlerInterface {
     @Override
     public void handle(RegisterPlayerResponse response) {
