@@ -23,12 +23,15 @@ public class RMIConnection implements Connection {
 
     @Override
     public void registerPlayer(String username) {
-        try {
-            RegisterPlayerResponse response = remoteMethods.registerPlayer(username);
-            Client.getInstance().getConnection().receiveResponse(response);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+            new Thread(()-> {
+                RegisterPlayerResponse response = null;
+                try {
+                    response = remoteMethods.registerPlayer(username);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+                Client.getInstance().getConnection().receiveResponse(response);
+            }).start();
     }
 
     @Override

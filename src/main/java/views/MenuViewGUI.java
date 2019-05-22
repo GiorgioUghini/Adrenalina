@@ -1,5 +1,6 @@
 package views;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -8,6 +9,7 @@ import java.util.logging.Logger;
 
 import controllers.MenuController;
 import controllers.ScreenController;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -19,6 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import network.ConnectionType;
 import utils.Console;
+import javafx.scene.control.ListView;
 
 public class MenuViewGUI implements Initializable, MenuView {
 
@@ -33,9 +36,9 @@ public class MenuViewGUI implements Initializable, MenuView {
     @FXML
     private Button registerButton;
     @FXML
-    private Text waitingPlayerLabel;
+    private Button joinButton;
     @FXML
-    private Text connectedLabel;
+    private ListView listView;
 
     private ConnectionType connectionType = ConnectionType.RMI;
     private MenuController menuController;
@@ -55,16 +58,18 @@ public class MenuViewGUI implements Initializable, MenuView {
 
     @Override
     public void initialize(java.net.URL arg0, ResourceBundle arg1) {
-        connectionSelector.getItems().setAll("RMI", "Socket");
-        connectionSelector.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-            @Override public void changed(ObservableValue<? extends String> selected, String oldConnection, String newConnection) {
-                if (newConnection.equals("RMI")) {
-                    connectionType = ConnectionType.RMI;
-                } else {
-                    connectionType = ConnectionType.Socket;
+        if (connectionSelector!=null) { //If it is not null, we are in register stage, if it is: we are in waitingPlayerLobby stage.
+            connectionSelector.getItems().setAll("RMI", "Socket");
+            connectionSelector.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+                @Override public void changed(ObservableValue<? extends String> selected, String oldConnection, String newConnection) {
+                    if (newConnection.equals("RMI")) {
+                        connectionType = ConnectionType.RMI;
+                    } else {
+                        connectionType = ConnectionType.Socket;
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override
@@ -93,8 +98,6 @@ public class MenuViewGUI implements Initializable, MenuView {
     /**{@inheritDoc}*/
     @Override
     public void registrationCompleted(List<String> players){
-        waitingPlayerLabel.setText("Player waiting: " + players.size());
-        connectedLabel.setText("Connected: true");
         String toastMsg = "You joined the waiting room!";
         int toastMsgTime = 2500; //2.5 seconds
         int fadeInTime = 500; //0.5 seconds
@@ -130,10 +133,11 @@ public class MenuViewGUI implements Initializable, MenuView {
 
     @Override
     public void showMessage(String message) {
-        //TODO: It seems that you must be on the same thread of JavaFX to show toasts... Socket isn't!
         int toastMsgTime = 2500; //2.5 seconds
         int fadeInTime = 500; //0.5 seconds
         int fadeOutTime= 500; //0.5 seconds
-        Toast.makeText(ScreenController.getInstance().getActualStage(), message, toastMsgTime, fadeInTime, fadeOutTime);
+        //TODO: ALWAYS USE PLATFORM RUN LATER TO EDIT GUI OBJECTS
+        Platform.runLater(() -> Toast.makeText(ScreenController.getInstance().getActualStage(), message, toastMsgTime, fadeInTime, fadeOutTime));
+        ScreenController.getInstance().activate("WaitingRoom.fxml");
     }
 }

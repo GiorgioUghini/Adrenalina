@@ -20,7 +20,7 @@
 
 <BorderPane id="borderPane" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.MenuViewGUI">
     <stylesheets>
-        <URL value="@form.css" />
+        <URL value="@../form.css" />
     </stylesheets>
     <padding>
         <Insets bottom="50" left="50" right="50" top="10" />
@@ -30,7 +30,7 @@
             <padding>
                 <Insets bottom="10.0" left="50.0" right="50.0" top="10.0" />
             </padding>
-            <Text id="text" text="Adrenaline - La prova finale evento">
+            <Text id="text" text="ADRENALINE - LA PROVA FINALE EVENTO">
                 <font>
                     <Font name="Arial Black" size="28.0" />
                 </font>
@@ -38,17 +38,9 @@
                     <DropShadow offsetX="3" offsetY="3" />
                 </effect>
             </Text>
-         <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-alignment: center;">
+         <HBox prefHeight="75.0" prefWidth="200.0" style="-fx-alignment: center;">
             <children>
-               <Text fx:id="connectedLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Connected: false" textAlignment="CENTER">
-                  <HBox.margin>
-                     <Insets left="20.0" right="20.0" />
-                  </HBox.margin>
-                  <font>
-                     <Font size="20.0" />
-                  </font>
-               </Text>
-               <Text fx:id="waitingPlayerLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Player waiting: 0" textAlignment="CENTER">
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please register and choose your connection type." textAlignment="CENTER">
                   <HBox.margin>
                      <Insets left="20.0" right="20.0" />
                   </HBox.margin>

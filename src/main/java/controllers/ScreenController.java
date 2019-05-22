@@ -1,30 +1,38 @@
 package controllers;
 
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import views.StartGUI;
 
-import java.util.HashMap;
+import java.io.IOException;
+import java.net.URL;
+
 
 public class ScreenController {
-    private HashMap<String, Pane> screenMap = new HashMap<>();
-    private Scene main;
-    private static ScreenController instance;
     private Stage actualStage;
+    private static ScreenController instance;
+    private Scene actualScene;
 
-    public void setActualStage(Stage actualStage) {
-        this.actualStage = actualStage;
+    public void setActualScene(Scene actualScene) {
+        this.actualScene = actualScene;
+    }
+
+    public Scene getActualScene() {
+        return actualScene;
     }
 
     public Stage getActualStage() {
         return actualStage;
     }
 
-    private ScreenController(Scene main) {
-        this.main = main;
+    private ScreenController(Stage main) {
+        this.actualStage = main;
     }
 
-    public static ScreenController getInstance(Scene main) {
+    public static ScreenController getInstance(Stage main) {
         if (instance==null) {
             instance = new ScreenController(main);
         }
@@ -35,15 +43,21 @@ public class ScreenController {
         return instance;
     }
 
-    public void addScreen(String name, Pane pane){
-        screenMap.put(name, pane);
-    }
-
-    public void removeScreen(String name){
-        screenMap.remove(name);
-    }
-
-    public void activate(String name){
-        main.setRoot( screenMap.get(name) );
+    public void activate(String name) {
+        Platform.runLater( () -> {
+                    actualStage.setTitle(name); //Set the title you like most
+                    Parent newParent = null;
+                    try {
+                        URL url = getClass().getClassLoader().getResource("fxml/" + name);
+                        newParent = FXMLLoader.load(url);
+                        System.out.println("OK");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Scene newParentScene = new Scene(newParent);
+                    actualStage.setScene(newParentScene);
+                    actualStage.setResizable(false);
+                }
+            );
     }
 }
