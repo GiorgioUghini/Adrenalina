@@ -5,16 +5,16 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class PollingQueueListener implements Runnable {
 
-    private BlockingQueue<Update> queue;
+    private BlockingQueue<Response> queue;
 
-    public PollingQueueListener() {
-        this.queue = new LinkedBlockingQueue<>(100);
+    public PollingQueueListener(BlockingQueue queue) {
+        this.queue = queue;
     }
 
     @Override
     public void run() {
-        UpdateHandler updateHandler = new UpdateHandler();
-        Update update = null;
+        ResponseHandler updateHandler = new ResponseHandler();
+        Response update = null;
         while (true) {
             try {
                 update = queue.take();

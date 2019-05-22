@@ -10,9 +10,9 @@ import java.util.logging.Logger;
 public class LongPollingTask extends TimerTask {
 
     private RemoteMethodsInterface remoteMethods;
-    private BlockingQueue<Update> queue;
+    private BlockingQueue<Response> queue;
 
-    public LongPollingTask(RemoteMethodsInterface remoteMethods, BlockingQueue<Update> queue){
+    public LongPollingTask(RemoteMethodsInterface remoteMethods, BlockingQueue<Response> queue){
         this.remoteMethods = remoteMethods;
         this.queue = queue;
     }
@@ -21,7 +21,7 @@ public class LongPollingTask extends TimerTask {
     public void run() {
         try {
             String token = Client.getInstance().getConnection().getToken();
-            List<Update> updates = remoteMethods.longPolling(token);
+            List<Response> updates = remoteMethods.longPolling(token);
             if(updates != null)
                 queue.addAll(updates);
         } catch (RemoteException e) {

@@ -1,8 +1,11 @@
 package models.player;
 
+import controllers.UpdateController;
 import models.card.PowerUpCard;
 import models.card.WeaponCard;
 import models.turn.ActionGroup;
+import network.Response;
+import network.Server;
 import network.Update;
 import utils.TokenGenerator;
 
@@ -21,7 +24,7 @@ public class Player implements Subscriber, Serializable {
     private int numberOfSkulls;
     private ActionGroup lifeState = ActionGroup.NORMAL;
     private String token;
-    private List<Update> updates;
+    private List<Response> updates;
 
     /** Creates a new player object
      * @param name The name identifier for the player
@@ -168,11 +171,16 @@ public class Player implements Subscriber, Serializable {
         return this.token;
     }
 
-    public void addUpdate(Update update){
-        updates.add(update);
+    public void addUpdate(Response update){
+        if(Server.getInstance().getConnection().isSocket(this.token)){
+            UpdateController.sendUpdate(this, update);
+        }
+        else{
+            updates.add(update);
+        }
     }
 
-    public List<Update> getUpdates(){
+    public List<Response> getUpdates(){
         return updates;
     }
 

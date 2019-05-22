@@ -57,6 +57,12 @@ public class ServerConnection {
         return socket;
     }
 
+    public boolean isSocket(String token){
+        SocketWrapper socketWrapper = tokenSocketMap.get(token);
+        boolean isSocket = socketWrapper != null;
+        return isSocket;
+    }
+
     public String getToken(Socket socket){
         String token = socketTokenMap.get(socket);
         return token;

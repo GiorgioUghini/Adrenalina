@@ -1,9 +1,9 @@
 package network.updates;
 
-import network.*;
+import network.Response;
+import network.ResponseHandlerInterface;
 
-public class StartGameUpdate implements Response {
-
+public class NewPlayerUpdate implements Response {
     @Override
     public void handle(ResponseHandlerInterface handler) {
         handler.handle(this);

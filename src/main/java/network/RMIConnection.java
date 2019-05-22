@@ -16,7 +16,7 @@ public class RMIConnection implements Connection {
     private RemoteMethodsInterface remoteMethods;
     private ResponseHandler responseHandler;
     private Registry registry;
-    private BlockingQueue<Update> queue;
+    private BlockingQueue<Response> queue;
     private String token;
 
     @Override
@@ -55,7 +55,7 @@ public class RMIConnection implements Connection {
             LongPollingTask longPollingTask = new LongPollingTask(remoteMethods, queue);
             Timer timer = new Timer();
             timer.schedule(longPollingTask, 0, 2);
-            PollingQueueListener pollingQueueListener = new PollingQueueListener();
+            PollingQueueListener pollingQueueListener = new PollingQueueListener(queue);
             (new Thread(pollingQueueListener)).start();
         } catch (RemoteException e) {
             e.printStackTrace();

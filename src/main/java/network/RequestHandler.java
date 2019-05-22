@@ -30,5 +30,4 @@ public class RequestHandler implements RequestHandlerInterface {
         return remoteMethods.registerPlayer(request.username, request.getToken());
     }
 
-
 }
