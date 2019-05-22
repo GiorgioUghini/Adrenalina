@@ -172,17 +172,18 @@ public class Player implements Subscriber, Serializable {
     }
 
     public void addUpdate(Response update){
-        if(Server.getInstance().getConnection().isSocket(this.token)){
-            try {
+        try {
+            if(Server.getInstance().getConnection().isSocket(this.token)){
                 SocketWrapper socketWrapper = Server.getInstance().getConnection().getSocketWrapper(this.token);
                 socketWrapper.getOutputStream().writeObject(update);
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+            else{
+                updates.add(update);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        else{
-            updates.add(update);
-        }
+
     }
 
     public List<Response> getUpdates(){

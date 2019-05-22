@@ -21,7 +21,7 @@ public class LobbyTimerTest {
         List activeMatches = lobby.getActiveMatches();
         assertEquals(0, activeMatches.size());
 
-        lobby.disconnectPlayer(lobby.getWaitingMatch().getPlayerByToken(token1));
+        lobby.disconnectPlayer(lobby.getWaitingPlayer(token1));
 
         activeMatches = lobby.getActiveMatches();
         assertEquals(0, activeMatches.size());

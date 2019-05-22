@@ -1,10 +1,11 @@
 package models;
 
+import network.Response;
+import utils.BiMap;
 import utils.Constants;
 import models.player.Player;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -13,12 +14,12 @@ import java.util.concurrent.TimeUnit;
 public class Lobby {
     private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> activeCountdown;
-    private List<Match> activeMatches = new ArrayList<>();
+    private BiMap<Match, Player> matchPlayerMap = new BiMap<>();
+    private BiMap<String, Player> tokenPlayerMap = new BiMap<>();
+    private List<Player> waitingPlayers = new LinkedList<>();
 
-    private Match waitingMatch = new Match();
-
-    public Match getWaitingMatch() {
-        return waitingMatch;
+    public List<Player> getWaitingPlayers() {
+        return waitingPlayers;
     }
 
     /**
@@ -34,16 +35,17 @@ public class Lobby {
         } else {
             p = new Player(username, token);
         }
-        waitingMatch.addPlayer(p);
+        waitingPlayers.add(p);
 
-        if (waitingMatch.getPlayersNumber() == 5) {
+        if (waitingPlayers.size() == 5) {
             activeCountdown.cancel(true);
             activeCountdown = null;
             startMatch();
         }
-        if (waitingMatch.getPlayersNumber() >= 3) {
+        if (waitingPlayers.size() >= 3) {
             startCountdown();
         }
+        tokenPlayerMap.add(p.getToken(), p);
         return p.getToken();
     }
 
@@ -52,19 +54,21 @@ public class Lobby {
     }
 
     public synchronized void disconnectPlayer(Player player) {
-        waitingMatch.removePlayer(player);
+        waitingPlayers.remove(player);
         //TODO: was first player?
-        if ((activeCountdown != null) && waitingMatch.getPlayersNumber() < 3) {
+        if ((activeCountdown != null) && waitingPlayers.size() < 3) {
             activeCountdown.cancel(true);
             activeCountdown = null;
         }
     }
 
     public void startMatch() {
-        waitingMatch.startMatch();  //Call this method when you want to start the match
-        activeMatches.add(waitingMatch);
-
-        waitingMatch = new Match();
+        Match match = new Match(waitingPlayers);
+        for(Player waitingPlayer : waitingPlayers){
+            matchPlayerMap.add(match, waitingPlayer);
+        }
+        match.startMatch();  //Call this method when you want to start the match
+        waitingPlayers.clear();
     }
 
     public synchronized void startCountdown() {
@@ -79,19 +83,37 @@ public class Lobby {
     }
 
     public synchronized List<Match> getActiveMatches() {
-        return new ArrayList<>(activeMatches);
+        return matchPlayerMap.getKeys();
     }
 
-    public Match getMatchByToken(String token) {
-        for (Match match : getActiveMatches()) {
-            Player player = match.getPlayerByToken(token);
-            if (player != null)
-                return match;
+    public Match getMatch(String token) {
+        Player player = getPlayer(token);
+        Match match = getMatch(player);
+        return match;
+    }
+
+    public Match getMatch(Player player) {
+        Match match = matchPlayerMap.getSingleKey(player);
+        return match;
+    }
+
+    public Player getPlayer(String token) {
+      Player player = tokenPlayerMap.getSingleValue(token);
+      return player;
+    }
+
+    public void addUpdateWaitingPlayer(Response update){
+        for(Player player : waitingPlayers){
+            player.addUpdate(update);
         }
-        Player player = waitingMatch.getPlayerByToken(token);
-        if (player != null)
-            return waitingMatch;
-        return null;
     }
 
+    public Player getWaitingPlayer(String token) {
+            for(Player player : waitingPlayers){
+                if(player.getToken().equals(token)){
+                    return player;
+                }
+            }
+            return null;
+    }
 }

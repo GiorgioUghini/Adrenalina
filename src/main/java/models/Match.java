@@ -28,9 +28,8 @@ public class Match {
     private CardController cardController;
     //null -> noFrenzy, Type1, Type2
 
-    public Match(){
-        playerList = new ArrayList<>();
-        actualTurn  = new Turn();
+    public Match( List<Player> players ){
+        playerList = players;
         cardController = new CardController();
         powerUpDeck = cardController.getPowerUpDeck();
         weaponDeck = cardController.getWeaponDeck();

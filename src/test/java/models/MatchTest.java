@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -13,13 +14,14 @@ import static org.junit.Assert.*;
 public class MatchTest {
     @Test
     public void startTurnNextTurnEndTurnPossibleActions() {
-        Match m = new Match();
         Player pl1 = new Player("Cosimo");
         Player pl2 = new Player( "Giorgio");
         Player pl3 = new Player( "Vila");
-        m.addPlayer(pl3);
-        m.addPlayer(pl2);
-        m.addPlayer(pl1);
+        List<Player> players = new LinkedList<>();
+        players.add(pl3);
+        players.add(pl2);
+        players.add(pl1);
+        Match m = new Match(players);
         m.setFirstPlayer(pl2);
         assertEquals(pl2, m.getFirstPlayer());
 
@@ -45,14 +47,14 @@ public class MatchTest {
 
     @Test
     public void confirmActions() {
-        Match m = new Match();
-        Player pl1 = new Player( "Cosimo");
-        Player pl2 = new Player("Giorgio");
-        Player pl3 = new Player("Vila");
-        m.addPlayer(pl3);
-        m.addPlayer(pl2);
-        m.addPlayer(pl1);
-        m.setFirstPlayer(pl2);
+        Player pl1 = new Player("Cosimo");
+        Player pl2 = new Player( "Giorgio");
+        Player pl3 = new Player( "Vila");
+        List<Player> players = new LinkedList<>();
+        players.add(pl2);
+        players.add(pl3);
+        players.add(pl1);
+        Match m = new Match(players);
         assertEquals(pl2, m.getFirstPlayer());
 
         m.startMatch();

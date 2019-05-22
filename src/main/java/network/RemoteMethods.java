@@ -21,16 +21,13 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     @Override
     public List<Response> longPolling(String token)  {
         if(token != null){
-            Server server = Server.getInstance();
-            Lobby lobby = server.getLobby();
-            Match currentMatch = lobby.getMatchByToken(token);
-            Player currentPlayer = currentMatch.getPlayerByToken(token);
+            Player currentPlayer = Server.getInstance().getLobby().getPlayer(token);
             List<Response> updates = currentPlayer.getUpdates().stream().collect(Collectors.toList());
             currentPlayer.clearUpdates();
             return updates;
         }
         else{
-            return new LinkedList<Response>();
+            return new LinkedList<>();
         }
     }
 
@@ -38,19 +35,17 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     public RegisterPlayerResponse registerPlayer(String username, String token)  {
         Lobby lobby = Server.getInstance().getLobby();
         String returnToken = lobby.registerPlayer(username, token);
-        Match match = lobby.getMatchByToken(returnToken);
         Response update = new NewPlayerUpdate();
-        match.addUpdate(update);
+        lobby.addUpdateWaitingPlayer(update);
         return new RegisterPlayerResponse(returnToken);
     }
 
     @Override
-    public ValidActionsResponse validActions(String token) throws RemoteException {
+    public ValidActionsResponse validActions(String token) {
         Lobby lobby = Server.getInstance().getLobby();
-        Match currentMatch = lobby.getMatchByToken(token);
-        Player currentPlayer = currentMatch.getPlayerByToken(token);
+        Player currentPlayer = lobby.getPlayer(token);
+        Match currentMatch = lobby.getMatch(currentPlayer);
         Set actions = currentMatch.getPossibleAction(currentPlayer);
         return new ValidActionsResponse(actions);
     }
-
 }

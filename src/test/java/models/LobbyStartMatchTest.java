@@ -23,7 +23,7 @@ public class LobbyStartMatchTest {
         String token1 = lobby.registerPlayer("Giorgio");
         lobby.registerPlayer("Vila");   //Three player, timer starts
 
-        lobby.disconnectPlayer(lobby.getWaitingMatch().getPlayerByToken(token1));    //Two player remaining, timer aborts
+        lobby.disconnectPlayer(lobby.getWaitingPlayer(token1));    //Two player remaining, timer aborts
 
         try {
             await().atMost(5, SECONDS).until(retFalse());
