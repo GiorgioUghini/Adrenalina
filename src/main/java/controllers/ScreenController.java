@@ -50,7 +50,6 @@ public class ScreenController {
                     try {
                         URL url = getClass().getClassLoader().getResource("fxml/" + name);
                         newParent = FXMLLoader.load(url);
-                        System.out.println("OK");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

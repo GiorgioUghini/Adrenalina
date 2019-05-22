@@ -136,7 +136,6 @@ public class MenuViewGUI implements Initializable, MenuView {
         int toastMsgTime = 2500; //2.5 seconds
         int fadeInTime = 500; //0.5 seconds
         int fadeOutTime= 500; //0.5 seconds
-        //TODO: ALWAYS USE PLATFORM RUN LATER TO EDIT GUI OBJECTS
         Platform.runLater(() -> Toast.makeText(ScreenController.getInstance().getActualStage(), message, toastMsgTime, fadeInTime, fadeOutTime));
         ScreenController.getInstance().activate("WaitingRoom.fxml");
     }
