@@ -86,6 +86,11 @@ public class MenuViewGUI implements Initializable, MenuView {
             Logger logger = Logger.getAnonymousLogger();
             logger.log(Level.SEVERE, "An exception was thrown:", e);
         }
+    }
+
+    @Override
+    public void connectionCreated() {
+        ScreenController.getInstance().activate("WaitingRoom.fxml");
         registerPlayer();
     }
 
@@ -137,6 +142,5 @@ public class MenuViewGUI implements Initializable, MenuView {
         int fadeInTime = 500; //0.5 seconds
         int fadeOutTime= 500; //0.5 seconds
         Platform.runLater(() -> Toast.makeText(ScreenController.getInstance().getActualStage(), message, toastMsgTime, fadeInTime, fadeOutTime));
-        ScreenController.getInstance().activate("WaitingRoom.fxml");
     }
 }

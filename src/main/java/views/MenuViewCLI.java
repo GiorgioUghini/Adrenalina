@@ -40,6 +40,11 @@ public class MenuViewCLI implements MenuView {
             Logger logger = Logger.getAnonymousLogger();
             logger.log(Level.SEVERE, "an exception was thrown", e);
         }
+    }
+
+    @Override
+    public void connectionCreated() {
+        Console.println("Connection created.");
         registerPlayer();
     }
 

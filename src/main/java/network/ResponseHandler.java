@@ -4,14 +4,16 @@ import errors.InvalidInputException;
 import network.responses.ErrorResponse;
 import network.responses.RegisterPlayerResponse;
 import network.responses.ValidActionsResponse;
+import views.MenuView;
 
 import java.util.List;
 
 public class ResponseHandler implements ResponseHandlerInterface {
     @Override
     public void handle(RegisterPlayerResponse response) {
-        Client.getInstance().getConnection().setToken(response.token);
-        Client.getInstance().getCurrentView().showMessage("Token: " + response.token);
+        Client clientInstance = Client.getInstance();
+        clientInstance.getConnection().setToken(response.token);
+        clientInstance.getCurrentView().showMessage("Token: " + response.token);
     }
 
     @Override

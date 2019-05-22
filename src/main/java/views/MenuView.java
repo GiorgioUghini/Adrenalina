@@ -9,6 +9,8 @@ public interface MenuView extends View {
     void startView();
     /** ask if socket or rmi, then calls the controller */
     void createConnection();
+    /** After a successful connection creation, notify the user */
+    void connectionCreated();
     /** Continue asking for the username until it matches the requirements, then sends it to server */
     void registerPlayer() throws IOException;
     /** After a successful registration of the user, receive a complete list of the users in the lobby
