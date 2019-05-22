@@ -1,4 +1,4 @@
-package models;
+package models.card;
 
 import java.io.Serializable;
 

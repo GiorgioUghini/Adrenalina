@@ -10,6 +10,8 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Server {
     private static Server instance = null;
@@ -34,6 +36,11 @@ public class Server {
         connection.init();
     }
 
+    public void fatalError(Exception e){
+        Logger.getAnonymousLogger().log(Level.SEVERE, e.getMessage());
+        System.exit(1);
+    }
+  
     public ServerConnection getConnection(){
         return connection;
     }

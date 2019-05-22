@@ -17,6 +17,11 @@ public class RegisterPlayerRequest implements Request {
         return token;
     }
 
+    @Override
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public RegisterPlayerRequest(String username){
         this.token = Client.getInstance().getConnection().getToken();
         this.username = username;

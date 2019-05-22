@@ -1,7 +1,5 @@
 package network;
 
-import errors.InvalidConnectionTypeException;
-import network.requests.ValidActionsRequest;
 import network.responses.RegisterPlayerResponse;
 import network.responses.ValidActionsResponse;
 
@@ -23,15 +21,12 @@ public class RMIConnection implements Connection {
 
     @Override
     public void registerPlayer(String username) {
-            new Thread(()-> {
-                RegisterPlayerResponse response = null;
-                try {
-                    response = remoteMethods.registerPlayer(username);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-                Client.getInstance().getConnection().receiveResponse(response);
-            }).start();
+        try {
+            RegisterPlayerResponse response = remoteMethods.registerPlayer(username, null);
+            Client.getInstance().getConnection().receiveResponse(response);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
