@@ -3,8 +3,6 @@ package network.updates;
 import models.player.Player;
 import network.Response;
 import network.ResponseHandlerInterface;
-import network.Update;
-import network.UpdateHandlerInterface;
 
 public class PlayerDisconnectUpdate implements Response {
 

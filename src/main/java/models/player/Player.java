@@ -6,7 +6,6 @@ import models.turn.ActionGroup;
 import network.Response;
 import network.Server;
 import network.SocketWrapper;
-import network.Update;
 import utils.TokenGenerator;
 
 import java.io.IOException;
@@ -175,7 +174,7 @@ public class Player implements Subscriber, Serializable {
     public void addUpdate(Response update){
         if(Server.getInstance().getConnection().isSocket(this.token)){
             try {
-                SocketWrapper socketWrapper = Server.getInstance().getConnection().getSocket(this.token);
+                SocketWrapper socketWrapper = Server.getInstance().getConnection().getSocketWrapper(this.token);
                 socketWrapper.getOutputStream().writeObject(update);
             } catch (IOException e) {
                 e.printStackTrace();

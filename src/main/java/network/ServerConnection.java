@@ -1,5 +1,6 @@
 package network;
 
+import utils.BiMap;
 import utils.Constants;
 import utils.TokenGenerator;
 
@@ -18,16 +19,14 @@ public class ServerConnection {
     private ServerSocket serverSocket;
     private ExecutorService pool;
     private Registry registry;
-    private Map<String, SocketWrapper> tokenSocketMap;
-    private Map<SocketWrapper, String> socketTokenMap;
+    private BiMap<String, SocketWrapper> socketMap;
     private boolean close;
 
     public ServerConnection() throws IOException {
         close = false;
         pool = Executors.newCachedThreadPool();
         serverSocket = new ServerSocket(Constants.PORT);
-        tokenSocketMap = new HashMap<>();
-        socketTokenMap = new HashMap<>();
+        socketMap = new BiMap<>();
 
         registry = LocateRegistry.createRegistry(Constants.REGISTRY_PORT);
         registry.rebind(Constants.REGISTRY_NAME, new RemoteMethods());
@@ -47,24 +46,27 @@ public class ServerConnection {
         UnicastRemoteObject.unexportObject(registry, true);
     }
 
-    public void addSocket(String token, SocketWrapper socket){
-        tokenSocketMap.put(token, socket);
-        socketTokenMap.put(socket, token);
+    public void addSocket(String token, SocketWrapper socketWrapper){
+        socketMap.add(token, socketWrapper);
     }
 
-    public SocketWrapper getSocket(String token){
-        SocketWrapper socket = tokenSocketMap.get(token);
-        return socket;
+    public SocketWrapper getSocketWrapper(String token){
+        SocketWrapper socketWrapper = socketMap.getSingleValue(token);
+        return socketWrapper;
     }
 
     public boolean isSocket(String token){
-        SocketWrapper socketWrapper = tokenSocketMap.get(token);
+        SocketWrapper socketWrapper = socketMap.getSingleValue(token);
         boolean isSocket = socketWrapper != null;
         return isSocket;
     }
 
-    public String getToken(Socket socket){
-        String token = socketTokenMap.get(socket);
+    public Registry getRegistry(){
+        return registry;
+    }
+
+    public String getToken(SocketWrapper socketWrapper){
+        String token = socketMap.getSingleKey(socketWrapper);
         return token;
     }
 }

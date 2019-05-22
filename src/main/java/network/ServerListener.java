@@ -6,19 +6,18 @@ import java.util.logging.Logger;
 
 public class ServerListener implements Runnable{
 
-    private ResponseHandlerInterface responseHandler;
     private ObjectInputStream in;
 
-    public ServerListener() {
-        this.responseHandler = new ResponseHandler();
+    ServerListener() {
         this.in = ((SocketConnection) Client.getInstance().getConnection()).getInputStream();
     }
 
     @Override
     public void run() {
         try {
+            Response response = null;
             while(true){
-                Response response = (Response) in.readObject();
+                response = (Response) in.readObject();
                 Client.getInstance().getConnection().receiveResponse(response);
             }
         } catch (Exception e) {
