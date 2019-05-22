@@ -13,8 +13,6 @@ public class StartClient {
         }
         Client client = Client.getInstance();
         client.start(viewType);
-        if(viewType == ViewType.CLI) {
-            Thread.currentThread().join();
-        }
+        Thread.currentThread().join();
     }
 }
