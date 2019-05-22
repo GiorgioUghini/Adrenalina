@@ -17,7 +17,7 @@ public class LobbyStartMatchTest {
 
     @Test
     public void lobbyStartMatchTest() throws InterruptedException {
-        Lobby lobby = Lobby.getInstance();
+        Lobby lobby = new Lobby();
 
         lobby.registerPlayer("Cosimo");
         String token1 = lobby.registerPlayer("Giorgio");
@@ -37,7 +37,7 @@ public class LobbyStartMatchTest {
 
         List activeMatches = lobby.getActiveMatches();
         assertEquals(1, activeMatches.size());
-        lobby.resetInstance();
+        //lobby.resetInstance();
     }
 
     private Callable<Boolean> retFalse() {

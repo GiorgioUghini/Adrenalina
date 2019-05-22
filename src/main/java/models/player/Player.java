@@ -1,14 +1,15 @@
 package models.player;
 
-import controllers.UpdateController;
 import models.card.PowerUpCard;
 import models.card.WeaponCard;
 import models.turn.ActionGroup;
 import network.Response;
 import network.Server;
+import network.SocketWrapper;
 import network.Update;
 import utils.TokenGenerator;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 
@@ -173,7 +174,12 @@ public class Player implements Subscriber, Serializable {
 
     public void addUpdate(Response update){
         if(Server.getInstance().getConnection().isSocket(this.token)){
-            UpdateController.sendUpdate(this, update);
+            try {
+                SocketWrapper socketWrapper = Server.getInstance().getConnection().getSocket(this.token);
+                socketWrapper.getOutputStream().writeObject(update);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         else{
             updates.add(update);

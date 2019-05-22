@@ -10,9 +10,11 @@ import models.map.MapGenerator;
 import models.player.Player;
 import models.turn.ActionGroup;
 import models.turn.Turn;
+import network.Response;
 import network.updates.StartGameUpdate;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Match {
     private List<Player> playerList;
@@ -138,8 +140,12 @@ public class Match {
     public void startMatch() {
         actualPlayerIndex = 0;
         actualTurn = new Turn();
+        StartGameUpdate update = new StartGameUpdate();
+        addUpdate(update);
+    }
+
+    public void addUpdate(Response update){
         for(Player player : playerList){
-            StartGameUpdate update = new StartGameUpdate();
             player.addUpdate(update);
         }
     }
@@ -200,6 +206,10 @@ public class Match {
         }
 
         return (indexBigger == biggerList.size());
+    }
+
+    public List<Player> getPlayers(){
+        return playerList;
     }
 
 }

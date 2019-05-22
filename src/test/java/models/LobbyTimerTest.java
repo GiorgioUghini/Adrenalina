@@ -14,7 +14,7 @@ public class LobbyTimerTest {
 
     @Test
     public void lobbyTimerAbortTest() {
-        Lobby lobby = Lobby.getInstance();
+        Lobby lobby = new Lobby();
         lobby.registerPlayer("Cosimo");
         String token1 = lobby.registerPlayer("Giorgio");
         lobby.registerPlayer("Vila");
@@ -34,7 +34,7 @@ public class LobbyTimerTest {
 
         activeMatches = lobby.getActiveMatches();
         assertEquals(0, activeMatches.size());
-        lobby.resetInstance();
+        //lobby.resetInstance();
     }
 
     private Callable<Boolean> retFalse() {

@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 public class Server {
     private static Server instance = null;
     private ServerConnection connection;
+    private Lobby lobby;
 
     private Server() {}
 
@@ -32,6 +33,7 @@ public class Server {
     }
 
     public void start() throws IOException {
+        lobby = new Lobby();
         connection = new ServerConnection();
         connection.init();
     }
@@ -43,5 +45,9 @@ public class Server {
   
     public ServerConnection getConnection(){
         return connection;
+    }
+
+    public Lobby getLobby(){
+        return lobby;
     }
 }

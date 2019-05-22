@@ -15,7 +15,7 @@ public class LobbyTest {
 
     @Test
     public void lobbyTimerTest() {
-        Lobby lobby = Lobby.getInstance();
+        Lobby lobby = new Lobby();
         lobby.registerPlayer("Cosimo");
         lobby.registerPlayer("Giorgio");
         lobby.registerPlayer("Vila");
@@ -29,7 +29,7 @@ public class LobbyTest {
         }
 
         assert true;
-        lobby.resetInstance();
+        //lobby.resetInstance();
     }
 
     private Callable<Boolean> matchStarted(Lobby lobby) {

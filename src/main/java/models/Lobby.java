@@ -11,7 +11,6 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class Lobby {
-    private static Lobby instance = null;
     private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> activeCountdown;
     private List<Match> activeMatches = new ArrayList<>();
@@ -20,32 +19,6 @@ public class Lobby {
 
     public Match getWaitingMatch() {
         return waitingMatch;
-    }
-
-    private Lobby() {
-    }
-
-    /**
-     * Method that creates or directly return the singleton instance
-     *
-     * @return the instance of the singleton class "Lobby"
-     */
-    public static Lobby getInstance() {
-        if (instance == null) {
-            instance = new Lobby();
-        }
-        return instance;
-    }
-
-    public synchronized void resetInstance() {    //Only for testing purpose
-        instance = null;
-        activeMatches.clear();
-        if (activeCountdown != null) {
-            activeCountdown.cancel(true);
-            activeCountdown = null;
-        }
-        scheduler.shutdownNow();
-        scheduler = Executors.newScheduledThreadPool(1);
     }
 
     /**
@@ -99,8 +72,8 @@ public class Lobby {
         activeCountdown = scheduler.schedule(new Runnable() {
             @Override
             public void run() {
-                Lobby.getInstance().activeCountdown = null;
-                Lobby.getInstance().startMatch();
+                activeCountdown = null;
+                startMatch();
             }
         }, Constants.DELAY_SECONDS, TimeUnit.SECONDS);
     }
