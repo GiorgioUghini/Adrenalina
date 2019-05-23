@@ -1,5 +1,6 @@
 package models.player;
 
+import models.Match;
 import models.card.PowerUpCard;
 import models.card.WeaponCard;
 import models.turn.ActionGroup;
@@ -8,7 +9,6 @@ import network.Server;
 import network.SocketWrapper;
 import utils.TokenGenerator;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
@@ -26,6 +26,7 @@ public class Player implements Subscriber, Serializable {
     private int numberOfSkulls;
     private ActionGroup lifeState = ActionGroup.NORMAL;
     private String token;
+    private boolean online;
     private BlockingQueue<Response> updates;
 
     /** Creates a new player object
@@ -33,6 +34,7 @@ public class Player implements Subscriber, Serializable {
      * */
     public Player(String name){
         this.name = name;
+        this.online = true;
         ammo = new Ammo();
         weaponList = new ArrayList<>();
         powerUpList = new ArrayList<>();
@@ -187,5 +189,13 @@ public class Player implements Subscriber, Serializable {
 
     public void clearUpdates(){
         updates.clear();
+    }
+
+    public void reconnect(){
+        online = true;
+    }
+
+    public void disconnect() {
+        online = false;
     }
 }

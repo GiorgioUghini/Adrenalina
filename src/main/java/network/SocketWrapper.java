@@ -5,7 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class SocketWrapper {
+public class SocketWrapper{
     private Socket socket;
     private ObjectInputStream in;
     private ObjectOutputStream out;
@@ -41,7 +41,7 @@ public class SocketWrapper {
         this.updatePusher = updatePusher;
     }
 
-    public void stopUpdatePusher(){
+    public void stop() {
         updatePusher.stop();
     }
 }

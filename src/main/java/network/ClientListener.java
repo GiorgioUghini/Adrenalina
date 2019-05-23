@@ -9,7 +9,6 @@ import utils.TokenGenerator;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,8 +42,9 @@ public class ClientListener implements Runnable{
             }
         } catch (SocketException socketEx) {
             Console.println("Socket " + token + " disconnected!");
-            socketWrapper.stopUpdatePusher();
+            socketWrapper.stop();
             Player player = Server.getInstance().getLobby().getPlayer(token);
+            player.disconnect();
             Match match = Server.getInstance().getLobby().getMatch(player);
             Server.getInstance().getConnection().removeSocket(token);
             match.addUpdate(new PlayerDisconnectUpdate(player));
