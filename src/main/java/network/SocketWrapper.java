@@ -9,6 +9,7 @@ public class SocketWrapper {
     private Socket socket;
     private ObjectInputStream in;
     private ObjectOutputStream out;
+    private UpdatePusher updatePusher;
 
     public SocketWrapper(Socket socket){
         this.socket = socket;
@@ -34,5 +35,13 @@ public class SocketWrapper {
 
     public synchronized void write(Object object) throws IOException {
         out.writeObject(object);
+    }
+
+    public void setUpdatePusher(UpdatePusher updatePusher){
+        this.updatePusher = updatePusher;
+    }
+
+    public void stopUpdatePusher(){
+        updatePusher.stop();
     }
 }

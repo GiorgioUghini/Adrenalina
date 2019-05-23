@@ -1,11 +1,14 @@
 package network;
 
+import javafx.application.Platform;
 import models.Lobby;
 import models.Match;
 import models.player.Player;
 import network.responses.RegisterPlayerResponse;
 import network.responses.ValidActionsResponse;
 import network.updates.NewPlayerUpdate;
+import network.updates.PlayerDisconnectUpdate;
+import utils.TokenGenerator;
 
 import java.lang.reflect.Array;
 import java.rmi.RemoteException;
@@ -22,7 +25,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     public List<Response> longPolling(String token)  {
         if(token != null){
             Player currentPlayer = Server.getInstance().getLobby().getPlayer(token);
-            List<Response> updates = currentPlayer.getUpdates().stream().collect(Collectors.toList());
+            List<Response> updates = new LinkedList<>(currentPlayer.getUpdates());
             currentPlayer.clearUpdates();
             return updates;
         }
@@ -34,15 +37,28 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     @Override
     public RegisterPlayerResponse registerPlayer(String username, String token)  {
         Lobby lobby = Server.getInstance().getLobby();
-        String returnToken = lobby.registerPlayer(username, token);
-        Player player = lobby.getWaitingPlayer(token);
-        if(Server.getInstance().getConnection().isSocket(returnToken)){
+        Player player = lobby.getPlayerByUsername(username);
+        if(player == null){
+            token = lobby.registerPlayer(username, token);
+            player = lobby.getWaitingPlayer(token);
+            lobby.addPlayer(player);
+        }
+        else{
+            if(token == null)
+                token = TokenGenerator.nextToken();
+            player.setToken(token);
+            lobby.addPlayer(player);
+            Match match = lobby.getMatch(player);
+            match.addUpdate(new NewPlayerUpdate());
+        }
+        if(Server.getInstance().getConnection().isSocket(token)){
             UpdatePusher updatePusher = new UpdatePusher(player);
+            SocketWrapper socketWrapper = Server.getInstance().getConnection().getSocketWrapper(token);
+            socketWrapper.setUpdatePusher(updatePusher);
             (new Thread(updatePusher)).start();
         }
-        Response update = new NewPlayerUpdate();
-        lobby.addUpdateWaitingPlayer(update);
-        return new RegisterPlayerResponse(returnToken);
+        lobby.addUpdateWaitingPlayer( new NewPlayerUpdate());
+        return new RegisterPlayerResponse(token);
     }
 
     @Override

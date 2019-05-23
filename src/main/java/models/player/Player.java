@@ -177,6 +177,10 @@ public class Player implements Subscriber, Serializable {
         updates.add(update);
     }
 
+    public void setToken(String token){
+        this.token = token;
+    }
+
     public BlockingQueue<Response> getUpdates(){
         return updates;
     }

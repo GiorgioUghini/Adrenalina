@@ -1,6 +1,7 @@
 package models;
 
 import controllers.CardController;
+import javafx.application.Platform;
 import models.card.AmmoDeck;
 import models.card.Card;
 import models.card.PowerUpDeck;
@@ -29,7 +30,7 @@ public class Match {
     //null -> noFrenzy, Type1, Type2
 
     public Match( List<Player> players ){
-        playerList = players;
+        playerList = new LinkedList<>(players);
         cardController = new CardController();
         powerUpDeck = cardController.getPowerUpDeck();
         weaponDeck = cardController.getWeaponDeck();
@@ -209,6 +210,10 @@ public class Match {
 
     public List<Player> getPlayers(){
         return playerList;
+    }
+
+    public Player getPlayerByUsername(String username){
+        return playerList.stream().filter(f -> f.getName().equals(username)).findFirst().orElse(null);
     }
 
 }

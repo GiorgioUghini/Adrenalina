@@ -1,5 +1,6 @@
 package models;
 
+import javafx.application.Platform;
 import network.Response;
 import utils.BiMap;
 import utils.Constants;
@@ -45,7 +46,7 @@ public class Lobby {
         if (waitingPlayers.size() >= 3) {
             startCountdown();
         }
-        tokenPlayerMap.add(p.getToken(), p);
+        //tokenPlayerMap.add(p.getToken(), p);
         return p.getToken();
     }
 
@@ -92,6 +93,10 @@ public class Lobby {
         return match;
     }
 
+    public void addPlayer(Player player){
+        tokenPlayerMap.add(player.getToken(), player);
+    }
+
     public Match getMatch(Player player) {
         Match match = matchPlayerMap.getSingleKey(player);
         return match;
@@ -100,6 +105,10 @@ public class Lobby {
     public Player getPlayer(String token) {
       Player player = tokenPlayerMap.getSingleValue(token);
       return player;
+    }
+
+    public Player getPlayerByUsername(String username){
+        return tokenPlayerMap.getValues().stream().filter(p -> p.getName().equals(username)).findFirst().orElse(null);
     }
 
     public void addUpdateWaitingPlayer(Response update){

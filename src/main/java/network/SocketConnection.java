@@ -1,5 +1,6 @@
 package network;
 
+import com.sun.corba.se.spi.ior.ObjectKey;
 import network.requests.RegisterPlayerRequest;
 import network.requests.ValidActionsRequest;
 import utils.Constants;
@@ -22,7 +23,7 @@ public class SocketConnection implements Connection {
     public void registerPlayer(String username) {
         try {
             RegisterPlayerRequest request = new RegisterPlayerRequest(username);
-            out.writeObject(request);
+            write(request);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -32,7 +33,7 @@ public class SocketConnection implements Connection {
     public void validActions() {
         try {
             ValidActionsRequest request = new ValidActionsRequest();
-            out.writeObject(request);
+            write(request);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -54,6 +55,12 @@ public class SocketConnection implements Connection {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public synchronized void write(Object object) throws IOException {
+        out.writeObject(object);
+        out.flush();
+        out.reset();
     }
 
     public void setToken(String token) {

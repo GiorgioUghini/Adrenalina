@@ -51,6 +51,10 @@ public class ServerConnection {
         socketMap.add(token, socketWrapper);
     }
 
+    public void removeSocket(String token){
+        socketMap.removeByKey(token);
+    }
+
     public SocketWrapper getSocketWrapper(String token){
         SocketWrapper socketWrapper = socketMap.getSingleValue(token);
         return socketWrapper;
