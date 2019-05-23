@@ -35,7 +35,8 @@ public class ServerConnection {
     public void init() throws IOException {
         while (!close) {
             Socket clientSocket = serverSocket.accept();
-            pool.submit(new ClientListener(clientSocket));
+            SocketWrapper socketWrapper = new SocketWrapper(clientSocket);
+            pool.submit(new ClientListener(socketWrapper));
         }
     }
 

@@ -35,6 +35,11 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     public RegisterPlayerResponse registerPlayer(String username, String token)  {
         Lobby lobby = Server.getInstance().getLobby();
         String returnToken = lobby.registerPlayer(username, token);
+        Player player = lobby.getWaitingPlayer(token);
+        if(Server.getInstance().getConnection().isSocket(returnToken)){
+            UpdatePusher updatePusher = new UpdatePusher(player);
+            (new Thread(updatePusher)).start();
+        }
         Response update = new NewPlayerUpdate();
         lobby.addUpdateWaitingPlayer(update);
         return new RegisterPlayerResponse(returnToken);

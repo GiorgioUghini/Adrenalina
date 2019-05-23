@@ -1,7 +1,6 @@
 package network.updates;
 
-import network.Response;
-import network.ResponseHandlerInterface;
+import network.*;
 
 public class NewPlayerUpdate implements Response {
     @Override

@@ -31,4 +31,8 @@ public class SocketWrapper {
     public Socket getSocket(){
         return socket;
     }
+
+    public synchronized void write(Object object) throws IOException {
+        out.writeObject(object);
+    }
 }

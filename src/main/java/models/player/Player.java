@@ -11,6 +11,8 @@ import utils.TokenGenerator;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class Player implements Subscriber, Serializable {
 
@@ -24,7 +26,7 @@ public class Player implements Subscriber, Serializable {
     private int numberOfSkulls;
     private ActionGroup lifeState = ActionGroup.NORMAL;
     private String token;
-    private List<Response> updates;
+    private BlockingQueue<Response> updates;
 
     /** Creates a new player object
      * @param name The name identifier for the player
@@ -40,7 +42,7 @@ public class Player implements Subscriber, Serializable {
         marks = new Mark();
         //token generation
         this.token = TokenGenerator.nextToken();
-        updates = new LinkedList<>();
+        updates = new LinkedBlockingQueue<>();
     }
 
     public Player(String name, String token){
@@ -172,21 +174,10 @@ public class Player implements Subscriber, Serializable {
     }
 
     public void addUpdate(Response update){
-        try {
-            if(Server.getInstance().getConnection().isSocket(this.token)){
-                SocketWrapper socketWrapper = Server.getInstance().getConnection().getSocketWrapper(this.token);
-                socketWrapper.getOutputStream().writeObject(update);
-            }
-            else{
-                updates.add(update);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        updates.add(update);
     }
 
-    public List<Response> getUpdates(){
+    public BlockingQueue<Response> getUpdates(){
         return updates;
     }
 

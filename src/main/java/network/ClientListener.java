@@ -15,12 +15,12 @@ public class ClientListener implements Runnable{
     private ObjectOutputStream out;
     private RequestHandlerInterface requestHandler;
     private String token;
+    private SocketWrapper socketWrapper;
 
-    public ClientListener(Socket socket) throws IOException {
-        SocketWrapper socketWrapper = new SocketWrapper(socket);
+    public ClientListener(SocketWrapper socketWrapper) throws IOException {
+        this.socketWrapper = socketWrapper;
         this.token = TokenGenerator.nextToken();
         Server.getInstance().getConnection().addSocket(token, socketWrapper);
-        this.out = socketWrapper.getOutputStream();
         this.in = socketWrapper.getInputStream();
         this.requestHandler = new RequestHandler();
     }
@@ -31,7 +31,7 @@ public class ClientListener implements Runnable{
             Request request = (Request) in.readObject();
             request.setToken(token);
             Response response = request.handle(requestHandler);
-            out.writeObject(response);
+            socketWrapper.write(response);
         } catch (Exception e) {
             Logger logger = Logger.getAnonymousLogger();
             logger.log(Level.SEVERE, "an exception was thrown", e);
