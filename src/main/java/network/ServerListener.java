@@ -7,16 +7,18 @@ import java.util.logging.Logger;
 public class ServerListener implements Runnable{
 
     private ObjectInputStream in;
+    private boolean stop;
 
     ServerListener() {
         this.in = ((SocketConnection) Client.getInstance().getConnection()).getInputStream();
+        this.stop = false;
     }
 
     @Override
     public void run() {
         try {
             Response response = null;
-            while(true){
+            while(!stop){
                 response = (Response) in.readObject();
                 Client.getInstance().getConnection().receiveResponse(response);
             }
@@ -24,5 +26,9 @@ public class ServerListener implements Runnable{
             Logger logger = Logger.getAnonymousLogger();
             logger.log(Level.SEVERE, "an exception was thrown", e);
         }
+    }
+
+    public void stop(){
+        stop = true;
     }
 }

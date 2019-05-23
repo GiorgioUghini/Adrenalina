@@ -21,6 +21,7 @@ public class ClientListener implements Runnable{
     private RequestHandlerInterface requestHandler;
     private String token;
     private SocketWrapper socketWrapper;
+    private boolean stop;
 
     public ClientListener(SocketWrapper socketWrapper) throws IOException {
         this.socketWrapper = socketWrapper;
@@ -28,12 +29,13 @@ public class ClientListener implements Runnable{
         Server.getInstance().getConnection().addSocket(token, socketWrapper);
         this.in = socketWrapper.getInputStream();
         this.requestHandler = new RequestHandler();
+        this.stop = false;
     }
 
     @Override
     public void run() {
         try {
-            while (true){
+            while (!stop){
                 Request request = (Request) in.readObject();
                 request.setToken(token);
                 Response response = request.handle(requestHandler);
@@ -51,5 +53,9 @@ public class ClientListener implements Runnable{
             Logger logger = Logger.getAnonymousLogger();
             logger.log(Level.SEVERE, "an exception was thrown", ex);
         }
+    }
+
+    public void stop(){
+        stop = true;
     }
 }
