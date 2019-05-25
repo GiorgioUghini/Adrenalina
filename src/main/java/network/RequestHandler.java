@@ -3,6 +3,7 @@ package network;
 import models.Match;
 import network.requests.RegisterPlayerRequest;
 import network.requests.ValidActionsRequest;
+import network.requests.WaitingPlayerRequest;
 import network.responses.ErrorResponse;
 import network.responses.RegisterPlayerResponse;
 
@@ -28,6 +29,11 @@ public class RequestHandler implements RequestHandlerInterface {
     @Override
     public Response handle(RegisterPlayerRequest request) throws RemoteException {
         return remoteMethods.registerPlayer(request.username, request.getToken());
+    }
+
+    @Override
+    public Response handle(WaitingPlayerRequest request) throws RemoteException {
+        return remoteMethods.waitingPlayer();
     }
 
 }

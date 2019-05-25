@@ -24,4 +24,6 @@ public interface MenuView extends View {
     void onPlayerDisconnected(String name);
     /** Notify the user that game is starting, the controller will close this view and create a gameView */
     void startGame();
+    /** Show who is waiting when a player first set up his connection **/
+    void showWaitingPlayerList(List<String> waitingPlayerUsernames);
 }

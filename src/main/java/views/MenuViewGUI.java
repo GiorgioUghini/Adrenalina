@@ -1,6 +1,5 @@
 package views;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -10,8 +9,12 @@ import java.util.logging.Logger;
 import controllers.MenuController;
 import controllers.ScreenController;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,6 +22,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import network.Client;
 import network.ConnectionType;
 import utils.Console;
 import javafx.scene.control.ListView;
@@ -38,17 +42,15 @@ public class MenuViewGUI implements Initializable, MenuView {
     @FXML
     private Button joinButton;
     @FXML
-    private ListView listView;
+    private ListView<String> listView;
+
 
     private ConnectionType connectionType = ConnectionType.RMI;
     private MenuController menuController;
-    private List<String> players = new ArrayList<>();
-    private String username = null;
 
     @FXML
     private void register(final ActionEvent event) {
         event.consume();
-        username = usernameLabel.getText();
         this.createConnection();
     }
 
@@ -69,6 +71,9 @@ public class MenuViewGUI implements Initializable, MenuView {
                     }
                 }
             });
+        } else {
+            Client.getInstance().setCurrentView(this);
+            menuController.getWaitingPlayer();
         }
     }
 
@@ -88,16 +93,16 @@ public class MenuViewGUI implements Initializable, MenuView {
         }
     }
 
+    /**{@inheritDoc}*/
     @Override
     public void connectionCreated() {
         ScreenController.getInstance().activate("WaitingRoom.fxml");
-        registerPlayer();
     }
 
     /**{@inheritDoc}*/
     @Override
     public void registerPlayer() {
-        menuController.registerPlayer(username);
+        menuController.registerPlayer(usernameLabel.getText());
     }
 
     /**{@inheritDoc}*/
@@ -112,16 +117,14 @@ public class MenuViewGUI implements Initializable, MenuView {
 
     /**{@inheritDoc}*/
     @Override
-    public void onNewPlayer(String playerName){
-        Console.println(playerName + " joined the Lobby");
-        players.add(playerName);
+    public void onNewPlayer(String playerName) {
+        Platform.runLater( () -> listView.getItems().add(playerName));
     }
 
     /**{@inheritDoc}*/
     @Override
-    public void onPlayerDisconnected(String name){
-        Console.println(name + "left the room");
-        players.remove(name);
+    public void onPlayerDisconnected(String name) {
+        //TODO: REMOVE PLAYER
     }
 
     /**{@inheritDoc}*/
@@ -142,5 +145,13 @@ public class MenuViewGUI implements Initializable, MenuView {
         int fadeInTime = 500; //0.5 seconds
         int fadeOutTime= 500; //0.5 seconds
         Platform.runLater(() -> Toast.makeText(ScreenController.getInstance().getActualStage(), message, toastMsgTime, fadeInTime, fadeOutTime));
+    }
+
+    /**{@inheritDoc}*/
+    @Override
+    public void showWaitingPlayerList(List<String> waitingPlayersUsername) {
+        for (String p : waitingPlayersUsername) {
+            Platform.runLater( () -> listView.getItems().add(p));
+        }
     }
 }

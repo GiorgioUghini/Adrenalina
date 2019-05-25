@@ -5,6 +5,7 @@ import models.Match;
 import models.player.Player;
 import network.responses.RegisterPlayerResponse;
 import network.responses.ValidActionsResponse;
+import network.responses.WaitingPlayerResponse;
 import network.updates.NewPlayerUpdate;
 import utils.TokenGenerator;
 
@@ -48,7 +49,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             player.setToken(token);
             lobby.addPlayer(player);
             Match match = lobby.getMatch(player);
-            match.addUpdate(new NewPlayerUpdate());
+            match.addUpdate(new NewPlayerUpdate(player.getName()));
         }
         if(Server.getInstance().getConnection().isSocket(token)){
             UpdatePusher updatePusher = new UpdatePusher(player);
@@ -64,7 +65,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             Timer timer = new Timer();
             timer.schedule(rmiStatusTask, 0, 4000);
         }
-        lobby.addUpdateWaitingPlayer( new NewPlayerUpdate());
+        lobby.addUpdateWaitingPlayer( new NewPlayerUpdate(player.getName()));
         return new RegisterPlayerResponse(token);
     }
 
@@ -75,5 +76,11 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         Match currentMatch = lobby.getMatch(currentPlayer);
         Set actions = currentMatch.getPossibleAction(currentPlayer);
         return new ValidActionsResponse(actions);
+    }
+
+    @Override
+    public WaitingPlayerResponse waitingPlayer() throws RemoteException {
+        List<String> waitingPlayers = Server.getInstance().getLobby().getWaitingPlayersUsername();
+        return new WaitingPlayerResponse(waitingPlayers);
     }
 }

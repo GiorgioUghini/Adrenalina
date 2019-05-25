@@ -1,14 +1,15 @@
 package network;
 
-import com.sun.corba.se.spi.ior.ObjectKey;
 import network.requests.RegisterPlayerRequest;
 import network.requests.ValidActionsRequest;
+import network.requests.WaitingPlayerRequest;
 import utils.Constants;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 
 
 public class SocketConnection implements Connection {
@@ -23,6 +24,16 @@ public class SocketConnection implements Connection {
     public void registerPlayer(String username) {
         try {
             RegisterPlayerRequest request = new RegisterPlayerRequest(username);
+            write(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getWaitingPlayer() {
+        try {
+            WaitingPlayerRequest request = new WaitingPlayerRequest();
             write(request);
         } catch (IOException e) {
             e.printStackTrace();

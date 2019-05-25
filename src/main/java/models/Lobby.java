@@ -11,6 +11,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class Lobby {
     private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -21,6 +22,11 @@ public class Lobby {
 
     public List<Player> getWaitingPlayers() {
         return waitingPlayers;
+    }
+
+    public List<String> getWaitingPlayersUsername() {
+        List<String> ciao = waitingPlayers.stream().map(Player::getName).collect(Collectors.toList());
+        return ciao;
     }
 
     /**

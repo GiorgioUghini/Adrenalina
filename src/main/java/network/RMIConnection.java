@@ -2,11 +2,13 @@ package network;
 
 import network.responses.RegisterPlayerResponse;
 import network.responses.ValidActionsResponse;
+import network.responses.WaitingPlayerResponse;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.List;
 import java.util.Timer;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -23,6 +25,16 @@ public class RMIConnection implements Connection {
     public void registerPlayer(String username) {
         try {
             RegisterPlayerResponse response = remoteMethods.registerPlayer(username, null);
+            Client.getInstance().getConnection().receiveResponse(response);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getWaitingPlayer() {
+        try {
+            WaitingPlayerResponse response = remoteMethods.waitingPlayer();
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
             e.printStackTrace();

@@ -94,6 +94,11 @@ public class MenuViewCLI implements MenuView {
         Console.println("The game is starting");
     }
 
+    @Override
+    public void showWaitingPlayerList(List<String> waitingPlayerUsernames) {
+        //TODO: implement this method
+    }
+
     /**{@inheritDoc}*/
     @Override
     public void printError(String error) {

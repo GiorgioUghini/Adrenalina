@@ -54,4 +54,8 @@ public class Client {
     public View getCurrentView(){
         return currentView;
     }
+
+    public void setCurrentView(View currentView) {
+        this.currentView = currentView;
+    }
 }

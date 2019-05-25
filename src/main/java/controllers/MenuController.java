@@ -21,4 +21,8 @@ public class MenuController {
     public void registerPlayer(String username) {
         Client.getInstance().getConnection().registerPlayer(username);
     }
+
+    public void getWaitingPlayer() {
+        Client.getInstance().getConnection().getWaitingPlayer();
+    }
 }
