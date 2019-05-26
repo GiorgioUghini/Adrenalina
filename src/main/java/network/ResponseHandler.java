@@ -62,7 +62,8 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(PlayerDisconnectUpdate response) {
-        Client.getInstance().getCurrentView().showMessage("A player disconnected");
+        //IF WE ARE IN MENU VIEW:
+        ((MenuView) Client.getInstance().getCurrentView()).onPlayerDisconnected(response.getName());
     }
 
     @Override
@@ -72,6 +73,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(NewPlayerUpdate response) {
+        //IF WE ARE IN MENU VIEW:
         ((MenuView) Client.getInstance().getCurrentView()).onNewPlayer(response.getName());
     }
 }

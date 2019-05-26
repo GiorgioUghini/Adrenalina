@@ -123,8 +123,8 @@ public class MenuViewGUI implements Initializable, MenuView {
 
     /**{@inheritDoc}*/
     @Override
-    public void onPlayerDisconnected(String name) {
-        //TODO: REMOVE PLAYER
+    public void onPlayerDisconnected(String playerName) {
+        Platform.runLater( () -> listView.getItems().remove(playerName));
     }
 
     /**{@inheritDoc}*/

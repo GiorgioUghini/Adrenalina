@@ -1,15 +1,18 @@
 package network.updates;
 
-import models.player.Player;
 import network.Response;
 import network.ResponseHandlerInterface;
 
 public class PlayerDisconnectUpdate implements Response {
 
-    public Player player;
+    private String name;
 
-    public PlayerDisconnectUpdate(Player player){
-        this.player = player;
+    public String getName() {
+        return name;
+    }
+
+    public PlayerDisconnectUpdate(String name) {
+        this.name = name;
     }
 
     @Override

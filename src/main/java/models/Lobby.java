@@ -25,8 +25,7 @@ public class Lobby {
     }
 
     public List<String> getWaitingPlayersUsername() {
-        List<String> ciao = waitingPlayers.stream().map(Player::getName).collect(Collectors.toList());
-        return ciao;
+        return waitingPlayers.stream().map(Player::getName).collect(Collectors.toList());
     }
 
     /**

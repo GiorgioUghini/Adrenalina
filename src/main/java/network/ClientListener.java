@@ -47,7 +47,8 @@ public class ClientListener implements Runnable{
             player.disconnect();
             Match match = Server.getInstance().getLobby().getMatch(player);
             Server.getInstance().getConnection().removeSocket(token);
-            match.addUpdate(new PlayerDisconnectUpdate(player));
+            match.addUpdate(new PlayerDisconnectUpdate(player.getName()));
+            //TODO: RMI disconnection? && FIX java.io.EOFException for socket
         }
         catch (Exception ex){
             Logger logger = Logger.getAnonymousLogger();
