@@ -38,7 +38,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         Lobby lobby = Server.getInstance().getLobby();
         Player player = lobby.getPlayerByUsername(username);
         if(player == null){
-            token = lobby.registerPlayer(username, token);
+            token = lobby.registerPlayer(username, password, token);
             player = lobby.getWaitingPlayer(token);
             lobby.addPlayer(player);
         }
