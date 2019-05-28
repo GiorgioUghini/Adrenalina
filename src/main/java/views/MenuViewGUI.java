@@ -18,14 +18,11 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import network.Client;
 import network.ConnectionType;
 import utils.Console;
-import javafx.scene.control.ListView;
 
 public class MenuViewGUI implements Initializable, MenuView {
 
@@ -44,7 +41,7 @@ public class MenuViewGUI implements Initializable, MenuView {
     @FXML
     private ListView<String> listView;
     @FXML
-    private TextField passwordLabel;
+    private PasswordField passwordLabel;
 
 
     private ConnectionType connectionType = ConnectionType.RMI;
