@@ -2,10 +2,7 @@ package network;
 
 import errors.InvalidInputException;
 import models.turn.ActionElement;
-import network.responses.ErrorResponse;
-import network.responses.RegisterPlayerResponse;
-import network.responses.ValidActionsResponse;
-import network.responses.WaitingPlayerResponse;
+import network.responses.*;
 import network.updates.NewPlayerUpdate;
 import network.updates.PlayerDisconnectUpdate;
 import network.updates.StartGameUpdate;
@@ -69,6 +66,11 @@ public class ResponseHandler implements ResponseHandlerInterface {
     @Override
     public void handle(WaitingPlayerResponse response) {
         ((MenuView) Client.getInstance().getCurrentView()).showWaitingPlayerList(response.getList());
+    }
+
+    @Override
+    public void handle(CardEffectsResponse response) {
+        //TODO arrivata la risposta su client... vai avanti a giocare la carta
     }
 
     @Override

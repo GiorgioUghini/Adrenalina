@@ -10,5 +10,6 @@ public interface Connection {
     void getWaitingPlayer();
     void validActions();
     void chooseMap(int map);
+    void cardEffects(String cardName);
     void receiveResponse(Response response);
 }

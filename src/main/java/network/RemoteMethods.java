@@ -89,4 +89,9 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     public Response chooseMap(String token, int map) throws RemoteException {
         return new ChooseMapResponse();
     }
+
+    @Override
+    public Response cardEffects(String token, String cardName) throws RemoteException {
+        return null;
+    }
 }

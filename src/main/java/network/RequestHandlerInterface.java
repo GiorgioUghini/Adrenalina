@@ -1,10 +1,7 @@
 package network;
 
 import jdk.nashorn.internal.runtime.regexp.RegExpMatcher;
-import network.requests.ChooseMapRequest;
-import network.requests.RegisterPlayerRequest;
-import network.requests.ValidActionsRequest;
-import network.requests.WaitingPlayerRequest;
+import network.requests.*;
 
 import java.rmi.RemoteException;
 
@@ -13,4 +10,5 @@ public interface RequestHandlerInterface {
     Response handle(RegisterPlayerRequest request) throws RemoteException;
     Response handle(WaitingPlayerRequest request) throws RemoteException;
     Response handle(ChooseMapRequest request) throws RemoteException;
+    Response hadle(CardEffectsRequest request) throws RemoteException;
 }

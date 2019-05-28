@@ -1,9 +1,7 @@
 package network;
 
-import network.requests.ChooseMapRequest;
-import network.requests.RegisterPlayerRequest;
-import network.requests.ValidActionsRequest;
-import network.requests.WaitingPlayerRequest;
+import network.requests.*;
+import network.responses.CardEffectsResponse;
 import utils.Constants;
 
 import java.io.IOException;
@@ -55,6 +53,16 @@ public class SocketConnection implements Connection {
     public void chooseMap(int map) {
         try {
             ChooseMapRequest request = new ChooseMapRequest(map);
+            write(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void cardEffects(String cardName) {
+        try {
+            CardEffectsRequest request = new CardEffectsRequest(cardName);
             write(request);
         } catch (IOException e) {
             e.printStackTrace();
