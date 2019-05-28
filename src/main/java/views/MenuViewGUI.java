@@ -44,7 +44,7 @@ public class MenuViewGUI implements Initializable, MenuView {
     @FXML
     private ListView<String> listView;
     @FXML
-    private Text passwordLabel;
+    private TextField passwordLabel;
 
 
     private ConnectionType connectionType = ConnectionType.RMI;
