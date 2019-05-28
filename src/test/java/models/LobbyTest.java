@@ -16,9 +16,9 @@ public class LobbyTest {
     @Test
     public void lobbyTimerTest() {
         Lobby lobby = new Lobby();
-        lobby.registerPlayer("Cosimo");
-        lobby.registerPlayer("Giorgio");
-        lobby.registerPlayer("Vila");
+        lobby.registerPlayer("Cosimo", "");
+        lobby.registerPlayer("Giorgio", "");
+        lobby.registerPlayer("Vila", "");
         List activeMatches = lobby.getActiveMatches();
         assertEquals(0, activeMatches.size());
 

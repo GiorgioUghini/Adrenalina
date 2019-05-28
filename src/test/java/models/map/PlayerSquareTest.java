@@ -11,7 +11,7 @@ public class PlayerSquareTest {
     private UUID uuid = UUID.randomUUID();
     @Test
     public void PlayerOnSquare(){
-        Player player = new Player("a");
+        Player player = new Player("a", "");
         Square square = new SpawnPoint(RoomColor.GREEN, 0, uuid);
 
         PlayerSquare playerSquare = new PlayerSquare();
@@ -23,8 +23,8 @@ public class PlayerSquareTest {
     }
     @Test
     public void multiplePlayers(){
-        Player p1 = new Player( "a");
-        Player p2 = new Player("a");
+        Player p1 = new Player( "a", "");
+        Player p2 = new Player("a", "");
         Square square = new SpawnPoint(RoomColor.GREEN, 0, uuid);
 
         PlayerSquare playerSquare = new PlayerSquare();
@@ -39,7 +39,7 @@ public class PlayerSquareTest {
     }
     @Test
     public void movePlayerInSameRoom(){
-        Player p = new Player("a");
+        Player p = new Player("a", "");
         Square s1 = new SpawnPoint(RoomColor.GREEN, 0, uuid);
         Square s2 = new AmmoPoint(RoomColor.GREEN, 1, uuid);
 
@@ -56,7 +56,7 @@ public class PlayerSquareTest {
     }
     @Test
     public void addSamePlayerTwice(){
-        Player p = new Player("a");
+        Player p = new Player("a", "");
         Square s1 = new SpawnPoint(RoomColor.GREEN, 0, uuid);
         Square s2 = new AmmoPoint(RoomColor.PURPLE, 1, uuid);
         PlayerSquare playerSquare = new PlayerSquare();
@@ -73,7 +73,7 @@ public class PlayerSquareTest {
     public void getPlayersNumber(){
         PlayerSquare playerSquare = new PlayerSquare();
         assertEquals(0, playerSquare.getPlayersNumber());
-        Player p = new Player("a");
+        Player p = new Player("a", "");
         Square square = new AmmoPoint(RoomColor.WHITE, 0, uuid);
         playerSquare.addPlayer(p, square);
         assertEquals(1, playerSquare.getPlayersNumber());

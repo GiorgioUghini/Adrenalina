@@ -19,9 +19,9 @@ public class LobbyStartMatchTest {
     public void lobbyStartMatchTest() throws InterruptedException {
         Lobby lobby = new Lobby();
 
-        lobby.registerPlayer("Cosimo");
-        String token1 = lobby.registerPlayer("Giorgio");
-        lobby.registerPlayer("Vila");   //Three player, timer starts
+        lobby.registerPlayer("Cosimo", "");
+        String token1 = lobby.registerPlayer("Giorgio", "");
+        lobby.registerPlayer("Vila", "");   //Three player, timer starts
 
         lobby.disconnectPlayer(lobby.getWaitingPlayer(token1));    //Two player remaining, timer aborts
 
@@ -31,9 +31,9 @@ public class LobbyStartMatchTest {
             assert true;
         }
 
-        lobby.registerPlayer("Cosimo");
-        lobby.registerPlayer("Giorgio");
-        lobby.registerPlayer("Vila");   //Five player, match starts ASAP
+        lobby.registerPlayer("Cosimo", "");
+        lobby.registerPlayer("Giorgio", "");
+        lobby.registerPlayer("Vila", "");   //Five player, match starts ASAP
 
         List activeMatches = lobby.getActiveMatches();
         assertEquals(1, activeMatches.size());

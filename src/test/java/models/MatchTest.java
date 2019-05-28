@@ -14,9 +14,9 @@ import static org.junit.Assert.*;
 public class MatchTest {
     @Test
     public void startTurnNextTurnEndTurnPossibleActions() {
-        Player pl1 = new Player("Cosimo");
-        Player pl2 = new Player( "Giorgio");
-        Player pl3 = new Player( "Vila");
+        Player pl1 = new Player("Cosimo", "");
+        Player pl2 = new Player( "Giorgio", "");
+        Player pl3 = new Player( "Vila", "");
         List<Player> players = new LinkedList<>();
         players.add(pl3);
         players.add(pl2);
@@ -47,9 +47,9 @@ public class MatchTest {
 
     @Test
     public void confirmActions() {
-        Player pl1 = new Player("Cosimo");
-        Player pl2 = new Player( "Giorgio");
-        Player pl3 = new Player( "Vila");
+        Player pl1 = new Player("Cosimo", "");
+        Player pl2 = new Player( "Giorgio", "");
+        Player pl3 = new Player( "Vila", "");
         List<Player> players = new LinkedList<>();
         players.add(pl2);
         players.add(pl3);

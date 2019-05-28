@@ -9,8 +9,8 @@ import static org.junit.Assert.*;
 public class LifeTest {
     @Test
     public void damage(){
-        Player pl1 = new Player( "Cosimo");
-        Player pl2 = new Player( "Giorgio");
+        Player pl1 = new Player( "Cosimo", "");
+        Player pl2 = new Player( "Giorgio", "");
         pl2.getDamage(2, pl1);
         Map<Player, Integer> pl2Damages = pl2.getDamageMap();
         assertEquals(2, pl2Damages.get(pl1).intValue());
@@ -20,8 +20,8 @@ public class LifeTest {
 
     @Test
     public void marksAndDamage(){
-        Player pl1 = new Player( "Cosimo");
-        Player pl2 = new Player( "Giorgio");
+        Player pl1 = new Player( "Cosimo", "");
+        Player pl2 = new Player( "Giorgio", "");
         pl2.giveMark(1, pl1);
         pl2.getDamage(2, pl1);
         Map<Player, Integer> pl2Damages = pl2.getDamageMap();
@@ -32,8 +32,8 @@ public class LifeTest {
 
     @Test
     public void damageOverflow(){
-        Player pl1 = new Player( "Cosimo");
-        Player pl2 = new Player( "Giorgio");
+        Player pl1 = new Player( "Cosimo", "");
+        Player pl2 = new Player( "Giorgio", "");
         pl2.getDamage(24, pl1);
         Map<Player, Integer> pl2Damages = pl2.getDamageMap();
         assertEquals(12, pl2Damages.get(pl1).intValue());
@@ -43,8 +43,8 @@ public class LifeTest {
 
     @Test
     public void moreDifferentDamage(){
-        Player pl1 = new Player( "Cosimo");
-        Player pl2 = new Player( "Giorgio");
+        Player pl1 = new Player( "Cosimo", "");
+        Player pl2 = new Player( "Giorgio", "");
         pl2.getDamage(2, pl1);
         pl2.getDamage(3, pl1);
         pl2.getDamage(1, pl1);
@@ -56,16 +56,16 @@ public class LifeTest {
 
     @Test
     public void clearDamages(){
-        Player pl2 = new Player( "Giorgio");
+        Player pl2 = new Player( "Giorgio", "");
         Map<Player, Integer> pl2CountedPoints = pl2.countPoints();
         assertTrue(pl2CountedPoints.isEmpty());
     }
 
     @Test
     public void countPoints(){
-        Player pl1 = new Player( "Cosimo");
-        Player pl2 = new Player( "Giorgio");
-        Player pl3 = new Player( "Vila");
+        Player pl1 = new Player( "Cosimo", "");
+        Player pl2 = new Player( "Giorgio", "");
+        Player pl3 = new Player( "Vila", "");
         pl2.getDamage(2, pl1);
         pl2.getDamage(4, pl3);
         pl2.getDamage(2, pl1);
@@ -79,7 +79,7 @@ public class LifeTest {
 
     @Test
     public void noDamageCountPoints(){
-        Player pl2 = new Player( "Giorgio");
+        Player pl2 = new Player( "Giorgio", "");
         Map<Player, Integer> pl2CountedPoints = pl2.countPoints();
         assertTrue(pl2CountedPoints.isEmpty());
     }
@@ -88,9 +88,9 @@ public class LifeTest {
     public void fiveTimesDeadCountPoints(){
         int[] assignablePoints = {8, 6, 4, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
-        Player pl1 = new Player( "Cosimo");
-        Player pl2 = new Player( "Giorgio");
-        Player pl3 = new Player( "Vila");
+        Player pl1 = new Player( "Cosimo", "");
+        Player pl2 = new Player( "Giorgio", "");
+        Player pl3 = new Player( "Vila", "");
 
         for (int skull = 0; skull <5; skull++) {
             pl2.clearDamages();
@@ -110,9 +110,9 @@ public class LifeTest {
     public void revengeAddMarkCountPoints(){
         int[] assignablePoints = {8, 6, 4, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
-        Player pl1 = new Player( "Cosimo");
-        Player pl2 = new Player( "Giorgio");
-        Player pl3 = new Player( "Vila");
+        Player pl1 = new Player( "Cosimo", "");
+        Player pl2 = new Player( "Giorgio", "");
+        Player pl3 = new Player( "Vila", "");
 
         pl2.getDamage(5, pl1);
         pl2.getDamage(7, pl1);
@@ -130,8 +130,8 @@ public class LifeTest {
 
     @Test
     public void isDead(){
-        Player pl1 = new Player( "Cosimo");
-        Player pl2 = new Player( "Giorgio");
+        Player pl1 = new Player( "Cosimo", "");
+        Player pl2 = new Player( "Giorgio", "");
         pl2.getDamage(10, pl1);
         assertFalse(pl2.isDead());
         pl2.getDamage(1, pl1);

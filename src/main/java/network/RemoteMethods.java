@@ -35,7 +35,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public RegisterPlayerResponse registerPlayer(String username, String token)  {
+    public Response registerPlayer(String username, String password, String token)  {
         Lobby lobby = Server.getInstance().getLobby();
         Player player = lobby.getPlayerByUsername(username);
         if(player == null){

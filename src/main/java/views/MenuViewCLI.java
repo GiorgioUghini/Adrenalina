@@ -57,7 +57,7 @@ public class MenuViewCLI implements MenuView {
             Console.print("Insert username: ");
         }
         Console.println("Welcome, " + username);
-        menuController.registerPlayer(username);
+        menuController.registerPlayer(username, "");
     }
 
     /**{@inheritDoc}*/

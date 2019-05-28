@@ -34,12 +34,12 @@ public class Lobby {
      * @param username the username of the player to register
      * @return a String that contains the player token
      */
-    public synchronized String registerPlayer(String username, String token) {
+    public synchronized String registerPlayer(String username, String password, String token) {
         Player p;
         if (token == null || token.isEmpty()) {
-            p = new Player(username);
+            p = new Player(username, password);
         } else {
-            p = new Player(username, token);
+            p = new Player(username, password, token);
         }
         waitingPlayers.add(p);
 
@@ -55,8 +55,8 @@ public class Lobby {
         return p.getToken();
     }
 
-    public synchronized String registerPlayer(String username){
-        return registerPlayer(username, null);
+    public synchronized String registerPlayer(String username, String password){
+        return registerPlayer(username,password, null);
     }
 
     public synchronized void disconnectPlayer(Player player) {

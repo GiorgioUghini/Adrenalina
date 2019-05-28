@@ -17,6 +17,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class Player implements Subscriber, Serializable {
 
     private String name;
+    private String password;
     private Ammo ammo;
     private List<WeaponCard> weaponList;
     private List<PowerUpCard> powerUpList;
@@ -32,8 +33,9 @@ public class Player implements Subscriber, Serializable {
     /** Creates a new player object
      * @param name The name identifier for the player
      * */
-    public Player(String name){
+    public Player(String name, String password){
         this.name = name;
+        this.password = password;
         this.online = true;
         ammo = new Ammo();
         weaponList = new ArrayList<>();
@@ -47,8 +49,8 @@ public class Player implements Subscriber, Serializable {
         updates = new LinkedBlockingQueue<>();
     }
 
-    public Player(String name, String token){
-        this(name);
+    public Player(String name, String password, String token){
+        this(name, password);
         this.token = token;
     }
 

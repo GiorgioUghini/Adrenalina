@@ -214,8 +214,8 @@ public class GameMapTest {
     }
     @Test
     public void getPlayersOnSquare(){
-        Player p1 = new Player( "p1");
-        Player p2 = new Player( "p2");
+        Player p1 = new Player( "p1","");
+        Player p2 = new Player( "p2", "");
         GameMap gameMap = new GameMap();
         gameMap.createRoom(1,1, RoomColor.WHITE, new Coordinate(0,0));
 
@@ -235,8 +235,8 @@ public class GameMapTest {
         GameMap gameMap = new GameMap();
         gameMap.createRoom(3,3, RoomColor.PURPLE, new Coordinate(0,0));
         SpawnPoint spawnPoint = (SpawnPoint) gameMap.getSpawnPoints().toArray()[0];
-        Player pippo = new Player( "Pippo");
-        Player pluto = new Player( "Pluto");
+        Player pippo = new Player( "Pippo", "");
+        Player pluto = new Player( "Pluto", "");
 
         gameMap.spawnPlayer(pippo, spawnPoint);
 
@@ -258,7 +258,7 @@ public class GameMapTest {
         }catch (SquareNotInMapException e){ assert true; }
     }
     @Test public void removePlayer(){
-        Player player = new Player( "a");
+        Player player = new Player( "a", "");
         GameMap gameMap = new GameMap();
         gameMap.createRoom(2,2, RoomColor.WHITE, new Coordinate(0,0));
 
@@ -474,9 +474,9 @@ public class GameMapTest {
         gameMap.createRoom(3,3, RoomColor.GREEN, new Coordinate(1,1));
         gameMap.createRoom(3,3, RoomColor.WHITE, new Coordinate(1,1));
         gameMap.connectRooms(gameMap.getSquareById(2), gameMap.getSquareById(9), false, new HashSet<>());
-        Player a = new Player( "a");
-        Player b = new Player( "b");
-        Player c = new Player( "c");
+        Player a = new Player( "a", "");
+        Player b = new Player( "b", "");
+        Player c = new Player( "c", "");
 
         gameMap.spawnPlayer(a, (SpawnPoint) gameMap.getSquareById(4));
         gameMap.spawnPlayer(b, (SpawnPoint) gameMap.getSquareById(13));
@@ -502,9 +502,9 @@ public class GameMapTest {
         doors.add(0);
         gameMap.connectRooms(s1,s2,false, doors);
         gameMap.connectRooms(s3,s4,false, doors);
-        Player a = new Player( "a");
-        Player b = new Player( "b");
-        Player c = new Player( "c");
+        Player a = new Player( "a", "");
+        Player b = new Player( "b", "");
+        Player c = new Player( "c", "");
 
         SpawnPoint spawnPointB = (SpawnPoint) gameMap.getSquareById(13);
 
