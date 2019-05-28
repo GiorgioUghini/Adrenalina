@@ -14,6 +14,16 @@ public class Client {
     private GameView gameView;
     private View currentView;
 
+    private int mapNum;
+
+    public int getMapNum() {
+        return mapNum;
+    }
+
+    public void setMapNum(int mapNum) {
+        this.mapNum = mapNum;
+    }
+
     public static Client getInstance()
     {
         if (instance == null) {

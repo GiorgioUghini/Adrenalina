@@ -1,6 +1,5 @@
 package models;
 
-import javafx.application.Platform;
 import network.Response;
 import utils.BiMap;
 import utils.Constants;
@@ -46,7 +45,7 @@ public class Lobby {
         if (waitingPlayers.size() == 5) {
             activeCountdown.cancel(true);
             activeCountdown = null;
-            startMatch();
+            chooseMapAndStartMatch();
         }
         if (waitingPlayers.size() >= 3) {
             startCountdown();
@@ -68,12 +67,12 @@ public class Lobby {
         }
     }
 
-    public void startMatch() {
+    public void chooseMapAndStartMatch() {
         Match match = new Match(waitingPlayers);
         for(Player waitingPlayer : waitingPlayers){
             matchPlayerMap.add(match, waitingPlayer);
         }
-        match.startMatch();  //Call this method when you want to start the match
+        match.chooseMapAndStartMatch();  //Call this method when you want to start the match
         waitingPlayers.clear();
     }
 
@@ -83,7 +82,7 @@ public class Lobby {
             @Override
             public void run() {
                 activeCountdown = null;
-                startMatch();
+                chooseMapAndStartMatch();
             }
         }, Constants.DELAY_SECONDS, TimeUnit.SECONDS);
     }

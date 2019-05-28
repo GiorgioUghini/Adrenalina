@@ -2,17 +2,10 @@ package network;
 
 import errors.InvalidInputException;
 import models.turn.ActionElement;
-import network.responses.ErrorResponse;
-import network.responses.RegisterPlayerResponse;
-import network.responses.ValidActionsResponse;
-import network.responses.WaitingPlayerResponse;
-import network.updates.NewPlayerUpdate;
-import network.updates.PlayerDisconnectUpdate;
-import network.updates.StartGameUpdate;
+import network.responses.*;
+import network.updates.*;
 import views.MenuView;
 
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 
 public class ResponseHandler implements ResponseHandlerInterface {
@@ -56,8 +49,8 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(StartGameUpdate response) {
-        Client.getInstance().getCurrentView().showMessage("Start game");
-        Client.getInstance().getConnection().validActions();
+        ((MenuView) Client.getInstance().getCurrentView()).startGame();
+        //Client.getInstance().getConnection().validActions();
     }
 
     @Override
@@ -76,4 +69,21 @@ public class ResponseHandler implements ResponseHandlerInterface {
         //IF WE ARE IN MENU VIEW:
         ((MenuView) Client.getInstance().getCurrentView()).onNewPlayer(response.getName());
     }
+
+    @Override
+    public void handle(ChooseMapUpdate response) {
+        ((MenuView) Client.getInstance().getCurrentView()).chooseMap(response.getUsername());
+    }
+
+    @Override
+    public void handle(MapChosenUpdate response) {
+        ((MenuView) Client.getInstance().getCurrentView()).mapChosen(response.getMap());
+    }
+
+    @Override
+    public void handle(ChooseMapResponse response) {
+        //NOTHING TO DO
+    }
+
+
 }

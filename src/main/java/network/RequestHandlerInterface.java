@@ -1,6 +1,5 @@
 package network;
 
-import jdk.nashorn.internal.runtime.regexp.RegExpMatcher;
 import network.requests.ChooseMapRequest;
 import network.requests.RegisterPlayerRequest;
 import network.requests.ValidActionsRequest;

@@ -99,6 +99,16 @@ public class MenuViewCLI implements MenuView {
         //TODO: implement this method
     }
 
+    @Override
+    public void mapChosen(int map) {
+        //TODO: implement this method
+    }
+
+    @Override
+    public void chooseMap(String username) {
+        //TODO: implement this method
+    }
+
     /**{@inheritDoc}*/
     @Override
     public void printError(String error) {

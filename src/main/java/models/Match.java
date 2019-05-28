@@ -12,6 +12,7 @@ import models.player.Player;
 import models.turn.ActionGroup;
 import models.turn.Turn;
 import network.Response;
+import network.updates.ChooseMapUpdate;
 import network.updates.StartGameUpdate;
 
 import java.util.*;
@@ -137,10 +138,11 @@ public class Match {
     }
 
     /** Method that signal the start of the match. This method SHOULD be called once when the match is ready to start.*/
-    public void startMatch() {
+    public void chooseMapAndStartMatch() {
         actualPlayerIndex = 0;
         actualTurn = new Turn();
-        StartGameUpdate update = new StartGameUpdate();
+        //TODO If a turn will have a timeout, here must be disabled
+        ChooseMapUpdate update = new ChooseMapUpdate(playerList.get(0).getName());
         addUpdate(update);
     }
 

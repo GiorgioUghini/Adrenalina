@@ -26,4 +26,12 @@ public interface MenuView extends View {
     void startGame();
     /** Show who is waiting when a player first set up his connection **/
     void showWaitingPlayerList(List<String> waitingPlayerUsernames);
+    /** Map is chosen, we can start the game
+     * @param map which map to use
+     * **/
+    void mapChosen(int map);
+    /** Need to choose the map
+     * @param username who should choose
+     */
+    void chooseMap(String username);
 }

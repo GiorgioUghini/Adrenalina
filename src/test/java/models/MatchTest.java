@@ -28,7 +28,7 @@ public class MatchTest {
         Set possibleActions = m.getPossibleAction(pl2);
         assertTrue(possibleActions.isEmpty());
 
-        m.startMatch();
+        m.chooseMapAndStartMatch();
         possibleActions = m.getPossibleAction(pl2);
         assertFalse(possibleActions.isEmpty());
 
@@ -57,7 +57,7 @@ public class MatchTest {
         Match m = new Match(players);
         assertEquals(pl2, m.getFirstPlayer());
 
-        m.startMatch();
+        m.chooseMapAndStartMatch();
 
         LinkedList<ActionElement> wantsToDoList = new LinkedList<>();
         wantsToDoList.add(ActionElement.RUN);

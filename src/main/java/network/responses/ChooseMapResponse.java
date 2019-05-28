@@ -6,6 +6,6 @@ import network.ResponseHandlerInterface;
 public class ChooseMapResponse implements Response {
     @Override
     public void handle(ResponseHandlerInterface handler) {
-
+        handler.handle(this);
     }
 }

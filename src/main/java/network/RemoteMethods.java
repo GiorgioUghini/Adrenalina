@@ -3,10 +3,8 @@ package network;
 import models.Lobby;
 import models.Match;
 import models.player.Player;
-import network.responses.ChooseMapResponse;
-import network.responses.RegisterPlayerResponse;
-import network.responses.ValidActionsResponse;
-import network.responses.WaitingPlayerResponse;
+import network.responses.*;
+import network.updates.MapChosenUpdate;
 import network.updates.NewPlayerUpdate;
 import utils.TokenGenerator;
 
@@ -53,6 +51,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             match.addUpdate(new NewPlayerUpdate(player.getName()));
         }
         if(Server.getInstance().getConnection().isSocket(token)){
+            //TODO: Put UpdatePusher initialization on socket connection, not player registration. Oor listview won't be refreshed
             UpdatePusher updatePusher = new UpdatePusher(player);
             SocketWrapper socketWrapper = Server.getInstance().getConnection().getSocketWrapper(token);
             socketWrapper.setUpdatePusher(updatePusher);
@@ -87,6 +86,8 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
 
     @Override
     public Response chooseMap(String token, int map) throws RemoteException {
+        Server.getInstance().getLobby().getMatch(token).createMap(map);
+        Server.getInstance().getLobby().getMatch(token).addUpdate(new MapChosenUpdate(map));
         return new ChooseMapResponse();
     }
 }
