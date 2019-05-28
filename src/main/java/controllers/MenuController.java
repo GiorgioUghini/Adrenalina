@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.rmi.NotBoundException;
 
 public class MenuController {
-    public void createConnection(ConnectionType type) throws IOException, NotBoundException, InterruptedException {
+    public void createConnection(ConnectionType type) {
         Connection connection = new ConnectionFactory().getConnection(type);
         Client.getInstance().setConnection(connection);
         connection.init();

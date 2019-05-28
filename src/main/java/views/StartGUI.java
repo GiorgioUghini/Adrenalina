@@ -17,7 +17,6 @@ public class StartGUI extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        URL url = getClass().getClassLoader().getResource("fxml/Form1.fxml");
         Parent register = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/Form1.fxml"));
         primaryStage.setTitle("Adrenaline La prova finale evento");
         Scene registerScene = new Scene(register);

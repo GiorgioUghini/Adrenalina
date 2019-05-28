@@ -1,5 +1,6 @@
 package views;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -7,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import controllers.MenuController;
+import controllers.ResourceController;
 import controllers.ScreenController;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -118,6 +120,7 @@ public class MenuViewGUI implements Initializable, MenuView {
     @Override
     public void onNewPlayer(String playerName) {
         Platform.runLater( () -> listView.getItems().add(playerName));
+        ScreenController.getInstance().activate("GameRoom.fxml");
     }
 
     /**{@inheritDoc}*/
