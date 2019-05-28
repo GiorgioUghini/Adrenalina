@@ -43,6 +43,8 @@ public class MenuViewGUI implements Initializable, MenuView {
     private Button joinButton;
     @FXML
     private ListView<String> listView;
+    @FXML
+    private Text passwordLabel;
 
 
     private ConnectionType connectionType = ConnectionType.RMI;
@@ -102,7 +104,7 @@ public class MenuViewGUI implements Initializable, MenuView {
     /**{@inheritDoc}*/
     @Override
     public void registerPlayer() {
-        menuController.registerPlayer(usernameLabel.getText());
+        menuController.registerPlayer(usernameLabel.getText(), passwordLabel.getText());
     }
 
     /**{@inheritDoc}*/
