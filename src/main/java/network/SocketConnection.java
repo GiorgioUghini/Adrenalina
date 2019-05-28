@@ -21,9 +21,9 @@ public class SocketConnection implements Connection {
     private String token;
 
     @Override
-    public void registerPlayer(String username) {
+    public void registerPlayer(String username, String password) {
         try {
-            RegisterPlayerRequest request = new RegisterPlayerRequest(username);
+            RegisterPlayerRequest request = new RegisterPlayerRequest(username, password);
             write(request);
         } catch (IOException e) {
             e.printStackTrace();

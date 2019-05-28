@@ -18,8 +18,9 @@ public class MenuController {
         ((MenuView) Client.getInstance().getCurrentView()).connectionCreated();
     }
 
-    public void registerPlayer(String username) {
-        Client.getInstance().getConnection().registerPlayer(username);
+    public void registerPlayer(String username, String password) {
+        //TODO: Do not block GUI while doing RMI network operations
+        Client.getInstance().getConnection().registerPlayer(username, password);
     }
 
     public void getWaitingPlayer() {

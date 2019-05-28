@@ -22,9 +22,9 @@ public class RMIConnection implements Connection {
     private String token;
 
     @Override
-    public void registerPlayer(String username) {
+    public void registerPlayer(String username, String password) {
         try {
-            RegisterPlayerResponse response = remoteMethods.registerPlayer(username, null);
+            RegisterPlayerResponse response = remoteMethods.registerPlayer(username, password, null);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
             e.printStackTrace();

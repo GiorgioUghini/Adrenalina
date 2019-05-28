@@ -12,9 +12,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.MenuViewGUI">
+<AnchorPane prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.MenuViewGUI">
    <children>
-      <HBox alignment="CENTER_LEFT" layoutY="84.0" prefHeight="50.0" prefWidth="600.0">
+      <HBox alignment="CENTER_LEFT" layoutY="85.0" prefHeight="50.0" prefWidth="600.0">
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="180.0" text="Username:" textAlignment="CENTER" wrapText="true">
                <font>
@@ -22,6 +22,30 @@
                </font>
             </Label>
             <TextField fx:id="usernameLabel" />
+         </children>
+      </HBox>
+      <Pane layoutX="5.0" layoutY="160.0" prefHeight="150.0" prefWidth="590.0">
+         <children>
+            <Text layoutX="80.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Online waiting player" textAlignment="CENTER" wrappingWidth="430">
+               <font>
+                  <Font name="System Italic" size="17.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+      <Text layoutX="125.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ADRENALINE WAITING ROOM" textAlignment="CENTER">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Text>
+      <HBox alignment="CENTER_LEFT" layoutY="135.0" prefHeight="50.0" prefWidth="600.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="180.0" text="Password:" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <TextField fx:id="passwordLabel" />
             <Button fx:id="joinButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#registerPlayer" text="JOIN WAITING ROOM!" textAlignment="CENTER">
                <opaqueInsets>
                   <Insets />
@@ -35,20 +59,6 @@
             </Button>
          </children>
       </HBox>
-      <Pane layoutY="200.0" prefHeight="150.0" prefWidth="600.0">
-         <children>
-            <ListView fx:id="listView" prefHeight="150.0" prefWidth="600.0" />
-         </children>
-      </Pane>
-      <Text layoutX="86.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Online waiting player" textAlignment="CENTER" wrappingWidth="428.7294921875">
-         <font>
-            <Font name="System Italic" size="17.0" />
-         </font>
-      </Text>
-      <Text layoutX="125.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ADRENALINE WAITING ROOM" textAlignment="CENTER">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Text>
+      <ListView fx:id="listView" layoutX="5.0" layoutY="265.0" prefHeight="150.0" prefWidth="590.0" />
    </children>
 </AnchorPane>
