@@ -55,7 +55,7 @@ public class ScreenController {
                     }
                     Scene newParentScene = new Scene(newParent);
                     actualStage.setScene(newParentScene);
-                    actualStage.setResizable(false);
+                    actualStage.setResizable(true);
                 }
             );
     }
