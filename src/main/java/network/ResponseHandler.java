@@ -65,6 +65,11 @@ public class ResponseHandler implements ResponseHandlerInterface {
     }
 
     @Override
+    public void handle(CardEffectsResponse response) {
+        //TODO arrivata la risposta su client... vai avanti a giocare la carta
+    }
+
+    @Override
     public void handle(NewPlayerUpdate response) {
         //IF WE ARE IN MENU VIEW:
         ((MenuView) Client.getInstance().getCurrentView()).onNewPlayer(response.getName());

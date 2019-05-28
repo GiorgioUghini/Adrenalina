@@ -1,10 +1,7 @@
 package network;
 
 import models.Match;
-import network.requests.ChooseMapRequest;
-import network.requests.RegisterPlayerRequest;
-import network.requests.ValidActionsRequest;
-import network.requests.WaitingPlayerRequest;
+import network.requests.*;
 import network.responses.ErrorResponse;
 import network.responses.RegisterPlayerResponse;
 
@@ -40,6 +37,11 @@ public class RequestHandler implements RequestHandlerInterface {
     @Override
     public Response handle(ChooseMapRequest request) throws RemoteException {
         return remoteMethods.chooseMap(request.getToken(), request.map);
+    }
+
+    @Override
+    public Response hadle(CardEffectsRequest request) throws RemoteException {
+        return remoteMethods.cardEffects(request.getToken(), request.cardName);
     }
 
 }

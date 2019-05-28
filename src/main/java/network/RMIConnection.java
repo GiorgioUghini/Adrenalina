@@ -64,6 +64,17 @@ public class RMIConnection implements Connection {
     }
 
     @Override
+    public void cardEffects(String cardName) {
+        try {
+            String token = Client.getInstance().getConnection().getToken();
+            Response response = remoteMethods.cardEffects(token, cardName);
+            Client.getInstance().getConnection().receiveResponse(response);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void receiveResponse(Response response) {
         response.handle(responseHandler);
     }

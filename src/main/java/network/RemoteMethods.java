@@ -90,4 +90,9 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         Server.getInstance().getLobby().getMatch(token).addUpdate(new MapChosenUpdate(map));
         return new ChooseMapResponse();
     }
+
+    @Override
+    public Response cardEffects(String token, String cardName) throws RemoteException {
+        return null;
+    }
 }

@@ -16,6 +16,8 @@ public interface ResponseHandlerInterface {
 
     void handle(WaitingPlayerResponse response);
 
+    void handle(CardEffectsResponse response);
+
     void handle(ErrorResponse response);
 
     void handle(ChooseMapUpdate response);
