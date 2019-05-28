@@ -3,6 +3,7 @@ package network;
 import models.Lobby;
 import models.Match;
 import models.player.Player;
+import network.responses.ChooseMapResponse;
 import network.responses.RegisterPlayerResponse;
 import network.responses.ValidActionsResponse;
 import network.responses.WaitingPlayerResponse;
@@ -82,5 +83,10 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     public WaitingPlayerResponse waitingPlayer() throws RemoteException {
         List<String> waitingPlayers = Server.getInstance().getLobby().getWaitingPlayersUsername();
         return new WaitingPlayerResponse(waitingPlayers);
+    }
+
+    @Override
+    public Response chooseMap(String token, int map) throws RemoteException {
+        return new ChooseMapResponse();
     }
 }

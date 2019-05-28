@@ -34,7 +34,7 @@ public class RMIConnection implements Connection {
     @Override
     public void getWaitingPlayer() {
         try {
-            WaitingPlayerResponse response = remoteMethods.waitingPlayer();
+            Response response = remoteMethods.waitingPlayer();
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -45,7 +45,18 @@ public class RMIConnection implements Connection {
     public void validActions() {
         try {
             String token = Client.getInstance().getConnection().getToken();
-            ValidActionsResponse response = remoteMethods.validActions(token);
+            Response response = remoteMethods.validActions(token);
+            Client.getInstance().getConnection().receiveResponse(response);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void chooseMap(int map) {
+        try {
+            String token = Client.getInstance().getConnection().getToken();
+            Response response = remoteMethods.chooseMap(token, map);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
             e.printStackTrace();

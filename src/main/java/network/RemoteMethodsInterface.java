@@ -11,6 +11,7 @@ import java.util.List;
 public interface RemoteMethodsInterface extends Remote {
     List<Response> longPolling(String token) throws RemoteException;
     Response registerPlayer(String username, String password, String token) throws RemoteException;
-    ValidActionsResponse validActions(String token) throws RemoteException;
-    WaitingPlayerResponse waitingPlayer() throws RemoteException;
+    Response validActions(String token) throws RemoteException;
+    Response waitingPlayer() throws RemoteException;
+    Response chooseMap(String token, int map) throws RemoteException;
 }

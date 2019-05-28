@@ -1,5 +1,6 @@
 package network;
 
+import network.requests.ChooseMapRequest;
 import network.requests.RegisterPlayerRequest;
 import network.requests.ValidActionsRequest;
 import network.requests.WaitingPlayerRequest;
@@ -44,6 +45,16 @@ public class SocketConnection implements Connection {
     public void validActions() {
         try {
             ValidActionsRequest request = new ValidActionsRequest();
+            write(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void chooseMap(int map) {
+        try {
+            ChooseMapRequest request = new ChooseMapRequest(map);
             write(request);
         } catch (IOException e) {
             e.printStackTrace();

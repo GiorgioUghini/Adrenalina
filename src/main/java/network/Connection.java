@@ -9,5 +9,6 @@ public interface Connection {
     void registerPlayer(String username, String password);
     void getWaitingPlayer();
     void validActions();
+    void chooseMap(int map);
     void receiveResponse(Response response);
 }

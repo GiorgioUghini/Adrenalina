@@ -1,5 +1,7 @@
 package network;
 
+import jdk.nashorn.internal.runtime.regexp.RegExpMatcher;
+import network.requests.ChooseMapRequest;
 import network.requests.RegisterPlayerRequest;
 import network.requests.ValidActionsRequest;
 import network.requests.WaitingPlayerRequest;
@@ -10,4 +12,5 @@ public interface RequestHandlerInterface {
     Response handle(ValidActionsRequest request) throws RemoteException;
     Response handle(RegisterPlayerRequest request) throws RemoteException;
     Response handle(WaitingPlayerRequest request) throws RemoteException;
+    Response handle(ChooseMapRequest request) throws RemoteException;
 }
