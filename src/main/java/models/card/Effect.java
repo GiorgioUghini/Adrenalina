@@ -9,4 +9,5 @@ public class Effect implements Serializable {
     public String name;
     public List<Action> actions;
     public Ammo price;
+    public int orderId;
 }
