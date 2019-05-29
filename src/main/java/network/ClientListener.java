@@ -40,6 +40,7 @@ public class ClientListener implements Runnable{
             Player player = Server.getInstance().getLobby().getPlayer(token);
             if(player != null){
                 socketWrapper.stop();
+                Server.getInstance().getConnection().addUpdateUnregisteredPlayers(new PlayerDisconnectUpdate(player.getName()));
                 if(player.isWaiting()){
                     Server.getInstance().getLobby().addUpdateWaitingPlayers(new PlayerDisconnectUpdate(player.getName()));
                     Server.getInstance().getLobby().disconnectPlayer(player);

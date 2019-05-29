@@ -63,7 +63,6 @@ public class Lobby {
             tokenPlayerMap.removeByValue(player);
             waitingPlayers.remove(player);
         }
-        //TODO: was first player?
         if ((activeCountdown != null) && waitingPlayers.size() < 3) {
             activeCountdown.cancel(true);
             activeCountdown = null;

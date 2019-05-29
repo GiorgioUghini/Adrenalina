@@ -19,8 +19,12 @@ public class MenuController {
     }
 
     public void registerPlayer(String username, String password) {
-        //TODO: Do not block GUI while doing RMI network operations
-        Client.getInstance().getConnection().registerPlayer(username, password);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Client.getInstance().getConnection().registerPlayer(username, password);
+            }
+        }).start();
     }
 
     public void getWaitingPlayer() {
