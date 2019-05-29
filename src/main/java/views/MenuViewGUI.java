@@ -216,6 +216,6 @@ public class MenuViewGUI implements Initializable, MenuView {
                 menuController.chooseMap(i);
             });
         }
-        //TODO: ADD TIMER, AFTER IT TIMERS CHOOSE RANDOMLY
+        //TODO: ADD TIMER (IN SERVER), AFTER IT TIMERS CHOOSE RANDOMLY
     }
 }
