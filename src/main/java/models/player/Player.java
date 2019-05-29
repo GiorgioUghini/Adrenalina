@@ -26,9 +26,8 @@ public class Player implements Subscriber, Serializable {
     private int points;
     private int numberOfSkulls;
     private ActionGroup lifeState = ActionGroup.NORMAL;
-    private String token;
     private boolean online;
-    private BlockingQueue<Response> updates;
+
 
     /** Creates a new player object
      * @param name The name identifier for the player
@@ -45,13 +44,6 @@ public class Player implements Subscriber, Serializable {
         numberOfSkulls = 0;
         marks = new Mark();
         //token generation
-        this.token = TokenGenerator.nextToken();
-        updates = new LinkedBlockingQueue<>();
-    }
-
-    public Player(String name, String password, String token){
-        this(name, password);
-        this.token = token;
     }
 
     @Override
@@ -86,6 +78,10 @@ public class Player implements Subscriber, Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public void setAmmo(Ammo ammo) {
@@ -173,31 +169,19 @@ public class Player implements Subscriber, Serializable {
         return this.lifeState;
     }
 
-    public String getToken() {
-        return this.token;
-    }
-
-    public void addUpdate(Response update){
-        updates.add(update);
-    }
-
-    public void setToken(String token){
-        this.token = token;
-    }
-
-    public BlockingQueue<Response> getUpdates(){
-        return updates;
-    }
-
-    public void clearUpdates(){
-        updates.clear();
-    }
-
     public void reconnect(){
         online = true;
     }
 
     public void disconnect() {
         online = false;
+    }
+
+    public boolean isOnline(){
+        return online;
+    }
+
+    public boolean isWaiting(){
+       return  Server.getInstance().getLobby().getWaitingPlayers().contains(this);
     }
 }

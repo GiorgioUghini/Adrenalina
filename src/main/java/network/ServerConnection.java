@@ -1,5 +1,6 @@
 package network;
 
+import network.updates.NewPlayerUpdate;
 import utils.BiMap;
 import utils.Constants;
 
@@ -16,16 +17,14 @@ public class ServerConnection {
     private ServerSocket serverSocket;
     private ExecutorService pool;
     private Registry registry;
-    private BiMap<String, SocketWrapper> socketMap;
-    private BiMap<String, RMIWrapper> rmiMap;
+    private BiMap<String, ConnectionWrapper> connectionWrapperMap;
     private boolean close;
 
     public ServerConnection() throws IOException {
         close = false;
         pool = Executors.newCachedThreadPool();
         serverSocket = new ServerSocket(Constants.PORT);
-        socketMap = new BiMap<>();
-        rmiMap = new BiMap<>();
+        connectionWrapperMap = new BiMap<>();
 
         registry = LocateRegistry.createRegistry(Constants.REGISTRY_PORT);
         registry.rebind(Constants.REGISTRY_NAME, new RemoteMethods());
@@ -35,6 +34,9 @@ public class ServerConnection {
         while (!close) {
             Socket clientSocket = serverSocket.accept();
             SocketWrapper socketWrapper = new SocketWrapper(clientSocket);
+            UpdatePusher updatePusher = new UpdatePusher(socketWrapper);
+            socketWrapper.setUpdatePusher(updatePusher);
+            (new Thread(updatePusher)).start();
             pool.submit(new ClientListener(socketWrapper));
         }
     }
@@ -46,42 +48,31 @@ public class ServerConnection {
         UnicastRemoteObject.unexportObject(registry, true);
     }
 
-    public void addSocket(String token, SocketWrapper socketWrapper){
-        socketMap.add(token, socketWrapper);
+    public void addConnectionWrapper(String token, ConnectionWrapper connectionWrapper){
+        connectionWrapperMap.add(token, connectionWrapper);
     }
 
-    public void addRMI(String token,RMIWrapper rmiWrapper){
-        rmiMap.add(token, rmiWrapper);
+    public void removeConnection(String token){
+        connectionWrapperMap.removeByKey(token);
     }
 
-    public void removeSocket(String token){
-        socketMap.removeByKey(token);
+    public void removeConnection(ConnectionWrapper connectionWrapper){
+        connectionWrapperMap.removeByValue(connectionWrapper);
     }
 
-    public void removeRMI(String token){
-        rmiMap.removeByKey(token);
+    public ConnectionWrapper getConnectionWrapper(String token){
+        ConnectionWrapper connectionWrapper = connectionWrapperMap.getSingleValue(token);
+        return connectionWrapper;
     }
 
     public SocketWrapper getSocketWrapper(String token){
-        SocketWrapper socketWrapper = socketMap.getSingleValue(token);
+        SocketWrapper socketWrapper = (SocketWrapper) connectionWrapperMap.getSingleValue(token);
         return socketWrapper;
     }
 
     public RMIWrapper getRMIWrapper(String token){
-        RMIWrapper rmiWrapper = rmiMap.getSingleValue(token);
+        RMIWrapper rmiWrapper = (RMIWrapper) connectionWrapperMap.getSingleValue(token);
         return rmiWrapper;
-    }
-
-    public boolean isSocket(String token){
-        SocketWrapper socketWrapper = socketMap.getSingleValue(token);
-        boolean isSocket = socketWrapper != null;
-        return isSocket;
-    }
-
-    public boolean isRMI(String token){
-        RMIWrapper rmiWrapper = rmiMap.getSingleValue(token);
-        boolean isRMI = rmiWrapper != null;
-        return isRMI;
     }
 
     public Registry getRegistry(){
@@ -89,7 +80,12 @@ public class ServerConnection {
     }
 
     public String getToken(SocketWrapper socketWrapper){
-        String token = socketMap.getSingleKey(socketWrapper);
+        String token = connectionWrapperMap.getSingleKey(socketWrapper);
+        return token;
+    }
+
+    public String getToken(RMIWrapper rmiWrapper){
+        String token = connectionWrapperMap.getSingleKey(rmiWrapper);
         return token;
     }
 }

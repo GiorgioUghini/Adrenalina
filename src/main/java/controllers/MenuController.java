@@ -27,5 +27,7 @@ public class MenuController {
         Client.getInstance().getConnection().getWaitingPlayer();
     }
 
-    public void chooseMap(int mapNum) { Client.getInstance().getConnection().chooseMap(mapNum); }
+    public void chooseMap(int mapNum) {
+        Client.getInstance().getConnection().chooseMap(mapNum);
+    }
 }

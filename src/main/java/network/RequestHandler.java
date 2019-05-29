@@ -40,7 +40,7 @@ public class RequestHandler implements RequestHandlerInterface {
     }
 
     @Override
-    public Response hadle(CardEffectsRequest request) throws RemoteException {
+    public Response handle(CardEffectsRequest request) throws RemoteException {
         return remoteMethods.cardEffects(request.getToken(), request.cardName);
     }
 

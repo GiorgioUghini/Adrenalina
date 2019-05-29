@@ -24,7 +24,7 @@ public class RMIConnection implements Connection {
     @Override
     public void registerPlayer(String username, String password) {
         try {
-            Response response = remoteMethods.registerPlayer(username, password, null);
+            Response response = remoteMethods.registerPlayer(username, password, token);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -86,6 +86,7 @@ public class RMIConnection implements Connection {
             remoteMethods = (RemoteMethodsInterface) registry.lookup("RemoteMethods");
             queue = new LinkedBlockingQueue<>(100);
             responseHandler = new ResponseHandler();
+            token = remoteMethods.handshake();
             LongPollingTask longPollingTask = new LongPollingTask(remoteMethods, queue);
             Timer timer = new Timer();
             timer.schedule(longPollingTask, 0, 500);

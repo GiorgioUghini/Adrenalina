@@ -1,6 +1,7 @@
 package models;
 
 import network.Response;
+import network.Server;
 import utils.BiMap;
 import utils.Constants;
 import models.player.Player;
@@ -33,13 +34,8 @@ public class Lobby {
      * @param username the username of the player to register
      * @return a String that contains the player token
      */
-    public synchronized String registerPlayer(String username, String password, String token) {
-        Player p;
-        if (token == null || token.isEmpty()) {
-            p = new Player(username, password);
-        } else {
-            p = new Player(username, password, token);
-        }
+    public synchronized Player registerPlayer(String username, String password, String token) {
+        Player p = new Player(username, password);
         waitingPlayers.add(p);
 
         if (waitingPlayers.size() == 5) {
@@ -50,16 +46,16 @@ public class Lobby {
         if (waitingPlayers.size() >= 3) {
             startCountdown();
         }
-        //tokenPlayerMap.add(p.getToken(), p);
-        return p.getToken();
+        tokenPlayerMap.add(token, p);
+        return p;
     }
 
-    public synchronized String registerPlayer(String username, String password){
-        return registerPlayer(username,password, null);
-    }
 
     public synchronized void disconnectPlayer(Player player) {
-        waitingPlayers.remove(player);
+        if(player.isWaiting()){
+            tokenPlayerMap.removeByValue(player);
+            waitingPlayers.remove(player);
+        }
         //TODO: was first player?
         if ((activeCountdown != null) && waitingPlayers.size() < 3) {
             activeCountdown.cancel(true);
@@ -97,10 +93,6 @@ public class Lobby {
         return match;
     }
 
-    public void addPlayer(Player player){
-        tokenPlayerMap.add(player.getToken(), player);
-    }
-
     public Match getMatch(Player player) {
         Match match = matchPlayerMap.getSingleKey(player);
         return match;
@@ -111,22 +103,22 @@ public class Lobby {
       return player;
     }
 
+    public String getToken(Player player) {
+        String token = tokenPlayerMap.getSingleKey(player);
+        return token;
+    }
+
     public Player getPlayerByUsername(String username){
         return tokenPlayerMap.getValues().stream().filter(p -> p.getName().equals(username)).findFirst().orElse(null);
     }
 
-    public void addUpdateWaitingPlayer(Response update){
+    public void addUpdateWaitingPlayers(Response update){
         for(Player player : waitingPlayers){
-            player.addUpdate(update);
+            Server.getInstance().getConnection().getConnectionWrapper(Server.getInstance().getLobby().getToken(player)).addUpdate(update);
         }
     }
 
     public Player getWaitingPlayer(String token) {
-            for(Player player : waitingPlayers){
-                if(player.getToken().equals(token)){
-                    return player;
-                }
-            }
-            return null;
+        return waitingPlayers.stream().filter(p -> Server.getInstance().getLobby().getToken(p).equals(token)).findFirst().orElse(null);
     }
 }

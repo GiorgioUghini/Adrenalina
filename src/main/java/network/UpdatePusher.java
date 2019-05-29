@@ -9,10 +9,10 @@ public class UpdatePusher implements Runnable {
     private SocketWrapper socketWrapper;
     private boolean stop;
 
-    UpdatePusher(Player player) {
+    UpdatePusher(SocketWrapper socketWrapper) {
         this.stop = false;
-        this.queue = player.getUpdates();
-        this.socketWrapper = Server.getInstance().getConnection().getSocketWrapper(player.getToken());
+        this.queue = socketWrapper.getUpdates();
+        this.socketWrapper = socketWrapper;
     }
 
     @Override

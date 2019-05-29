@@ -15,6 +15,11 @@ public class BiMap<T, U> {
         this.map2 = new HashMap<>();
     }
 
+    public BiMap(BiMap<T, U> biMap) {
+        this.map1 = new HashMap<>(biMap.map1);
+        this.map2 = new HashMap<>(biMap.map2);
+    }
+
     public synchronized void add(T t, U u) {
         map1.computeIfAbsent(t, uList -> new LinkedList<>());
         map2.computeIfAbsent(u, tList -> new LinkedList<>());
@@ -66,5 +71,18 @@ public class BiMap<T, U> {
     public List<U> getValues(){
         List<U> values = new LinkedList<>(map2.keySet());
         return values;
+    }
+
+    public int sizeKeys(){
+        return getKeys().size();
+    }
+
+    public int sizeValues(){
+        return getValues().size();
+    }
+
+    public void clear(){
+        map1.clear();
+        map2.clear();
     }
 }

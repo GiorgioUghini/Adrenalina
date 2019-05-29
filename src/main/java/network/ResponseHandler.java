@@ -12,8 +12,14 @@ public class ResponseHandler implements ResponseHandlerInterface {
     @Override
     public void handle(RegisterPlayerResponse response) {
         Client clientInstance = Client.getInstance();
-        clientInstance.getConnection().setToken(response.token);
-        clientInstance.getCurrentView().showMessage("Token: " + response.token);
+        clientInstance.getCurrentView().showMessage("Registrato come nuovo utente");
+    }
+
+    @Override
+    public void handle(ReconnectPlayerResponse response) {
+        Client clientInstance = Client.getInstance();
+        clientInstance.getCurrentView().showMessage("Ricollegato!");
+        //TODO Set game state!!!
     }
 
     @Override
@@ -34,6 +40,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(ErrorResponse response) {
+        Client.getInstance().getCurrentView().printError("Errore gestito dal server"); //DEBUG
         try {
             throw response.exception;
         }

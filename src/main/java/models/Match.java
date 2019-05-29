@@ -12,6 +12,7 @@ import models.player.Player;
 import models.turn.ActionGroup;
 import models.turn.Turn;
 import network.Response;
+import network.Server;
 import network.updates.ChooseMapUpdate;
 import network.updates.StartGameUpdate;
 
@@ -73,15 +74,6 @@ public class Match {
      * @return the first player.*/
     public Player getFirstPlayer() {
         return playerList.get(0);
-    }
-
-    public Player getPlayerByToken(String token) {
-       for(Player player : playerList){
-           if(player.getToken().equals(token)){
-               return player;
-           }
-       }
-       return null;
     }
 
     public void setFirstPlayer(Player firstPlayer) {
@@ -148,7 +140,7 @@ public class Match {
 
     public void addUpdate(Response update){
         for(Player player : playerList){
-            player.addUpdate(update);
+            Server.getInstance().getConnection().getConnectionWrapper(Server.getInstance().getLobby().getToken(player)).addUpdate(update);
         }
     }
 
