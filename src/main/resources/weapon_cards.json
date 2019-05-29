@@ -42,6 +42,7 @@
       },
       {
         "name": "Secondo aggancio",
+        "orderId": 1,
         "price": {
           "red": 1
         },
@@ -113,6 +114,7 @@
       },
       {
         "name": "Colpo focalizzato",
+        "orderId": 1,
         "price": {
           "yellow": 1
         },
@@ -125,6 +127,9 @@
               "rules": {
                 "include": [
                   "primary_enemy"
+                ],
+                "exclude": [
+                  "tertiary_enemy"
                 ]
               }
             }
@@ -141,6 +146,7 @@
       },
       {
         "name": "Tripode di supporto",
+        "orderId": 1,
         "price": {
           "blue": 1
         },
@@ -228,6 +234,7 @@
       },
       {
         "name": "Reazione a catena",
+        "orderId": 1,
         "price": {
           "blue": 1
         },
@@ -257,6 +264,7 @@
       },
       {
         "name": "Alta tensione",
+        "orderId": 2,
         "price": {
           "blue": 1
         },
@@ -347,6 +355,7 @@
       },
       {
         "name": "Colpo sovraccarico",
+        "orderId": 1,
         "price": {
           "blue": 1
         },
@@ -430,6 +439,7 @@
       },
       {
         "name": "Modalità mietitore",
+        "orderId": 1,
         "price": {
           "blue": 1,
           "red": 1
@@ -577,6 +587,7 @@
       },
       {
         "name": "Buco nero",
+        "orderId": 1,
         "price": {
           "red": 1
         },
@@ -957,6 +968,7 @@
       },
       {
         "name": "Muovi nemico",
+        "orderId": 1,
         "actions": [
           {
             "type": "select",
@@ -982,6 +994,7 @@
       },
       {
         "name": "Granata extra",
+        "orderId": 1,
         "price": {
           "red": 1
         },
@@ -1112,6 +1125,7 @@
       },
       {
         "name": "Testata a frammentazione",
+        "orderId": 1,
         "price": {
           "yellow": 1
         },
@@ -1232,6 +1246,7 @@
       },
       {
         "name": "Passo d'ombra",
+        "orderId": -1,
         "actions": [
           {
             "type": "select",
@@ -1255,6 +1270,7 @@
       },
       {
         "name": "Modalità sminuzzare",
+        "orderId": 1,
         "price": {
           "yellow": 1
         },
