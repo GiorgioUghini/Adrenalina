@@ -140,7 +140,8 @@ public class Match {
 
     public void addUpdate(Response update){
         for(Player player : playerList){
-            Server.getInstance().getConnection().getConnectionWrapper(Server.getInstance().getLobby().getToken(player)).addUpdate(update);
+            if(Server.getInstance().getConnection() != null) // IF SOLO PER I TEST!!
+                Server.getInstance().getConnection().getConnectionWrapper(Server.getInstance().getLobby().getToken(player)).addUpdate(update);
         }
     }
 

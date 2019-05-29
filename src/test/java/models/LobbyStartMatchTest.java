@@ -1,5 +1,6 @@
 package models;
 
+import models.player.Player;
 import org.awaitility.core.ConditionTimeoutException;
 import org.junit.Test;
 
@@ -20,10 +21,10 @@ public class LobbyStartMatchTest {
         Lobby lobby = new Lobby();
 
         lobby.registerPlayer("Cosimo", "");
-        String token1 = lobby.registerPlayer("Giorgio", "");
+        Player player1 = lobby.registerPlayer("Giorgio", "");
         lobby.registerPlayer("Vila", "");   //Three player, timer starts
 
-        lobby.disconnectPlayer(lobby.getWaitingPlayer(token1));    //Two player remaining, timer aborts
+        lobby.disconnectPlayer(player1);    //Two player remaining, timer aborts
 
         try {
             await().atMost(5, SECONDS).until(retFalse());

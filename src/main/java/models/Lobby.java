@@ -5,6 +5,7 @@ import network.Server;
 import utils.BiMap;
 import utils.Constants;
 import models.player.Player;
+import utils.TokenGenerator;
 
 import java.util.*;
 import java.util.concurrent.Executors;
@@ -50,9 +51,14 @@ public class Lobby {
         return p;
     }
 
+    //SOLO PER I TEST!!
+    public synchronized Player registerPlayer(String username, String password) {
+        return registerPlayer(username,password, TokenGenerator.nextToken());
+    }
+    //SOLO PER I TEST!!
 
     public synchronized void disconnectPlayer(Player player) {
-        if(player.isWaiting()){
+        if(waitingPlayers.contains(player)){
             tokenPlayerMap.removeByValue(player);
             waitingPlayers.remove(player);
         }

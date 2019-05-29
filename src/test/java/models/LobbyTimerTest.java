@@ -1,5 +1,6 @@
 package models;
 
+import models.player.Player;
 import org.awaitility.core.ConditionTimeoutException;
 import org.junit.Test;
 
@@ -15,13 +16,13 @@ public class LobbyTimerTest {
     @Test
     public void lobbyTimerAbortTest() {
         Lobby lobby = new Lobby();
-        lobby.registerPlayer("Cosimo", "");
-        String token1 = lobby.registerPlayer("Giorgio","");
-        lobby.registerPlayer("Vila","");
+        lobby.registerPlayer("Cosimo", "", "a");
+        Player player1 = lobby.registerPlayer("Giorgio","", "b");
+        lobby.registerPlayer("Vila","", "c");
         List activeMatches = lobby.getActiveMatches();
         assertEquals(0, activeMatches.size());
 
-        lobby.disconnectPlayer(lobby.getWaitingPlayer(token1));
+        lobby.disconnectPlayer(player1);
 
         activeMatches = lobby.getActiveMatches();
         assertEquals(0, activeMatches.size());
