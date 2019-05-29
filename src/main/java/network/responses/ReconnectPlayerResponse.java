@@ -3,9 +3,8 @@ package network.responses;
 import network.Response;
 import network.ResponseHandlerInterface;
 
-public class RegisterPlayerResponse implements Response {
-
-    public RegisterPlayerResponse(){
+public class ReconnectPlayerResponse implements Response {
+    public ReconnectPlayerResponse(){
 
     }
 

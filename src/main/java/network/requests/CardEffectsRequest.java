@@ -27,6 +27,6 @@ public class CardEffectsRequest implements Request {
 
     @Override
     public Response handle(RequestHandlerInterface handler) throws RemoteException {
-        return null;
+        return handler.handle(this);
     }
 }

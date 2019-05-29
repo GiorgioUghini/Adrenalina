@@ -6,6 +6,8 @@ import network.updates.*;
 public interface ResponseHandlerInterface {
     void handle(RegisterPlayerResponse response);
 
+    void handle(ReconnectPlayerResponse response);
+
     void handle(ValidActionsResponse response);
 
     void handle(NewPlayerUpdate response);

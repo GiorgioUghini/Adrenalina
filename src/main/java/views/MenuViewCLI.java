@@ -15,6 +15,7 @@ public class MenuViewCLI implements MenuView {
     private MenuController menuController;
     private List<String> players = new ArrayList<>();
     private String username = "";
+    private String password = "";
 
     public MenuViewCLI(){
         this.menuController = new MenuController();
@@ -56,8 +57,13 @@ public class MenuViewCLI implements MenuView {
             Console.println("Username cannot be null");
             Console.print("Insert username: ");
         }
+        Console.print("Insert password: ");
+        while((password = Console.nextLine()).equals("")){
+            Console.println("Password cannot be null");
+            Console.print("Insert password: ");
+        }
         Console.println("Welcome, " + username);
-        menuController.registerPlayer(username, "");
+        menuController.registerPlayer(username, password);
     }
 
     /**{@inheritDoc}*/
