@@ -1,5 +1,6 @@
 package network;
 
+import models.player.Player;
 import network.updates.NewPlayerUpdate;
 import utils.BiMap;
 import utils.Constants;
@@ -10,8 +11,12 @@ import java.net.Socket;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class ServerConnection {
     private ServerSocket serverSocket;
@@ -88,4 +93,18 @@ public class ServerConnection {
         String token = connectionWrapperMap.getSingleKey(rmiWrapper);
         return token;
     }
+
+    public List<ConnectionWrapper> getUnregisteredConnectionWrappers(){
+        List<ConnectionWrapper> registeredWrappers = Server.getInstance().getLobby().getRegisteredConnectionWrappers();
+        List<ConnectionWrapper> unregisteredWrappers = connectionWrapperMap.getValues().stream().filter(c -> !registeredWrappers.contains(c)).collect(Collectors.toList());
+       return unregisteredWrappers;
+    }
+
+    public void addUpdateUnregisteredPlayers(Response update){
+        List<ConnectionWrapper> wrappers = getUnregisteredConnectionWrappers();
+        for(ConnectionWrapper wrapper : wrappers){
+            wrapper.addUpdate(update);
+        }
+    }
+
 }

@@ -1,5 +1,6 @@
 package models;
 
+import network.ConnectionWrapper;
 import network.Response;
 import network.Server;
 import utils.BiMap;
@@ -122,6 +123,18 @@ public class Lobby {
         for(Player player : waitingPlayers){
             Server.getInstance().getConnection().getConnectionWrapper(Server.getInstance().getLobby().getToken(player)).addUpdate(update);
         }
+    }
+
+    public List<Player> getRegisteredPlayers(){
+        List<Player> players = new ArrayList<>(tokenPlayerMap.getValues());
+        players.addAll(waitingPlayers);
+        return players;
+    }
+
+    public List<ConnectionWrapper> getRegisteredConnectionWrappers(){
+        List<Player> players = getRegisteredPlayers();
+        List<ConnectionWrapper> wrappers = players.stream().map(p -> Server.getInstance().getConnection().getConnectionWrapper(getToken(p))).collect(Collectors.toList());
+        return wrappers;
     }
 
     public Player getWaitingPlayer(String token) {
