@@ -253,7 +253,7 @@
             "damage": {
               "type": "player",
               "target": "tertiary_enemy",
-              "value": 1
+              "value": 2
             }
           }
         ]
@@ -426,6 +426,10 @@
                 {
                   "ref": "me",
                   "area": "visible"
+                },
+                {
+                  "ref": "enemy",
+                  "max": 2
                 }
               ]
             }
@@ -435,6 +439,31 @@
             "move": {
               "target": "enemy",
               "dest": "destination"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Modalità punitore",
+        "actions": [
+          {
+            "type": "select",
+            "select": {
+              "type": "player",
+              "id": "enemy",
+              "radix": [
+                {
+                  "ref": "me",
+                  "max": 2
+                }
+              ]
+            }
+          },
+          {
+            "type": "move",
+            "move": {
+              "target": "enemy",
+              "dest": "me"
             }
           }
         ]
@@ -505,7 +534,10 @@
                   "ref": "vortex",
                   "max": 1
                 }
-              ]
+              ],
+              "rules": {
+                "exclude": ["enemy"]
+              }
             }
           },
           {
@@ -569,6 +601,7 @@
               "radix": [
                 {
                   "ref": "me",
+                  "min": 1,
                   "max": 1
                 }
               ]
@@ -577,7 +610,7 @@
           {
             "type": "damage",
             "damage": {
-              "type": "room",
+              "type": "square",
               "target": "burn_square",
               "value": 1
             }
@@ -585,7 +618,7 @@
           {
             "type": "mark",
             "mark": {
-              "type": "room",
+              "type": "square",
               "target": "burn_square",
               "value": 1
             }
@@ -662,7 +695,7 @@
         ]
       },
       {
-        "name": "Modalità base",
+        "name": "Modalità nano-traccianti",
         "actions": [
           {
             "type": "select",
@@ -723,7 +756,7 @@
             "type": "select",
             "select": {
               "id": "secondary_enemy",
-              "type": "player,",
+              "type": "player",
               "radix": [
                 {
                   "ref": "me",
@@ -793,7 +826,7 @@
             "damage": {
               "type": "square",
               "target": "primary_square",
-              "value": 1
+              "value": 2
             }
           },
           {
@@ -835,7 +868,12 @@
               "target": "enemy",
               "value": 1
             }
-          },
+          }
+        ]
+      },
+      {
+        "name": "Muovi nemico",
+        "actions": [
           {
             "type": "select",
             "select": {
@@ -911,6 +949,20 @@
             }
           },
           {
+            "type": "select",
+            "select": {
+              "auto": true,
+              "id": "original_square",
+              "type": "square",
+              "radix": [
+                {
+                  "ref": "enemy",
+                  "max": 0
+                }
+              ]
+            }
+          },
+          {
             "type": "damage",
             "damage": {
               "type": "player",
@@ -939,6 +991,52 @@
             }
           }
         ]
+      },
+      {
+        "name": "Razzi portatili",
+        "actions": [
+          {
+            "type": "select",
+            "select": {
+              "type": "square",
+              "id": "my_destination",
+              "radix": [
+                {
+                  "ref": "me",
+                  "max": 2
+                }
+              ]
+            }
+          },
+          {
+            "type": "move",
+            "move": {
+              "target": "me",
+              "dest": "my_destination"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Testata a frammentazione",
+        "actions": [
+          {
+            "type": "damage",
+            "damage": {
+              "type": "square",
+              "target": "original_square",
+              "value": 1
+            }
+          },
+          {
+            "type": "damage",
+            "damage": {
+              "type": "player",
+              "target": "enemy",
+              "value": 1
+            }
+          }
+        ]
       }
     ]
   },
@@ -952,6 +1050,7 @@
           {
             "type": "select",
             "select": {
+              "type": "player",
               "id": "enemy",
               "radix": [
                 {
@@ -1055,8 +1154,8 @@
         "actions": [
           {
             "type": "select",
-            "id": "secondary_enemy",
             "select": {
+              "id": "secondary_enemy",
               "type": "player",
               "radix": [{
                 "ref": "me"
@@ -1149,7 +1248,7 @@
   },
   {
     "name": "Fucile a pompa",
-    "exclusive": false,
+    "exclusive": true,
     "effects": [
       {
         "name": "Modalità base",
@@ -1157,6 +1256,7 @@
           {
             "type": "select",
             "select": {
+              "type": "player",
               "id": "enemy",
               "radix": [
                 {
@@ -1199,6 +1299,7 @@
           {
             "type": "select",
             "select": {
+              "type": "player",
               "id": "enemy",
               "radix": [
                 {
@@ -1230,6 +1331,7 @@
           {
             "type": "select",
             "select": {
+              "type": "player",
               "id": "enemy",
               "radix": [
                 {
@@ -1283,6 +1385,19 @@
             }
           },
           {
+            "type": "select",
+            "select": {
+              "auto": true,
+              "type": "square",
+              "id": "zero_square",
+              "radix": [
+                {
+                  "ref": "me"
+                }
+              ]
+            }
+          },
+          {
             "type": "move",
             "move": {
               "target": "me",
@@ -1313,7 +1428,8 @@
             "type": "select",
             "select": {
               "id": "second_square",
-              "type": "square,",
+              "type": "square",
+              "min": 0,
               "radix": [
                 {
                   "ref": "me",
@@ -1322,7 +1438,7 @@
                 },
                 {
                   "ref": "me",
-                  "straight": "first_square"
+                  "straight": "zero_square"
                 }
               ]
             }
@@ -1365,6 +1481,105 @@
       {
         "name": "Modalità base",
         "actions": [
+          {
+            "type": "select",
+            "select": {
+              "type": "player",
+              "id": "first_enemy",
+              "radix": [
+                {
+                  "ref": "me",
+                  "min": 1,
+                  "max": 1
+                }
+              ]
+            }
+          },
+          {
+            "type": "select",
+            "select": {
+              "auto": true,
+              "id": "first_square",
+              "radix": [
+                {
+                  "ref": "first_enemy"
+                }
+              ]
+            }
+          },
+          {
+            "type": "select",
+            "select": {
+              "type": "player",
+              "id": "second_enemy",
+              "min": 0,
+              "radix": [
+                {
+                  "ref": "me",
+                  "min": 1,
+                  "max": 1
+                }
+              ],
+              "rules": {
+                "exclude": [
+                  "first_square"
+                ]
+              }
+            }
+          },
+          {
+            "type": "select",
+            "select": {
+              "auto": true,
+              "id": "second_square",
+              "radix": [
+                {
+                  "ref": "second_enemy"
+                }
+              ]
+            }
+          },
+          {
+            "type": "select",
+            "select": {
+              "type": "player",
+              "id": "third_enemy",
+              "min": 0,
+              "radix": [
+                {
+                  "ref": "me",
+                  "min": 1,
+                  "max": 1
+                }
+              ],
+              "rules": {
+                "exclude": [
+                  "first_square", "second_square"
+                ]
+              }
+            }
+          },
+          {
+            "type": "damage",
+            "damage": {
+              "target": "first_enemy",
+              "value": 1
+            }
+          },
+          {
+            "type": "damage",
+            "damage": {
+              "target": "second_enemy",
+              "value": 1
+            }
+          },
+          {
+            "type": "damage",
+            "damage": {
+              "target": "third_enemy",
+              "value": 1
+            }
+          }
         ]
       },
       {

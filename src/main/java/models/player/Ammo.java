@@ -8,7 +8,7 @@ public class Ammo implements Serializable {
         green = 0;
         yellow = 0;
     }
-    int red;
-    int green;
-    int yellow;
+    public int red;
+    public int green;
+    public int yellow;
 }
