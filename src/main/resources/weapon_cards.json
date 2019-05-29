@@ -1,6 +1,9 @@
 [
   {
     "name": "Distruttore",
+    "price": {
+      "blue": 2
+    },
     "exclusive": false,
     "effects": [
       {
@@ -39,6 +42,9 @@
       },
       {
         "name": "Secondo aggancio",
+        "price": {
+          "red": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -73,6 +79,10 @@
   {
     "name": "Mitragliatrice",
     "exclusive": false,
+    "price": {
+      "blue": 1,
+      "red": 1
+    },
     "effects": [
       {
         "name": "Effetto base",
@@ -103,6 +113,9 @@
       },
       {
         "name": "Colpo focalizzato",
+        "price": {
+          "yellow": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -128,6 +141,9 @@
       },
       {
         "name": "Tripode di supporto",
+        "price": {
+          "blue": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -178,6 +194,10 @@
   },
   {
     "name": "Torpedine",
+    "price": {
+      "blue": 1,
+      "red": 1
+    },
     "exclusive": false,
     "effects": [
       {
@@ -208,6 +228,9 @@
       },
       {
         "name": "Reazione a catena",
+        "price": {
+          "blue": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -234,6 +257,9 @@
       },
       {
         "name": "Alta tensione",
+        "price": {
+          "blue": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -262,6 +288,10 @@
   },
   {
     "name": "Fucile al plasma",
+    "price": {
+      "blue": 1,
+      "yellow": 1
+    },
     "exclusive": false,
     "effects": [
       {
@@ -317,6 +347,9 @@
       },
       {
         "name": "Colpo sovraccarico",
+        "price": {
+          "blue": 1
+        },
         "actions": [
           {
             "type": "damage",
@@ -333,6 +366,10 @@
   {
     "name": "Fucile di precisione",
     "exclusive": false,
+    "price": {
+      "blue": 2,
+      "yellow": 1
+    },
     "effects": [
       {
         "name": "Effetto",
@@ -374,6 +411,9 @@
   {
     "name": "Falce protonica",
     "exclusive": true,
+    "price": {
+      "blue": 1
+    },
     "effects": [
       {
         "name": "Modalità base",
@@ -390,6 +430,10 @@
       },
       {
         "name": "Modalità mietitore",
+        "price": {
+          "blue": 1,
+          "red": 1
+        },
         "actions": [
           {
             "type": "damage",
@@ -406,6 +450,9 @@
   {
     "name": "Raggio traente",
     "exclusive": true,
+    "price": {
+      "blue": 1
+    },
     "effects": [
       {
         "name": "Modalità base",
@@ -445,6 +492,10 @@
       },
       {
         "name": "Modalità punitore",
+        "price": {
+          "red": 1,
+          "yellow": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -473,6 +524,10 @@
   {
     "name": "Cannone vortex",
     "exclusive": false,
+    "price": {
+      "red": 1,
+      "blue": 1
+    },
     "effects": [
       {
         "name": "Effetto base",
@@ -522,6 +577,9 @@
       },
       {
         "name": "Buco nero",
+        "price": {
+          "red": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -561,6 +619,10 @@
   {
     "name": "Vulcanizzatore",
     "exclusive": true,
+    "price": {
+      "red": 1,
+      "blue": 1
+    },
     "effects": [
       {
         "name": "Modalità base",
@@ -629,8 +691,14 @@
   },
   {
     "name": "Razzo termico",
+    "exclusive": true,
+    "price": {
+      "red": 2,
+      "yellow": 1
+    },
     "effects": [
       {
+        "name": "Modalità base",
         "actions": [
           {
             "type": "select",
@@ -658,6 +726,10 @@
   {
     "name": "Raggio solare",
     "exclusive": true,
+    "price": {
+      "red": 1,
+      "yellow": 1
+    },
     "effects": [
       {
         "name": "Modalità base",
@@ -696,6 +768,9 @@
       },
       {
         "name": "Modalità nano-traccianti",
+        "price": {
+          "red": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -734,6 +809,9 @@
   {
     "name": "Lanciafiamme",
     "exclusive": true,
+    "price": {
+      "red": 1
+    },
     "effects": [
       {
         "name": "Modalità base",
@@ -788,6 +866,9 @@
       },
       {
         "name": "Modalità barbecue",
+        "price": {
+          "yellow": 2
+        },
         "actions": [
           {
             "type": "select",
@@ -844,6 +925,9 @@
   {
     "name": "Lanciagranate",
     "exclusive": false,
+    "price": {
+      "red": 1
+    },
     "effects": [
       {
         "name": "Effetto base",
@@ -898,6 +982,9 @@
       },
       {
         "name": "Granata extra",
+        "price": {
+          "red": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -927,6 +1014,9 @@
   {
     "name": "Lanciarazzi",
     "exclusive": false,
+    "price": {
+      "red": 2
+    },
     "effects": [
       {
         "name": "Effetto base",
@@ -994,6 +1084,9 @@
       },
       {
         "name": "Razzi portatili",
+        "price": {
+          "blue": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -1019,6 +1112,9 @@
       },
       {
         "name": "Testata a frammentazione",
+        "price": {
+          "yellow": 1
+        },
         "actions": [
           {
             "type": "damage",
@@ -1043,6 +1139,10 @@
   {
     "name": "Fucile laser",
     "exclusive": true,
+    "price": {
+      "yellow": 2,
+      "blue": 1
+    },
     "effects": [
       {
         "name": "Modalità base",
@@ -1101,6 +1201,10 @@
   {
     "name": "Spada fotonica",
     "exclusive": false,
+    "price": {
+      "yellow": 1,
+      "red": 1
+    },
     "effects": [
       {
         "name": "Effetto base",
@@ -1151,6 +1255,9 @@
       },
       {
         "name": "Modalità sminuzzare",
+        "price": {
+          "yellow": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -1182,6 +1289,10 @@
   {
     "name": "ZX-2",
     "exclusive": true,
+    "price": {
+      "yellow": 1,
+      "red": 1
+    },
     "effects": [
       {
         "name": "Modalità base",
@@ -1249,6 +1360,9 @@
   {
     "name": "Fucile a pompa",
     "exclusive": true,
+    "price": {
+      "yellow": 2
+    },
     "effects": [
       {
         "name": "Modalità base",
@@ -1324,6 +1438,10 @@
   {
     "name": "Cyberguanto",
     "exclusive": true,
+    "price": {
+      "yellow": 1,
+      "blue": 1
+    },
     "effects": [
       {
         "name": "Modalità base",
@@ -1369,6 +1487,9 @@
       },
       {
         "name": "Modalità cento pugni",
+        "price": {
+          "blue": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -1477,6 +1598,9 @@
   {
     "name": "Onda d'urto",
     "exclusive": true,
+    "price": {
+      "yellow": 1
+    },
     "effects": [
       {
         "name": "Modalità base",
@@ -1584,6 +1708,9 @@
       },
       {
         "name": "Modalità tsunami",
+        "price": {
+          "yellow": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -1614,6 +1741,9 @@
   {
     "name": "Martello ionico",
     "exclusive": true,
+    "price": {
+      "yellow": 1
+    },
     "effects": [
       {
         "name": "Modalità base",
@@ -1642,6 +1772,9 @@
       },
       {
         "name": "Modalità polverizzare",
+        "price": {
+          "red": 1
+        },
         "actions": [
           {
             "type": "select",
