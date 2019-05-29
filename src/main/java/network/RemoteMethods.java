@@ -24,14 +24,8 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     public List<Response> longPolling(String token) {
         RMIWrapper rmiWrapper = Server.getInstance().getConnection().getRMIWrapper(token);
         rmiWrapper.ping();
-        Player currentPlayer = Server.getInstance().getLobby().getPlayer(token);
-        List<Response> updates;
-        if (currentPlayer != null) {
-            updates = new LinkedList<>(rmiWrapper.getUpdates());
-            rmiWrapper.clearUpdates();
-        } else {
-            updates = new LinkedList<>();
-        }
+        List<Response> updates = new LinkedList<>(rmiWrapper.getUpdates());
+        rmiWrapper.clearUpdates();
         return updates;
     }
 
