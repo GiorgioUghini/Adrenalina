@@ -36,7 +36,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         RMIStatusTask rmiStatusTask = new RMIStatusTask(rmiWrapper);
         rmiWrapper.setRMIStatusTask(rmiStatusTask);
         Timer timer = new Timer();
-        timer.schedule(rmiStatusTask, 0, 4000);
+        timer.schedule(rmiStatusTask, 0, 1000);
         return token;
     }
 

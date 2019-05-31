@@ -1,14 +1,9 @@
 package network;
 
-import network.responses.RegisterPlayerResponse;
-import network.responses.ValidActionsResponse;
-import network.responses.WaitingPlayerResponse;
-
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.List;
 import java.util.Timer;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -89,7 +84,7 @@ public class RMIConnection implements Connection {
             token = remoteMethods.handshake();
             LongPollingTask longPollingTask = new LongPollingTask(remoteMethods, queue);
             Timer timer = new Timer();
-            timer.schedule(longPollingTask, 0, 500);
+            timer.schedule(longPollingTask, 0, 100);
             PollingQueueListener pollingQueueListener = new PollingQueueListener(queue);
             (new Thread(pollingQueueListener)).start();
         } catch (RemoteException e) {
