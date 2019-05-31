@@ -27,7 +27,7 @@ public class RMIWrapper implements ConnectionWrapper {
     }
 
     public void ping(){
-        if(rmiStatusTask != null){
+        if(rmiStatusTask != null) {
             rmiStatusTask.ping();
         }
     }

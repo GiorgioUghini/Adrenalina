@@ -31,6 +31,8 @@ public class ClientListener implements Runnable{
         try {
             while (!stop){
                 Request request = (Request) in.readObject();
+                //TODO: FIX java.io.EOFException for socket - still not fixed 31/05/19
+                //It seems to happen without any cause
                 request.setToken(token);
                 Response response = request.handle(requestHandler);
                 socketWrapper.write(response);
@@ -52,7 +54,6 @@ public class ClientListener implements Runnable{
                 }
             }
             Server.getInstance().getConnection().removeConnection(token);
-            //TODO: FIX java.io.EOFException for socket
         }
         catch (Exception ex){
             Logger logger = Logger.getAnonymousLogger();

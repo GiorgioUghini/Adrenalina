@@ -69,7 +69,7 @@ public class Lobby {
         }
     }
 
-    public void chooseMapAndStartMatch() {
+    public synchronized void chooseMapAndStartMatch() {
         Match match = new Match(waitingPlayers);
         for(Player waitingPlayer : waitingPlayers){
             matchPlayerMap.add(match, waitingPlayer);
@@ -84,7 +84,9 @@ public class Lobby {
             @Override
             public void run() {
                 activeCountdown = null;
-                chooseMapAndStartMatch();
+                if (waitingPlayers.size() < 3) {
+                    chooseMapAndStartMatch();
+                }
             }
         }, Constants.DELAY_SECONDS, TimeUnit.SECONDS);
     }
