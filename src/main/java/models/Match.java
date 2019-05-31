@@ -133,7 +133,6 @@ public class Match {
     public void chooseMapAndStartMatch() {
         actualPlayerIndex = 0;
         actualTurn = new Turn();
-        //TODO If a turn will have a timeout, here must be disabled
         ChooseMapUpdate update = new ChooseMapUpdate(playerList.get(0).getName());
         addUpdate(update);
     }
