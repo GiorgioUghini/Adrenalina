@@ -2,13 +2,13 @@ package views;
 
 import controllers.ScreenController;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
 
 public class StartGUI extends Application {
     public static void main(String[] args) {
@@ -27,5 +27,11 @@ public class StartGUI extends Application {
         screenController.setActualScene(registerScene);
 
         primaryStage.show();
+    }
+
+    @Override
+    public void stop() {
+        Platform.exit();
+        System.exit(0);
     }
 }
