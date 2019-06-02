@@ -29,6 +29,10 @@ public class EffectCardTest {
                 for(Effect e : effects.getLegitEffects()){
                     assertTrue(e.orderId==0 || e.orderId==-1);
                 }
+                weaponCard.playEffect(effects.getLegitEffects().get(0));
+                for(Effect e : effects.getLegitEffects()){
+                    assertTrue(e.orderId==0 || e.orderId==1 || e.orderId == -1);
+                }
             }
         }
     }

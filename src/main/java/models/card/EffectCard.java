@@ -90,14 +90,14 @@ public class EffectCard extends Card  {
     private LegitEffects getByOrderId(int orderId){
         LegitEffects out = new LegitEffects();
         effects.stream().forEach(e -> {
-            boolean activable = (e.orderId==orderId || e.orderId == -1);
+            boolean activable = (e.orderId==orderId || e.orderId==orderId+1 || e.orderId == -1);
             out.addEffect(e, activable);
         });
         return out;
     }
 
     private int getLastOrderId(){
-        if(activatedEffects.isEmpty()) return 0;
+        if(activatedEffects.isEmpty()) return -1;
         return activatedEffects.get(activatedEffects.size()-1).orderId;
     }
 }
