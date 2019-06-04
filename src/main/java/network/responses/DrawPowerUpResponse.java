@@ -13,6 +13,10 @@ public class DrawPowerUpResponse implements Response {
         this.card = card;
     }
 
+    public PowerUpCard getCard() {
+        return card;
+    }
+
     @Override
     public void handle(ResponseHandlerInterface handler) {
         handler.handle(this);

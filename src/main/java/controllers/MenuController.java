@@ -19,12 +19,7 @@ public class MenuController {
     }
 
     public void registerPlayer(String username, String password) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Client.getInstance().getConnection().registerPlayer(username, password);
-            }
-        }).start();
+        new Thread(() -> Client.getInstance().getConnection().registerPlayer(username, password)).start();
     }
 
     public void getWaitingPlayer() {

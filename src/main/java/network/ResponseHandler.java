@@ -5,6 +5,7 @@ import models.map.RoomColor;
 import models.turn.ActionElement;
 import network.responses.*;
 import network.updates.*;
+import views.GameView;
 import views.MenuView;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
     @Override
     public void handle(ValidActionsResponse response) {
         if(!response.actions.isEmpty()){
-            Client.getInstance().getCurrentView().showMessage("Your valid actions are:");
+            Client.getInstance().getCurrentView().showMessage("You could do some actions. Chooose one from:");
             for(List<ActionElement> list : response.actions){
                 for(ActionElement a : list){
                     Client.getInstance().getCurrentView().showMessage(a.name());
@@ -35,7 +36,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
             }
         }
         else{
-            Client.getInstance().getCurrentView().showMessage("NO actions for you!");
+            Client.getInstance().getCurrentView().showMessage("You can't really do any actions. Wait for your turn.");
         }
     }
 
@@ -95,12 +96,12 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(ChooseMapResponse response) {
-        Client.getInstance().getConnection().spawnPlayer(RoomColor.RED);
+        //should be empty
     }
 
     @Override
     public void handle(DrawPowerUpResponse response) {
-        // TODO use card in response
+        ((GameView) Client.getInstance().getCurrentView()).showMessage("You drawn " + response.getCard().name + " and its color is " + response.getCard().color.name());
     }
 
     @Override

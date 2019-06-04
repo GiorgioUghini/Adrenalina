@@ -39,17 +39,18 @@ public class Lobby {
     public synchronized Player registerPlayer(String username, String password, String token) {
         Player p = new Player(username, password);
         waitingPlayers.add(p);
-
-        if (waitingPlayers.size() == 5) {
-            if (activeCountdown != null) {
-                activeCountdown.cancel(true);
-                activeCountdown = null;
+        new Thread(() -> {
+            if (waitingPlayers.size() == 5) {
+                if (activeCountdown != null) {
+                    activeCountdown.cancel(true);
+                    activeCountdown = null;
+                }
+                chooseMapAndStartMatch();
             }
-            chooseMapAndStartMatch();
-        }
-        if (waitingPlayers.size() >= 3) {
-            startCountdown();
-        }
+            if (waitingPlayers.size() >= 3) {
+                startCountdown();
+            }
+        }).start();
         tokenPlayerMap.add(token, p);
         return p;
     }
@@ -82,13 +83,10 @@ public class Lobby {
 
     public synchronized void startCountdown() {
         //Starting countdown now...
-        activeCountdown = scheduler.schedule(new Runnable() {
-            @Override
-            public void run() {
-                activeCountdown = null;
-                if (!(waitingPlayers.size() < 3)) {
-                    chooseMapAndStartMatch();
-                }
+        activeCountdown = scheduler.schedule(() -> {
+            activeCountdown = null;
+            if (!(waitingPlayers.size() < 3)) {
+                chooseMapAndStartMatch();
             }
         }, Constants.DELAY_SECONDS, TimeUnit.SECONDS);
     }

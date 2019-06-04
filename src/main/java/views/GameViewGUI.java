@@ -2,6 +2,7 @@ package views;
 
 import controllers.GameController;
 import controllers.ScreenController;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
@@ -29,8 +30,18 @@ public class GameViewGUI implements Initializable, GameView {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        mainGridPane.setStyle("-fx-background-image: url('img/map-" + Integer.toString(Client.getInstance().getMapNum()+1) + ".png'); -fx-background-repeat: stretch; -fx-background-size: stretch; -fx-background-position: center center;");
+        Client.getInstance().setCurrentView(this);
+        mainGridPane.setStyle(String.format("-fx-background-image: url('img/map-%d.png'); -fx-background-repeat: stretch; -fx-background-size: stretch; -fx-background-position: center center;", Client.getInstance().getMapNum() + 1));
         ScreenController.getInstance().getActualStage().setFullScreen(true);
+        Platform.runLater(this::getValidActions);
+    }
+
+    public void getValidActions() {
+        gameController.getValidActions();
+    }
+
+    public void ciao() {
+        gameController.drawPowerUp();
     }
 
 

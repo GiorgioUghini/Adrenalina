@@ -177,9 +177,8 @@ public class Match {
         try {
             gameMap.checkPlayerInMap(p);
         } catch (PlayerNotOnMapException e) {
-            HashSet<ActionElement> possibleActions = new HashSet<>();
-            possibleActions.add(ActionElement.SPAWN);
-            return possibleActions;
+            LinkedList actionGroupSpawn = new LinkedList<>(Collections.singletonList(ActionElement.DRAW));
+            return new HashSet<>(Collections.singletonList(actionGroupSpawn));
         }
 
         if (frenzy != null) {
