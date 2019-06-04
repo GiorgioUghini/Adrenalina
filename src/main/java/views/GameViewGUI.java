@@ -7,8 +7,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
+import models.card.PowerUpCard;
 import network.Client;
 
 import java.net.URL;
@@ -22,6 +24,7 @@ public class GameViewGUI implements Initializable, GameView {
     private Text waitMapLabel;
     @FXML
     private ListView<String> gameStatusListView;
+
     @FXML
     private Button btnDrawPowerUp;
     @FXML
@@ -39,6 +42,22 @@ public class GameViewGUI implements Initializable, GameView {
     @FXML
     private Button btnUsePowerUp;
 
+    @FXML
+    private ImageView imgYourWeaponCard1;
+    @FXML
+    private ImageView imgYourWeaponCard2;
+    @FXML
+    private ImageView imgYourWeaponCard3;
+    @FXML
+    private ImageView imgYourWeaponCard4;
+    @FXML
+    private ImageView imgYourPowerUpCard1;
+    @FXML
+    private ImageView imgYourPowerUpCard2;
+    @FXML
+    private ImageView imgYourPowerUpCard3;
+    @FXML
+    private ImageView imgYourPowerUpCard4;
 
     private GameController gameController;
 
@@ -63,6 +82,14 @@ public class GameViewGUI implements Initializable, GameView {
         gameController.drawPowerUp();
         gameController.getValidActions();
     }
+
+    public void addPowerUpToHand(PowerUpCard card) {
+        //TODO: Set image in imageview, on the first space free
+    }
+    public void addWeaponToHand(PowerUpCard card) {
+        //TODO: Set image in imageview, on the first space free
+    }
+
     public void grabWeapon() {
 
     }
@@ -97,7 +124,7 @@ public class GameViewGUI implements Initializable, GameView {
 
     @Override
     public void chooseSpawnPoint() {
-        //TODO
+        //TODO: Delete this and use spawn()
     }
     @Override
     public void setBtnDrawPowerUpVisibility(boolean isVisible) {
