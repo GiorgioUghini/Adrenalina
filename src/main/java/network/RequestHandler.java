@@ -44,4 +44,9 @@ public class RequestHandler implements RequestHandlerInterface {
         return remoteMethods.cardEffects(request.getToken(), request.cardName);
     }
 
+    @Override
+    public Response handle(DrawPowerUpRequest request) throws RemoteException {
+        return remoteMethods.drawPowerUp(request.getToken());
+    }
+
 }

@@ -16,4 +16,5 @@ public interface RemoteMethodsInterface extends Remote {
     Response waitingPlayer() throws RemoteException;
     Response chooseMap(String token, int map) throws RemoteException;
     Response cardEffects(String token, String cardName) throws RemoteException;
+    Response drawPowerUp(String token) throws  RemoteException;
 }

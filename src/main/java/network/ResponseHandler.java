@@ -97,5 +97,10 @@ public class ResponseHandler implements ResponseHandlerInterface {
         //NOTHING TO DO
     }
 
+    @Override
+    public void handle(DrawPowerUpResponse response) {
+        // TODO use card in response
+    }
+
 
 }

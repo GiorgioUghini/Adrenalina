@@ -27,4 +27,6 @@ public interface ResponseHandlerInterface {
     void handle(MapChosenUpdate response);
 
     void handle(ChooseMapResponse response);
+
+    void handle(DrawPowerUpResponse response);
 }

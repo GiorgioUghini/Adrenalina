@@ -4,6 +4,8 @@ import errors.InvalidInputException;
 import errors.WrongPasswordException;
 import models.Lobby;
 import models.Match;
+import models.card.Card;
+import models.card.PowerUpCard;
 import models.player.Player;
 import network.responses.*;
 import network.updates.MapChosenUpdate;
@@ -87,4 +89,13 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     public Response cardEffects(String token, String cardName) throws RemoteException {
         return null;
     }
+
+    @Override
+    public Response drawPowerUp(String token) throws RemoteException {
+       Match match = Server.getInstance().getLobby().getMatch(token);
+       PowerUpCard card = (PowerUpCard) match.drawPowerUp();
+       return new DrawPowerUpResponse(card);
+    }
+
+
 }
