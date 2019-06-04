@@ -4,9 +4,10 @@ import controllers.GameController;
 import controllers.ScreenController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 import network.Client;
-import org.w3c.dom.Text;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,10 +18,14 @@ public class GameViewGUI implements Initializable, GameView {
     private GridPane mainGridPane;
     @FXML
     private Text waitMapLabel;
+    @FXML
+    private ListView<String> gameStatusListView;
 
     private GameController gameController;
 
-
+    public GameViewGUI() {
+        this.gameController = new GameController();
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -36,6 +41,11 @@ public class GameViewGUI implements Initializable, GameView {
 
     @Override
     public void showMessage(String message) {
+        gameStatusListView.getItems().add(message);
+    }
 
+    @Override
+    public void chooseSpawnPoint() {
+        //TODO
     }
 }

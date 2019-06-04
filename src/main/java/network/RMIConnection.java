@@ -84,7 +84,7 @@ public class RMIConnection implements Connection {
             token = remoteMethods.handshake();
             LongPollingTask longPollingTask = new LongPollingTask(remoteMethods, queue);
             Timer timer = new Timer();
-            timer.schedule(longPollingTask, 0, 100);
+            timer.schedule(longPollingTask, 0, 50);
             PollingQueueListener pollingQueueListener = new PollingQueueListener(queue);
             (new Thread(pollingQueueListener)).start();
         } catch (RemoteException e) {

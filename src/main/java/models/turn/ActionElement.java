@@ -4,5 +4,6 @@ public enum ActionElement {
     RUN,
     GRAB,
     SHOOT,
-    RELOAD
+    RELOAD,
+    SPAWN
 }

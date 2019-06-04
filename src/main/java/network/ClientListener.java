@@ -31,13 +31,11 @@ public class ClientListener implements Runnable{
         try {
             while (!stop){
                 Request request = (Request) in.readObject();
-                //TODO: FIX java.io.EOFException for socket - still not fixed 31/05/19
-                //It seems to happen without any cause
                 request.setToken(token);
                 Response response = request.handle(requestHandler);
                 socketWrapper.write(response);
             }
-        } catch (SocketException socketEx) {
+        } catch (Exception socketEx) {
             Console.println("Socket " + token + " disconnected!");
             Player player = Server.getInstance().getLobby().getPlayer(token);
             if(player != null){
@@ -54,10 +52,6 @@ public class ClientListener implements Runnable{
                 }
             }
             Server.getInstance().getConnection().removeConnection(token);
-        }
-        catch (Exception ex){
-            Logger logger = Logger.getAnonymousLogger();
-            logger.log(Level.SEVERE, "an exception was thrown", ex);
         }
     }
 

@@ -1,6 +1,7 @@
 package models;
 
 import controllers.CardController;
+import errors.PlayerNotOnMapException;
 import javafx.application.Platform;
 import models.card.AmmoDeck;
 import models.card.Card;
@@ -9,6 +10,7 @@ import models.card.WeaponDeck;
 import models.map.GameMap;
 import models.map.MapGenerator;
 import models.player.Player;
+import models.turn.ActionElement;
 import models.turn.ActionGroup;
 import models.turn.Turn;
 import network.Response;
@@ -167,6 +169,15 @@ public class Match {
         if ((!p.equals(playerList.get(actualPlayerIndex))) || actualTurn == null) {
             return new HashSet<>();
         }
+
+        try {
+            gameMap.checkPlayerInMap(p);
+        } catch (PlayerNotOnMapException e) {
+            HashSet<ActionElement> possibleActions = new HashSet<>();
+            possibleActions.add(ActionElement.SPAWN);
+            return possibleActions;
+        }
+
         if (frenzy != null) {
             return (HashSet) actualTurn.getCompositions().get(frenzy);
         }

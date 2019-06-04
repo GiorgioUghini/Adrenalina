@@ -224,7 +224,7 @@ public class GameMap {
     /** Check if player is in map
      * @throws NullPointerException if player is null
      * @throws PlayerNotOnMapException if player is not on this map */
-    private void checkPlayerInMap(Player player){
+    public void checkPlayerInMap(Player player){
         if(player==null) throw new NullPointerException();
         if(!hasPlayer(player)) throw new PlayerNotOnMapException();
     }

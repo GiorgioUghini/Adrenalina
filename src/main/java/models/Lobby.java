@@ -86,7 +86,7 @@ public class Lobby {
             @Override
             public void run() {
                 activeCountdown = null;
-                if (waitingPlayers.size() > 3) {
+                if (!(waitingPlayers.size() < 3)) {
                     chooseMapAndStartMatch();
                 }
             }
