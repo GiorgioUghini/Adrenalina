@@ -29,6 +29,26 @@ public class ResponseHandler implements ResponseHandlerInterface {
         if(!response.actions.isEmpty()){
             Client.getInstance().getCurrentView().showMessage("You could do some actions. Chooose one from:");
             for(List<ActionElement> list : response.actions){
+
+                switch (list.get(0)) {
+                    case DRAW:
+                        ((GameView) Client.getInstance().getCurrentView()).setBtnDrawPowerUpVisibility(true);
+                        break;
+                    case RUN:
+                        ((GameView) Client.getInstance().getCurrentView()).setBtnRun(true);
+                        break;
+                    case SHOOT:
+                        ((GameView) Client.getInstance().getCurrentView()).setBtnShoot(true);
+                        break;
+                    case RELOAD:
+                        ((GameView) Client.getInstance().getCurrentView()).setBtnReload(true);
+                        break;
+                    case SPAWN:
+                        ((GameView) Client.getInstance().getCurrentView()).setBtnSpawn(true);
+                        break;
+                    //NE MANCANO ALCUNI! TIPO I VARI USEPOWERUP
+                }
+
                 for(ActionElement a : list){
                     Client.getInstance().getCurrentView().showMessage(a.name());
                 }
