@@ -1,17 +1,74 @@
 [
   {
-    "name": "Teletrasporto",
+    "name": "Granata Venom",
     "effects": [],
-    "color": "red"
+    "color": "blue",
+    "image": "AD_powerups_IT_022.png"
+  },
+  {
+    "name": "Granata Venom",
+    "effects": [],
+    "color": "red",
+    "image": "AD_powerups_IT_023.png"
+  },
+  {
+    "name": "Granata Venom",
+    "effects": [],
+    "color": "yellow",
+    "image": "AD_powerups_IT_024.png"
   },
   {
     "name": "Mirino",
     "effects": [],
-    "color": "blue"
+    "color": "blue",
+    "image": "AD_powerups_IT_025.png"
   },
   {
-    "name": "Banana",
+    "name": "Mirino",
     "effects": [],
-    "color": "yellow"
+    "color": "red",
+    "image": "AD_powerups_IT_026.png"
+  },
+  {
+    "name": "Mirino",
+    "effects": [],
+    "color": "yellow",
+    "image": "AD_powerups_IT_027.png"
+  },
+  {
+    "name": "Raggio cinetico",
+    "effects": [],
+    "color": "blue",
+    "image": "AD_powerups_IT_028.png"
+  },
+  {
+    "name": "Raggio cinetico",
+    "effects": [],
+    "color": "red",
+    "image": "AD_powerups_IT_029.png"
+  },
+  {
+    "name": "Raggio cinetico",
+    "effects": [],
+    "color": "yellow",
+    "image": "AD_powerups_IT_0210.png"
+  },
+  {
+    "name": "Teletrasporto",
+    "effects": [],
+    "color": "blue",
+    "image": "AD_powerups_IT_0211.png"
+  },
+  {
+    "name": "Teletrasporto",
+    "effects": [],
+    "color": "red",
+    "image": "AD_powerups_IT_0212.png"
+  },
+  {
+    "name": "Teletrasporto",
+    "effects": [],
+    "color": "yellow",
+    "image": "AD_powerups_IT_0213.png"
   }
 ]
