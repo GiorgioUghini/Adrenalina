@@ -11,4 +11,5 @@ public interface RequestHandlerInterface {
     Response handle(ChooseMapRequest request) throws RemoteException;
     Response handle(CardEffectsRequest request) throws RemoteException;
     Response handle(DrawPowerUpRequest request) throws RemoteException;
+    Response handle(SpawnPlayerRequest request) throws RemoteException;
 }

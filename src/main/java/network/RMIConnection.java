@@ -1,5 +1,7 @@
 package network;
 
+import models.map.RoomColor;
+
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -74,6 +76,17 @@ public class RMIConnection implements Connection {
         try {
             String token = Client.getInstance().getConnection().getToken();
             Response response = remoteMethods.drawPowerUp(token);
+            Client.getInstance().getConnection().receiveResponse(response);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void spawnPlayer(RoomColor color) {
+        try {
+            String token = Client.getInstance().getConnection().getToken();
+            Response response = remoteMethods.spawnPlayer(token, color);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
             e.printStackTrace();

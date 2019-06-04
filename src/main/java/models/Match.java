@@ -131,6 +131,10 @@ public class Match {
         MapGenerator.initCards(ammoDeck, weaponDeck, gameMap);
     }
 
+    public GameMap getMap(){
+        return gameMap;
+    }
+
     /** Method that signal the start of the match. This method SHOULD be called once when the match is ready to start.*/
     public void chooseMapAndStartMatch() {
         actualPlayerIndex = 0;

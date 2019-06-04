@@ -1,5 +1,6 @@
 package network;
 
+import models.map.RoomColor;
 import network.requests.*;
 import network.responses.CardEffectsResponse;
 import utils.Constants;
@@ -72,6 +73,16 @@ public class SocketConnection implements Connection {
     public void drawPowerUpCard() {
         try {
             DrawPowerUpRequest request = new DrawPowerUpRequest();
+            write(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void spawnPlayer(RoomColor color) {
+        try {
+            SpawnPlayerRequest request = new SpawnPlayerRequest(color);
             write(request);
         } catch (IOException e) {
             e.printStackTrace();

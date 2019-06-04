@@ -1,6 +1,7 @@
 package network;
 
 import errors.InvalidInputException;
+import models.map.RoomColor;
 import models.turn.ActionElement;
 import network.responses.*;
 import network.updates.*;
@@ -94,12 +95,17 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(ChooseMapResponse response) {
-        Client.getInstance().getConnection().drawPowerUpCard();
+        Client.getInstance().getConnection().spawnPlayer(RoomColor.RED);
     }
 
     @Override
     public void handle(DrawPowerUpResponse response) {
         // TODO use card in response
+    }
+
+    @Override
+    public void handle(SpawnPlayerResponse response) {
+        //TODO bho non lo so sei spawnato (Vai Giorgio)
     }
 
 

@@ -49,4 +49,9 @@ public class RequestHandler implements RequestHandlerInterface {
         return remoteMethods.drawPowerUp(request.getToken());
     }
 
+    @Override
+    public Response handle(SpawnPlayerRequest request) throws RemoteException {
+        return remoteMethods.spawnPlayer(request.getToken(), request.color);
+    }
+
 }

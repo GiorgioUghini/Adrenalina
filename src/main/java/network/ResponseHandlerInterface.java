@@ -29,4 +29,6 @@ public interface ResponseHandlerInterface {
     void handle(ChooseMapResponse response);
 
     void handle(DrawPowerUpResponse response);
+
+    void handle(SpawnPlayerResponse response);
 }

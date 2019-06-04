@@ -1,5 +1,7 @@
 package network;
 
+import models.map.RoomColor;
+
 import java.util.List;
 
 public interface Connection {
@@ -12,5 +14,6 @@ public interface Connection {
     void chooseMap(int map);
     void cardEffects(String cardName);
     void drawPowerUpCard();
+    void spawnPlayer(RoomColor color);
     void receiveResponse(Response response);
 }

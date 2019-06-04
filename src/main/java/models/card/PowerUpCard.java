@@ -1,5 +1,7 @@
 package models.card;
 
+import models.map.RoomColor;
+
 public class PowerUpCard extends EffectCard {
-    public Color color;
+    public RoomColor color;
 }

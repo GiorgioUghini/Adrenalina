@@ -4,8 +4,10 @@ import errors.InvalidInputException;
 import errors.WrongPasswordException;
 import models.Lobby;
 import models.Match;
-import models.card.Card;
 import models.card.PowerUpCard;
+import models.map.GameMap;
+import models.map.RoomColor;
+import models.map.SpawnPoint;
 import models.player.Player;
 import network.responses.*;
 import network.updates.MapChosenUpdate;
@@ -17,6 +19,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.Timer;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsInterface {
     RemoteMethods() throws RemoteException {
@@ -95,6 +99,20 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
        Match match = Server.getInstance().getLobby().getMatch(token);
        PowerUpCard card = (PowerUpCard) match.drawPowerUp();
        return new DrawPowerUpResponse(card);
+    }
+
+    @Override
+    public Response spawnPlayer(String token, RoomColor color) throws RemoteException {
+        Player player = Server.getInstance().getLobby().getPlayer(token);
+        Match match = Server.getInstance().getLobby().getMatch(player);
+        GameMap map = match.getMap();
+        List<PowerUpCard> powerUpCards = player.getPowerUpList();
+        if(!powerUpCards.stream().map(c -> c.color).collect(Collectors.toList()).contains(color)){
+            return new ErrorResponse(new InvalidInputException("You're cheating! You do not have a power up of that color"));
+        }
+        SpawnPoint spawnPoint = map.getSpawnPoints().stream().filter(p -> p.getColor() == color).findFirst().orElse(null);
+        map.spawnPlayer(player,spawnPoint);
+        return new SpawnPlayerResponse();
     }
 
 

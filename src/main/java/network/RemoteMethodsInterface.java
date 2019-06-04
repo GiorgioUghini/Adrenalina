@@ -1,5 +1,6 @@
 package network;
 
+import models.map.RoomColor;
 import network.responses.RegisterPlayerResponse;
 import network.responses.ValidActionsResponse;
 import network.responses.WaitingPlayerResponse;
@@ -17,4 +18,5 @@ public interface RemoteMethodsInterface extends Remote {
     Response chooseMap(String token, int map) throws RemoteException;
     Response cardEffects(String token, String cardName) throws RemoteException;
     Response drawPowerUp(String token) throws  RemoteException;
+    Response spawnPlayer(String token, RoomColor color) throws  RemoteException;
 }
