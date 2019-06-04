@@ -1,6 +1,7 @@
 [
   {
     "name": "Distruttore",
+    "image": "AD_weapons_IT_0221.png",
     "price": {
       "blue": 2
     },
@@ -79,6 +80,7 @@
   },
   {
     "name": "Mitragliatrice",
+    "image": "AD_weapons_IT_0220.png",
     "exclusive": false,
     "price": {
       "blue": 1,
@@ -200,6 +202,7 @@
   },
   {
     "name": "Torpedine",
+    "image": "AD_weapons_IT_0216.png",
     "price": {
       "blue": 1,
       "red": 1
@@ -296,6 +299,7 @@
   },
   {
     "name": "Fucile al plasma",
+    "image": "AD_weapons_IT_0219.png",
     "price": {
       "blue": 1,
       "yellow": 1
@@ -374,6 +378,7 @@
   },
   {
     "name": "Fucile di precisione",
+    "image": "AD_weapons_IT_0218.png",
     "exclusive": false,
     "price": {
       "blue": 2,
@@ -419,6 +424,7 @@
   },
   {
     "name": "Falce protonica",
+    "image": "AD_weapons_IT_0222.png",
     "exclusive": true,
     "price": {
       "blue": 1
@@ -458,6 +464,7 @@
   },
   {
     "name": "Raggio traente",
+    "image": "AD_weapons_IT_0217.png",
     "exclusive": true,
     "price": {
       "blue": 1
@@ -532,6 +539,7 @@
   },
   {
     "name": "Cannone vortex",
+    "image": "AD_weapons_IT_029.png",
     "exclusive": false,
     "price": {
       "red": 1,
@@ -628,6 +636,7 @@
   },
   {
     "name": "Vulcanizzatore",
+    "image": "AD_weapons_IT_0214.png",
     "exclusive": true,
     "price": {
       "red": 1,
@@ -703,6 +712,7 @@
   },
   {
     "name": "Razzo termico",
+    "image": "AD_weapons_IT_0210.png",
     "exclusive": true,
     "price": {
       "red": 2,
@@ -737,6 +747,7 @@
   },
   {
     "name": "Raggio solare",
+    "image": "AD_weapons_IT_0215.png",
     "exclusive": true,
     "price": {
       "red": 1,
@@ -820,6 +831,7 @@
   },
   {
     "name": "Lanciafiamme",
+    "image": "AD_weapons_IT_0213.png",
     "exclusive": true,
     "price": {
       "red": 1
@@ -936,6 +948,7 @@
   },
   {
     "name": "Lanciagranate",
+    "image": "AD_weapons_IT_0212.png",
     "exclusive": false,
     "price": {
       "red": 1
@@ -1027,6 +1040,7 @@
   },
   {
     "name": "Lanciarazzi",
+    "image": "AD_weapons_IT_0211.png",
     "exclusive": false,
     "price": {
       "red": 2
@@ -1154,6 +1168,7 @@
   {
     "name": "Fucile laser",
     "exclusive": true,
+    "image": "AD_weapons_IT_026.png",
     "price": {
       "yellow": 2,
       "blue": 1
@@ -1216,6 +1231,7 @@
   {
     "name": "Spada fotonica",
     "exclusive": false,
+    "image": "AD_weapons_IT_023.png",
     "price": {
       "yellow": 1,
       "red": 1
@@ -1305,6 +1321,7 @@
   },
   {
     "name": "ZX-2",
+    "image": "AD_weapons_IT_027.png",
     "exclusive": true,
     "price": {
       "yellow": 1,
@@ -1376,6 +1393,7 @@
   },
   {
     "name": "Fucile a pompa",
+    "image": "AD_weapons_IT_025.png",
     "exclusive": true,
     "price": {
       "yellow": 2
@@ -1459,6 +1477,7 @@
       "yellow": 1,
       "blue": 1
     },
+    "image": "AD_weapons_IT_024.png",
     "effects": [
       {
         "name": "Modalità base",
@@ -1614,6 +1633,7 @@
   },
   {
     "name": "Onda d'urto",
+    "image": "AD_weapons_IT_028.png",
     "exclusive": true,
     "price": {
       "yellow": 1
@@ -1757,6 +1777,7 @@
   },
   {
     "name": "Martello ionico",
+    "image": "AD_weapons_IT_022.png",
     "exclusive": true,
     "price": {
       "yellow": 1

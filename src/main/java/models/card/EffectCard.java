@@ -13,6 +13,7 @@ public class EffectCard extends Card  {
     public String name;
     public Boolean exclusive;
     public Ammo price;
+    public String image;
     private boolean loaded;
     public List<Effect> effects;
     private List<Effect> activatedEffects;
