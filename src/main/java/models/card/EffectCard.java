@@ -137,7 +137,7 @@ public class EffectCard extends Card  {
             }
         }
         final boolean tmp = baseEffectActivated;
-        effects.stream().forEach(e -> {
+        effects.forEach(e -> {
             if(tmp){
                 boolean activable = (e.orderId==orderId || e.orderId==orderId+1 || e.orderId == -1);
                 map.put(e, activable);
