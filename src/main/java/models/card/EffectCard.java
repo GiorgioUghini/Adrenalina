@@ -99,8 +99,6 @@ public class EffectCard extends Card  {
         return activeAction;
     }
 
-
-
     /** get all effects and set the 'activable' flag to FALSE */
     private LegitEffects noActivableEffects(){
         LegitEffects out = new LegitEffects();
@@ -131,12 +129,23 @@ public class EffectCard extends Card  {
 
     /** Get all effects with orderId equal to the one given as param or orderId=-1 */
     private LegitEffects getByOrderId(int orderId){
-        LegitEffects out = new LegitEffects();
+        Map<Effect, Boolean> map = new HashMap<>();
+        boolean baseEffectActivated = true;
+        if(orderId == 0 && !exclusive){
+            if(!activatedEffects.contains(effects.get(0))){
+                baseEffectActivated = false;
+            }
+        }
+        final boolean tmp = baseEffectActivated;
         effects.stream().forEach(e -> {
-            boolean activable = (e.orderId==orderId || e.orderId==orderId+1 || e.orderId == -1);
-            out.addEffect(e, activable);
+            if(tmp){
+                boolean activable = (e.orderId==orderId || e.orderId==orderId+1 || e.orderId == -1);
+                map.put(e, activable);
+            }else{
+                map.put(e, (e.orderId<1));
+            }
         });
-        return out;
+        return new LegitEffects(map);
     }
 
     private int getLastOrderId(){
