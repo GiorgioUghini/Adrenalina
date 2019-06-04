@@ -18,37 +18,46 @@ public class CardController {
     private AmmoDeck ammoDeck;
 
     private List<Card> getDeserializedCards(String filename, CardType cardType) {
-        try{
+        try {
             String json = getJsonCardDescriptor(filename);
             GsonBuilder gsonBuilder = new GsonBuilder();
             Gson gson = gsonBuilder.create();
             Type type = getType(cardType);
             return gson.fromJson(json, type);
-        }catch(IOException e){
+        } catch (IOException e) {
             //fatal error, close the server
             Server.getInstance().fatalError(e);
         }
         return null;
     }
 
-    private Type getType(CardType cardType){
-        if(cardType.equals(CardType.AMMO))
-            return new TypeToken<List<AmmoCard>>(){}.getType();
-        else
-            return new TypeToken<List<WeaponCard>>(){}.getType();
+    private Type getType(CardType cardType) {
+        switch (cardType) {
+            case AMMO:
+                return new TypeToken<List<AmmoCard>>() {
+                }.getType();
+            case WEAPON:
+                return new TypeToken<List<WeaponCard>>() {
+                }.getType();
+            case POWERUP:
+                return new TypeToken<List<PowerUpCard>>() {
+                }.getType();
+            default:
+                return null;
+        }
     }
 
-    private void loadWeaponCards(){
+    private void loadWeaponCards() {
         List<Card> cards = getDeserializedCards("weapon_cards.json", CardType.WEAPON);
         weaponDeck = new WeaponDeck(cards);
     }
 
-    private void loadPowerUpCards(){
+    private void loadPowerUpCards() {
         List<Card> cards = getDeserializedCards("powerup_cards.json", CardType.POWERUP);
         powerUpDeck = new PowerUpDeck(cards);
     }
 
-    private void loadAmmoCards(){
+    private void loadAmmoCards() {
         List<Card> cards = getDeserializedCards("ammo_cards.json", CardType.AMMO);
         ammoDeck = new AmmoDeck(cards);
     }
@@ -58,21 +67,21 @@ public class CardController {
         return new String(Files.readAllBytes(file.toPath()));
     }
 
-    public CardController(){
+    public CardController() {
         loadWeaponCards();
         loadPowerUpCards();
         loadAmmoCards();
     }
 
-    public WeaponDeck getWeaponDeck(){
+    public WeaponDeck getWeaponDeck() {
         return weaponDeck;
     }
 
-    public PowerUpDeck getPowerUpDeck(){
+    public PowerUpDeck getPowerUpDeck() {
         return powerUpDeck;
     }
 
-    public AmmoDeck getAmmoDeck(){
+    public AmmoDeck getAmmoDeck() {
         return ammoDeck;
     }
 }

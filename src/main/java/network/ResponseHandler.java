@@ -94,7 +94,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(ChooseMapResponse response) {
-        //NOTHING TO DO
+        Client.getInstance().getConnection().drawPowerUpCard();
     }
 
     @Override

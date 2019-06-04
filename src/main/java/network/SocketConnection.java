@@ -69,6 +69,16 @@ public class SocketConnection implements Connection {
     }
 
     @Override
+    public void drawPowerUpCard() {
+        try {
+            DrawPowerUpRequest request = new DrawPowerUpRequest();
+            write(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void receiveResponse(Response response) {
         response.handle(responseHandler);
     }

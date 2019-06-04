@@ -70,6 +70,17 @@ public class RMIConnection implements Connection {
     }
 
     @Override
+    public void drawPowerUpCard() {
+        try {
+            String token = Client.getInstance().getConnection().getToken();
+            Response response = remoteMethods.drawPowerUp(token);
+            Client.getInstance().getConnection().receiveResponse(response);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void receiveResponse(Response response) {
         response.handle(responseHandler);
     }

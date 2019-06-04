@@ -11,5 +11,6 @@ public interface Connection {
     void validActions();
     void chooseMap(int map);
     void cardEffects(String cardName);
+    void drawPowerUpCard();
     void receiveResponse(Response response);
 }

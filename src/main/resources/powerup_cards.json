@@ -1,6 +1,17 @@
 [
   {
     "name": "Teletrasporto",
-    "effects": []
+    "effects": [],
+    "color": "red"
+  },
+  {
+    "name": "Mirino",
+    "effects": [],
+    "color": "blue"
+  },
+  {
+    "name": "Banana",
+    "effects": [],
+    "color": "yellow"
   }
 ]
