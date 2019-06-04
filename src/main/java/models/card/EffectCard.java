@@ -99,6 +99,8 @@ public class EffectCard extends Card  {
         return activeAction;
     }
 
+
+
     /** get all effects and set the 'activable' flag to FALSE */
     private LegitEffects noActivableEffects(){
         LegitEffects out = new LegitEffects();

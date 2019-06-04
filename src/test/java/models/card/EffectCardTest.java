@@ -15,7 +15,8 @@ public class EffectCardTest {
         ammo.blue = 3;
         ammo.yellow = 3;
         ammo.red = 3;
-        for(int i = 0; i<weaponDeck.size(); i++){
+        int deckSize = weaponDeck.size();
+        for(int i = 0; i<deckSize; i++){
             WeaponCard weaponCard = (WeaponCard) weaponDeck.draw();
             assertEquals(0, weaponCard.getEffects(ammo).getLegitEffects().size());
             Ammo price = weaponCard.getPrice();

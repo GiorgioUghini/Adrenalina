@@ -14,6 +14,7 @@ public class Effect implements Serializable {
 
     public Effect(){
         price = new Ammo();
+        orderId = 0;
     }
 
     @Override

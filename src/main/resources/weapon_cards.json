@@ -93,7 +93,6 @@
             "select": {
               "type": "player",
               "id": "primary_enemy",
-              "max": 2,
               "radix": [
                 {
                   "ref": "me",
@@ -107,6 +106,31 @@
             "damage": {
               "type": "player",
               "target": "primary_enemy",
+              "value": 1
+            }
+          },
+          {
+            "type": "select",
+            "select": {
+              "type": "player",
+              "id": "secondary_enemy",
+              "min": 0,
+              "radix": [
+                {
+                  "ref": "me",
+                  "area": "visible"
+                }
+              ],
+              "rules": {
+                "exclude": ["primary_enemy"]
+              }
+            }
+          },
+          {
+            "type": "damage",
+            "damage": {
+              "type": "player",
+              "target": "secondary_enemy",
               "value": 1
             }
           }
@@ -123,13 +147,13 @@
             "type": "select",
             "select": {
               "type": "player",
-              "id": "secondary_enemy",
+              "id": "tertiary_enemy",
               "rules": {
                 "include": [
-                  "primary_enemy"
+                  "primary_enemy", "secondary_enemy"
                 ],
                 "exclude": [
-                  "tertiary_enemy"
+                  "quaternary_enemy"
                 ]
               }
             }
@@ -138,7 +162,7 @@
             "type": "damage",
             "damage": {
               "type": "player",
-              "target": "secondary_enemy",
+              "target": "tertiary_enemy",
               "value": 1
             }
           }
@@ -155,33 +179,14 @@
             "type": "select",
             "select": {
               "type": "player",
-              "id": "tertiary_enemy",
-              "rules": {
-                "include": [
-                  "primary_enemy"
-                ],
-                "exclude": [
-                  "secondary_enemy"
-                ]
-              }
-            }
-          },
-          {
-            "type": "damage",
-            "damage": {
-              "type": "player",
-              "target": "tertiary_enemy",
-              "value": 1
-            }
-          },
-          {
-            "type": "select",
-            "select": {
-              "type": "player",
+              "min": 0,
               "id": "quaternary_enemy",
               "rules": {
+                "include": [
+                  "primary_enemy", "secondary_enemy"
+                ],
                 "exclude": [
-                  "primary_enemy"
+                  "tertiary_enemy"
                 ]
               }
             }
@@ -191,6 +196,27 @@
             "damage": {
               "type": "player",
               "target": "quaternary_enemy",
+              "value": 1
+            }
+          },
+          {
+            "type": "select",
+            "select": {
+              "type": "player",
+              "id": "enemy_5",
+              "min": 0,
+              "rules": {
+                "exclude": [
+                  "primary_enemy", "secondary_enemy"
+                ]
+              }
+            }
+          },
+          {
+            "type": "damage",
+            "damage": {
+              "type": "player",
+              "target": "enemy_5",
               "value": 1
             }
           }
@@ -249,7 +275,10 @@
                   "ref": "primary_enemy",
                   "area": "visible"
                 }
-              ]
+              ],
+              "rules": {
+                "exclude": ["primary_enemy"]
+              }
             }
           },
           {
@@ -279,7 +308,10 @@
                   "ref": "secondary_enemy",
                   "area": "visible"
                 }
-              ]
+              ],
+              "rules": {
+                "exclude": ["primary_enemy", "secondary_enemy"]
+              }
             }
           },
           {
@@ -496,6 +528,14 @@
               "target": "enemy",
               "dest": "destination"
             }
+          },
+          {
+            "type": "damage",
+            "damage": {
+              "target": "enemy",
+              "type": "player",
+              "value": 1
+            }
           }
         ]
       },
@@ -524,6 +564,14 @@
             "move": {
               "target": "enemy",
               "dest": "me"
+            }
+          },
+          {
+            "type": "damage",
+            "damage": {
+              "target": "enemy",
+              "type": "player",
+              "value": 3
             }
           }
         ]
@@ -596,7 +644,6 @@
             "select": {
               "type": "player",
               "id": "secondary_enemy",
-              "max": 2,
               "radix": [
                 {
                   "ref": "vortex",
@@ -609,6 +656,22 @@
             }
           },
           {
+            "type": "select",
+            "select": {
+              "type": "player",
+              "id": "tertiary_enemy",
+              "radix": [
+                {
+                  "ref": "vortex",
+                  "max": 1
+                }
+              ],
+              "rules": {
+                "exclude": ["enemy", "secondary_enemy"]
+              }
+            }
+          },
+          {
             "type": "move",
             "move": {
               "target": "secondary_enemy",
@@ -616,9 +679,23 @@
             }
           },
           {
+            "type": "move",
+            "move": {
+              "target": "tertiary_enemy",
+              "dest": "vortex"
+            }
+          },
+          {
             "type": "damage",
             "damage": {
               "target": "secondary_enemy",
+              "value": 1
+            }
+          },
+          {
+            "type": "damage",
+            "damage": {
+              "target": "tertiary_enemy",
               "value": 1
             }
           }
@@ -900,7 +977,7 @@
             "type": "select",
             "select": {
               "id": "secondary_square",
-              "type": "square,",
+              "type": "square",
               "radix": [
                 {
                   "ref": "me",
@@ -1136,7 +1213,8 @@
             "damage": {
               "type": "square",
               "target": "original_square",
-              "value": 1
+              "value": 1,
+              "except": ["enemy"]
             }
           },
           {
@@ -1170,7 +1248,8 @@
               "radix": [
                 {
                   "ref": "me",
-                  "area": "cardinal"
+                  "area": "cardinal",
+                  "throughWalls": true
                 }
               ]
             }
@@ -1191,12 +1270,13 @@
           {
             "type": "select",
             "select": {
+              "type": "player",
               "id": "enemy",
-              "max": 2,
               "radix": [
                 {
                   "ref": "me",
-                  "area": "cardinal"
+                  "area": "cardinal",
+                  "throughWalls": true
                 }
               ]
             }
@@ -1206,6 +1286,32 @@
             "damage": {
               "type": "player",
               "target": "enemy",
+              "value": 2
+            }
+          },
+          {
+            "type": "select",
+            "select": {
+              "id": "secondary_enemy",
+              "type": "player",
+              "min": 0,
+              "radix": [
+                {
+                  "ref": "me",
+                  "straight": "enemy",
+                  "throughWalls": true
+                }
+              ],
+              "rules": {
+                "exclude": ["enemy"]
+              }
+            }
+          },
+          {
+            "type": "damage",
+            "damage": {
+              "type": "player",
+              "target": "secondary_enemy",
               "value": 2
             }
           }
@@ -1231,7 +1337,8 @@
               "id": "primary_enemy",
               "radix": [
                 {
-                  "ref": "me"
+                  "ref": "me",
+                  "max": 0
                 }
               ]
             }
@@ -1282,7 +1389,8 @@
               "id": "secondary_enemy",
               "type": "player",
               "radix": [{
-                "ref": "me"
+                "ref": "me",
+                "max": 0
               }],
               "rules": {
                 "exclude": [
@@ -1352,8 +1460,7 @@
             "type": "select",
             "select": {
               "type": "player",
-              "id": "enemy",
-              "max": 3,
+              "id": "enemy_1",
               "radix": [
                 {
                   "ref": "me",
@@ -1363,10 +1470,58 @@
             }
           },
           {
-            "type": "damage",
+            "type": "select",
+            "select": {
+              "type": "player",
+              "id": "enemy_2",
+              "radix": [
+                {
+                  "ref": "me",
+                  "area": "visible"
+                }
+              ],
+              "rules": {
+                "exclude": ["enemy_1"]
+              }
+            }
+          },
+          {
+            "type": "select",
+            "select": {
+              "type": "player",
+              "id": "enemy_3",
+              "radix": [
+                {
+                  "ref": "me",
+                  "area": "visible"
+                }
+              ],
+              "rules": {
+                "exclude": ["enemy_1", "enemy_2"]
+              }
+            }
+          },
+          {
+            "type": "mark",
             "damage": {
               "type": "player",
-              "target": "enemy",
+              "target": "enemy_1",
+              "value": 1
+            }
+          },
+          {
+            "type": "mark",
+            "damage": {
+              "type": "player",
+              "target": "enemy_2",
+              "value": 1
+            }
+          },
+          {
+            "type": "mark",
+            "damage": {
+              "type": "player",
+              "target": "enemy_3",
               "value": 1
             }
           }
@@ -1391,7 +1546,8 @@
               "id": "enemy",
               "radix": [
                 {
-                  "ref": "me"
+                  "ref": "me",
+                  "max": 0
                 }
               ]
             }
@@ -1530,7 +1686,8 @@
               "id": "zero_square",
               "radix": [
                 {
-                  "ref": "me"
+                  "ref": "me",
+                  "max": 0
                 }
               ]
             }
@@ -1549,7 +1706,8 @@
               "id": "first_enemy",
               "radix": [
                 {
-                  "ref": "first_square"
+                  "ref": "first_square",
+                  "max": 0
                 }
               ]
             }
@@ -1575,8 +1733,8 @@
                   "min": 1
                 },
                 {
-                  "ref": "me",
-                  "straight": "zero_square"
+                  "ref": "zero_square",
+                  "straight": "me"
                 }
               ]
             }
@@ -1595,7 +1753,8 @@
               "id": "second_enemy",
               "radix": [
                 {
-                  "ref": "second_square"
+                  "ref": "second_square",
+                  "max": 0
                 }
               ]
             }
@@ -1643,7 +1802,8 @@
               "id": "first_square",
               "radix": [
                 {
-                  "ref": "first_enemy"
+                  "ref": "first_enemy",
+                  "max": 0
                 }
               ]
             }
@@ -1675,7 +1835,8 @@
               "id": "second_square",
               "radix": [
                 {
-                  "ref": "second_enemy"
+                  "ref": "second_enemy",
+                  "max": 0
                 }
               ]
             }
@@ -1732,9 +1893,9 @@
           {
             "type": "select",
             "select": {
-              "id": "enemy",
-              "max": -1,
-              "type": "player",
+              "id": "square_1",
+              "auto": true,
+              "type": "square",
               "radix": [
                 {
                   "ref": "me",
@@ -1745,9 +1906,88 @@
             }
           },
           {
+            "type": "select",
+            "select": {
+              "id": "square_2",
+              "auto": true,
+              "type": "square",
+              "radix": [
+                {
+                  "ref": "me",
+                  "min": 1,
+                  "max": 1
+                }
+              ],
+              "rules": {
+                "exclude": ["square_1"]
+              }
+            }
+          },
+          {
+            "type": "select",
+            "select": {
+              "id": "square_3",
+              "auto": true,
+              "type": "square",
+              "radix": [
+                {
+                  "ref": "me",
+                  "min": 1,
+                  "max": 1
+                }
+              ],
+              "rules": {
+                "exclude": ["square_1", "square_2"]
+              }
+            }
+          },
+          {
+            "type": "select",
+            "select": {
+              "id": "square_4",
+              "auto": true,
+              "type": "square",
+              "radix": [
+                {
+                  "ref": "me",
+                  "min": 1,
+                  "max": 1
+                }
+              ],
+              "rules": {
+                "exclude": ["square_1", "square_2", "square_3"]
+              }
+            }
+          },
+          {
             "type": "damage",
             "damage": {
-              "target": "enemy",
+              "type": "square",
+              "target": "square_1",
+              "value": 1
+            }
+          },
+          {
+            "type": "damage",
+            "damage": {
+              "type": "square",
+              "target": "square_2",
+              "value": 1
+            }
+          },
+          {
+            "type": "damage",
+            "damage": {
+              "type": "square",
+              "target": "square_3",
+              "value": 1
+            }
+          },
+          {
+            "type": "damage",
+            "damage": {
+              "type": "square",
+              "target": "square_4",
               "value": 1
             }
           }
@@ -1822,6 +2062,7 @@
                 {
                   "ref": "me",
                   "area": "cardinal",
+                  "throughWalls": false,
                   "max": 2
                 }
               ]

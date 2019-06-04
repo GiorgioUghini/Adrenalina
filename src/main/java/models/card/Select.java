@@ -9,8 +9,10 @@ public class Select implements Serializable {
     public Integer min;
     public Radix[] radix;
     public Rules rules;
+    public boolean auto;
 
     public Select(){
+        auto = false;
         max = 1;
         min = 1;
     }
