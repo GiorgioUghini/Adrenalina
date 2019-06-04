@@ -1,6 +1,9 @@
 [
   {
     "name": "Distruttore",
+    "price": {
+      "blue": 2
+    },
     "exclusive": false,
     "effects": [
       {
@@ -39,6 +42,10 @@
       },
       {
         "name": "Secondo aggancio",
+        "orderId": 1,
+        "price": {
+          "red": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -73,6 +80,10 @@
   {
     "name": "Mitragliatrice",
     "exclusive": false,
+    "price": {
+      "blue": 1,
+      "red": 1
+    },
     "effects": [
       {
         "name": "Effetto base",
@@ -103,6 +114,10 @@
       },
       {
         "name": "Colpo focalizzato",
+        "orderId": 1,
+        "price": {
+          "yellow": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -112,6 +127,9 @@
               "rules": {
                 "include": [
                   "primary_enemy"
+                ],
+                "exclude": [
+                  "tertiary_enemy"
                 ]
               }
             }
@@ -128,6 +146,10 @@
       },
       {
         "name": "Tripode di supporto",
+        "orderId": 1,
+        "price": {
+          "blue": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -178,6 +200,10 @@
   },
   {
     "name": "Torpedine",
+    "price": {
+      "blue": 1,
+      "red": 1
+    },
     "exclusive": false,
     "effects": [
       {
@@ -208,6 +234,10 @@
       },
       {
         "name": "Reazione a catena",
+        "orderId": 1,
+        "price": {
+          "blue": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -234,6 +264,10 @@
       },
       {
         "name": "Alta tensione",
+        "orderId": 2,
+        "price": {
+          "blue": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -253,7 +287,7 @@
             "damage": {
               "type": "player",
               "target": "tertiary_enemy",
-              "value": 1
+              "value": 2
             }
           }
         ]
@@ -262,6 +296,10 @@
   },
   {
     "name": "Fucile al plasma",
+    "price": {
+      "blue": 1,
+      "yellow": 1
+    },
     "exclusive": false,
     "effects": [
       {
@@ -317,6 +355,10 @@
       },
       {
         "name": "Colpo sovraccarico",
+        "orderId": 1,
+        "price": {
+          "blue": 1
+        },
         "actions": [
           {
             "type": "damage",
@@ -333,6 +375,10 @@
   {
     "name": "Fucile di precisione",
     "exclusive": false,
+    "price": {
+      "blue": 2,
+      "yellow": 1
+    },
     "effects": [
       {
         "name": "Effetto",
@@ -374,6 +420,9 @@
   {
     "name": "Falce protonica",
     "exclusive": true,
+    "price": {
+      "blue": 1
+    },
     "effects": [
       {
         "name": "Modalità base",
@@ -390,6 +439,10 @@
       },
       {
         "name": "Modalità mietitore",
+        "price": {
+          "blue": 1,
+          "red": 1
+        },
         "actions": [
           {
             "type": "damage",
@@ -406,6 +459,9 @@
   {
     "name": "Raggio traente",
     "exclusive": true,
+    "price": {
+      "blue": 1
+    },
     "effects": [
       {
         "name": "Modalità base",
@@ -426,6 +482,10 @@
                 {
                   "ref": "me",
                   "area": "visible"
+                },
+                {
+                  "ref": "enemy",
+                  "max": 2
                 }
               ]
             }
@@ -438,12 +498,45 @@
             }
           }
         ]
+      },
+      {
+        "name": "Modalità punitore",
+        "price": {
+          "red": 1,
+          "yellow": 1
+        },
+        "actions": [
+          {
+            "type": "select",
+            "select": {
+              "type": "player",
+              "id": "enemy",
+              "radix": [
+                {
+                  "ref": "me",
+                  "max": 2
+                }
+              ]
+            }
+          },
+          {
+            "type": "move",
+            "move": {
+              "target": "enemy",
+              "dest": "me"
+            }
+          }
+        ]
       }
     ]
   },
   {
     "name": "Cannone vortex",
     "exclusive": false,
+    "price": {
+      "red": 1,
+      "blue": 1
+    },
     "effects": [
       {
         "name": "Effetto base",
@@ -493,6 +586,10 @@
       },
       {
         "name": "Buco nero",
+        "orderId": 1,
+        "price": {
+          "red": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -505,7 +602,10 @@
                   "ref": "vortex",
                   "max": 1
                 }
-              ]
+              ],
+              "rules": {
+                "exclude": ["enemy"]
+              }
             }
           },
           {
@@ -529,6 +629,10 @@
   {
     "name": "Vulcanizzatore",
     "exclusive": true,
+    "price": {
+      "red": 1,
+      "blue": 1
+    },
     "effects": [
       {
         "name": "Modalità base",
@@ -548,7 +652,9 @@
                   "area": "visible"
                 }
               ]
-            },
+            }
+          },
+          {
             "type": "damage",
             "damage": {
               "type": "room",
@@ -569,6 +675,7 @@
               "radix": [
                 {
                   "ref": "me",
+                  "min": 1,
                   "max": 1
                 }
               ]
@@ -577,7 +684,7 @@
           {
             "type": "damage",
             "damage": {
-              "type": "room",
+              "type": "square",
               "target": "burn_square",
               "value": 1
             }
@@ -585,7 +692,7 @@
           {
             "type": "mark",
             "mark": {
-              "type": "room",
+              "type": "square",
               "target": "burn_square",
               "value": 1
             }
@@ -596,8 +703,14 @@
   },
   {
     "name": "Razzo termico",
+    "exclusive": true,
+    "price": {
+      "red": 2,
+      "yellow": 1
+    },
     "effects": [
       {
+        "name": "Modalità base",
         "actions": [
           {
             "type": "select",
@@ -625,6 +738,10 @@
   {
     "name": "Raggio solare",
     "exclusive": true,
+    "price": {
+      "red": 1,
+      "yellow": 1
+    },
     "effects": [
       {
         "name": "Modalità base",
@@ -662,7 +779,10 @@
         ]
       },
       {
-        "name": "Modalità base",
+        "name": "Modalità nano-traccianti",
+        "price": {
+          "red": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -701,6 +821,9 @@
   {
     "name": "Lanciafiamme",
     "exclusive": true,
+    "price": {
+      "red": 1
+    },
     "effects": [
       {
         "name": "Modalità base",
@@ -723,7 +846,7 @@
             "type": "select",
             "select": {
               "id": "secondary_enemy",
-              "type": "player,",
+              "type": "player",
               "radix": [
                 {
                   "ref": "me",
@@ -755,6 +878,9 @@
       },
       {
         "name": "Modalità barbecue",
+        "price": {
+          "yellow": 2
+        },
         "actions": [
           {
             "type": "select",
@@ -793,7 +919,7 @@
             "damage": {
               "type": "square",
               "target": "primary_square",
-              "value": 1
+              "value": 2
             }
           },
           {
@@ -811,6 +937,9 @@
   {
     "name": "Lanciagranate",
     "exclusive": false,
+    "price": {
+      "red": 1
+    },
     "effects": [
       {
         "name": "Effetto base",
@@ -835,7 +964,13 @@
               "target": "enemy",
               "value": 1
             }
-          },
+          }
+        ]
+      },
+      {
+        "name": "Muovi nemico",
+        "orderId": 1,
+        "actions": [
           {
             "type": "select",
             "select": {
@@ -860,6 +995,10 @@
       },
       {
         "name": "Granata extra",
+        "orderId": 1,
+        "price": {
+          "red": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -889,6 +1028,9 @@
   {
     "name": "Lanciarazzi",
     "exclusive": false,
+    "price": {
+      "red": 2
+    },
     "effects": [
       {
         "name": "Effetto base",
@@ -906,6 +1048,20 @@
                 {
                   "ref": "me",
                   "min": 1
+                }
+              ]
+            }
+          },
+          {
+            "type": "select",
+            "select": {
+              "auto": true,
+              "id": "original_square",
+              "type": "square",
+              "radix": [
+                {
+                  "ref": "enemy",
+                  "max": 0
                 }
               ]
             }
@@ -939,12 +1095,69 @@
             }
           }
         ]
+      },
+      {
+        "name": "Razzi portatili",
+        "price": {
+          "blue": 1
+        },
+        "actions": [
+          {
+            "type": "select",
+            "select": {
+              "type": "square",
+              "id": "my_destination",
+              "radix": [
+                {
+                  "ref": "me",
+                  "max": 2
+                }
+              ]
+            }
+          },
+          {
+            "type": "move",
+            "move": {
+              "target": "me",
+              "dest": "my_destination"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Testata a frammentazione",
+        "orderId": 1,
+        "price": {
+          "yellow": 1
+        },
+        "actions": [
+          {
+            "type": "damage",
+            "damage": {
+              "type": "square",
+              "target": "original_square",
+              "value": 1
+            }
+          },
+          {
+            "type": "damage",
+            "damage": {
+              "type": "player",
+              "target": "enemy",
+              "value": 1
+            }
+          }
+        ]
       }
     ]
   },
   {
     "name": "Fucile laser",
     "exclusive": true,
+    "price": {
+      "yellow": 2,
+      "blue": 1
+    },
     "effects": [
       {
         "name": "Modalità base",
@@ -952,6 +1165,7 @@
           {
             "type": "select",
             "select": {
+              "type": "player",
               "id": "enemy",
               "radix": [
                 {
@@ -1002,6 +1216,10 @@
   {
     "name": "Spada fotonica",
     "exclusive": false,
+    "price": {
+      "yellow": 1,
+      "red": 1
+    },
     "effects": [
       {
         "name": "Effetto base",
@@ -1029,6 +1247,7 @@
       },
       {
         "name": "Passo d'ombra",
+        "orderId": -1,
         "actions": [
           {
             "type": "select",
@@ -1052,11 +1271,15 @@
       },
       {
         "name": "Modalità sminuzzare",
+        "orderId": 1,
+        "price": {
+          "yellow": 1
+        },
         "actions": [
           {
             "type": "select",
-            "id": "secondary_enemy",
             "select": {
+              "id": "secondary_enemy",
               "type": "player",
               "radix": [{
                 "ref": "me"
@@ -1083,6 +1306,10 @@
   {
     "name": "ZX-2",
     "exclusive": true,
+    "price": {
+      "yellow": 1,
+      "red": 1
+    },
     "effects": [
       {
         "name": "Modalità base",
@@ -1149,7 +1376,10 @@
   },
   {
     "name": "Fucile a pompa",
-    "exclusive": false,
+    "exclusive": true,
+    "price": {
+      "yellow": 2
+    },
     "effects": [
       {
         "name": "Modalità base",
@@ -1157,6 +1387,7 @@
           {
             "type": "select",
             "select": {
+              "type": "player",
               "id": "enemy",
               "radix": [
                 {
@@ -1199,6 +1430,7 @@
           {
             "type": "select",
             "select": {
+              "type": "player",
               "id": "enemy",
               "radix": [
                 {
@@ -1223,6 +1455,10 @@
   {
     "name": "Cyberguanto",
     "exclusive": true,
+    "price": {
+      "yellow": 1,
+      "blue": 1
+    },
     "effects": [
       {
         "name": "Modalità base",
@@ -1230,6 +1466,7 @@
           {
             "type": "select",
             "select": {
+              "type": "player",
               "id": "enemy",
               "radix": [
                 {
@@ -1267,6 +1504,9 @@
       },
       {
         "name": "Modalità cento pugni",
+        "price": {
+          "blue": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -1278,6 +1518,19 @@
                   "ref": "me",
                   "min": 1,
                   "max": 1
+                }
+              ]
+            }
+          },
+          {
+            "type": "select",
+            "select": {
+              "auto": true,
+              "type": "square",
+              "id": "zero_square",
+              "radix": [
+                {
+                  "ref": "me"
                 }
               ]
             }
@@ -1313,7 +1566,8 @@
             "type": "select",
             "select": {
               "id": "second_square",
-              "type": "square,",
+              "type": "square",
+              "min": 0,
               "radix": [
                 {
                   "ref": "me",
@@ -1322,7 +1576,7 @@
                 },
                 {
                   "ref": "me",
-                  "straight": "first_square"
+                  "straight": "zero_square"
                 }
               ]
             }
@@ -1361,14 +1615,119 @@
   {
     "name": "Onda d'urto",
     "exclusive": true,
+    "price": {
+      "yellow": 1
+    },
     "effects": [
       {
         "name": "Modalità base",
         "actions": [
+          {
+            "type": "select",
+            "select": {
+              "type": "player",
+              "id": "first_enemy",
+              "radix": [
+                {
+                  "ref": "me",
+                  "min": 1,
+                  "max": 1
+                }
+              ]
+            }
+          },
+          {
+            "type": "select",
+            "select": {
+              "auto": true,
+              "id": "first_square",
+              "radix": [
+                {
+                  "ref": "first_enemy"
+                }
+              ]
+            }
+          },
+          {
+            "type": "select",
+            "select": {
+              "type": "player",
+              "id": "second_enemy",
+              "min": 0,
+              "radix": [
+                {
+                  "ref": "me",
+                  "min": 1,
+                  "max": 1
+                }
+              ],
+              "rules": {
+                "exclude": [
+                  "first_square"
+                ]
+              }
+            }
+          },
+          {
+            "type": "select",
+            "select": {
+              "auto": true,
+              "id": "second_square",
+              "radix": [
+                {
+                  "ref": "second_enemy"
+                }
+              ]
+            }
+          },
+          {
+            "type": "select",
+            "select": {
+              "type": "player",
+              "id": "third_enemy",
+              "min": 0,
+              "radix": [
+                {
+                  "ref": "me",
+                  "min": 1,
+                  "max": 1
+                }
+              ],
+              "rules": {
+                "exclude": [
+                  "first_square", "second_square"
+                ]
+              }
+            }
+          },
+          {
+            "type": "damage",
+            "damage": {
+              "target": "first_enemy",
+              "value": 1
+            }
+          },
+          {
+            "type": "damage",
+            "damage": {
+              "target": "second_enemy",
+              "value": 1
+            }
+          },
+          {
+            "type": "damage",
+            "damage": {
+              "target": "third_enemy",
+              "value": 1
+            }
+          }
         ]
       },
       {
         "name": "Modalità tsunami",
+        "price": {
+          "yellow": 1
+        },
         "actions": [
           {
             "type": "select",
@@ -1399,6 +1758,9 @@
   {
     "name": "Martello ionico",
     "exclusive": true,
+    "price": {
+      "yellow": 1
+    },
     "effects": [
       {
         "name": "Modalità base",
@@ -1427,6 +1789,9 @@
       },
       {
         "name": "Modalità polverizzare",
+        "price": {
+          "red": 1
+        },
         "actions": [
           {
             "type": "select",

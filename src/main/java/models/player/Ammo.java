@@ -5,10 +5,10 @@ import java.io.Serializable;
 public class Ammo implements Serializable {
     public Ammo() {
         red = 0;
-        green = 0;
+        blue = 0;
         yellow = 0;
     }
-    int red;
-    int green;
-    int yellow;
+    public int red;
+    public int blue;
+    public int yellow;
 }
