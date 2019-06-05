@@ -536,4 +536,32 @@ public class GameMapTest {
         assertTrue(result.contains(b));
 
     }
+
+    @Test
+    public void getCardinalDirection(){
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(3,3, RoomColor.YELLOW, new Coordinate(0,0));
+        gameMap.createRoom(3,3, RoomColor.BLUE, new Coordinate(0,0));
+        gameMap.connectRooms(2,9, false, null);
+        Square from = gameMap.getSquareById(0);
+        Square to = gameMap.getSquareById(11);
+        CardinalDirection direction = gameMap.getDirection(from, to);
+        assertEquals(direction, CardinalDirection.RIGHT);
+
+        to = gameMap.getSquareById(12);
+        try{
+            direction = gameMap.getDirection(from, to);
+            assert false;
+        }catch(NoDirectionException e){
+            assert true;
+        }
+
+        to = gameMap.getSquareById(0);
+        try{
+            direction = gameMap.getDirection(from, to);
+            assert false;
+        }catch(NoDirectionException e){
+            assert true;
+        }
+    }
 }

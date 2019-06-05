@@ -420,6 +420,21 @@ public class GameMap {
         return out;
     }
 
+    /** Given 2 aligned squares, calculates the direction that you have to take to go from the square "from"
+     * to the square "to". Works through walls too
+     * @param from
+     * @param to
+     * @throws NoDirectionException if from=to or from and to are not aligned */
+    public CardinalDirection getDirection(Square from, Square to){
+        if(from.equals(to)) throw new NoDirectionException("From and to cannot be the same square");
+        for(CardinalDirection direction : CardinalDirection.values()){
+            if(getAllSquaresByCardinal(from, direction).contains(to)){
+                return direction;
+            }
+        }
+        throw new NoDirectionException();
+    }
+
     /** Check that a square is in the map
      * @param square the square being checked, cannot be null
      * @throws NullPointerException if square is null */
