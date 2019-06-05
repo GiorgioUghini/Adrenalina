@@ -4,10 +4,7 @@ import errors.*;
 import models.player.Player;
 import org.junit.Test;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -447,6 +444,27 @@ public class GameMapTest {
         assertEquals(3, result.size());
         for(int i = 0; i<resultLength; i++){
             assertEquals(i+5, result.get(i).getId());
+        }
+    }
+    @Test
+    public void getAllSquaresByCardinalWithWalls(){
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(4,4,RoomColor.GREEN, null);
+        gameMap.createRoom(4,4,RoomColor.YELLOW, null);
+        gameMap.connectRooms(3,16,false,null);
+        Square startSquare = gameMap.getSquareById(5);
+        List<Square> result = gameMap.getAllSquaresByCardinal(startSquare, CardinalDirection.RIGHT, false);
+        List<Integer> squareIds = Arrays.asList(5,6,7,20,21,22,23);
+        assertEquals(squareIds.size(), result.size());
+        for(int i = 0; i<result.size(); i++){
+            assertEquals((int)squareIds.get(i), result.get(i).getId());
+        }
+
+        result = gameMap.getAllSquaresByCardinal(startSquare, CardinalDirection.RIGHT, true);
+        squareIds = Arrays.asList(5,6,7);
+        assertEquals(squareIds.size(), result.size());
+        for(int i = 0; i<result.size(); i++){
+            assertEquals((int)squareIds.get(i), result.get(i).getId());
         }
     }
     @Test

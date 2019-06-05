@@ -2,6 +2,7 @@ package models.card;
 
 import errors.NoActiveEffectException;
 import errors.WeaponCardException;
+import models.map.GameMap;
 import models.map.RoomColor;
 import models.map.Square;
 import models.player.Ammo;
@@ -45,6 +46,10 @@ public class EffectCard extends Card  {
         if(!hasEnoughAmmo(ammo, price)) throw new WeaponCardException("Not enough ammo to reload");
         pay(price, ammo);
         loaded = true;
+    }
+
+    public Set<Player> getSelectablePlayers(GameMap gameMap, Player me){
+        return new SelectorEngine(gameMap, me, activeAction.select, selectedPlayers, selectedSquares).getSelectablePlayers();
     }
 
     /** If the card is loaded, activate it */

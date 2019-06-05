@@ -364,6 +364,25 @@ public class GameMap {
      * @return A set of all the squares of the map, without any order */
     public Set<Square> getAllSquares() { return squares; }
 
+    /** Returns in a list all squares in a given cardinal direction until the end of the map, stop on walls if throughWalls=false
+     * @param from the starting square, will return as the first element of the list
+     * @param direction the cardinal direction
+     * @throws NullPointerException if one of the params is null
+     * @throws SquareNotInMapException if map does not have that square
+     * @return a List containing the squares in the order in which they are walked in the path */
+    public List<Square> getAllSquaresByCardinal(Square from, CardinalDirection direction, boolean stopOnWalls){
+        checkSquareIsInMap(from);
+        if(direction==null) throw new NullPointerException();
+        List<Square> out = new ArrayList<>();
+        Square tmp = from;
+        while(tmp!=null){
+            out.add(tmp);
+            if(stopOnWalls && !tmp.hasNextWalkable(direction)) break;
+            tmp = tmp.getNextSquare(direction);
+        }
+        return out;
+    }
+
     /** Returns in a list all squares in a given cardinal direction until the end of the map. Does not stop on walls
      * @param from the starting square, will return as the first element of the list
      * @param direction the cardinal direction
@@ -371,15 +390,7 @@ public class GameMap {
      * @throws SquareNotInMapException if map does not have that square
      * @return a List containing the squares in the order in which they are walked in the path */
     public List<Square> getAllSquaresByCardinal(Square from, CardinalDirection direction){
-        checkSquareIsInMap(from);
-        if(direction==null) throw new NullPointerException();
-        List<Square> out = new ArrayList<>();
-        Square tmp = from;
-        while(tmp!=null){
-            out.add(tmp);
-            tmp = tmp.getNextSquare(direction);
-        }
-        return out;
+        return getAllSquaresByCardinal(from, direction, false);
     }
     /** Gets all players in a cardinal direction, passing through walls. Does not return them in order
      * @param from the square from which the research start
