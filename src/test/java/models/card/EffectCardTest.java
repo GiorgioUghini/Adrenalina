@@ -26,7 +26,7 @@ public class EffectCardTest {
         for(int i = 0; i<deckSize; i++){
             WeaponCard weaponCard = (WeaponCard) weaponDeck.draw();
             assertEquals(0, weaponCard.getEffects(ammo).getLegitEffects().size());
-            weaponCard.activate();
+            weaponCard.activate(null, null);
             LegitEffects effects = weaponCard.getEffects(ammo);
             Ammo effectPrice;
             Effect chosenEffect;
@@ -71,6 +71,7 @@ public class EffectCardTest {
 
 
         WeaponCard lanciarazzi = getCard("Lanciarazzi");
+        lanciarazzi.activate(gameMap, player1);
         Ammo ammo = new Ammo(3, 3, 3);
         List<Effect> effects = lanciarazzi.getEffects(ammo).getLegitEffects();
         for(Effect e : effects){
@@ -79,19 +80,19 @@ public class EffectCardTest {
             }
         }
         lanciarazzi.playNextAction(); //select
-        Set<Player> selectablePlayers = lanciarazzi.getSelectablePlayers(gameMap, player1).getPlayers();
+        Set<Player> selectablePlayers = lanciarazzi.getSelectablePlayers().getPlayers();
         assertEquals(1, selectablePlayers.size());
         Player selectablePlayer = (Player) selectablePlayers.toArray()[0];
         assertEquals(player2, selectablePlayer);
         lanciarazzi.selectPlayer(player2);
         lanciarazzi.playNextAction(); //autoselect
-        Set<Square> selectableSquares = lanciarazzi.getSelectableSquares(gameMap, player1).getSquares();
+        Set<Square> selectableSquares = lanciarazzi.getSelectableSquares().getSquares();
         assertEquals(1, selectableSquares.size());
         Square zeroSquare = (Square) selectableSquares.toArray()[0];
         assertEquals(gameMap.getPlayerPosition(player2), zeroSquare);
         lanciarazzi.selectSquare(zeroSquare);
         lanciarazzi.playNextAction(); //damage
-        Map<Player, Integer> playersToDamage = lanciarazzi.getPlayersToDamage(gameMap, player1);
+        Map<Player, Integer> playersToDamage = lanciarazzi.getPlayersToDamage();
         assertTrue(playersToDamage.containsKey(player2));
         assertEquals(1, playersToDamage.size());
         boolean effectFound = false;
@@ -103,23 +104,23 @@ public class EffectCardTest {
         }
         assertTrue(effectFound);
         lanciarazzi.playNextAction(); //damage
-        playersToDamage = lanciarazzi.getPlayersToDamage(gameMap, player1);
+        playersToDamage = lanciarazzi.getPlayersToDamage();
         assertEquals(0, playersToDamage.size());
         lanciarazzi.playNextAction();
-        playersToDamage = lanciarazzi.getPlayersToDamage(gameMap, player1);
+        playersToDamage = lanciarazzi.getPlayersToDamage();
         assertEquals(1, playersToDamage.size());
         assertTrue(playersToDamage.containsKey(player2));
+        lanciarazzi.reset();
     }
 
     private WeaponCard getCard(String cardName){
         weaponDeck = new CardController().getWeaponDeck();
         Ammo ammo = new Ammo(3,3,3);
         int deckSize = weaponDeck.size();
-        WeaponCard weaponCard = null;
+        WeaponCard weaponCard;
         for(int i = 0; i<deckSize; i++){
             weaponCard = (WeaponCard) weaponDeck.draw();
             if(weaponCard.name.equals(cardName)){
-                weaponCard.activate();
                 return weaponCard;
             }
 

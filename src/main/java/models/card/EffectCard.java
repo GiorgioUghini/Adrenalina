@@ -23,6 +23,8 @@ public class EffectCard extends Card  {
     private Map<String, Player> selectedPlayers;
     private Map<String, Square> selectedSquares;
     private Map<String, RoomColor> selectedRooms;
+    private GameMap gameMap;
+    private Player me;
 
     public EffectCard(){
         init();
@@ -38,6 +40,7 @@ public class EffectCard extends Card  {
         selectedRooms = new HashMap<>();
     }
 
+    /** @return the price to reload the ammo, as indicated in the top-left corner of the card */
     public Ammo getPrice(){
         return this.price;
     }
@@ -46,27 +49,49 @@ public class EffectCard extends Card  {
         return loaded;
     }
 
+    /** Removes the necessary ammos from the "ammo" param to reload the card. You can check if you have enough ammo to reload by calling canReload(ammo) method
+     * @param ammo the ammo the player has, the reload cost will be deducted from here. ATTENTION: this function modifies the param
+     * @throws WeaponCardException if the given ammo is not enough to reload. */
     public void load(Ammo ammo){
         if(!hasEnoughAmmo(ammo, price)) throw new WeaponCardException("Not enough ammo to reload");
         pay(price, ammo);
         loaded = true;
     }
 
-    public Selectable getSelectablePlayers(GameMap gameMap, Player me){
+    /** @param ammo your ammo availability
+     *  @return true if the provided ammos are enough to reload. */
+    public boolean canReload(Ammo ammo){
+        return hasEnoughAmmo(ammo, price);
+    }
+
+    /** If the card is loaded, activate it
+     * @param gameMap
+     * @param me the player who is going to use the card
+     * @throws WeaponCardException if the weapon is not loaded */
+    public void activate(GameMap gameMap, Player me){
+        if(!isLoaded()) throw new WeaponCardException("The weapon is not loaded, cannot activate");
+        this.activated = true;
+        this.loaded = false;
+        this.gameMap = gameMap;
+        this.me = me;
+    }
+
+    public Selectable getSelectablePlayers(){
+        checkActiveAction(ActionType.SELECT);
         Selectable out = new Selectable(activeAction.select.optional);
         Set<Player> players = new SelectorEngine(gameMap, me, activeAction.select, selectedPlayers, selectedSquares).getSelectablePlayers();
         out.addPlayers(players);
         return out;
     }
 
-    public Selectable getSelectableSquares(GameMap gameMap, Player me){
+    public Selectable getSelectableSquares(){
         Selectable out = new Selectable(activeAction.select.optional);
         Set<Square> squares = new SelectorEngine(gameMap, me, activeAction.select, selectedPlayers, selectedSquares).getSelectableSquares();
         out.addSquares(squares);
         return out;
     }
 
-    public Selectable getSelectableRooms(GameMap gameMap, Player me){
+    public Selectable getSelectableRooms(){
         Selectable out = new Selectable(activeAction.select.optional);
         Set<RoomColor> rooms = new SelectorEngine(gameMap, me, activeAction.select, selectedPlayers, selectedSquares).getSelectableRooms();
         out.addRooms(rooms);
@@ -98,13 +123,6 @@ public class EffectCard extends Card  {
 
     private void checkIfCanTag(){
         if(!activeAction.type.equals(ActionType.SELECT)) throw new WeaponCardException("You cannot tag if the action is not a select");
-    }
-
-    /** If the card is loaded, activate it */
-    public void activate(){
-        if(!isLoaded()) throw new WeaponCardException("The weapon is not loaded, cannot activate");
-        this.activated = true;
-        this.loaded = false;
     }
 
     /** Get all effects, with a TRUE flag on the ones that can be activated the card must have been activated
@@ -152,18 +170,20 @@ public class EffectCard extends Card  {
         return activeAction;
     }
 
-    public Map<Player, Integer> getPlayersToDamage(GameMap gameMap, Player me){
+    public Map<Player, Integer> getPlayersToDamage(){
         checkActiveAction(ActionType.DAMAGE);
         return new DamageEngine(activeAction.damage, selectedPlayers, selectedSquares, selectedRooms, gameMap, me).getDamages();
     }
 
-    public Map<Player, Integer> getPlayersToMark(GameMap gameMap, Player me){
+    public Map<Player, Integer> getPlayersToMark(){
         checkActiveAction(ActionType.MARK);
         return new DamageEngine(activeAction.damage, selectedPlayers, selectedSquares, selectedRooms, gameMap, me).getDamages();
     }
 
     public void reset(){
         init();
+        this.gameMap = null;
+        this.me = null;
     }
 
     /** get all effects and set the 'activable' flag to FALSE */
