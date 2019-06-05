@@ -76,6 +76,8 @@ public class EffectCard extends Card  {
         this.me = me;
     }
 
+    /** @return an object containing a set of players that can be selected and boolean that indicates if the select is mandatory
+     * @throws WeaponCardException if the current action is not a select */
     public Selectable getSelectablePlayers(){
         checkActiveAction(ActionType.SELECT);
         Selectable out = new Selectable(activeAction.select.optional);
@@ -84,34 +86,49 @@ public class EffectCard extends Card  {
         return out;
     }
 
+    /** @return an object containing a set of squares that can be selected and boolean that indicates if the select is mandatory
+     * @throws WeaponCardException if the current action is not a select */
     public Selectable getSelectableSquares(){
+        checkActiveAction(ActionType.SELECT);
         Selectable out = new Selectable(activeAction.select.optional);
         Set<Square> squares = new SelectorEngine(gameMap, me, activeAction.select, selectedPlayers, selectedSquares).getSelectableSquares();
         out.addSquares(squares);
         return out;
     }
 
+    /** @return an object containing a set of rooms that can be selected and boolean that indicates if the select is mandatory
+     * @throws WeaponCardException if the current action is not a select */
     public Selectable getSelectableRooms(){
+        checkActiveAction(ActionType.SELECT);
         Selectable out = new Selectable(activeAction.select.optional);
         Set<RoomColor> rooms = new SelectorEngine(gameMap, me, activeAction.select, selectedPlayers, selectedSquares).getSelectableRooms();
         out.addRooms(rooms);
         return out;
     }
 
+    /** @param player the player that will be tagged with this select
+     *  @throws WeaponCardException if the current action is not a select
+     *  @throws WeaponCardException if you are trying to tag a player but the tag was for a square or a room */
     public void selectPlayer(Player player){
-        checkIfCanTag();
+        checkActiveAction(ActionType.SELECT);
         checkTargetType(TargetType.PLAYER);
         selectedPlayers.put(activeAction.select.id, player);
     }
 
+    /** @param square the square that will be tagged with this select
+     *  @throws WeaponCardException if the current action is not a select
+     *  @throws WeaponCardException if you are trying to tag a square but the tag was for a player or a room */
     public void selectSquare(Square square){
-        checkIfCanTag();
+        checkActiveAction(ActionType.SELECT);
         checkTargetType(TargetType.SQUARE);
         selectedSquares.put(activeAction.select.id, square);
     }
 
+    /** @param color the room that will be tagged with this select, identified by its color
+     *  @throws WeaponCardException if the current action is not a select
+     *  @throws WeaponCardException if you are trying to tag a room but the tag was for a player or a square */
     public void selectRoom(RoomColor color){
-        checkIfCanTag();
+        checkActiveAction(ActionType.SELECT);
         checkTargetType(TargetType.ROOM);
         selectedRooms.put(activeAction.select.id, color);
     }
@@ -121,11 +138,7 @@ public class EffectCard extends Card  {
         if(!actual.equals(expected)) throw new WeaponCardException("Cannot tag a " + expected + " if the given target type is " + actual);
     }
 
-    private void checkIfCanTag(){
-        if(!activeAction.type.equals(ActionType.SELECT)) throw new WeaponCardException("You cannot tag if the action is not a select");
-    }
-
-    /** Get all effects, with a TRUE flag on the ones that can be activated the card must have been activated
+    /** Get all effects, with a TRUE flag on the ones that can be used. The card must have been activated
      * to get any activable effect
      * @param ammo your ammo
      * @return all the effects with the flag set to false if the card has not been activated */
@@ -147,6 +160,9 @@ public class EffectCard extends Card  {
         }
     }
 
+    /** Activates the chosen effect, paying it with the ammos given as param
+     * @param effect
+     * @param ammo ATTENTION: this param will be modified if the effect activation was successfull. The effect price will be deducted from it */
     public void playEffect(Effect effect, Ammo ammo){
         if(!hasEnoughAmmo(ammo, effect.price))throw new WeaponCardException("Not enough ammo to activate this effect");
         pay(effect.price, ammo);
@@ -154,6 +170,16 @@ public class EffectCard extends Card  {
         activeEffect = effect;
     }
 
+    private int getLastOrderId(){
+        if(activatedEffects.isEmpty()) return -1;
+        return activatedEffects.get(activatedEffects.size()-1).orderId;
+    }
+
+    /** activates the next action inside the effect. Must be called for the first action too. It also cancels the active effect and action if
+     * there are no more actions. In this case, on the last call it returned null
+     * @return the action that has just been activated, or null if there are no more actions
+     * @throws NoActiveEffectException if no effect is active at the moment
+     * */
     public Action playNextAction(){
         if(activeEffect == null) throw new NoActiveEffectException();
         if(activeAction == null) {
@@ -170,23 +196,28 @@ public class EffectCard extends Card  {
         return activeAction;
     }
 
+    /** @return a map with the players as keys and the damages to give to each one as the value
+     * @throws WeaponCardException if the current action is not a damage */
     public Map<Player, Integer> getPlayersToDamage(){
         checkActiveAction(ActionType.DAMAGE);
         return new DamageEngine(activeAction.damage, selectedPlayers, selectedSquares, selectedRooms, gameMap, me).getDamages();
     }
 
+    /** @return a map with the players as keys and the marks to give to each one as the value
+     * @throws WeaponCardException if the current action is not a mark */
     public Map<Player, Integer> getPlayersToMark(){
         checkActiveAction(ActionType.MARK);
         return new DamageEngine(activeAction.damage, selectedPlayers, selectedSquares, selectedRooms, gameMap, me).getDamages();
     }
 
+    /** Must be called at the end of the card usage. resets the card to its initial status (but unloaded) */
     public void reset(){
         init();
         this.gameMap = null;
         this.me = null;
     }
 
-    /** get all effects and set the 'activable' flag to FALSE */
+    /** @return All effects and set the 'activable' flag to FALSE */
     private LegitEffects noActivableEffects(){
         LegitEffects out = new LegitEffects();
         for(Effect e : effects){
@@ -238,11 +269,6 @@ public class EffectCard extends Card  {
     private void checkActiveAction(ActionType expected){
         ActionType actual = activeAction.type;
         if(!actual.equals(expected)) throw new WeaponCardException("Expected active action " + expected + " differs from found active action " + actual);
-    }
-
-    private int getLastOrderId(){
-        if(activatedEffects.isEmpty()) return -1;
-        return activatedEffects.get(activatedEffects.size()-1).orderId;
     }
 
     private void pay(Ammo price, Ammo ammo){
