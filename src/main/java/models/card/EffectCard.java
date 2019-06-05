@@ -49,21 +49,21 @@ public class EffectCard extends Card  {
     }
 
     public Selectable getSelectablePlayers(GameMap gameMap, Player me){
-        Selectable out = new Selectable(activeAction.select.min==0);
+        Selectable out = new Selectable(activeAction.select.optional);
         Set<Player> players = new SelectorEngine(gameMap, me, activeAction.select, selectedPlayers, selectedSquares).getSelectablePlayers();
         out.addPlayers(players);
         return out;
     }
 
     public Selectable getSelectableSquares(GameMap gameMap, Player me){
-        Selectable out = new Selectable(activeAction.select.min==0);
+        Selectable out = new Selectable(activeAction.select.optional);
         Set<Square> squares = new SelectorEngine(gameMap, me, activeAction.select, selectedPlayers, selectedSquares).getSelectableSquares();
         out.addSquares(squares);
         return out;
     }
 
     public Selectable getSelectableRooms(GameMap gameMap, Player me){
-        Selectable out = new Selectable(activeAction.select.min==0);
+        Selectable out = new Selectable(activeAction.select.optional);
         Set<RoomColor> rooms = new SelectorEngine(gameMap, me, activeAction.select, selectedPlayers, selectedSquares).getSelectableRooms();
         out.addRooms(rooms);
         return out;
