@@ -7,5 +7,6 @@ public enum ActionGroup implements Serializable {
     LOW_LIFE,
     VERY_LOW_LIFE,
     FRENZY_TYPE_1,
-    FRENZY_TYPE_2
+    FRENZY_TYPE_2,
+    NONE,
 }
