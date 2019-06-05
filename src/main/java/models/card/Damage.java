@@ -4,14 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Damage implements Serializable {
-    public TargetType type;
-    public String target;
-    public Integer value;
+public class Damage extends Mark implements Serializable {
     //exclude some player from the damage
     public List<String> except;
 
     public Damage(){
+        super();
         except = new ArrayList<>();
     }
 }

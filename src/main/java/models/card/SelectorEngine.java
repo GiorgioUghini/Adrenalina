@@ -29,7 +29,8 @@ public class SelectorEngine {
 
     Set<Player> getSelectablePlayers(){
         Set<Player> out = new HashSet<>();
-        if(select.rules.include!=null){
+        boolean hasRules = select.rules!=null;
+        if(hasRules && select.rules.include!=null){
             for(String tag : select.rules.include){
                 out.addAll(getAllPlayersWithTag(tag));
             }
@@ -40,7 +41,7 @@ public class SelectorEngine {
             }
         }
 
-        if(select.rules.exclude!=null){
+        if(hasRules && select.rules.exclude!=null){
             for(String tag : select.rules.exclude){
                 out.removeAll(getAllPlayersWithTag(tag));
             }
@@ -51,7 +52,8 @@ public class SelectorEngine {
 
     Set<Square> getSelectableSquares(){
         Set<Square> out = new HashSet<>();
-        if(select.rules.include!=null){
+        boolean hasRules = select.rules!=null;
+        if(hasRules && select.rules.include!=null){
             for(String tag : select.rules.include){
                 out.add(getSquareWithTag(tag));
             }
@@ -60,7 +62,7 @@ public class SelectorEngine {
             out.addAll(radixSquares);
         }
 
-        if(select.rules.exclude!=null){
+        if(hasRules && select.rules.exclude!=null){
             for(String tag : select.rules.exclude){
                 out.remove(getSquareWithTag(tag));
             }

@@ -130,8 +130,8 @@ public class EffectCard extends Card  {
     }
 
     public void playEffect(Effect effect, Ammo ammo){
-        if(!hasEnoughAmmo(ammo, price))throw new WeaponCardException("Not enough ammo to activate this effect");
-        pay(price, ammo);
+        if(!hasEnoughAmmo(ammo, effect.price))throw new WeaponCardException("Not enough ammo to activate this effect");
+        pay(effect.price, ammo);
         activatedEffects.add(effect);
         activeEffect = effect;
     }
@@ -150,6 +150,16 @@ public class EffectCard extends Card  {
         }
         activeAction = activeEffect.actions.get(lastActionIndex + 1);
         return activeAction;
+    }
+
+    public Map<Player, Integer> getPlayersToDamage(GameMap gameMap, Player me){
+        checkActiveAction(ActionType.DAMAGE);
+        return new DamageEngine(activeAction.damage, selectedPlayers, selectedSquares, selectedRooms, gameMap, me).getDamages();
+    }
+
+    public Map<Player, Integer> getPlayersToMark(GameMap gameMap, Player me){
+        checkActiveAction(ActionType.MARK);
+        return new DamageEngine(activeAction.damage, selectedPlayers, selectedSquares, selectedRooms, gameMap, me).getDamages();
     }
 
     public void reset(){
@@ -203,6 +213,11 @@ public class EffectCard extends Card  {
             }
         });
         return new LegitEffects(map);
+    }
+
+    private void checkActiveAction(ActionType expected){
+        ActionType actual = activeAction.type;
+        if(!actual.equals(expected)) throw new WeaponCardException("Expected active action " + expected + " differs from found active action " + actual);
     }
 
     private int getLastOrderId(){
