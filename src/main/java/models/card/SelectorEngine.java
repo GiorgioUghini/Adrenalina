@@ -3,10 +3,12 @@ package models.card;
 import errors.WeaponCardException;
 import models.map.CardinalDirection;
 import models.map.GameMap;
+import models.map.RoomColor;
 import models.map.Square;
 import models.player.Player;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,12 +34,8 @@ public class SelectorEngine {
                 out.addAll(getAllPlayersWithTag(tag));
             }
         }else{
-            Set<Square> radix = gameMap.getAllSquares();
-            for(int i=0; i<select.radix.length; i++){
-                radix.retainAll(getAllSquaresInRadix(select.radix[i]));
-                if(radix.isEmpty()) return out;
-            }
-            for(Square s : radix){
+            Set<Square> radixSquares = getAllSquaresInRadix(select.radix);
+            for(Square s : radixSquares){
                 out.addAll(gameMap.getPlayersOnSquare(s));
             }
         }
@@ -47,9 +45,45 @@ public class SelectorEngine {
                 out.removeAll(getAllPlayersWithTag(tag));
             }
         }
-        if(select.min==0) out.add(new Player(null, null));
         removeMe(out);
         return out;
+    }
+
+    Set<Square> getSelectableSquares(){
+        Set<Square> out = new HashSet<>();
+        if(select.rules.include!=null){
+            for(String tag : select.rules.include){
+                out.add(getSquareWithTag(tag));
+            }
+        }else{
+            Set<Square> radixSquares = getAllSquaresInRadix(select.radix);
+            out.addAll(radixSquares);
+        }
+
+        if(select.rules.exclude!=null){
+            for(String tag : select.rules.exclude){
+                out.remove(getSquareWithTag(tag));
+            }
+        }
+        return out;
+    }
+
+    Set<RoomColor> getSelectableRooms(){
+        Set<RoomColor> out = new HashSet<>();
+        Set<Square> squares = getAllSquaresInRadix(select.radix);
+        for(Square square : squares){
+            out.add(square.getColor());
+        }
+        return out;
+    }
+
+    private Set<Square> getAllSquaresInRadix(Radix[] radixArray){
+        Set<Square> radix = gameMap.getAllSquares();
+        for(int i=0; i<radixArray.length; i++){
+            radix.retainAll(getAllSquaresInRadix(select.radix[i]));
+            if(radix.isEmpty()) return radix;
+        }
+        return radix;
     }
 
     private Set<Square> getAllSquaresInRadix(Radix radix){
@@ -68,6 +102,12 @@ public class SelectorEngine {
                         out.retainAll(gameMap.getAllSquaresByCardinal(ref, direction, !radix.throughWalls));
                     }
                     break;
+                case "other_room":
+                    RoomColor myColor = ref.getColor();
+                    out.removeAll(gameMap.getAllSquaresInRoom(myColor));
+                    break;
+                default:
+                    throw new WeaponCardException("Unknown value in radix.area: " + radix.area);
             }
         }
         if(radix.min != 0 || radix.max != -1){

@@ -24,6 +24,10 @@ public class GameMap {
         this.id = UUID.randomUUID();
     }
 
+    public Set<RoomColor> getRooms(){
+        return new HashSet<>(rooms);
+    }
+
     /** creates room using a coordinate system with (0,0) in the top left corner of the room
      * @param width room width
      * @param height room height
