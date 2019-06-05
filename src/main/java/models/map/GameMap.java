@@ -24,6 +24,10 @@ public class GameMap {
         this.id = UUID.randomUUID();
     }
 
+    public Set<RoomColor> getRooms(){
+        return new HashSet<>(rooms);
+    }
+
     /** creates room using a coordinate system with (0,0) in the top left corner of the room
      * @param width room width
      * @param height room height
@@ -364,6 +368,25 @@ public class GameMap {
      * @return A set of all the squares of the map, without any order */
     public Set<Square> getAllSquares() { return squares; }
 
+    /** Returns in a list all squares in a given cardinal direction until the end of the map, stop on walls if throughWalls=false
+     * @param from the starting square, will return as the first element of the list
+     * @param direction the cardinal direction
+     * @throws NullPointerException if one of the params is null
+     * @throws SquareNotInMapException if map does not have that square
+     * @return a List containing the squares in the order in which they are walked in the path */
+    public List<Square> getAllSquaresByCardinal(Square from, CardinalDirection direction, boolean stopOnWalls){
+        checkSquareIsInMap(from);
+        if(direction==null) throw new NullPointerException();
+        List<Square> out = new ArrayList<>();
+        Square tmp = from;
+        while(tmp!=null){
+            out.add(tmp);
+            if(stopOnWalls && !tmp.hasNextWalkable(direction)) break;
+            tmp = tmp.getNextSquare(direction);
+        }
+        return out;
+    }
+
     /** Returns in a list all squares in a given cardinal direction until the end of the map. Does not stop on walls
      * @param from the starting square, will return as the first element of the list
      * @param direction the cardinal direction
@@ -371,15 +394,7 @@ public class GameMap {
      * @throws SquareNotInMapException if map does not have that square
      * @return a List containing the squares in the order in which they are walked in the path */
     public List<Square> getAllSquaresByCardinal(Square from, CardinalDirection direction){
-        checkSquareIsInMap(from);
-        if(direction==null) throw new NullPointerException();
-        List<Square> out = new ArrayList<>();
-        Square tmp = from;
-        while(tmp!=null){
-            out.add(tmp);
-            tmp = tmp.getNextSquare(direction);
-        }
-        return out;
+        return getAllSquaresByCardinal(from, direction, false);
     }
     /** Gets all players in a cardinal direction, passing through walls. Does not return them in order
      * @param from the square from which the research start
@@ -407,6 +422,21 @@ public class GameMap {
             out.addAll(getPlayersOnSquare(square));
         }
         return out;
+    }
+
+    /** Given 2 aligned squares, calculates the direction that you have to take to go from the square "from"
+     * to the square "to". Works through walls too
+     * @param from
+     * @param to
+     * @throws NoDirectionException if from=to or from and to are not aligned */
+    public CardinalDirection getDirection(Square from, Square to){
+        if(from.equals(to)) throw new NoDirectionException("From and to cannot be the same square");
+        for(CardinalDirection direction : CardinalDirection.values()){
+            if(getAllSquaresByCardinal(from, direction).contains(to)){
+                return direction;
+            }
+        }
+        throw new NoDirectionException();
     }
 
     /** Check that a square is in the map

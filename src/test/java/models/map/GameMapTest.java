@@ -4,10 +4,7 @@ import errors.*;
 import models.player.Player;
 import org.junit.Test;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -450,6 +447,27 @@ public class GameMapTest {
         }
     }
     @Test
+    public void getAllSquaresByCardinalWithWalls(){
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(4,4,RoomColor.GREEN, null);
+        gameMap.createRoom(4,4,RoomColor.YELLOW, null);
+        gameMap.connectRooms(3,16,false,null);
+        Square startSquare = gameMap.getSquareById(5);
+        List<Square> result = gameMap.getAllSquaresByCardinal(startSquare, CardinalDirection.RIGHT, false);
+        List<Integer> squareIds = Arrays.asList(5,6,7,20,21,22,23);
+        assertEquals(squareIds.size(), result.size());
+        for(int i = 0; i<result.size(); i++){
+            assertEquals((int)squareIds.get(i), result.get(i).getId());
+        }
+
+        result = gameMap.getAllSquaresByCardinal(startSquare, CardinalDirection.RIGHT, true);
+        squareIds = Arrays.asList(5,6,7);
+        assertEquals(squareIds.size(), result.size());
+        for(int i = 0; i<result.size(); i++){
+            assertEquals((int)squareIds.get(i), result.get(i).getId());
+        }
+    }
+    @Test
     public void getAllSquaresByCardinalWrongParams(){
         GameMap gameMap = new GameMap();
         gameMap.createRoom(1,1, RoomColor.GREEN, null);
@@ -517,5 +535,33 @@ public class GameMapTest {
         assertTrue(result.contains(a));
         assertTrue(result.contains(b));
 
+    }
+
+    @Test
+    public void getCardinalDirection(){
+        GameMap gameMap = new GameMap();
+        gameMap.createRoom(3,3, RoomColor.YELLOW, new Coordinate(0,0));
+        gameMap.createRoom(3,3, RoomColor.BLUE, new Coordinate(0,0));
+        gameMap.connectRooms(2,9, false, null);
+        Square from = gameMap.getSquareById(0);
+        Square to = gameMap.getSquareById(11);
+        CardinalDirection direction = gameMap.getDirection(from, to);
+        assertEquals(direction, CardinalDirection.RIGHT);
+
+        to = gameMap.getSquareById(12);
+        try{
+            direction = gameMap.getDirection(from, to);
+            assert false;
+        }catch(NoDirectionException e){
+            assert true;
+        }
+
+        to = gameMap.getSquareById(0);
+        try{
+            direction = gameMap.getDirection(from, to);
+            assert false;
+        }catch(NoDirectionException e){
+            assert true;
+        }
     }
 }
