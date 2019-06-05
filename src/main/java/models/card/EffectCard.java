@@ -25,13 +25,17 @@ public class EffectCard extends Card  {
     private Map<String, RoomColor> selectedRooms;
 
     public EffectCard(){
+        init();
+        loaded = true;
+    }
+
+    private void init(){
         this.activatedEffects = new ArrayList<>();
         activeEffect = null;
         activeAction = null;
         selectedPlayers = new HashMap<>();
         selectedSquares = new HashMap<>();
         selectedRooms = new HashMap<>();
-        loaded = true;
     }
 
     public Ammo getPrice(){
@@ -67,6 +71,33 @@ public class EffectCard extends Card  {
         Set<RoomColor> rooms = new SelectorEngine(gameMap, me, activeAction.select, selectedPlayers, selectedSquares).getSelectableRooms();
         out.addRooms(rooms);
         return out;
+    }
+
+    public void selectPlayer(Player player){
+        checkIfCanTag();
+        checkTargetType(TargetType.PLAYER);
+        selectedPlayers.put(activeAction.select.id, player);
+    }
+
+    public void selectSquare(Square square){
+        checkIfCanTag();
+        checkTargetType(TargetType.SQUARE);
+        selectedSquares.put(activeAction.select.id, square);
+    }
+
+    public void selectRoom(RoomColor color){
+        checkIfCanTag();
+        checkTargetType(TargetType.ROOM);
+        selectedRooms.put(activeAction.select.id, color);
+    }
+
+    private void checkTargetType(TargetType expected){
+        TargetType actual = activeAction.select.type;
+        if(!actual.equals(expected)) throw new WeaponCardException("Cannot tag a " + expected + " if the given target type is " + actual);
+    }
+
+    private void checkIfCanTag(){
+        if(!activeAction.type.equals(ActionType.SELECT)) throw new WeaponCardException("You cannot tag if the action is not a select");
     }
 
     /** If the card is loaded, activate it */
@@ -119,6 +150,10 @@ public class EffectCard extends Card  {
         }
         activeAction = activeEffect.actions.get(lastActionIndex + 1);
         return activeAction;
+    }
+
+    public void reset(){
+        init();
     }
 
     /** get all effects and set the 'activable' flag to FALSE */
