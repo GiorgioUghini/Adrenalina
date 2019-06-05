@@ -1,7 +1,6 @@
 package network;
 
 import errors.InvalidInputException;
-import models.map.RoomColor;
 import models.turn.ActionElement;
 import network.responses.*;
 import network.updates.*;
@@ -35,16 +34,16 @@ public class ResponseHandler implements ResponseHandlerInterface {
                         ((GameView) Client.getInstance().getCurrentView()).setBtnDrawPowerUpVisibility(true);
                         break;
                     case RUN:
-                        ((GameView) Client.getInstance().getCurrentView()).setBtnRun(true);
+                        ((GameView) Client.getInstance().getCurrentView()).setBtnRunVisibility(true);
                         break;
                     case SHOOT:
-                        ((GameView) Client.getInstance().getCurrentView()).setBtnShoot(true);
+                        ((GameView) Client.getInstance().getCurrentView()).setBtnShootVisibility(true);
                         break;
                     case RELOAD:
-                        ((GameView) Client.getInstance().getCurrentView()).setBtnReload(true);
+                        ((GameView) Client.getInstance().getCurrentView()).setBtnReloadVisibility(true);
                         break;
                     case SPAWN:
-                        ((GameView) Client.getInstance().getCurrentView()).setBtnSpawn(true);
+                        ((GameView) Client.getInstance().getCurrentView()).setBtnSpawnVisibility(true);
                         break;
                     //NE MANCANO ALCUNI! TIPO I VARI USEPOWERUP
                 }
@@ -121,6 +120,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(DrawPowerUpResponse response) {
+        ((GameView) Client.getInstance().getCurrentView()).addPowerUpToHand(response.getCard());
         ((GameView) Client.getInstance().getCurrentView()).showMessage("You drawn " + response.getCard().name + " and its color is " + response.getCard().color.name());
     }
 

@@ -1,19 +1,24 @@
 package views;
 
 import controllers.GameController;
+import controllers.ResourceController;
 import controllers.ScreenController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import models.card.PowerUpCard;
+import models.card.WeaponCard;
 import network.Client;
 
+import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class GameViewGUI implements Initializable, GameView {
@@ -59,6 +64,9 @@ public class GameViewGUI implements Initializable, GameView {
     @FXML
     private ImageView imgYourPowerUpCard4;
 
+    private ArrayList<ImageView> powerUpSpaces = new ArrayList<>();
+    private ArrayList<ImageView> weaponSpaces = new ArrayList<>();
+
     private GameController gameController;
 
     public GameViewGUI() {
@@ -68,8 +76,16 @@ public class GameViewGUI implements Initializable, GameView {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Client.getInstance().setCurrentView(this);
-        mainGridPane.setStyle(String.format("-fx-background-image: url('img/map-%d.png'); -fx-background-repeat: stretch; -fx-background-size: stretch; -fx-background-position: center center;", Client.getInstance().getMapNum() + 1));
+        mainGridPane.setStyle(String.format("-fx-background-image: url('maps/map-%d.png'); -fx-background-repeat: stretch; -fx-background-size: stretch; -fx-background-position: center center;", Client.getInstance().getMapNum() + 1));
         ScreenController.getInstance().getActualStage().setFullScreen(true);
+        powerUpSpaces.add(imgYourPowerUpCard1);
+        powerUpSpaces.add(imgYourPowerUpCard2);
+        powerUpSpaces.add(imgYourPowerUpCard3);
+        powerUpSpaces.add(imgYourPowerUpCard4);
+        weaponSpaces.add(imgYourWeaponCard1);
+        weaponSpaces.add(imgYourWeaponCard2);
+        weaponSpaces.add(imgYourWeaponCard3);
+        weaponSpaces.add(imgYourWeaponCard4);
         Platform.runLater(this::getValidActions);
     }
 
@@ -84,9 +100,18 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     public void addPowerUpToHand(PowerUpCard card) {
-        //TODO: Set image in imageview, on the first space free
+        int i = 0;
+        String prova = "powerupcards/" + card.image;
+        File provaa = ResourceController.getResource(prova);
+        Image img = new Image(ResourceController.getResource("powerupcards/" + card.image).toURI().toString());
+        while (powerUpSpaces.get(i).getImage() != null) {
+            i++;
+        }
+        if (i>3) return;
+        powerUpSpaces.get(i).setImage(img);
     }
-    public void addWeaponToHand(PowerUpCard card) {
+
+    public void addWeaponToHand(WeaponCard card) {
         //TODO: Set image in imageview, on the first space free
     }
 
@@ -119,6 +144,7 @@ public class GameViewGUI implements Initializable, GameView {
 
     @Override
     public void showMessage(String message) {
+        if (message.equals("\n")) return;
         gameStatusListView.getItems().add(message);
     }
 
@@ -131,31 +157,31 @@ public class GameViewGUI implements Initializable, GameView {
         btnDrawPowerUp.setDisable(!isVisible);
     }
     @Override
-    public void setBtnGrabWeapon(boolean isVisible) {
+    public void setBtnGrabWeaponVisibility(boolean isVisible) {
         btnGrabWeapon.setDisable(!isVisible);
     }
     @Override
-    public void setBtnSpawn(boolean isVisible) {
+    public void setBtnSpawnVisibility(boolean isVisible) {
         btnSpawn.setDisable(!isVisible);
     }
     @Override
-    public void setBtnRun(boolean isVisible) {
+    public void setBtnRunVisibility(boolean isVisible) {
         btnRun.setDisable(!isVisible);
     }
     @Override
-    public void setBtnGrabAmmo(boolean isVisible) {
+    public void setBtnGrabAmmoVisibility(boolean isVisible) {
         btnGrabAmmo.setDisable(!isVisible);
     }
     @Override
-    public void setBtnShoot(boolean isVisible) {
+    public void setBtnShootVisibility(boolean isVisible) {
         btnShoot.setDisable(!isVisible);
     }
     @Override
-    public void setBtnReload(boolean isVisible) {
+    public void setBtnReloadVisibility(boolean isVisible) {
         btnReload.setDisable(!isVisible);
     }
     @Override
-    public void setBtnUsePowerUp(boolean isVisible) {
+    public void setBtnUsePowerUpVisibility(boolean isVisible) {
         btnUsePowerUp.setDisable(!isVisible);
     }
 
