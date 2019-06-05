@@ -37,6 +37,9 @@ public class SelectorEngine {
                 radix.retainAll(getAllSquaresInRadix(select.radix[i]));
                 if(radix.isEmpty()) return out;
             }
+            for(Square s : radix){
+                out.addAll(gameMap.getPlayersOnSquare(s));
+            }
         }
 
         if(select.rules.exclude!=null){
