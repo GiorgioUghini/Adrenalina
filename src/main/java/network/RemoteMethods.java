@@ -121,13 +121,23 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
 
     @Override
     public Response playEffect(String token, Effect effect) throws RemoteException {
-        //TODO play effect
-        return null;
+        Player player = Server.getInstance().getLobby().getPlayer(token);
+        player.playWeaponEffect(effect);
+        Action action;
+        while ((action = player.playNextWeaponAction()) != null){
+            if(action.type == ActionType.SELECT && !action.select.auto){
+                Selectable selectable = player.getActiveWeapon().getSelectable();
+                return new SelectResponse(selectable);
+            }
+        }
+        LegitEffects legitEffects = player.getWeaponEffects();
+        return legitEffects.getLegitEffects().isEmpty() ? new FinishCardResponse() : new FinishEffectResponse();
     }
 
     @Override
     public Response finishCard(String token) throws RemoteException {
-        //TODO prendere la carta corrente e terminare la sua attivazione
+        Player player = Server.getInstance().getLobby().getPlayer(token);
+        player.resetWeapon();
         return new FinishCardResponse();
     }
 
