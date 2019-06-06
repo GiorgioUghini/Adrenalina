@@ -2,10 +2,11 @@ package models.map;
 
 import errors.NotWallException;
 import models.card.Card;
+import models.card.Taggable;
 
 import java.util.*;
 
-public abstract class Square{
+public abstract class Square implements Taggable {
     private RoomColor color;
     private boolean isSpawnPoint;
     private Map<CardinalDirection, SquareLink> links;

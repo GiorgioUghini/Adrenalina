@@ -1,10 +1,11 @@
 package models.map;
 
 import com.google.gson.annotations.SerializedName;
+import models.card.Taggable;
 
 import java.io.Serializable;
 
-public enum RoomColor implements Serializable {
+public enum RoomColor implements Serializable, Taggable {
     @SerializedName("blue")
     BLUE,
     @SerializedName("red")

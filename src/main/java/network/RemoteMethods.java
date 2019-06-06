@@ -4,9 +4,7 @@ import errors.InvalidInputException;
 import errors.WrongPasswordException;
 import models.Lobby;
 import models.Match;
-import models.card.LegitEffects;
-import models.card.PowerUpCard;
-import models.card.WeaponCard;
+import models.card.*;
 import models.map.GameMap;
 import models.map.RoomColor;
 import models.map.SpawnPoint;
@@ -119,6 +117,18 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         SpawnPoint spawnPoint = map.getSpawnPoints().stream().filter(p -> p.getColor() == color).findFirst().orElse(null);
         map.spawnPlayer(player,spawnPoint);
         return new SpawnPlayerResponse();
+    }
+
+    @Override
+    public Response playEffect(String token, Effect effect) throws RemoteException {
+        //TODO play effect
+        return null;
+    }
+
+    @Override
+    public Response tagElement(String token, Taggable taggable) throws RemoteException {
+        //TODO Taggable va castato, bisogna capire il suo (ottenerlo dalla select corrent? Aggiungere getType a taggable?)
+        return null;
     }
 
 

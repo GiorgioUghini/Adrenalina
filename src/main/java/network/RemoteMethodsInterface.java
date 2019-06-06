@@ -1,5 +1,7 @@
 package network;
 
+import models.card.Effect;
+import models.card.Taggable;
 import models.map.RoomColor;
 import network.responses.RegisterPlayerResponse;
 import network.responses.ValidActionsResponse;
@@ -19,4 +21,6 @@ public interface RemoteMethodsInterface extends Remote {
     Response cardEffects(String token, String cardName) throws RemoteException;
     Response drawPowerUp(String token) throws  RemoteException;
     Response spawnPlayer(String token, RoomColor color) throws  RemoteException;
+    Response playEffect(String token, Effect effect) throws  RemoteException;
+    Response tagElement(String token, Taggable taggable) throws  RemoteException;
 }

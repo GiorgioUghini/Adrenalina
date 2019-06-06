@@ -10,7 +10,7 @@ import network.Server;
 import java.io.Serializable;
 import java.util.*;
 
-public class Player implements Subscriber, Serializable {
+public class Player implements Subscriber, Serializable, Taggable {
 
     private String name;
     private String password;

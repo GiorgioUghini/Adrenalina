@@ -135,5 +135,10 @@ public class ResponseHandler implements ResponseHandlerInterface {
         //TODO bho non lo so sei spawnato (Vai Giorgio)
     }
 
+    @Override
+    public void handle(SelectResponse response) {
+        // response.selectable per ottenere type e oggetti da selezionare
+    }
+
 
 }

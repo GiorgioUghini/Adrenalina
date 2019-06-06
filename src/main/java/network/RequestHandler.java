@@ -54,4 +54,14 @@ public class RequestHandler implements RequestHandlerInterface {
         return remoteMethods.spawnPlayer(request.getToken(), request.color);
     }
 
+    @Override
+    public Response handle(PlayEffectRequest request) throws RemoteException {
+        return remoteMethods.playEffect(request.getToken(), request.effect);
+    }
+
+    @Override
+    public Response handle(TagElementRequest request) throws RemoteException {
+        return remoteMethods.tagElement(request.getToken(), request.taggable);
+    }
+
 }

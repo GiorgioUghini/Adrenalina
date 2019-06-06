@@ -31,4 +31,6 @@ public interface ResponseHandlerInterface {
     void handle(DrawPowerUpResponse response);
 
     void handle(SpawnPlayerResponse response);
+
+    void handle(SelectResponse response);
 }
