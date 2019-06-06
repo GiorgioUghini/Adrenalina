@@ -29,15 +29,19 @@ class DamageEngine {
 
     Map<Player, Integer> getDamages(){
         Map<Player, Integer> out = new HashMap<>();
-
+        Player player = null;
         switch (markOrDamage.type){
             case PLAYER:
+                player = selectedPlayers.get(markOrDamage.target);
+                if(player==null) return out;
                 out.put(selectedPlayers.get(markOrDamage.target), markOrDamage.value);
                 break;
             case SQUARE:
+                Square target = getSquareByTag(markOrDamage.target);
+                if(target==null) return out;
                 Set<Player> playersOnSquare = gameMap.getPlayersOnSquare(selectedSquares.get(markOrDamage.target));
-                for(Player player : playersOnSquare){
-                    out.put(player, markOrDamage.value);
+                for(Player p : playersOnSquare){
+                    out.put(p, markOrDamage.value);
                 }
                 out.remove(me);
                 break;
@@ -63,5 +67,14 @@ class DamageEngine {
         }
 
         return out;
+    }
+
+    private Square getSquareByTag(String tag){
+        if(tag.equals("me")){
+            return gameMap.getPlayerPosition(me);
+        }else if(selectedSquares.containsKey(tag)){
+            return selectedSquares.get(tag);
+        }
+        return null;
     }
 }
