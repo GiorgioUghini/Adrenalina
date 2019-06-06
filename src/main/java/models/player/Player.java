@@ -263,6 +263,12 @@ public class Player implements Subscriber, Serializable, Taggable {
                     gameMap.movePlayer(entry.getKey(), entry.getValue());
                 }
                 break;
+            case SELECT:
+                if(!action.select.auto)break;
+                Selectable selectable = activeWeapon.getSelectable();
+                Set<Taggable> selectableSet = selectable.get();
+                if(selectableSet.isEmpty()) break;
+                activeWeapon.select((Taggable) selectableSet.toArray()[0]);
         }
         return action;
     }
