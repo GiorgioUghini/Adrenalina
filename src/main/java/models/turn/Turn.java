@@ -8,7 +8,7 @@ public class Turn {
 
     public Turn() {
         finished = false;
-        LinkedList actionGroupRunNormal = new LinkedList<>(Arrays.asList(ActionElement.RUN, ActionElement.RUN));
+        LinkedList actionGroupRunNormal = new LinkedList<>(Arrays.asList(ActionElement.RUN, ActionElement.RUN, ActionElement.RUN));
         LinkedList actionGroupGrabNormal = new LinkedList<>(Arrays.asList(ActionElement.RUN, ActionElement.GRAB));
         LinkedList actionGroupShootNormal = new LinkedList<>(Collections.singletonList(ActionElement.SHOOT));
 
@@ -30,7 +30,7 @@ public class Turn {
         compositions.put(ActionGroup.FRENZY_TYPE_2, new HashSet<>(Arrays.asList(actionGroupGrabFrenzyType2, actionGroupShootFrenzyType2)));
     }
 
-    public Map getCompositions()
+    public Map<ActionGroup, HashSet> getCompositions()
     {
         return compositions;
     }
