@@ -4,7 +4,9 @@ import errors.InvalidInputException;
 import errors.WrongPasswordException;
 import models.Lobby;
 import models.Match;
+import models.card.LegitEffects;
 import models.card.PowerUpCard;
+import models.card.WeaponCard;
 import models.map.GameMap;
 import models.map.RoomColor;
 import models.map.SpawnPoint;
@@ -91,7 +93,11 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
 
     @Override
     public Response cardEffects(String token, String cardName) throws RemoteException {
-        return null;
+        Player player = Server.getInstance().getLobby().getPlayer(token);
+        WeaponCard card = player.getWeaponList().stream().filter(w -> w.name.equals(cardName)).findFirst().orElse(null);
+        player.playWeapon(card);
+        LegitEffects legitEffects = player.getWeaponEffects();
+        return new CardEffectsResponse(legitEffects);
     }
 
     @Override

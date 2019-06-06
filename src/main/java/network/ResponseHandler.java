@@ -1,6 +1,8 @@
 package network;
 
 import errors.InvalidInputException;
+import models.card.Effect;
+import models.card.LegitEffects;
 import models.turn.ActionElement;
 import network.responses.*;
 import network.updates.*;
@@ -94,7 +96,11 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(CardEffectsResponse response) {
-        //TODO arrivata la risposta su client... vai avanti a giocare la carta
+        // TODO: Questo è solo un placeholder!!!! Bisogna far scegliere all'utente tra gli effect.name
+        LegitEffects legitEffects = response.legitEffects;
+        for(Effect effect : legitEffects.getLegitEffects()){
+            Client.getInstance().getCurrentView().showMessage(effect.name);
+        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package network.responses;
 
+import models.card.LegitEffects;
 import network.Response;
 import network.ResponseHandlerInterface;
 
@@ -7,10 +8,10 @@ import java.util.Map;
 
 public class CardEffectsResponse implements Response {
 
-    public Map<String, Boolean> effects;
+    public LegitEffects legitEffects;
 
-    public CardEffectsResponse(Map<String, Boolean> effects){
-        this.effects = effects;
+    public CardEffectsResponse(LegitEffects legitEffects){
+        this.legitEffects = legitEffects;
     }
 
     @Override
