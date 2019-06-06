@@ -64,4 +64,9 @@ public class RequestHandler implements RequestHandlerInterface {
         return remoteMethods.tagElement(request.getToken(), request.taggable);
     }
 
+    @Override
+    public Response handle(FinishCardRequest request) throws RemoteException {
+        return remoteMethods.finishCard(request.getToken());
+    }
+
 }

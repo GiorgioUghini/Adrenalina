@@ -33,4 +33,6 @@ public interface ResponseHandlerInterface {
     void handle(SpawnPlayerResponse response);
 
     void handle(SelectResponse response);
+
+    void handle(FinishCardResponse response);
 }

@@ -126,6 +126,12 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
+    public Response finishCard(String token) throws RemoteException {
+        //TODO prendere la carta corrente e terminare la sua attivazione
+        return new FinishCardResponse();
+    }
+
+    @Override
     public Response tagElement(String token, Taggable taggable) throws RemoteException {
         //TODO Taggable va castato, bisogna capire il suo (ottenerlo dalla select corrent? Aggiungere getType a taggable?)
         return null;

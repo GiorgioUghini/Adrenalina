@@ -140,5 +140,10 @@ public class ResponseHandler implements ResponseHandlerInterface {
         // response.selectable per ottenere type e oggetti da selezionare
     }
 
+    @Override
+    public void handle(FinishCardResponse response) {
+        // TODO andare avanti col turno sul client, è finito uno SHOOT
+    }
+
 
 }
