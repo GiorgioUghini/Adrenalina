@@ -26,7 +26,23 @@ class SelectorEngine {
         this.selectedSquares = selectedSquares;
     }
 
-    Set<Player> getSelectablePlayers(){
+    Set<Taggable> getSelectable(){
+        Set<Taggable> out = new HashSet<>();
+        switch (select.type){
+            case PLAYER:
+                out.addAll(getSelectablePlayers());
+                break;
+            case SQUARE:
+                out.addAll(getSelectableSquares());
+                break;
+            case ROOM:
+                out.addAll(getSelectableRooms());
+                break;
+        }
+        return out;
+    }
+
+    private Set<Player> getSelectablePlayers(){
         Set<Player> out = new HashSet<>();
         boolean hasRules = select.rules!=null;
         if(hasRules && select.rules.include!=null){
@@ -49,7 +65,7 @@ class SelectorEngine {
         return out;
     }
 
-    Set<Square> getSelectableSquares(){
+    private Set<Square> getSelectableSquares(){
         Set<Square> out = new HashSet<>();
         boolean hasRules = select.rules!=null;
         if(hasRules && select.rules.include!=null){
@@ -69,7 +85,7 @@ class SelectorEngine {
         return out;
     }
 
-    Set<RoomColor> getSelectableRooms(){
+    private Set<RoomColor> getSelectableRooms(){
         Set<RoomColor> out = new HashSet<>();
         Set<Square> squares = getAllSquaresInRadix(select.radix);
         for(Square square : squares){

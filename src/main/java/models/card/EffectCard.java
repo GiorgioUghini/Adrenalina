@@ -78,66 +78,34 @@ public class EffectCard extends Card  {
         this.me = me;
     }
 
-    /** @return an object containing a set of players that can be selected and boolean that indicates if the select is mandatory
+    /** @return an object containing a set of taggable that can be selected, boolean that indicates if the select is mandatory
+     * and a TargetType that specifies the type of the select
      * @throws WeaponCardException if the current action is not a select */
-    public Selectable getSelectablePlayers(){
+    public Selectable getSelectable(){
         checkActiveAction(ActionType.SELECT);
         Selectable out = new Selectable(activeAction.select.optional);
-        Set<Player> players = new SelectorEngine(gameMap, me, activeAction.select, selectedPlayers, selectedSquares).getSelectablePlayers();
-        out.addPlayers(players);
+        Set<Taggable> taggables = new SelectorEngine(gameMap, me, activeAction.select, selectedPlayers, selectedSquares).getSelectable();
+        out.add(taggables, activeAction.select.type);
         return out;
     }
 
-    /** @return an object containing a set of squares that can be selected and boolean that indicates if the select is mandatory
-     * @throws WeaponCardException if the current action is not a select */
-    public Selectable getSelectableSquares(){
-        checkActiveAction(ActionType.SELECT);
-        Selectable out = new Selectable(activeAction.select.optional);
-        Set<Square> squares = new SelectorEngine(gameMap, me, activeAction.select, selectedPlayers, selectedSquares).getSelectableSquares();
-        out.addSquares(squares);
-        return out;
-    }
-
-    /** @return an object containing a set of rooms that can be selected and boolean that indicates if the select is mandatory
-     * @throws WeaponCardException if the current action is not a select */
-    public Selectable getSelectableRooms(){
-        checkActiveAction(ActionType.SELECT);
-        Selectable out = new Selectable(activeAction.select.optional);
-        Set<RoomColor> rooms = new SelectorEngine(gameMap, me, activeAction.select, selectedPlayers, selectedSquares).getSelectableRooms();
-        out.addRooms(rooms);
-        return out;
-    }
-
-    /** @param player the player that will be tagged with this select
+    /** @param taggable the taggable element that will be tagged with this select
      *  @throws WeaponCardException if the current action is not a select
-     *  @throws WeaponCardException if you are trying to tag a player but the tag was for a square or a room */
-    public void selectPlayer(Player player){
+     *  @throws WeaponCardException if you are trying to tag a player but the tag was for a square or a room
+     *  @throws ClassCastException if the select type differs from the class of the taggable object */
+    public void select(Taggable taggable){
         checkActiveAction(ActionType.SELECT);
-        checkTargetType(TargetType.PLAYER);
-        selectedPlayers.put(activeAction.select.id, player);
-    }
-
-    /** @param square the square that will be tagged with this select
-     *  @throws WeaponCardException if the current action is not a select
-     *  @throws WeaponCardException if you are trying to tag a square but the tag was for a player or a room */
-    public void selectSquare(Square square){
-        checkActiveAction(ActionType.SELECT);
-        checkTargetType(TargetType.SQUARE);
-        selectedSquares.put(activeAction.select.id, square);
-    }
-
-    /** @param color the room that will be tagged with this select, identified by its color
-     *  @throws WeaponCardException if the current action is not a select
-     *  @throws WeaponCardException if you are trying to tag a room but the tag was for a player or a square */
-    public void selectRoom(RoomColor color){
-        checkActiveAction(ActionType.SELECT);
-        checkTargetType(TargetType.ROOM);
-        selectedRooms.put(activeAction.select.id, color);
-    }
-
-    private void checkTargetType(TargetType expected){
-        TargetType actual = activeAction.select.type;
-        if(!actual.equals(expected)) throw new WeaponCardException("Cannot tag a " + expected + " if the given target type is " + actual);
+        switch (activeAction.select.type){
+            case PLAYER:
+                selectedPlayers.put(activeAction.select.id, (Player) taggable);
+                break;
+            case SQUARE:
+                selectedSquares.put(activeAction.select.id, (Square) taggable);
+                break;
+            case ROOM:
+                selectedRooms.put(activeAction.select.id, (RoomColor) taggable);
+                break;
+        }
     }
 
     /** Get all effects, with a TRUE flag on the ones that can be used. The card must have been activated
@@ -163,7 +131,7 @@ public class EffectCard extends Card  {
     }
 
     /** Activates the chosen effect, paying it with the ammos given as param
-     * @param effect
+     * @param effect the effect to play
      * @param ammo ATTENTION: this param will be modified if the effect activation was successfull. The effect price will be deducted from it
      * @throws WeaponCardException if you do not have enough ammo to activate the effect */
     public void playEffect(Effect effect, Ammo ammo){
@@ -257,10 +225,8 @@ public class EffectCard extends Card  {
     private LegitEffects getByOrderId(int orderId){
         Map<Effect, Boolean> map = new HashMap<>();
         boolean baseEffectActivated = true;
-        if(orderId == 0 && !exclusive){
-            if(!activatedEffects.contains(effects.get(0))){
-                baseEffectActivated = false;
-            }
+        if(orderId == 0 && !exclusive && !activatedEffects.contains(effects.get(0))){
+            baseEffectActivated = false;
         }
         final boolean tmp = baseEffectActivated;
         effects.forEach(e -> {

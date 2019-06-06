@@ -80,17 +80,17 @@ public class EffectCardTest {
             }
         }
         lanciarazzi.playNextAction(); //select
-        Set<Player> selectablePlayers = lanciarazzi.getSelectablePlayers().getPlayers();
+        Set<Taggable> selectablePlayers = lanciarazzi.getSelectable().get();
         assertEquals(1, selectablePlayers.size());
         Player selectablePlayer = (Player) selectablePlayers.toArray()[0];
         assertEquals(player2, selectablePlayer);
-        lanciarazzi.selectPlayer(player2);
+        lanciarazzi.select(player2);
         lanciarazzi.playNextAction(); //autoselect
-        Set<Square> selectableSquares = lanciarazzi.getSelectableSquares().getSquares();
+        Set<Taggable> selectableSquares = lanciarazzi.getSelectable().get();
         assertEquals(1, selectableSquares.size());
         Square zeroSquare = (Square) selectableSquares.toArray()[0];
         assertEquals(gameMap.getPlayerPosition(player2), zeroSquare);
-        lanciarazzi.selectSquare(zeroSquare);
+        lanciarazzi.select(zeroSquare);
         lanciarazzi.playNextAction(); //damage
         Map<Player, Integer> playersToDamage = lanciarazzi.getPlayersToDamage();
         assertTrue(playersToDamage.containsKey(player2));
