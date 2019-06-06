@@ -1,5 +1,7 @@
 package network;
 
+import models.card.Effect;
+import models.card.Taggable;
 import models.map.RoomColor;
 
 import java.rmi.NotBoundException;
@@ -87,6 +89,39 @@ public class RMIConnection implements Connection {
         try {
             String token = Client.getInstance().getConnection().getToken();
             Response response = remoteMethods.spawnPlayer(token, color);
+            Client.getInstance().getConnection().receiveResponse(response);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void tagElement(Taggable taggable) {
+        try {
+            String token = Client.getInstance().getConnection().getToken();
+            Response response = remoteMethods.tagElement(token, taggable);
+            Client.getInstance().getConnection().receiveResponse(response);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void playEffect(Effect effect) {
+        try {
+            String token = Client.getInstance().getConnection().getToken();
+            Response response = remoteMethods.playEffect(token, effect);
+            Client.getInstance().getConnection().receiveResponse(response);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void finishCard() {
+        try {
+            String token = Client.getInstance().getConnection().getToken();
+            Response response = remoteMethods.finishCard(token);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
             e.printStackTrace();

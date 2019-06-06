@@ -1,8 +1,11 @@
 package network;
 
+import models.card.Effect;
+import models.card.Taggable;
 import models.map.RoomColor;
 import network.requests.*;
 import network.responses.CardEffectsResponse;
+import network.responses.FinishCardResponse;
 import utils.Constants;
 
 import java.io.IOException;
@@ -83,6 +86,36 @@ public class SocketConnection implements Connection {
     public void spawnPlayer(RoomColor color) {
         try {
             SpawnPlayerRequest request = new SpawnPlayerRequest(color);
+            write(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void tagElement(Taggable taggable) {
+        try {
+            TagElementRequest request = new TagElementRequest(taggable);
+            write(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void playEffect(Effect effect) {
+        try {
+            PlayEffectRequest request = new PlayEffectRequest(effect);
+            write(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void finishCard() {
+        try {
+            FinishCardResponse request = new FinishCardResponse();
             write(request);
         } catch (IOException e) {
             e.printStackTrace();
