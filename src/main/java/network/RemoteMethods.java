@@ -90,15 +90,6 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public Response cardEffects(String token, String cardName) throws RemoteException {
-        Player player = Server.getInstance().getLobby().getPlayer(token);
-        WeaponCard card = player.getWeaponList().stream().filter(w -> w.name.equals(cardName)).findFirst().orElse(null);
-        player.playWeapon(card);
-        LegitEffects legitEffects = player.getWeaponEffects();
-        return new CardEffectsResponse(legitEffects);
-    }
-
-    @Override
     public Response drawPowerUp(String token) throws RemoteException {
        Match match = Server.getInstance().getLobby().getMatch(token);
        PowerUpCard card = (PowerUpCard) match.drawPowerUp();
@@ -117,6 +108,15 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         SpawnPoint spawnPoint = map.getSpawnPoints().stream().filter(p -> p.getColor() == color).findFirst().orElse(null);
         map.spawnPlayer(player,spawnPoint);
         return new SpawnPlayerResponse();
+    }
+
+    @Override
+    public Response cardEffects(String token, String cardName) throws RemoteException {
+        Player player = Server.getInstance().getLobby().getPlayer(token);
+        WeaponCard card = player.getWeaponList().stream().filter(w -> w.name.equals(cardName)).findFirst().orElse(null);
+        player.playWeapon(card);
+        LegitEffects legitEffects = player.getWeaponEffects();
+        return new CardEffectsResponse(legitEffects);
     }
 
     @Override
@@ -143,8 +143,18 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
 
     @Override
     public Response tagElement(String token, Taggable taggable) throws RemoteException {
-        //TODO Taggable va castato, bisogna capire il suo (ottenerlo dalla select corrent? Aggiungere getType a taggable?)
-        return null;
+        Player player = Server.getInstance().getLobby().getPlayer(token);
+        WeaponCard card = player.getActiveWeapon();
+        card.select(taggable);
+        Action action;
+        while ((action = player.playNextWeaponAction()) != null){
+            if(action.type == ActionType.SELECT && !action.select.auto){
+                Selectable selectable = player.getActiveWeapon().getSelectable();
+                return new SelectResponse(selectable);
+            }
+        }
+        LegitEffects legitEffects = player.getWeaponEffects();
+        return legitEffects.getLegitEffects().isEmpty() ? new FinishCardResponse() : new FinishEffectResponse();
     }
 
 
