@@ -222,7 +222,11 @@ public class Player implements Subscriber, Serializable, Taggable {
      * @return an object containing all the card effects with a TRUE flag on those that can be played.
      * all the flags are set to FALSE if the weapon has not been activated */
     public LegitEffects getWeaponEffects(){
-        return activeWeapon.getEffects(ammo);
+        LegitEffects out = activeWeapon.getEffects(ammo);
+        if(out.getLegitEffects().isEmpty()){
+            this.resetWeapon();
+        }
+        return out;
     }
 
     /** Activates the effect and gives access to playNextWeaponAction() method
@@ -273,9 +277,15 @@ public class Player implements Subscriber, Serializable, Taggable {
         return action;
     }
 
-    /** MUST be called when you finish using the weapon */
+    /**
+     * Effect to activate when the user finishes to use a weapon.
+     * if the last getWeaponEffects() returned no valid effects, this method has already been called.
+     * if the user still had valid effects but chose not to use them, you need to call this manually */
     public void resetWeapon(){
-        activeWeapon.reset();
+        if(activeWeapon!=null){
+            activeWeapon.reset();
+            activeWeapon = null;
+        }
     }
     public WeaponCard getActiveWeapon(){
         return activeWeapon;
