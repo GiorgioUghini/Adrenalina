@@ -1,20 +1,22 @@
 package models.turn;
 
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class TurnEngineTest {
 
     @Test
-    public void testStartCorrect(){
+    public void testStartCorrect() {
         TurnEngine turnEngine = new TurnEngine(TurnType.START_GAME, ActionGroup.NONE);
         turnEngine.draw();
         turnEngine.draw();
         turnEngine.spawn();
+        turnEngine.end();
     }
 
     @Test
-    public void testStartNoDraw(){
+    public void testStartNoDraw() {
         try {
             TurnEngine turnEngine = new TurnEngine(TurnType.START_GAME, ActionGroup.NONE);
             turnEngine.spawn();
@@ -25,7 +27,7 @@ public class TurnEngineTest {
     }
 
     @Test
-    public void testStartNoSecondDraw(){
+    public void testStartNoSecondDraw() {
         try {
             TurnEngine turnEngine = new TurnEngine(TurnType.START_GAME, ActionGroup.NONE);
             turnEngine.draw();
@@ -37,14 +39,15 @@ public class TurnEngineTest {
     }
 
     @Test
-    public void testCorrectRespawn(){
+    public void testCorrectRespawn() {
         TurnEngine turnEngine = new TurnEngine(TurnType.RESPAWN, ActionGroup.NONE);
         turnEngine.draw();
         turnEngine.spawn();
+        turnEngine.end();
     }
 
     @Test
-    public void testRespawnNoDraw(){
+    public void testRespawnNoDraw() {
         try {
             TurnEngine turnEngine = new TurnEngine(TurnType.RESPAWN, ActionGroup.NONE);
             turnEngine.spawn();
@@ -56,36 +59,35 @@ public class TurnEngineTest {
 
 
     @Test
-    public void testInGameNormalRunCorrect(){
+    public void testInGameNormalRunCorrect() {
         TurnEngine turnEngine = new TurnEngine(TurnType.IN_GAME, ActionGroup.NORMAL);
         turnEngine.run();
-        turnEngine.reload();
+        turnEngine.end();
     }
 
     @Test
-    public void testInGameNormalRunGrabCorrect(){
+    public void testInGameNormalRunGrabCorrect() {
         TurnEngine turnEngine = new TurnEngine(TurnType.IN_GAME, ActionGroup.NORMAL);
         turnEngine.run();
         turnEngine.grab();
-        turnEngine.reload();
 
         turnEngine = new TurnEngine(TurnType.IN_GAME, ActionGroup.NORMAL);
         turnEngine.run();
         turnEngine.grab();
+        turnEngine.end();
     }
 
     @Test
-    public void testInGameNormalShootCorrect(){
+    public void testInGameNormalShootCorrect() {
         TurnEngine turnEngine = new TurnEngine(TurnType.IN_GAME, ActionGroup.NORMAL);
         turnEngine.shoot();
 
         turnEngine = new TurnEngine(TurnType.IN_GAME, ActionGroup.NORMAL);
         turnEngine.shoot();
-        turnEngine.reload();
     }
 
     @Test
-    public void testInGameNormalInvalidMoves(){
+    public void testInGameNormalInvalidMoves() {
         try {
             TurnEngine turnEngine = new TurnEngine(TurnType.IN_GAME, ActionGroup.NORMAL);
             turnEngine.run();
@@ -99,8 +101,8 @@ public class TurnEngineTest {
 
         try {
             TurnEngine turnEngine = new TurnEngine(TurnType.IN_GAME, ActionGroup.NORMAL);
-            turnEngine.reload();
             turnEngine.run();
+            turnEngine.shoot();
             fail();
         } catch (Exception ex) {
             System.out.println(ex);
@@ -108,8 +110,8 @@ public class TurnEngineTest {
 
         try {
             TurnEngine turnEngine = new TurnEngine(TurnType.IN_GAME, ActionGroup.NORMAL);
-            turnEngine.reload();
             turnEngine.grab();
+            turnEngine.run();
             fail();
         } catch (Exception ex) {
             System.out.println(ex);
@@ -136,7 +138,7 @@ public class TurnEngineTest {
     }
 
     @Test
-    public void testCorrectInGameLowLifeGrab(){
+    public void testCorrectInGameLowLifeGrab() {
         TurnEngine turnEngine = new TurnEngine(TurnType.IN_GAME, ActionGroup.LOW_LIFE);
         turnEngine.run();
         turnEngine.run();
@@ -146,17 +148,15 @@ public class TurnEngineTest {
         turnEngine.run();
         turnEngine.run();
         turnEngine.grab();
-        turnEngine.reload();
 
         turnEngine = new TurnEngine(TurnType.IN_GAME, ActionGroup.VERY_LOW_LIFE);
         turnEngine.run();
         turnEngine.run();
         turnEngine.grab();
-        turnEngine.reload();
     }
 
     @Test
-    public void testCorrectInGameVeryLowLifeShoot(){
+    public void testCorrectInGameVeryLowLifeShoot() {
         TurnEngine turnEngine = new TurnEngine(TurnType.IN_GAME, ActionGroup.VERY_LOW_LIFE);
         turnEngine.run();
         turnEngine.shoot();
@@ -164,6 +164,27 @@ public class TurnEngineTest {
         turnEngine = new TurnEngine(TurnType.IN_GAME, ActionGroup.VERY_LOW_LIFE);
         turnEngine.run();
         turnEngine.shoot();
+    }
+
+    @Test
+    public void testCorrectInGameFrenzyType1() {
+        TurnEngine turnEngine = new TurnEngine(TurnType.IN_GAME, ActionGroup.FRENZY_TYPE_1);
+        turnEngine.run();
         turnEngine.reload();
+        turnEngine.shoot();
+        turnEngine.end();
+
+        turnEngine = new TurnEngine(TurnType.IN_GAME, ActionGroup.FRENZY_TYPE_1);
+        turnEngine.run();
+        turnEngine.run();
+        turnEngine.run();
+        turnEngine.run();
+        turnEngine.end();
+
+        turnEngine = new TurnEngine(TurnType.IN_GAME, ActionGroup.FRENZY_TYPE_1);
+        turnEngine.run();
+        turnEngine.run();
+        turnEngine.grab();
+        turnEngine.end();
     }
 }

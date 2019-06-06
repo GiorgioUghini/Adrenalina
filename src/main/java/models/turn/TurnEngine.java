@@ -1,8 +1,11 @@
 package models.turn;
 
+import org.omg.PortableInterceptor.ACTIVE;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class TurnEngine {
 
@@ -93,10 +96,14 @@ class StartedStateBehaviour implements TurnStateBehaviour {
                 nextBehaviour = new GrabbedStateBehaviour(turnType, actionGroup);
             else if (event == TurnEvent.SHOOT)
                 nextBehaviour = new ShotStateBehaviour(turnType, actionGroup);
-            else if (event == TurnEvent.RELOAD)
-                nextBehaviour = new ReloadedStateBehaviour(turnType, actionGroup);
-        }
-        if (turnType == TurnType.START_GAME || turnType == TurnType.RESPAWN) {
+            else if (event == TurnEvent.END)
+                nextBehaviour = new EndedStateBehaviour(turnType, actionGroup);
+            else if ((actionGroup == ActionGroup.FRENZY_TYPE_1 || actionGroup == ActionGroup.FRENZY_TYPE_2) && event == TurnEvent.RELOAD)
+                nextBehaviour = new EndedStateBehaviour(turnType, actionGroup);
+        } else if (turnType == TurnType.START_GAME) {
+            if (event == TurnEvent.DRAW)
+                nextBehaviour = new FirstDrawnStateBehaviour(turnType, actionGroup);
+        } else if (turnType == TurnType.RESPAWN) {
             if (event == TurnEvent.DRAW)
                 nextBehaviour = new FirstDrawnStateBehaviour(turnType, actionGroup);
         }
@@ -106,11 +113,13 @@ class StartedStateBehaviour implements TurnStateBehaviour {
     @Override
     public Set<TurnEvent> getValidEvents() {
         if (turnType == TurnType.IN_GAME) {
-            return new HashSet<>(Arrays.asList(TurnEvent.RUN, TurnEvent.GRAB, TurnEvent.SHOOT, TurnEvent.RELOAD));
-        } else if (turnType == TurnType.START_GAME || turnType == TurnType.RESPAWN) {
-            return new HashSet<>(Arrays.asList(TurnEvent.DRAW));
+            if (actionGroup == ActionGroup.FRENZY_TYPE_1 || actionGroup == ActionGroup.FRENZY_TYPE_2) {
+                return new HashSet<>(Arrays.asList(TurnEvent.RUN, TurnEvent.GRAB, TurnEvent.RELOAD, TurnEvent.SHOOT, TurnEvent.END));
+            } else {
+                return new HashSet<>(Arrays.asList(TurnEvent.RUN, TurnEvent.GRAB, TurnEvent.SHOOT, TurnEvent.END));
+            }
         } else {
-            return new HashSet<>();
+            return new HashSet<>(Arrays.asList(TurnEvent.DRAW));
         }
     }
 
@@ -270,23 +279,29 @@ class FirstRunStateBehaviour implements TurnStateBehaviour {
     @Override
     public TurnStateBehaviour transition(TurnEvent event) {
         TurnStateBehaviour nextBehaviour = null;
-        if (event == TurnEvent.RELOAD)
-            nextBehaviour = new ReloadedStateBehaviour(turnType, actionGroup);
-        else if (event == TurnEvent.RUN)
-            nextBehaviour = new SecondRunStateBehaviour(turnType, actionGroup);
-        else if (event == TurnEvent.GRAB)
-            nextBehaviour = new GrabbedStateBehaviour(turnType, actionGroup);
-        else if (event == TurnEvent.SHOOT && actionGroup == ActionGroup.VERY_LOW_LIFE)
-            nextBehaviour = new GrabbedStateBehaviour(turnType, actionGroup);
+        if (turnType == TurnType.IN_GAME) {
+            if (event == TurnEvent.END)
+                nextBehaviour = new EndedStateBehaviour(turnType, actionGroup);
+            else if (event == TurnEvent.RUN)
+                nextBehaviour = new SecondRunStateBehaviour(turnType, actionGroup);
+            else if (event == TurnEvent.GRAB)
+                nextBehaviour = new GrabbedStateBehaviour(turnType, actionGroup);
+            else if (actionGroup == ActionGroup.VERY_LOW_LIFE && event == TurnEvent.SHOOT)
+                nextBehaviour = new ShotStateBehaviour(turnType, actionGroup);
+            else if ((actionGroup == ActionGroup.FRENZY_TYPE_1 || actionGroup == ActionGroup.FRENZY_TYPE_2) && event == TurnEvent.RELOAD)
+                nextBehaviour = new ReloadedStateBehaviour(turnType, actionGroup);
+        }
         return nextBehaviour;
     }
 
     @Override
     public Set<TurnEvent> getValidEvents() {
         if (actionGroup == ActionGroup.VERY_LOW_LIFE) {
-            return new HashSet<>(Arrays.asList(TurnEvent.RELOAD, TurnEvent.RUN, TurnEvent.GRAB, TurnEvent.SHOOT));
+            return new HashSet<>(Arrays.asList(TurnEvent.RUN, TurnEvent.GRAB, TurnEvent.SHOOT, TurnEvent.END));
+        } else if (actionGroup == ActionGroup.FRENZY_TYPE_1 || actionGroup == ActionGroup.FRENZY_TYPE_2) {
+            return new HashSet<>(Arrays.asList(TurnEvent.RUN, TurnEvent.GRAB, TurnEvent.RELOAD, TurnEvent.SHOOT, TurnEvent.END));
         } else {
-            return new HashSet<>(Arrays.asList(TurnEvent.RELOAD, TurnEvent.RUN, TurnEvent.GRAB));
+            return new HashSet<>(Arrays.asList(TurnEvent.RUN, TurnEvent.GRAB, TurnEvent.END));
         }
     }
 
@@ -319,22 +334,29 @@ class SecondRunStateBehaviour implements TurnStateBehaviour {
     @Override
     public TurnStateBehaviour transition(TurnEvent event) {
         TurnStateBehaviour nextBehaviour = null;
-        if (event == TurnEvent.RELOAD)
-            nextBehaviour = new ReloadedStateBehaviour(turnType, actionGroup);
-        else if (event == TurnEvent.RUN)
-            nextBehaviour = new ThirdRunStateBehaviour(turnType, actionGroup);
-        else if (event == TurnEvent.GRAB && (actionGroup == ActionGroup.LOW_LIFE || actionGroup == ActionGroup.VERY_LOW_LIFE))
-            nextBehaviour = new ThirdRunStateBehaviour(turnType, actionGroup);
-
+        if (turnType == TurnType.IN_GAME) {
+            if (event == TurnEvent.END)
+                nextBehaviour = new EndedStateBehaviour(turnType, actionGroup);
+            else if (event == TurnEvent.RUN)
+                nextBehaviour = new ThirdRunStateBehaviour(turnType, actionGroup);
+            else if ((actionGroup == ActionGroup.LOW_LIFE || actionGroup == ActionGroup.VERY_LOW_LIFE || actionGroup == ActionGroup.FRENZY_TYPE_1) && event == TurnEvent.GRAB)
+                nextBehaviour = new GrabbedStateBehaviour(turnType, actionGroup);
+            else if (actionGroup == ActionGroup.FRENZY_TYPE_2 && event == TurnEvent.RELOAD)
+                nextBehaviour = new ReloadedStateBehaviour(turnType, actionGroup);
+            else if ((actionGroup == ActionGroup.FRENZY_TYPE_1 || actionGroup == ActionGroup.FRENZY_TYPE_2) && event == TurnEvent.SHOOT)
+                nextBehaviour = new ShotStateBehaviour(turnType, actionGroup);
+        }
         return nextBehaviour;
     }
 
     @Override
     public Set<TurnEvent> getValidEvents() {
-        if (actionGroup == ActionGroup.LOW_LIFE || actionGroup == ActionGroup.VERY_LOW_LIFE) {
-            return new HashSet<>(Arrays.asList(TurnEvent.RELOAD, TurnEvent.RUN, TurnEvent.GRAB));
+        if (actionGroup == ActionGroup.LOW_LIFE || actionGroup == ActionGroup.VERY_LOW_LIFE || actionGroup == ActionGroup.FRENZY_TYPE_1) {
+            return new HashSet<>(Arrays.asList(TurnEvent.RUN, TurnEvent.GRAB, TurnEvent.END));
+        } else if (actionGroup == ActionGroup.FRENZY_TYPE_2) {
+            return new HashSet<>(Arrays.asList(TurnEvent.RUN, TurnEvent.GRAB, TurnEvent.RELOAD, TurnEvent.SHOOT, TurnEvent.END));
         } else {
-            return new HashSet<>(Arrays.asList(TurnEvent.RELOAD, TurnEvent.RUN));
+            return new HashSet<>(Arrays.asList(TurnEvent.RUN, TurnEvent.END));
         }
     }
 
@@ -367,20 +389,28 @@ class ThirdRunStateBehaviour implements TurnStateBehaviour {
     @Override
     public TurnStateBehaviour transition(TurnEvent event) {
         TurnStateBehaviour nextBehaviour = null;
-        if (event == TurnEvent.RUN && actionGroup == ActionGroup.FRENZY_TYPE_1)
-            nextBehaviour = new FourthRunStateBehaviour(turnType, actionGroup);
-        else if (event == TurnEvent.RELOAD)
-            nextBehaviour = new ReloadedStateBehaviour(turnType, actionGroup);
-
+        if (turnType == TurnType.IN_GAME) {
+            if (event == TurnEvent.END)
+                nextBehaviour = new EndedStateBehaviour(turnType, actionGroup);
+            if (actionGroup == ActionGroup.FRENZY_TYPE_1) {
+                if (event == TurnEvent.RUN)
+                    nextBehaviour = new FourthRunStateBehaviour(turnType, actionGroup);
+            } else if (actionGroup == ActionGroup.FRENZY_TYPE_2) {
+                if (event == TurnEvent.GRAB)
+                    nextBehaviour = new GrabbedStateBehaviour(turnType, actionGroup);
+            }
+        }
         return nextBehaviour;
     }
 
     @Override
     public Set<TurnEvent> getValidEvents() {
         if (actionGroup == ActionGroup.FRENZY_TYPE_1) {
-            return new HashSet<>(Arrays.asList(TurnEvent.RUN, TurnEvent.RELOAD));
+            return new HashSet<>(Arrays.asList(TurnEvent.RUN, TurnEvent.END));
+        } else if (actionGroup == ActionGroup.FRENZY_TYPE_2) {
+            return new HashSet<>(Arrays.asList(TurnEvent.GRAB, TurnEvent.END));
         } else {
-            return new HashSet<>(Arrays.asList(TurnEvent.RELOAD));
+            return new HashSet<>(Arrays.asList(TurnEvent.END, TurnEvent.END));
         }
     }
 
@@ -413,14 +443,14 @@ class FourthRunStateBehaviour implements TurnStateBehaviour {
     @Override
     public TurnStateBehaviour transition(TurnEvent event) {
         TurnStateBehaviour nextBehaviour = null;
-        if (event == TurnEvent.RELOAD)
-            nextBehaviour = new ReloadedStateBehaviour(turnType, actionGroup);
+        if (event == TurnEvent.END)
+            nextBehaviour = new EndedStateBehaviour(turnType, actionGroup);
         return nextBehaviour;
     }
 
     @Override
     public Set<TurnEvent> getValidEvents() {
-        return new HashSet<>(Arrays.asList(TurnEvent.RELOAD));
+        return new HashSet<>(Arrays.asList(TurnEvent.END));
     }
 
     @Override
@@ -452,14 +482,14 @@ class GrabbedStateBehaviour implements TurnStateBehaviour {
     @Override
     public TurnStateBehaviour transition(TurnEvent event) {
         TurnStateBehaviour nextBehaviour = null;
-        if (event == TurnEvent.RELOAD)
-            nextBehaviour = new ReloadedStateBehaviour(turnType, actionGroup);
+        if (event == TurnEvent.END)
+            nextBehaviour = new EndedStateBehaviour(turnType, actionGroup);
         return nextBehaviour;
     }
 
     @Override
     public Set<TurnEvent> getValidEvents() {
-        return new HashSet<>(Arrays.asList(TurnEvent.RELOAD));
+        return new HashSet<>(Arrays.asList(TurnEvent.END));
     }
 
     @Override
@@ -491,14 +521,14 @@ class ShotStateBehaviour implements TurnStateBehaviour {
     @Override
     public TurnStateBehaviour transition(TurnEvent event) {
         TurnStateBehaviour nextBehaviour = null;
-        if (event == TurnEvent.RELOAD)
-            nextBehaviour = new ReloadedStateBehaviour(turnType, actionGroup);
+        if (event == TurnEvent.END)
+            nextBehaviour = new EndedStateBehaviour(turnType, actionGroup);
         return nextBehaviour;
     }
 
     @Override
     public Set<TurnEvent> getValidEvents() {
-        return new HashSet<>(Arrays.asList(TurnEvent.RELOAD));
+        return new HashSet<>(Arrays.asList(TurnEvent.END));
     }
 
     @Override
@@ -532,12 +562,14 @@ class ReloadedStateBehaviour implements TurnStateBehaviour {
         TurnStateBehaviour nextBehaviour = null;
         if (event == TurnEvent.END)
             nextBehaviour = new EndedStateBehaviour(turnType, actionGroup);
+        if ((actionGroup == ActionGroup.FRENZY_TYPE_1 || actionGroup == ActionGroup.FRENZY_TYPE_2) && event == TurnEvent.SHOOT)
+            nextBehaviour = new ShotStateBehaviour(turnType, actionGroup);
         return nextBehaviour;
     }
 
     @Override
     public Set<TurnEvent> getValidEvents() {
-        return new HashSet<>(Arrays.asList(TurnEvent.END));
+        return new HashSet<>(Arrays.asList(TurnEvent.SHOOT, TurnEvent.END));
     }
 
     @Override
