@@ -26,7 +26,7 @@ public class EffectCardTest {
         for(int i = 0; i<deckSize; i++){
             WeaponCard weaponCard = (WeaponCard) weaponDeck.draw();
             assertEquals(0, weaponCard.getEffects(ammo).getLegitEffects().size());
-            weaponCard.activate(null, null);
+            weaponCard.activate(new Player("player1", "password"));
             LegitEffects effects = weaponCard.getEffects(ammo);
             Ammo effectPrice;
             Effect chosenEffect;
@@ -71,7 +71,7 @@ public class EffectCardTest {
 
 
         WeaponCard lanciarazzi = getCard("Lanciarazzi");
-        lanciarazzi.activate(gameMap, player1);
+        lanciarazzi.activate(player1);
         Ammo ammo = new Ammo(3, 3, 3);
         List<Effect> effects = lanciarazzi.getEffects(ammo).getLegitEffects();
         for(Effect e : effects){

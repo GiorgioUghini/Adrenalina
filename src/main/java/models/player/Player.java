@@ -42,6 +42,7 @@ public class Player implements Subscriber, Serializable {
         numberOfSkulls = 0;
         marks = new Mark();
         activeWeapon = null;
+        gameMap = null;
         //token generation
     }
 
@@ -198,8 +199,7 @@ public class Player implements Subscriber, Serializable {
      * */
     public void playWeapon(WeaponCard weaponCard){
         checkHasWeapon(weaponCard);
-        GameMap gameMap = Server.getInstance().getLobby().getMatch(this).getMap();
-        weaponCard.activate(gameMap, this);
+        weaponCard.activate(this);
         activeWeapon = weaponCard;
     }
 

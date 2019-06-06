@@ -66,14 +66,15 @@ public class EffectCard extends Card  {
     }
 
     /** If the card is loaded, activate it
-     * @param gameMap
      * @param me the player who is going to use the card
-     * @throws WeaponCardException if the weapon is not loaded */
-    public void activate(GameMap gameMap, Player me){
+     * @throws WeaponCardException if the weapon is not loaded
+     * @throws NullPointerException if player is null */
+    public void activate(Player me){
+        if(me==null) throw new NullPointerException("Player cannot be null");
         if(!isLoaded()) throw new WeaponCardException("The weapon is not loaded, cannot activate");
         this.activated = true;
         this.loaded = false;
-        this.gameMap = gameMap;
+        this.gameMap = me.getGameMap();
         this.me = me;
     }
 
