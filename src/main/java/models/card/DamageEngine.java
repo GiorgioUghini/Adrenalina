@@ -10,16 +10,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class DamageEngine {
+class DamageEngine {
     private Mark markOrDamage;
-    private ActionType actionType;
     private Map<String, Player> selectedPlayers;
     private Map<String, Square> selectedSquares;
     private Map<String, RoomColor> selectedRooms;
     private GameMap gameMap;
     private Player me;
 
-    public DamageEngine(Mark markOrDamage, Map<String, Player> selectedPlayers, Map<String, Square> selectedSquares, Map<String, RoomColor> selectedRooms, GameMap gameMap, Player me){
+    DamageEngine(Mark markOrDamage, Map<String, Player> selectedPlayers, Map<String, Square> selectedSquares, Map<String, RoomColor> selectedRooms, GameMap gameMap, Player me){
         this.markOrDamage = markOrDamage;
         this.selectedPlayers = selectedPlayers;
         this.selectedSquares = selectedSquares;
@@ -28,7 +27,7 @@ public class DamageEngine {
         this.me = me;
     }
 
-    public Map<Player, Integer> getDamages(){
+    Map<Player, Integer> getDamages(){
         Map<Player, Integer> out = new HashMap<>();
 
         switch (markOrDamage.type){
@@ -49,6 +48,7 @@ public class DamageEngine {
                         out.put(p, markOrDamage.value);
                     }
                 }
+                break;
             default:
                 throw new WeaponCardException("The damage type is not valid: " + markOrDamage.type);
         }
