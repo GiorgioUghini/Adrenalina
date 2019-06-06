@@ -8,11 +8,10 @@ import models.map.Square;
 import models.player.Player;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-public class SelectorEngine {
+class SelectorEngine {
     private GameMap gameMap;
     private Player me;
     private Select select;
@@ -91,6 +90,7 @@ public class SelectorEngine {
     private Set<Square> getAllSquaresInRadix(Radix radix){
         Set<Square> out = gameMap.getAllSquares();
         Square ref = getSquareWithTag(radix.ref);
+        if(ref==null) return out;
         if(radix.area != null){
             switch (radix.area){
                 case "visible":

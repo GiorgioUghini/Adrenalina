@@ -1,18 +1,14 @@
 package models.player;
 
-import models.Match;
-import models.card.PowerUpCard;
-import models.card.WeaponCard;
+import errors.WeaponCardException;
+import models.card.*;
+import models.map.GameMap;
+import models.map.Square;
 import models.turn.ActionGroup;
-import network.Response;
 import network.Server;
-import network.SocketWrapper;
-import utils.TokenGenerator;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 public class Player implements Subscriber, Serializable {
 
@@ -20,6 +16,7 @@ public class Player implements Subscriber, Serializable {
     private String password;
     private Ammo ammo;
     private List<WeaponCard> weaponList;
+    private WeaponCard activeWeapon;
     private List<PowerUpCard> powerUpList;
     private Life life;
     private Mark marks;
@@ -27,6 +24,7 @@ public class Player implements Subscriber, Serializable {
     private int numberOfSkulls;
     private ActionGroup lifeState = ActionGroup.NORMAL;
     private boolean online;
+    private GameMap gameMap;
 
 
     /** Creates a new player object
@@ -43,6 +41,8 @@ public class Player implements Subscriber, Serializable {
         points = 0;
         numberOfSkulls = 0;
         marks = new Mark();
+        activeWeapon = null;
+        gameMap = null;
         //token generation
     }
 
@@ -184,4 +184,99 @@ public class Player implements Subscriber, Serializable {
     public boolean isWaiting(){
        return  Server.getInstance().getLobby().getWaitingPlayers().contains(this);
     }
+
+    public void setGameMap(GameMap gameMap){
+        this.gameMap = gameMap;
+    }
+
+    public GameMap getGameMap(){
+        return gameMap;
+    }
+
+    /** Activates the weapon card given as param
+     * @throws WeaponCardException if you do not have this weapon
+     * @throws WeaponCardException if the weapon is not loaded
+     * */
+    public void playWeapon(WeaponCard weaponCard){
+        checkHasWeapon(weaponCard);
+        weaponCard.activate(this);
+        activeWeapon = weaponCard;
+    }
+
+    public boolean canReloadWeapon(WeaponCard weaponCard){
+        return weaponCard.canReload(ammo);
+    }
+
+    /**
+     * @param weaponCard the card you want to reload
+     * @throws WeaponCardException if you do not have that weapon
+     * @throws WeaponCardException if the weapon is already loaded
+     * @throws WeaponCardException if you do not have enough ammo to reload */
+    public void loadWeapon(WeaponCard weaponCard){
+        checkHasWeapon(weaponCard);
+        if(weaponCard.isLoaded()) throw new WeaponCardException("The weapon is already loaded");
+        weaponCard.load(ammo);
+    }
+
+    /**
+     * @return an object containing all the card effects with a TRUE flag on those that can be played.
+     * all the flags are set to FALSE if the weapon has not been activated */
+    public LegitEffects getWeaponEffects(){
+        return activeWeapon.getEffects(ammo);
+    }
+
+    /** Activates the effect and gives access to playNextWeaponAction() method
+     * @throws WeaponCardException if you do not have enough ammo to activate this effect */
+    public void playWeaponEffect(Effect e){
+        activeWeapon.playEffect(e, ammo);
+    }
+
+    /** if the action is a SELECT, you need to check the select TYPE and call one of the getSelectable[item] methods
+     * of the weapon (obtainable with getActiveWeapon() method), if the select is of type "auto" just pick the first
+     * selectable returned, otherwise ask the user to choose the item to select. Then, call one of the select[item]
+     * methods of the weapon to apply the select. Then you can call playNextWeaponAction() again.
+     * If the action is either MARK, DAMAGE or MOVE the weapon will do it by itself and you can just call playNextWeaponAction()
+     * again.
+     * @return the action being played. if null it means the effect is completed and you can play another effect
+     *  */
+    public Action playNextWeaponAction(){
+        Action action = activeWeapon.playNextAction();
+        switch (action.type){
+            case MARK:
+                Map<Player, Integer> playersToMark = activeWeapon.getPlayersToMark();
+                for(Player p : playersToMark.keySet()){
+                    int marks = playersToMark.get(p);
+                    p.giveMark(marks, this);
+                }
+                break;
+            case DAMAGE:
+                Map<Player, Integer> playersToDamage = activeWeapon.getPlayersToDamage();
+                for(Player p : playersToDamage.keySet()){
+                    int damage = playersToDamage.get(p);
+                    p.getDamage(damage, this);
+                }
+                break;
+            case MOVE:
+                Map<Player, Square> moves = activeWeapon.getPlayersMoves();
+                GameMap gameMap = Server.getInstance().getLobby().getMatch(this).getMap();
+                for(Map.Entry<Player, Square> entry : moves.entrySet()){
+                    gameMap.movePlayer(entry.getKey(), entry.getValue());
+                }
+                break;
+        }
+        return action;
+    }
+
+    /** MUST be called when you finish using the weapon */
+    public void resetWeapon(){
+        activeWeapon.reset();
+    }
+    public WeaponCard getActiveWeapon(){
+        return activeWeapon;
+    }
+
+    private void checkHasWeapon(WeaponCard weaponCard){
+        if(!weaponList.contains(weaponCard)) throw new WeaponCardException("This user does not have this weapon:" + weaponCard.name);
+    }
+
 }

@@ -66,14 +66,15 @@ public class EffectCard extends Card  {
     }
 
     /** If the card is loaded, activate it
-     * @param gameMap
      * @param me the player who is going to use the card
-     * @throws WeaponCardException if the weapon is not loaded */
-    public void activate(GameMap gameMap, Player me){
+     * @throws WeaponCardException if the weapon is not loaded
+     * @throws NullPointerException if player is null */
+    public void activate(Player me){
+        if(me==null) throw new NullPointerException("Player cannot be null");
         if(!isLoaded()) throw new WeaponCardException("The weapon is not loaded, cannot activate");
         this.activated = true;
         this.loaded = false;
-        this.gameMap = gameMap;
+        this.gameMap = me.getGameMap();
         this.me = me;
     }
 
@@ -163,7 +164,8 @@ public class EffectCard extends Card  {
 
     /** Activates the chosen effect, paying it with the ammos given as param
      * @param effect
-     * @param ammo ATTENTION: this param will be modified if the effect activation was successfull. The effect price will be deducted from it */
+     * @param ammo ATTENTION: this param will be modified if the effect activation was successfull. The effect price will be deducted from it
+     * @throws WeaponCardException if you do not have enough ammo to activate the effect */
     public void playEffect(Effect effect, Ammo ammo){
         if(!hasEnoughAmmo(ammo, effect.price))throw new WeaponCardException("Not enough ammo to activate this effect");
         pay(effect.price, ammo);
@@ -209,6 +211,11 @@ public class EffectCard extends Card  {
     public Map<Player, Integer> getPlayersToMark(){
         checkActiveAction(ActionType.MARK);
         return new DamageEngine(activeAction.damage, selectedPlayers, selectedSquares, selectedRooms, gameMap, me).getDamages();
+    }
+
+    public Map<Player, Square> getPlayersMoves(){
+        checkActiveAction(ActionType.MOVE);
+        return new MoveEngine(activeAction.move, selectedPlayers, selectedSquares, gameMap, me).getNewPositions();
     }
 
     /** Must be called at the end of the card usage. resets the card to its initial status (but unloaded) */
