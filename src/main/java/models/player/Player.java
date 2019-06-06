@@ -24,6 +24,7 @@ public class Player implements Subscriber, Serializable {
     private int numberOfSkulls;
     private ActionGroup lifeState = ActionGroup.NORMAL;
     private boolean online;
+    private GameMap gameMap;
 
 
     /** Creates a new player object
@@ -181,6 +182,14 @@ public class Player implements Subscriber, Serializable {
 
     public boolean isWaiting(){
        return  Server.getInstance().getLobby().getWaitingPlayers().contains(this);
+    }
+
+    public void setGameMap(GameMap gameMap){
+        this.gameMap = gameMap;
+    }
+
+    public GameMap getGameMap(){
+        return gameMap;
     }
 
     /** Activates the weapon card given as param

@@ -193,7 +193,8 @@ public class GameMap {
     public Set<SpawnPoint> getSpawnPoints(){
         return spawnPoints;
     }
-    /** Spawns player on a spawnpoint if it is not already on the map
+    /** Spawns player on a spawnpoint if it is not already on the map.
+     * this also calls player.setMap(this) so it modifies the player
      * @param player the player to spawn
      * @param spawnPoint the spawnpoint on which the player will spawn
      * @throws NullPointerException if player is null or spawnPoint is null
@@ -204,6 +205,7 @@ public class GameMap {
         if(player==null || spawnPoint==null) throw new NullPointerException();
         if(positions.hasPlayer(player)) throw new PlayerAlreadyOnMapException();
         positions.addPlayer(player, spawnPoint);
+        player.setGameMap(this);
     }
     /** Move player to a square in the map
      * @param player
