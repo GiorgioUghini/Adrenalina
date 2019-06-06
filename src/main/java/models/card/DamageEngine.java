@@ -29,10 +29,9 @@ class DamageEngine {
 
     Map<Player, Integer> getDamages(){
         Map<Player, Integer> out = new HashMap<>();
-        Player player = null;
         switch (markOrDamage.type){
             case PLAYER:
-                player = selectedPlayers.get(markOrDamage.target);
+                Player player = selectedPlayers.get(markOrDamage.target);
                 if(player==null) return out;
                 out.put(selectedPlayers.get(markOrDamage.target), markOrDamage.value);
                 break;
