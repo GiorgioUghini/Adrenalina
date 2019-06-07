@@ -1,5 +1,8 @@
 package controllers;
 
+import models.player.Player;
+import models.turn.TurnEngine;
+import models.turn.TurnType;
 import network.Client;
 
 public class GameController {
@@ -12,4 +15,10 @@ public class GameController {
         Client.getInstance().getConnection().drawPowerUpCard();
     }
 
+    public int howMuchRun() {
+        Player me = Client.getInstance().getPlayer();
+        TurnEngine te = new TurnEngine(me.hasJustStarted() ? (me.isDead() ? TurnType.RESPAWN : TurnType.IN_GAME) : TurnType.START_GAME, me.getLifeState());
+        int runs = 0;
+        
+    }
 }

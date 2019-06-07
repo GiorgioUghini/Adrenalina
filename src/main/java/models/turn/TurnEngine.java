@@ -1,11 +1,8 @@
 package models.turn;
 
-import org.omg.PortableInterceptor.ACTIVE;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 public class TurnEngine {
 
@@ -654,10 +651,4 @@ enum TurnState {
     SHOT,
     RELOADED,
     ENDED
-}
-
-enum TurnType {
-    START_GAME,
-    RESPAWN,
-    IN_GAME
 }
