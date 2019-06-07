@@ -1,6 +1,7 @@
 package network;
 
 import errors.InvalidInputException;
+import javafx.application.Platform;
 import models.card.Effect;
 import models.card.LegitEffects;
 import models.turn.ActionElement;
@@ -124,7 +125,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(NextTurnUpdate response) {
-
+        ((GameView) Client.getInstance().getCurrentView()).startTurn(response.name);
     }
 
     @Override
@@ -135,7 +136,9 @@ public class ResponseHandler implements ResponseHandlerInterface {
     @Override
     public void handle(DrawPowerUpResponse response) {
         ((GameView) Client.getInstance().getCurrentView()).addPowerUpToHand(response.getCard());
-        Client.getInstance().getCurrentView().showMessage("You drawn " + response.getCard().name + " and its color is " + response.getCard().color.name());
+        Platform.runLater( () -> {
+            Client.getInstance().getCurrentView().showMessage("You drawn " + response.getCard().name + " and its color is " + response.getCard().color.name());
+        });
     }
 
     @Override

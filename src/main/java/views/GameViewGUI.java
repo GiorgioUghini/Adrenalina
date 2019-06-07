@@ -162,6 +162,13 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
+    public void startTurn(String playerName) {
+        if (Client.getInstance().getPlayer().getName().equals(playerName)) {
+            gameController.getValidActions();
+        }
+    }
+
+    @Override
     public void printError(String error) {
 
     }
