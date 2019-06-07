@@ -31,31 +31,31 @@ public class TurnEngine {
         return stateBehaviour.getValidEvents();
     }
 
-    void run() {
+    public void run() {
         transition(TurnEvent.RUN);
     }
 
-    void draw() {
+    public void draw() {
         transition(TurnEvent.DRAW);
     }
 
-    void grab() {
+    public void grab() {
         transition(TurnEvent.GRAB);
     }
 
-    void shoot() {
+    public void shoot() {
         transition(TurnEvent.SHOOT);
     }
 
-    void spawn() {
+    public void spawn() {
         transition(TurnEvent.SPAWN);
     }
 
-    void reload() {
+    public void reload() {
         transition(TurnEvent.RELOAD);
     }
 
-    void end() {
+    public void end() {
         transition(TurnEvent.END);
     }
 

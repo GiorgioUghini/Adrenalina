@@ -17,8 +17,20 @@ public class GameController {
 
     public int howMuchRun() {
         Player me = Client.getInstance().getPlayer();
-        TurnEngine te = new TurnEngine(me.hasJustStarted() ? (me.isDead() ? TurnType.RESPAWN : TurnType.IN_GAME) : TurnType.START_GAME, me.getLifeState());
+        TurnEngine te;
+        if (me.hasJustStarted())
+            te = new TurnEngine(me.isDead() ? TurnType.RESPAWN : TurnType.IN_GAME, me.getLifeState());
+        else te = new TurnEngine(TurnType.START_GAME, me.getLifeState());
         int runs = 0;
-        
+        boolean go = true;
+        while (go) {
+            try {
+                te.run();
+                runs++;
+            } catch (Exception e) {
+                go = false;
+            }
+        }
+        return runs;
     }
 }
