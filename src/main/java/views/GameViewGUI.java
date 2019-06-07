@@ -68,6 +68,7 @@ public class GameViewGUI implements Initializable, GameView {
     private ArrayList<ImageView> weaponSpaces = new ArrayList<>();
     private ArrayList<PowerUpCard> myPowerUpsCardOrdered = new ArrayList<>();
     private ArrayList<PowerUpCard> myWeaponsCardOrdered = new ArrayList<>();
+
     private boolean canClickOnPowerUps = false;
 
     private GameController gameController;
@@ -107,15 +108,15 @@ public class GameViewGUI implements Initializable, GameView {
         }
         if (i>3) return;
         powerUpSpaces.get(i).setImage(img);
-        myPowerUpsCardOrdered.add(card);
+        Client.getInstance().getPlayer().getPowerUpList().add(card);
     }
 
     public void removePowerUpToHand(PowerUpCard card) {
         int i = 0;
-        while (myPowerUpsCardOrdered.get(i) != card) {
+        while (Client.getInstance().getPlayer().getPowerUpList().get(i) != card) {
             i++;
         }
-        myPowerUpsCardOrdered.remove(card);
+        Client.getInstance().getPlayer().getPowerUpList().remove(card);
 
         for(;i<3;i++) {
             powerUpSpaces.get(i).setImage(powerUpSpaces.get(i+1).getImage());
@@ -155,7 +156,7 @@ public class GameViewGUI implements Initializable, GameView {
     public void usePowerUp() {
 
     }
-    
+
     public void endTurn() {
 
     }
