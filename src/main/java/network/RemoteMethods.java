@@ -9,6 +9,7 @@ import models.map.GameMap;
 import models.map.RoomColor;
 import models.map.SpawnPoint;
 import models.player.Player;
+import models.turn.TurnEvent;
 import network.responses.*;
 import network.updates.MapChosenUpdate;
 import network.updates.NewPlayerUpdate;
@@ -93,6 +94,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     public Response drawPowerUp(String token) throws RemoteException {
        Match match = Server.getInstance().getLobby().getMatch(token);
        PowerUpCard card = (PowerUpCard) match.drawPowerUp();
+       match.doAction(TurnEvent.DRAW);
        return new DrawPowerUpResponse(card);
     }
 

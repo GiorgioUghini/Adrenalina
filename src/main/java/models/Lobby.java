@@ -40,7 +40,7 @@ public class Lobby {
         Player p = new Player(username, password);
         waitingPlayers.add(p);
         new Thread(() -> {
-            if (waitingPlayers.size() == 5) {
+            if (waitingPlayers.size() == 1) {
                 if (activeCountdown != null) {
                     activeCountdown.cancel(true);
                     activeCountdown = null;
