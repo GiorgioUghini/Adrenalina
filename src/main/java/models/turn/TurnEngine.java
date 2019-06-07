@@ -62,7 +62,7 @@ public class TurnEngine {
         transition(TurnEvent.END);
     }
 
-    void transition(TurnEvent event) {
+    public void transition(TurnEvent event) {
         TurnStateBehaviour nextBehaviour = stateBehaviour.transition(event);
         if (nextBehaviour == null)
             throw new RuntimeException("This move is not valid");
