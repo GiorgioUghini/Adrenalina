@@ -63,22 +63,22 @@
                                                                   <Font size="14.0" />
                                                                </font>
                                                             </Text>
-                                                            <ImageView fx:id="imgYourPowerUpCard1" fitHeight="258.0" fitWidth="167.0" pickOnBounds="true" preserveRatio="true">
+                                                            <ImageView fx:id="imgYourPowerUpCard1" fitHeight="258.0" fitWidth="167.0" onMouseClicked="#powerUp1Clicked" pickOnBounds="true" preserveRatio="true">
                                                                <HBox.margin>
                                                                   <Insets left="17.0" right="17.0" />
                                                                </HBox.margin>
                                                             </ImageView>
-                                                            <ImageView fx:id="imgYourPowerUpCard2" fitHeight="258.0" fitWidth="167.0" pickOnBounds="true" preserveRatio="true">
+                                                            <ImageView fx:id="imgYourPowerUpCard2" fitHeight="258.0" fitWidth="167.0" onMouseClicked="#powerUp2Clicked" pickOnBounds="true" preserveRatio="true">
                                                                <HBox.margin>
                                                                   <Insets left="17.0" right="17.0" />
                                                                </HBox.margin>
                                                             </ImageView>
-                                                            <ImageView fx:id="imgYourPowerUpCard3" fitHeight="258.0" fitWidth="167.0" pickOnBounds="true" preserveRatio="true">
+                                                            <ImageView fx:id="imgYourPowerUpCard3" fitHeight="258.0" fitWidth="167.0" onMouseClicked="#powerUp3Clicked" pickOnBounds="true" preserveRatio="true">
                                                                <HBox.margin>
                                                                   <Insets left="17.0" right="17.0" />
                                                                </HBox.margin>
                                                             </ImageView>
-                                                            <ImageView fx:id="imgYourPowerUpCard4" fitHeight="258.0" fitWidth="167.0" pickOnBounds="true" preserveRatio="true">
+                                                            <ImageView fx:id="imgYourPowerUpCard4" fitHeight="258.0" fitWidth="167.0" onMouseClicked="#powerUp4Clicked" pickOnBounds="true" preserveRatio="true">
                                                                <HBox.margin>
                                                                   <Insets left="17.0" right="17.0" />
                                                                </HBox.margin>

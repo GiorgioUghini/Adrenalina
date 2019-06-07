@@ -1,5 +1,6 @@
 package controllers;
 
+import models.card.PowerUpCard;
 import models.player.Player;
 import models.turn.TurnEngine;
 import models.turn.TurnType;
@@ -32,5 +33,10 @@ public class GameController {
             }
         }
         return runs;
+    }
+
+    public void spawn(PowerUpCard powerUpCard) {
+        Client.getInstance().getConnection().spawnPlayer(powerUpCard.color);
+
     }
 }

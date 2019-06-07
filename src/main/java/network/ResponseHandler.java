@@ -129,11 +129,13 @@ public class ResponseHandler implements ResponseHandlerInterface {
     @Override
     public void handle(DrawPowerUpResponse response) {
         ((GameView) Client.getInstance().getCurrentView()).addPowerUpToHand(response.getCard());
-        ((GameView) Client.getInstance().getCurrentView()).showMessage("You drawn " + response.getCard().name + " and its color is " + response.getCard().color.name());
+        Client.getInstance().getCurrentView().showMessage("You drawn " + response.getCard().name + " and its color is " + response.getCard().color.name());
     }
 
     @Override
     public void handle(SpawnPlayerResponse response) {
+        Client.getInstance().getCurrentView().showMessage("You've successfully spawned!");
+        ((GameView) Client.getInstance().getCurrentView()).getValidActions();
         //TODO bho non lo so sei spawnato (Vai Giorgio)
     }
 

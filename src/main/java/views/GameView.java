@@ -18,4 +18,6 @@ public interface GameView extends View {
     void addPowerUpToHand(PowerUpCard card);
     void addWeaponToHand(WeaponCard card);
 
+    public void getValidActions();
+
 }

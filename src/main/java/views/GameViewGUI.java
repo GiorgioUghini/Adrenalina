@@ -66,6 +66,9 @@ public class GameViewGUI implements Initializable, GameView {
 
     private ArrayList<ImageView> powerUpSpaces = new ArrayList<>();
     private ArrayList<ImageView> weaponSpaces = new ArrayList<>();
+    private ArrayList<PowerUpCard> myPowerUpsCardOrdered = new ArrayList<>();
+    private ArrayList<PowerUpCard> myWeaponsCardOrdered = new ArrayList<>();
+    private boolean canClickOnPowerUps = false;
 
     private GameController gameController;
 
@@ -89,8 +92,39 @@ public class GameViewGUI implements Initializable, GameView {
         Platform.runLater(this::getValidActions);
     }
 
+    @Override
     public void getValidActions() {
         gameController.getValidActions();
+    }
+
+
+
+    public void addPowerUpToHand(PowerUpCard card) {
+        int i = 0;
+        Image img = new Image(ResourceController.getResource("powerupcards/" + card.image).toURI().toString());
+        while (powerUpSpaces.get(i).getImage() != null) {
+            i++;
+        }
+        if (i>3) return;
+        powerUpSpaces.get(i).setImage(img);
+        myPowerUpsCardOrdered.add(card);
+    }
+
+    public void removePowerUpToHand(PowerUpCard card) {
+        int i = 0;
+        while (myPowerUpsCardOrdered.get(i) != card) {
+            i++;
+        }
+        myPowerUpsCardOrdered.remove(card);
+
+        for(;i<3;i++) {
+            powerUpSpaces.get(i).setImage(powerUpSpaces.get(i+1).getImage());
+        }
+        powerUpSpaces.get(3).setImage(null);
+    }
+
+    public void addWeaponToHand(WeaponCard card) {
+        //TODO: Set image in imageview, on the first space free
     }
 
     public void drawPowerUp() {
@@ -98,28 +132,13 @@ public class GameViewGUI implements Initializable, GameView {
         gameController.drawPowerUp();
         gameController.getValidActions();
     }
-
-    public void addPowerUpToHand(PowerUpCard card) {
-        int i = 0;
-        String prova = "powerupcards/" + card.image;
-        File provaa = ResourceController.getResource(prova);
-        Image img = new Image(ResourceController.getResource("powerupcards/" + card.image).toURI().toString());
-        while (powerUpSpaces.get(i).getImage() != null) {
-            i++;
-        }
-        if (i>3) return;
-        powerUpSpaces.get(i).setImage(img);
-    }
-
-    public void addWeaponToHand(WeaponCard card) {
-        //TODO: Set image in imageview, on the first space free
-    }
-
     public void grabWeapon() {
 
     }
     public void spawn() {
-
+        setBtnSpawnVisibility(false);
+        showMessage("Please click on the power up card you wish to DISCARD and spawn accordingly.");
+        canClickOnPowerUps = true;
     }
     public void run() {
 
@@ -152,6 +171,7 @@ public class GameViewGUI implements Initializable, GameView {
     public void chooseSpawnPoint() {
         //TODO: Delete this and use spawn()
     }
+
     @Override
     public void setBtnDrawPowerUpVisibility(boolean isVisible) {
         btnDrawPowerUp.setDisable(!isVisible);
@@ -185,5 +205,33 @@ public class GameViewGUI implements Initializable, GameView {
         btnUsePowerUp.setDisable(!isVisible);
     }
 
+    public void powerUp1Clicked() {
+        if (canClickOnPowerUps && (!myPowerUpsCardOrdered.isEmpty())) {
+            canClickOnPowerUps = false;
+            gameController.spawn(myPowerUpsCardOrdered.get(0));
+            removePowerUpToHand(myPowerUpsCardOrdered.get(0));
+        }
+    }
+    public void powerUp2Clicked() {
+        if (canClickOnPowerUps && (myPowerUpsCardOrdered.size() > 1)) {
+            canClickOnPowerUps = false;
+            gameController.spawn(myPowerUpsCardOrdered.get(1));
+            removePowerUpToHand(myPowerUpsCardOrdered.get(1));
+        }
+    }
+    public void powerUp3Clicked() {
+        if (canClickOnPowerUps && (myPowerUpsCardOrdered.size() > 2)) {
+            canClickOnPowerUps = false;
+            gameController.spawn(myPowerUpsCardOrdered.get(2));
+            removePowerUpToHand(myPowerUpsCardOrdered.get(2));
+        }
+    }
+    public void powerUp4Clicked() {
+        if (canClickOnPowerUps && (myPowerUpsCardOrdered.size() > 3)) {
+            canClickOnPowerUps = false;
+            gameController.spawn(myPowerUpsCardOrdered.get(3));
+            removePowerUpToHand(myPowerUpsCardOrdered.get(3));
+        }
+    }
 
 }
