@@ -58,12 +58,12 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                 return new ErrorResponse(new WrongPasswordException());
 
             player.reconnect();
-            return new ReconnectPlayerResponse();
+            return new ReconnectPlayerResponse(player);
         } else {
             player = lobby.registerPlayer(username, password, token);
             Server.getInstance().getConnection().addUpdateUnregisteredPlayers(new NewPlayerUpdate(player.getName()));
             lobby.addUpdateWaitingPlayers(new NewPlayerUpdate(player.getName()));
-            return new RegisterPlayerResponse();
+            return new RegisterPlayerResponse(player);
         }
     }
 

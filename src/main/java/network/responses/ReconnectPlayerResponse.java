@@ -1,11 +1,19 @@
 package network.responses;
 
+import models.player.Player;
 import network.Response;
 import network.ResponseHandlerInterface;
 
 public class ReconnectPlayerResponse implements Response {
-    public ReconnectPlayerResponse(){
 
+    private Player me;
+
+    public ReconnectPlayerResponse(Player p){
+        me = p;
+    }
+
+    public Player getMe() {
+        return me;
     }
 
     @Override

@@ -203,7 +203,6 @@ public class GameMap {
     public void spawnPlayer(Player player, SpawnPoint spawnPoint){
         player.hasSpawnFirstTime();
         checkSquareIsInMap(spawnPoint);
-        if(player==null || spawnPoint==null) throw new NullPointerException();
         if(positions.hasPlayer(player)) throw new PlayerAlreadyOnMapException();
         positions.addPlayer(player, spawnPoint);
         player.setGameMap(this);

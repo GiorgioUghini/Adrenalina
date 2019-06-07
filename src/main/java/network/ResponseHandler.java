@@ -16,12 +16,14 @@ public class ResponseHandler implements ResponseHandlerInterface {
     public void handle(RegisterPlayerResponse response) {
         Client clientInstance = Client.getInstance();
         clientInstance.getCurrentView().showMessage("Registrato come nuovo utente");
+        clientInstance.setPlayer(response.getMe());
     }
 
     @Override
     public void handle(ReconnectPlayerResponse response) {
         Client clientInstance = Client.getInstance();
         clientInstance.getCurrentView().showMessage("Ricollegato!");
+        clientInstance.setPlayer(response.getMe());
         //TODO Set game state!!!
     }
 

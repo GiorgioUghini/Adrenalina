@@ -11,4 +11,5 @@ public class GameController {
     public void drawPowerUp() {
         Client.getInstance().getConnection().drawPowerUpCard();
     }
+
 }

@@ -14,6 +14,7 @@ public class Client {
     private MenuView menuView;
     private GameView gameView;
     private View currentView;
+    private Player me;
 
     private int mapNum;
 
@@ -35,6 +36,14 @@ public class Client {
 
     private Client() {
 
+    }
+
+    public Player getPlayer() {
+        return me;
+    }
+
+    public void setPlayer(Player me) {
+        this.me = me;
     }
 
     public void start(ViewType viewType) throws InterruptedException {
