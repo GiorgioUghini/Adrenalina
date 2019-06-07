@@ -29,7 +29,7 @@ public class Match {
     private CardController cardController;
     //null -> noFrenzy, Type1, Type2
 
-    public Match( List<Player> players ){
+    public Match(List<Player> players) {
         playerList = new LinkedList<>(players);
         cardController = new CardController();
         turnEngines = new ArrayList<>();
@@ -63,14 +63,20 @@ public class Match {
         return playerList.size();
     }
 
-    /** Activate frenzy from now on
-     * @param player the player who is activating frenzy mode.*/
+    /**
+     * Activate frenzy from now on
+     *
+     * @param player the player who is activating frenzy mode.
+     */
     public void activateFrenzy(Player player) {
         frenzy = ActionGroup.FRENZY_TYPE_1;
     }
 
-    /** Get the first player on this match
-     * @return the first player.*/
+    /**
+     * Get the first player on this match
+     *
+     * @return the first player.
+     */
     public Player getFirstPlayer() {
         return playerList.get(0);
     }
@@ -80,61 +86,86 @@ public class Match {
         playerList.add(0, firstPlayer);
     }
 
-    /** Add a player into this match
-     * @param p the player who wants to join this match.*/
+    /**
+     * Add a player into this match
+     *
+     * @param p the player who wants to join this match.
+     */
     public void addPlayer(Player p) {
         playerList.add(p);
     }
 
-    /** Remove a player into this match
-     * @param p the player who wants to leave this match.*/
+    /**
+     * Remove a player into this match
+     *
+     * @param p the player who wants to leave this match.
+     */
     public void removePlayer(Player p) {
         playerList.remove(p);
     }
 
-    /** Draw a card from this match' power up deck
-     * @return the card that is drawn.*/
+    /**
+     * Draw a card from this match' power up deck
+     *
+     * @return the card that is drawn.
+     */
     public Card drawPowerUp() {
         Card drawn = powerUpDeck.draw();
         playerList.get(actualPlayerIndex).drawPowerUp((PowerUpCard) drawn);
         return drawn;
     }
 
-    /** Shuffle this match' power up deck*/
+    /**
+     * Shuffle this match' power up deck
+     */
     public void shufflePowerUpDeck() {
         powerUpDeck.shuffle();
     }
 
-    /** Get how many cards remains into this match' power up deck
-     * @return how many cards remains into this match' power up deck.*/
+    /**
+     * Get how many cards remains into this match' power up deck
+     *
+     * @return how many cards remains into this match' power up deck.
+     */
     public int getSizePowerUpDeck() {
         return powerUpDeck.size();
     }
 
-    /** Draw a card from this match' weapons deck
-     * @return the card that is drawn.*/
+    /**
+     * Draw a card from this match' weapons deck
+     *
+     * @return the card that is drawn.
+     */
     public Card drawWeapon() {
         return weaponDeck.draw();
     }
 
-    /** Get how many cards remains into this match' weapons deck
-     * @return how many cards remains into this match' weapons deck.*/
+    /**
+     * Get how many cards remains into this match' weapons deck
+     *
+     * @return how many cards remains into this match' weapons deck.
+     */
     public int getSizeWeaponDeck() {
         return weaponDeck.size();
     }
 
-    /** given an integer from 0 to 3, generates a map based on the order on which they appear on the instructions. Map 3 is the map that is not shown in the instructions
-     * @param mapID from 0 to 3 */
-    public void createMap(int mapID)  {
+    /**
+     * given an integer from 0 to 3, generates a map based on the order on which they appear on the instructions. Map 3 is the map that is not shown in the instructions
+     *
+     * @param mapID from 0 to 3
+     */
+    public void createMap(int mapID) {
         gameMap = MapGenerator.generate(mapID);
         MapGenerator.initCards(ammoDeck, weaponDeck, gameMap);
     }
 
-    public GameMap getMap(){
+    public GameMap getMap() {
         return gameMap;
     }
 
-    /** Method that signal the start of the match. This method SHOULD be called once when the match is ready to start.*/
+    /**
+     * Method that signal the start of the match. This method SHOULD be called once when the match is ready to start.
+     */
     public void chooseMapAndStartMatch() {
         actualPlayerIndex = 0;
         ChooseMapUpdate update = new ChooseMapUpdate(playerList.get(0).getName());
@@ -142,57 +173,67 @@ public class Match {
         nextTurn();
     }
 
-    public void addUpdate(Response update){
-        for(Player player : playerList){
-            if(Server.getInstance().getConnection() != null) // IF SOLO PER I TEST!!
+    public void addUpdate(Response update) {
+        for (Player player : playerList) {
+            if (Server.getInstance().getConnection() != null) // IF SOLO PER I TEST!!
                 Server.getInstance().getConnection().getConnectionWrapper(Server.getInstance().getLobby().getToken(player)).addUpdate(update);
         }
     }
 
-    /** Method that signal the start of the turn of a player. This method SHOULD be called each time a player starts his turn*/
+    /**
+     * Method that signal the start of the turn of a player. This method SHOULD be called each time a player starts his turn
+     */
     public void nextTurn() {
-        actualPlayerIndex = (actualPlayerIndex == playerList.size() - 1) ? 0 : actualPlayerIndex + 1 ;
+        actualPlayerIndex = (actualPlayerIndex == playerList.size() - 1) ? 0 : actualPlayerIndex + 1;
         if ((frenzy != null) && (actualPlayerIndex == 0)) { //actualPlayerIndex == firstPlayerIndex
             frenzy = ActionGroup.FRENZY_TYPE_2;
         }
         turnEngines.clear();
         Player currentPlayer = playerList.get(actualPlayerIndex);
         TurnType turnType = null;
-        if(currentPlayer.hasJustStarted()){
+        if (currentPlayer.hasJustStarted()) {
             turnType = TurnType.START_GAME;
-        }
-        else if(currentPlayer.isDead()){
+        } else if (currentPlayer.isDead()) {
             turnType = TurnType.RESPAWN;
-        }
-        else{
+        } else {
             turnType = TurnType.IN_GAME;
         }
         turnEngines.add(new TurnEngine(turnType, currentPlayer.getLifeState()));
-        if(frenzy != ActionGroup.FRENZY_TYPE_2 && !currentPlayer.isDead() && !currentPlayer.hasJustStarted()){
+        if (frenzy != ActionGroup.FRENZY_TYPE_2 && !currentPlayer.isDead() && !currentPlayer.hasJustStarted()) {
             turnEngines.add(new TurnEngine(turnType, currentPlayer.getLifeState()));
         }
     }
 
-    public void doAction(TurnEvent event){
+    public void doAction(TurnEvent event) {
         TurnEngine engine = turnEngines.stream().filter(e -> !(e.getValidEvents().size() == 1 && e.getValidEvents().contains(TurnEvent.END))).findFirst().orElse(null);
         engine.transition(event);
     }
 
-    /** returns the set of possible moves (as a list) of the given player.
+    /**
+     * returns the set of possible moves (as a list) of the given player.
+     *
      * @param p any player
-     * @return a Set of possible moves of the player */
+     * @return a Set of possible moves of the player
+     */
     public Set<TurnEvent> getPossibleAction(Player p) {
-        TurnEngine engine = turnEngines.stream().findFirst().orElse(null);
-        if(engine != null)
-            return engine.getValidEvents();
-        else
+        if (playerList.get(actualPlayerIndex).equals(p)) {
+            TurnEngine engine = turnEngines.stream().findFirst().orElse(null);
+            if (engine != null)
+                return engine.getValidEvents();
+            else
+                return new HashSet<TurnEvent>();
+        } else {
             return new HashSet<TurnEvent>();
+        }
     }
 
-    /** given a player object and the list of moves he wants to do, returns true if he's allowed to do this moves
-     * @param p any player
+    /**
+     * given a player object and the list of moves he wants to do, returns true if he's allowed to do this moves
+     *
+     * @param p          any player
      * @param actionList list of action the players wants to do
-     * @return true if he's allowed, false otherwise */
+     * @return true if he's allowed, false otherwise
+     */
     public boolean confirmActions(Player p, List actionList) {
         Set possibleActions = this.getPossibleAction(p);
         for (Object o : possibleActions) {
@@ -216,11 +257,11 @@ public class Match {
         return (indexBigger == biggerList.size());
     }
 
-    public List<Player> getPlayers(){
+    public List<Player> getPlayers() {
         return playerList;
     }
 
-    public Player getPlayerByUsername(String username){
+    public Player getPlayerByUsername(String username) {
         return playerList.stream().filter(f -> f.getName().equals(username)).findFirst().orElse(null);
     }
 
