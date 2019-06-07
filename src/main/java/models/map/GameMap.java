@@ -201,6 +201,7 @@ public class GameMap {
      * @throws SquareNotInMapException if square is not in this map
      * @throws PlayerAlreadyOnMapException if this map already has this player */
     public void spawnPlayer(Player player, SpawnPoint spawnPoint){
+        player.hasSpawnFirstTime();
         checkSquareIsInMap(spawnPoint);
         if(player==null || spawnPoint==null) throw new NullPointerException();
         if(positions.hasPlayer(player)) throw new PlayerAlreadyOnMapException();

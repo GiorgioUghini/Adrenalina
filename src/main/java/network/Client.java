@@ -2,6 +2,7 @@ package network;
 
 import errors.InvalidViewTypeException;
 import errors.NotImplementedException;
+import models.player.Player;
 import views.*;
 
 public class Client {

@@ -25,6 +25,7 @@ public class Player implements Subscriber, Serializable, Taggable {
     private ActionGroup lifeState = ActionGroup.NORMAL;
     private boolean online;
     private GameMap gameMap;
+    private boolean hasJustStarted;
 
 
     /** Creates a new player object
@@ -43,6 +44,7 @@ public class Player implements Subscriber, Serializable, Taggable {
         marks = new Mark();
         activeWeapon = null;
         gameMap = null;
+        hasJustStarted = true;
         //token generation
     }
 
@@ -74,6 +76,14 @@ public class Player implements Subscriber, Serializable, Taggable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean hasJustStarted() {
+        return hasJustStarted;
+    }
+
+    public void hasSpawnFirstTime() {
+        this.hasJustStarted = false;
     }
 
     public String getName() {
