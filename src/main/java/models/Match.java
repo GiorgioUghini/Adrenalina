@@ -10,9 +10,7 @@ import models.card.WeaponDeck;
 import models.map.GameMap;
 import models.map.MapGenerator;
 import models.player.Player;
-import models.turn.ActionElement;
-import models.turn.ActionGroup;
-import models.turn.Turn;
+import models.turn.*;
 import network.Response;
 import network.Server;
 import network.updates.ChooseMapUpdate;
@@ -28,7 +26,9 @@ public class Match {
     private WeaponDeck weaponDeck;
     private AmmoDeck ammoDeck;
     private GameMap gameMap;
-    private Turn actualTurn;
+    //private Turn actualTurn;
+    private List<TurnEngine> turnEngines;
+    private boolean turnActive = false;
     private ActionGroup frenzy = null;
     private CardController cardController;
     //null -> noFrenzy, Type1, Type2
@@ -36,6 +36,7 @@ public class Match {
     public Match( List<Player> players ){
         playerList = new LinkedList<>(players);
         cardController = new CardController();
+        turnEngines = new ArrayList<>();
         powerUpDeck = cardController.getPowerUpDeck();
         weaponDeck = cardController.getWeaponDeck();
         ammoDeck = cardController.getAmmoDeck();
@@ -138,7 +139,8 @@ public class Match {
     /** Method that signal the start of the match. This method SHOULD be called once when the match is ready to start.*/
     public void chooseMapAndStartMatch() {
         actualPlayerIndex = 0;
-        actualTurn = new Turn();
+        //actualTurn = new Turn();
+        turnActive = true;
         ChooseMapUpdate update = new ChooseMapUpdate(playerList.get(0).getName());
         addUpdate(update);
     }
@@ -152,41 +154,63 @@ public class Match {
 
     /** Method that signal the start of the turn of a player. This method SHOULD be called each time a player starts his turn*/
     public void nextTurn() {
-        if (actualTurn.hasFinished()) {
+        if (!turnActive) {
             actualPlayerIndex = (actualPlayerIndex == playerList.size() - 1) ? 0 : actualPlayerIndex + 1 ;
             if ((frenzy != null) && (actualPlayerIndex == 0)) { //actualPlayerIndex == firstPlayerIndex
                 frenzy = ActionGroup.FRENZY_TYPE_2;
             }
-            actualTurn = new Turn();
+            turnActive = true;
         }
     }
 
     /** Method that signal the end of the turn.*/
     public void endTurn() {
-        actualTurn.endTurn();
+        turnActive = false;
     }
 
     /** returns the set of possible moves (as a list) of the given player.
      * @param p any player
      * @return a Set of possible moves of the player */
     public Set getPossibleAction(Player p) {
+
+        /*
+
+        Player currentPlayer = playerList.get(actualPlayerIndex);
+        TurnType turnType = null;
+        if(p.hasJustStarted()){
+            turnType = TurnType.START_GAME;
+        }
+        else if(p.isDead()){
+            turnType = TurnType.RESPAWN;
+        }
+        else{
+            turnType = TurnType.IN_GAME;
+        }
+
+        turnEngines.add(new TurnEngine(turnType, p.getLifeState()));
+        if(frenzy != ActionGroup.FRENZY_TYPE_2){
+            turnEngines.add(new TurnEngine(turnType, p.getLifeState()));
+        }
+
+        TurnEngine engine = null;
+        while((engine = turnEngines.stream().findFirst().orElse(null)) != null){
+
+        }
+
+        for(TurnEngine engine = turnEngines.stream().findFirst().orElse(null); engine != null; )
+
         if ((!p.equals(playerList.get(actualPlayerIndex))) || actualTurn == null) {
             return new HashSet<>();
         }
 
-        try {
-            gameMap.checkPlayerInMap(p);
-        } catch (PlayerNotOnMapException e) {
-            LinkedList actionGroupSpawn = new LinkedList<>(Collections.singletonList(ActionElement.DRAW));
-            return new HashSet<>(Collections.singletonList(actionGroupSpawn));
-        }
 
         if (frenzy != null) {
             return (HashSet) actualTurn.getCompositions().get(frenzy);
         }
 
         return (HashSet) actualTurn.getCompositions().get(p.getLifeState());
-
+*/
+        return new HashSet<>();
     }
 
     /** given a player object and the list of moves he wants to do, returns true if he's allowed to do this moves
