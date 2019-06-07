@@ -19,6 +19,13 @@ public class TurnEngine {
         this.stateBehaviour = new StartedStateBehaviour(turnType, actionGroup);
     }
 
+    public TurnEngine(TurnStateBehaviour state) {
+        this.turnType = state.getTurnType();
+        this.actionGroup = state.getActionGroup();
+        this.stateBehaviour = state;
+
+    }
+
     TurnState getState() {
         return stateBehaviour.getState();
     }

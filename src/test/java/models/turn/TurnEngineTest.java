@@ -2,6 +2,8 @@ package models.turn;
 
 import org.junit.Test;
 
+import java.util.Set;
+
 import static org.junit.Assert.*;
 
 public class TurnEngineTest {
@@ -185,6 +187,21 @@ public class TurnEngineTest {
         turnEngine.run();
         turnEngine.run();
         turnEngine.grab();
+        turnEngine.end();
+    }
+
+    @Test
+    public void testSetState() {
+        try {
+            TurnEngine turnEngine = new TurnEngine(new FourthRunStateBehaviour(TurnType.IN_GAME, ActionGroup.VERY_LOW_LIFE));
+            turnEngine.run();
+            turnEngine.end();
+            fail();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+        TurnEngine turnEngine = new TurnEngine(new FourthRunStateBehaviour(TurnType.IN_GAME, ActionGroup.VERY_LOW_LIFE));
         turnEngine.end();
     }
 }
