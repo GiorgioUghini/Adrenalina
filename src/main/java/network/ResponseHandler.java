@@ -32,9 +32,9 @@ public class ResponseHandler implements ResponseHandlerInterface {
     public void handle(ValidActionsResponse response) {
         if(!response.actions.isEmpty()){
             Client.getInstance().getCurrentView().showMessage("You could do some actions. Chooose one from:");
-            for(List<TurnEvent> list : response.actions){
+            for(TurnEvent turnEvent : response.actions){
 
-                switch (list.get(0)) {
+                switch (turnEvent) {
                     case DRAW:
                         ((GameView) Client.getInstance().getCurrentView()).setBtnDrawPowerUpVisibility(true);
                         break;
@@ -53,7 +53,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
                     //NE MANCANO ALCUNI! TIPO I VARI USEPOWERUP
                 }
 
-                for(TurnEvent a : list){
+                for(TurnEvent a : response.actions){
                     Client.getInstance().getCurrentView().showMessage(a.name());
                 }
                 Client.getInstance().getCurrentView().showMessage("\n");

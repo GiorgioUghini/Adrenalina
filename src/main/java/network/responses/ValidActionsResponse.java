@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class ValidActionsResponse implements Response {
 
-    public Set<List<TurnEvent>> actions;
+    public Set<TurnEvent> actions;
 
     public ValidActionsResponse(Set actions){
         this.actions = actions;

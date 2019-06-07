@@ -140,9 +140,10 @@ public class Match {
     public void chooseMapAndStartMatch() {
         actualPlayerIndex = 0;
         //actualTurn = new Turn();
-        turnActive = true;
         ChooseMapUpdate update = new ChooseMapUpdate(playerList.get(0).getName());
         addUpdate(update);
+        nextTurn();
+        turnActive = true;
     }
 
     public void addUpdate(Response update){
