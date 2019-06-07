@@ -51,6 +51,9 @@ public class ResponseHandler implements ResponseHandlerInterface {
                     case SPAWN:
                         ((GameView) Client.getInstance().getCurrentView()).setBtnSpawnVisibility(true);
                         break;
+                    case GRAB:
+                        ((GameView) Client.getInstance().getCurrentView()).setBtnGrabAmmoVisibility(true);
+                        break;
                     //NE MANCANO ALCUNI! TIPO I VARI USEPOWERUP
                 }
 
