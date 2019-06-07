@@ -211,31 +211,31 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     public void powerUp1Clicked() {
-        if (canClickOnPowerUps && (!myPowerUpsCardOrdered.isEmpty())) {
+        if (canClickOnPowerUps && (!Client.getInstance().getPlayer().getPowerUpList().isEmpty())) {
             canClickOnPowerUps = false;
-            gameController.spawn(myPowerUpsCardOrdered.get(0));
-            removePowerUpToHand(myPowerUpsCardOrdered.get(0));
+            gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(0));
+            removePowerUpToHand(Client.getInstance().getPlayer().getPowerUpList().get(0));
         }
     }
     public void powerUp2Clicked() {
-        if (canClickOnPowerUps && (myPowerUpsCardOrdered.size() > 1)) {
+        if (canClickOnPowerUps && (Client.getInstance().getPlayer().getPowerUpList().size() > 1)) {
             canClickOnPowerUps = false;
-            gameController.spawn(myPowerUpsCardOrdered.get(1));
-            removePowerUpToHand(myPowerUpsCardOrdered.get(1));
+            gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(1));
+            removePowerUpToHand(Client.getInstance().getPlayer().getPowerUpList().get(1));
         }
     }
     public void powerUp3Clicked() {
-        if (canClickOnPowerUps && (myPowerUpsCardOrdered.size() > 2)) {
+        if (canClickOnPowerUps && (Client.getInstance().getPlayer().getPowerUpList().size() > 2)) {
             canClickOnPowerUps = false;
-            gameController.spawn(myPowerUpsCardOrdered.get(2));
-            removePowerUpToHand(myPowerUpsCardOrdered.get(2));
+            gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(2));
+            removePowerUpToHand(Client.getInstance().getPlayer().getPowerUpList().get(2));
         }
     }
     public void powerUp4Clicked() {
-        if (canClickOnPowerUps && (myPowerUpsCardOrdered.size() > 3)) {
+        if (canClickOnPowerUps && (Client.getInstance().getPlayer().getPowerUpList().size() > 3)) {
             canClickOnPowerUps = false;
-            gameController.spawn(myPowerUpsCardOrdered.get(3));
-            removePowerUpToHand(myPowerUpsCardOrdered.get(3));
+            gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(3));
+            removePowerUpToHand(Client.getInstance().getPlayer().getPowerUpList().get(3));
         }
     }
 
