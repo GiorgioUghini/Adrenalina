@@ -10,7 +10,9 @@ import models.player.Player;
 import models.turn.*;
 import network.Response;
 import network.Server;
+import network.responses.EndTurnResponse;
 import network.updates.ChooseMapUpdate;
+import network.updates.NextTurnUpdate;
 import network.updates.StartGameUpdate;
 
 import java.util.*;
@@ -202,6 +204,7 @@ public class Match {
         if (frenzy != ActionGroup.FRENZY_TYPE_2 && !currentPlayer.isDead() && !currentPlayer.hasJustStarted()) {
             turnEngines.add(new TurnEngine(turnType, currentPlayer.getLifeState()));
         }
+        addUpdate(new NextTurnUpdate(playerList.get(actualPlayerIndex).getName()));
     }
 
     public void doAction(TurnEvent event) {
