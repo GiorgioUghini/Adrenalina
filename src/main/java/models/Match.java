@@ -25,7 +25,6 @@ public class Match {
     private GameMap gameMap;
     //private Turn actualTurn;
     private List<TurnEngine> turnEngines;
-    private boolean turnActive = false;
     private ActionGroup frenzy = null;
     private CardController cardController;
     //null -> noFrenzy, Type1, Type2
@@ -138,11 +137,9 @@ public class Match {
     /** Method that signal the start of the match. This method SHOULD be called once when the match is ready to start.*/
     public void chooseMapAndStartMatch() {
         actualPlayerIndex = 0;
-        //actualTurn = new Turn();
         ChooseMapUpdate update = new ChooseMapUpdate(playerList.get(0).getName());
         addUpdate(update);
         nextTurn();
-        turnActive = true;
     }
 
     public void addUpdate(Response update){
@@ -154,41 +151,31 @@ public class Match {
 
     /** Method that signal the start of the turn of a player. This method SHOULD be called each time a player starts his turn*/
     public void nextTurn() {
-        if (!turnActive) {
-            actualPlayerIndex = (actualPlayerIndex == playerList.size() - 1) ? 0 : actualPlayerIndex + 1 ;
-            if ((frenzy != null) && (actualPlayerIndex == 0)) { //actualPlayerIndex == firstPlayerIndex
-                frenzy = ActionGroup.FRENZY_TYPE_2;
-            }
-            turnActive = true;
-
-
-            turnEngines.clear();
-            Player currentPlayer = playerList.get(actualPlayerIndex);
-            TurnType turnType = null;
-            if(currentPlayer.hasJustStarted()){
-                turnType = TurnType.START_GAME;
-            }
-            else if(currentPlayer.isDead()){
-                turnType = TurnType.RESPAWN;
-            }
-            else{
-                turnType = TurnType.IN_GAME;
-            }
+        actualPlayerIndex = (actualPlayerIndex == playerList.size() - 1) ? 0 : actualPlayerIndex + 1 ;
+        if ((frenzy != null) && (actualPlayerIndex == 0)) { //actualPlayerIndex == firstPlayerIndex
+            frenzy = ActionGroup.FRENZY_TYPE_2;
+        }
+        turnEngines.clear();
+        Player currentPlayer = playerList.get(actualPlayerIndex);
+        TurnType turnType = null;
+        if(currentPlayer.hasJustStarted()){
+            turnType = TurnType.START_GAME;
+        }
+        else if(currentPlayer.isDead()){
+            turnType = TurnType.RESPAWN;
+        }
+        else{
+            turnType = TurnType.IN_GAME;
+        }
+        turnEngines.add(new TurnEngine(turnType, currentPlayer.getLifeState()));
+        if(frenzy != ActionGroup.FRENZY_TYPE_2 && !currentPlayer.isDead() && !currentPlayer.hasJustStarted()){
             turnEngines.add(new TurnEngine(turnType, currentPlayer.getLifeState()));
-            if(frenzy != ActionGroup.FRENZY_TYPE_2){
-                turnEngines.add(new TurnEngine(turnType, currentPlayer.getLifeState()));
-            }
         }
     }
 
     public void doAction(TurnEvent event){
         TurnEngine engine = turnEngines.stream().filter(e -> !(e.getValidEvents().size() == 1 && e.getValidEvents().contains(TurnEvent.END))).findFirst().orElse(null);
         engine.transition(event);
-    }
-
-    /** Method that signal the end of the turn.*/
-    public void endTurn() {
-        turnActive = false;
     }
 
     /** returns the set of possible moves (as a list) of the given player.

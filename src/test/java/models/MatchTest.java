@@ -36,7 +36,6 @@ public class MatchTest {
         possibleActions = m.getPossibleAction(pl2);
         assertFalse(possibleActions.isEmpty());
 
-        m.endTurn();
         m.nextTurn();
         possibleActions = m.getPossibleAction(pl2);
         assertTrue(possibleActions.isEmpty());
@@ -87,8 +86,6 @@ public class MatchTest {
         // [RUN, RUN, GRAB] not permitted in this stage (Giorgio has full life)
         assertFalse(confirmation);
 
-        m.endTurn(); //End Giorgio
-
         m.nextTurn(); //Start Vila
         wantsToDoList.clear();
         wantsToDoList.add(ActionElement.RUN);
@@ -100,7 +97,6 @@ public class MatchTest {
 
         // Frenzy enabled!!!
         m.activateFrenzy(pl3);
-        m.endTurn(); //End Vila
 
         m.nextTurn(); //Start Cosimo
         wantsToDoList.clear();
@@ -115,7 +111,6 @@ public class MatchTest {
         confirmation = m.confirmActions(pl1, wantsToDoList);
         // [RUN, RELOAD, SHOOT] permitted in this stage (Not type 2)
         assertTrue(confirmation);
-        m.endTurn(); //End Cosimo
 
         m.nextTurn(); //Start Giorgio
         confirmation = m.confirmActions(pl2, wantsToDoList);
