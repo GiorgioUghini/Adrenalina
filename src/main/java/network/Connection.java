@@ -20,6 +20,6 @@ public interface Connection {
     void tagElement(Taggable taggable);
     void playEffect(Effect effect);
     void finishCard();
+    void endTurn();
     void receiveResponse(Response response);
-
 }

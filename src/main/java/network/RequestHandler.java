@@ -69,4 +69,9 @@ public class RequestHandler implements RequestHandlerInterface {
         return remoteMethods.finishCard(request.getToken());
     }
 
+    @Override
+    public Response handle(EndTurnRequest request) throws RemoteException {
+        return remoteMethods.endTurn(request.getToken());
+    }
+
 }

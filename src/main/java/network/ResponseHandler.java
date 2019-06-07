@@ -155,5 +155,10 @@ public class ResponseHandler implements ResponseHandlerInterface {
         // TODO è finito un effetto, chiedere all'utente se vuole attivarne un altro o terminare lo SHOOT. Per terminare deve inviare una FinishCardRequest
     }
 
+    @Override
+    public void handle(EndTurnResponse response) {
+
+    }
+
 
 }

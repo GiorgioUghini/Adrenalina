@@ -129,6 +129,17 @@ public class RMIConnection implements Connection {
     }
 
     @Override
+    public void endTurn() {
+        try {
+            String token = Client.getInstance().getConnection().getToken();
+            Response response = remoteMethods.endTurn(token);
+            Client.getInstance().getConnection().receiveResponse(response);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void receiveResponse(Response response) {
         response.handle(responseHandler);
     }

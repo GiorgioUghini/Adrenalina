@@ -5,6 +5,7 @@ import models.card.Taggable;
 import models.map.RoomColor;
 import network.requests.*;
 import network.responses.CardEffectsResponse;
+import network.responses.EndTurnResponse;
 import network.responses.FinishCardResponse;
 import utils.Constants;
 
@@ -116,6 +117,16 @@ public class SocketConnection implements Connection {
     public void finishCard() {
         try {
             FinishCardResponse request = new FinishCardResponse();
+            write(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void endTurn() {
+        try {
+            EndTurnRequest request = new EndTurnRequest();
             write(request);
         } catch (IOException e) {
             e.printStackTrace();

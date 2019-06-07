@@ -160,5 +160,10 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         return legitEffects.getLegitEffects().isEmpty() ? new FinishCardResponse() : new FinishEffectResponse();
     }
 
+    @Override
+    public Response endTurn(String token) throws RemoteException {
+        return new EndTurnResponse();
+    }
+
 
 }

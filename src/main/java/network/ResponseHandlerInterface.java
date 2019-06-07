@@ -37,4 +37,6 @@ public interface ResponseHandlerInterface {
     void handle(FinishCardResponse response);
 
     void handle(FinishEffectResponse response);
+
+    void handle(EndTurnResponse response);
 }
