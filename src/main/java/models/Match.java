@@ -160,7 +160,30 @@ public class Match {
                 frenzy = ActionGroup.FRENZY_TYPE_2;
             }
             turnActive = true;
+
+
+            turnEngines.clear();
+            Player currentPlayer = playerList.get(actualPlayerIndex);
+            TurnType turnType = null;
+            if(currentPlayer.hasJustStarted()){
+                turnType = TurnType.START_GAME;
+            }
+            else if(currentPlayer.isDead()){
+                turnType = TurnType.RESPAWN;
+            }
+            else{
+                turnType = TurnType.IN_GAME;
+            }
+            turnEngines.add(new TurnEngine(turnType, currentPlayer.getLifeState()));
+            if(frenzy != ActionGroup.FRENZY_TYPE_2){
+                turnEngines.add(new TurnEngine(turnType, currentPlayer.getLifeState()));
+            }
         }
+    }
+
+    public void doAction(TurnEvent event){
+        TurnEngine engine = turnEngines.stream().filter(e -> !(e.getValidEvents().size() == 1 && e.getValidEvents().contains(TurnEvent.END))).findFirst().orElse(null);
+        engine.transition(event);
     }
 
     /** Method that signal the end of the turn.*/
@@ -171,46 +194,12 @@ public class Match {
     /** returns the set of possible moves (as a list) of the given player.
      * @param p any player
      * @return a Set of possible moves of the player */
-    public Set getPossibleAction(Player p) {
-
-        /*
-
-        Player currentPlayer = playerList.get(actualPlayerIndex);
-        TurnType turnType = null;
-        if(p.hasJustStarted()){
-            turnType = TurnType.START_GAME;
-        }
-        else if(p.isDead()){
-            turnType = TurnType.RESPAWN;
-        }
-        else{
-            turnType = TurnType.IN_GAME;
-        }
-
-        turnEngines.add(new TurnEngine(turnType, p.getLifeState()));
-        if(frenzy != ActionGroup.FRENZY_TYPE_2){
-            turnEngines.add(new TurnEngine(turnType, p.getLifeState()));
-        }
-
-        TurnEngine engine = null;
-        while((engine = turnEngines.stream().findFirst().orElse(null)) != null){
-
-        }
-
-        for(TurnEngine engine = turnEngines.stream().findFirst().orElse(null); engine != null; )
-
-        if ((!p.equals(playerList.get(actualPlayerIndex))) || actualTurn == null) {
-            return new HashSet<>();
-        }
-
-
-        if (frenzy != null) {
-            return (HashSet) actualTurn.getCompositions().get(frenzy);
-        }
-
-        return (HashSet) actualTurn.getCompositions().get(p.getLifeState());
-*/
-        return new HashSet<>();
+    public Set<TurnEvent> getPossibleAction(Player p) {
+        TurnEngine engine = turnEngines.stream().findFirst().orElse(null);
+        if(engine != null)
+            return engine.getValidEvents();
+        else
+            return new HashSet<TurnEvent>();
     }
 
     /** given a player object and the list of moves he wants to do, returns true if he's allowed to do this moves
