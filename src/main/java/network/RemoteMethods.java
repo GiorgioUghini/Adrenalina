@@ -162,6 +162,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
 
     @Override
     public Response endTurn(String token) throws RemoteException {
+        Server.getInstance().getLobby().getMatch(token).nextTurn();
         return new EndTurnResponse();
     }
 

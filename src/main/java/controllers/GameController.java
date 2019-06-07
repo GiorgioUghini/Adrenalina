@@ -37,6 +37,9 @@ public class GameController {
 
     public void spawn(PowerUpCard powerUpCard) {
         Client.getInstance().getConnection().spawnPlayer(powerUpCard.color);
+    }
 
+    public void endTurn() {
+        Client.getInstance().getConnection().endTurn();
     }
 }
