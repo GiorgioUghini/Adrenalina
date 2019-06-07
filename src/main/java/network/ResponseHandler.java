@@ -4,6 +4,7 @@ import errors.InvalidInputException;
 import models.card.Effect;
 import models.card.LegitEffects;
 import models.turn.ActionElement;
+import models.turn.TurnEvent;
 import network.responses.*;
 import network.updates.*;
 import views.GameView;
@@ -31,7 +32,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
     public void handle(ValidActionsResponse response) {
         if(!response.actions.isEmpty()){
             Client.getInstance().getCurrentView().showMessage("You could do some actions. Chooose one from:");
-            for(List<ActionElement> list : response.actions){
+            for(List<TurnEvent> list : response.actions){
 
                 switch (list.get(0)) {
                     case DRAW:
@@ -52,7 +53,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
                     //NE MANCANO ALCUNI! TIPO I VARI USEPOWERUP
                 }
 
-                for(ActionElement a : list){
+                for(TurnEvent a : list){
                     Client.getInstance().getCurrentView().showMessage(a.name());
                 }
                 Client.getInstance().getCurrentView().showMessage("\n");

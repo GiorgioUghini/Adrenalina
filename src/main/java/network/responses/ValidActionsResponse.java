@@ -1,7 +1,6 @@
 package network.responses;
 
-import models.turn.ActionElement;
-import models.turn.ActionGroup;
+import models.turn.TurnEvent;
 import network.Response;
 import network.ResponseHandlerInterface;
 
@@ -10,7 +9,7 @@ import java.util.Set;
 
 public class ValidActionsResponse implements Response {
 
-    public Set<List<ActionElement>> actions;
+    public Set<List<TurnEvent>> actions;
 
     public ValidActionsResponse(Set actions){
         this.actions = actions;
