@@ -3,10 +3,7 @@ package models;
 import controllers.CardController;
 import errors.PlayerNotOnMapException;
 import javafx.application.Platform;
-import models.card.AmmoDeck;
-import models.card.Card;
-import models.card.PowerUpDeck;
-import models.card.WeaponDeck;
+import models.card.*;
 import models.map.GameMap;
 import models.map.MapGenerator;
 import models.player.Player;
@@ -99,7 +96,9 @@ public class Match {
     /** Draw a card from this match' power up deck
      * @return the card that is drawn.*/
     public Card drawPowerUp() {
-        return powerUpDeck.draw();
+        Card drawn = powerUpDeck.draw();
+        playerList.get(actualPlayerIndex).drawPowerUp((PowerUpCard) drawn);
+        return drawn;
     }
 
     /** Shuffle this match' power up deck*/
@@ -176,7 +175,7 @@ public class Match {
                 turnType = TurnType.IN_GAME;
             }
             turnEngines.add(new TurnEngine(turnType, currentPlayer.getLifeState()));
-            if(frenzy != ActionGroup.FRENZY_TYPE_2 && !currentPlayer.isDead() && !currentPlayer.hasJustStarted()){
+            if(frenzy != ActionGroup.FRENZY_TYPE_2){
                 turnEngines.add(new TurnEngine(turnType, currentPlayer.getLifeState()));
             }
         }

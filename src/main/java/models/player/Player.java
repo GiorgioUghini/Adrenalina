@@ -74,6 +74,10 @@ public class Player implements Subscriber, Serializable, Taggable {
         //TODO: What to do when the states changes?
     }
 
+    public void drawPowerUp(PowerUpCard drawn) {
+        powerUpList.add(drawn);
+    }
+
     public void setName(String name) {
         this.name = name;
     }

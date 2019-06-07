@@ -155,6 +155,10 @@ public class GameViewGUI implements Initializable, GameView {
     public void usePowerUp() {
 
     }
+    
+    public void endTurn() {
+
+    }
 
     @Override
     public void printError(String error) {
