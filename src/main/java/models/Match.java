@@ -176,7 +176,7 @@ public class Match {
                 turnType = TurnType.IN_GAME;
             }
             turnEngines.add(new TurnEngine(turnType, currentPlayer.getLifeState()));
-            if(frenzy != ActionGroup.FRENZY_TYPE_2){
+            if(frenzy != ActionGroup.FRENZY_TYPE_2 && !currentPlayer.isDead() && !currentPlayer.hasJustStarted()){
                 turnEngines.add(new TurnEngine(turnType, currentPlayer.getLifeState()));
             }
         }
