@@ -54,9 +54,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
                     //NE MANCANO ALCUNI! TIPO I VARI USEPOWERUP
                 }
 
-                for(TurnEvent a : response.actions){
-                    Client.getInstance().getCurrentView().showMessage(a.name());
-                }
+                Client.getInstance().getCurrentView().showMessage(turnEvent.name());
                 Client.getInstance().getCurrentView().showMessage("\n");
             }
         }

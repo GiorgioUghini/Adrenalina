@@ -176,7 +176,9 @@ public class GameViewGUI implements Initializable, GameView {
     @Override
     public void showMessage(String message) {
         if (message.equals("\n")) return;
-        gameStatusListView.getItems().add(message);
+        Platform.runLater( () -> {
+            gameStatusListView.getItems().add(message);
+        });
     }
 
     @Override
@@ -186,35 +188,35 @@ public class GameViewGUI implements Initializable, GameView {
 
     @Override
     public void setBtnDrawPowerUpVisibility(boolean isVisible) {
-        btnDrawPowerUp.setDisable(!isVisible);
+        Platform.runLater( () -> { btnDrawPowerUp.setDisable(!isVisible); });
     }
     @Override
     public void setBtnGrabWeaponVisibility(boolean isVisible) {
-        btnGrabWeapon.setDisable(!isVisible);
+        Platform.runLater( () -> { btnGrabWeapon.setDisable(!isVisible); });
     }
     @Override
     public void setBtnSpawnVisibility(boolean isVisible) {
-        btnSpawn.setDisable(!isVisible);
+        Platform.runLater( () -> { btnSpawn.setDisable(!isVisible); });
     }
     @Override
     public void setBtnRunVisibility(boolean isVisible) {
-        btnRun.setDisable(!isVisible);
+        Platform.runLater( () -> { btnRun.setDisable(!isVisible); });
     }
     @Override
     public void setBtnGrabAmmoVisibility(boolean isVisible) {
-        btnGrabAmmo.setDisable(!isVisible);
+        Platform.runLater( () -> { btnGrabAmmo.setDisable(!isVisible); });
     }
     @Override
     public void setBtnShootVisibility(boolean isVisible) {
-        btnShoot.setDisable(!isVisible);
+        Platform.runLater( () -> { btnShoot.setDisable(!isVisible); });
     }
     @Override
     public void setBtnReloadVisibility(boolean isVisible) {
-        btnReload.setDisable(!isVisible);
+        Platform.runLater( () -> { btnReload.setDisable(!isVisible); });
     }
     @Override
     public void setBtnUsePowerUpVisibility(boolean isVisible) {
-        btnUsePowerUp.setDisable(!isVisible);
+        Platform.runLater( () -> { btnUsePowerUp.setDisable(!isVisible); });
     }
 
     public void powerUp1Clicked() {
