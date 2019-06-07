@@ -125,7 +125,11 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(NextTurnUpdate response) {
-        ((GameView) Client.getInstance().getCurrentView()).startTurn(response.name);
+        try {
+            ((GameView) Client.getInstance().getCurrentView()).startTurn(response.name);
+        } catch (Exception e) {
+            Client.getInstance();
+        }
     }
 
     @Override
