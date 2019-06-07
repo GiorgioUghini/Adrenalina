@@ -123,6 +123,11 @@ public class ResponseHandler implements ResponseHandlerInterface {
     }
 
     @Override
+    public void handle(NextTurnUpdate response) {
+
+    }
+
+    @Override
     public void handle(ChooseMapResponse response) {
         //should be empty
     }
