@@ -220,6 +220,59 @@ public class EffectCardTest {
         assertEquals(2, p1.getTotalDamage());
     }
 
+    public void testVulcanizzatore(){
+        GameMap gameMap = MapGenerator.generate(1);
+        List<Player> players = createTestPlayers(4);
+        WeaponCard vulcanizzatore = getCard("Vulcanizzatore");
+        List<WeaponCard> myCards = new ArrayList<>();
+        myCards.add(vulcanizzatore);
+        Player me = players.get(0);
+        SpawnPoint yellow = getSpawnPoint(gameMap, RoomColor.YELLOW);
+        SpawnPoint red = getSpawnPoint(gameMap, RoomColor.RED);
+        gameMap.spawnPlayer(me, yellow);
+        gameMap.spawnPlayer(players.get(1), yellow);
+        gameMap.spawnPlayer(players.get(2), red);
+        gameMap.spawnPlayer(players.get(3), red);
+        gameMap.movePlayer(me, yellow.getNextSquare(CardinalDirection.TOP).getNextSquare(CardinalDirection.LEFT));
+        assertTrue(gameMap.getPlayerPosition(me).hasDoors());
+        me.setAmmo(new Ammo(3,3,3));
+        me.playWeapon(vulcanizzatore);
+        List<Effect> effects = me.getWeaponEffects().getLegitEffects();
+        assertEquals(2, effects.size());
+        for(Effect e : effects){
+            if(e.name.equals("Modalità base")){
+                me.playWeaponEffect(e);
+            }
+        }
+        vulcanizzatore.playNextAction(); //select room
+        Selectable selectableRooms = vulcanizzatore.getSelectable();
+        assertEquals(2, selectableRooms.get().size());
+        assertTrue(selectableRooms.get().contains(RoomColor.RED));
+        vulcanizzatore.select(RoomColor.RED);
+        vulcanizzatore.playNextAction(); //damage
+        assertEquals(0, players.get(1).getTotalDamage());
+        assertEquals(1, players.get(2).getTotalDamage());
+        assertEquals(1, players.get(3).getTotalDamage());
+    }
+
+    private SpawnPoint getSpawnPoint(GameMap gameMap, RoomColor color){
+        for(SpawnPoint s : gameMap.getSpawnPoints()){
+            if(s.getColor().equals(color)){
+                return s;
+            }
+        }
+        return null;
+    }
+
+    private List<Player> createTestPlayers(int number){
+        List<Player> out = new ArrayList<>();
+        out.add(new Player("me", "password"));
+        for(int i = 1; i<number; i++){
+            out.add(new Player("p"+i, "password"));
+        }
+        return out;
+    }
+
     private WeaponCard getCard(String cardName){
         weaponDeck = new CardController().getWeaponDeck();
         int deckSize = weaponDeck.size();
