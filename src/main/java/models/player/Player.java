@@ -151,7 +151,7 @@ public class Player implements Subscriber, Serializable, Taggable {
 
     /** Damage this player
      * @param damage the number of damage to give. Could be any number, without needs to check limitation of it.
-     * @param attacker the player witch is attacking
+     * @param attacker the player which is attacking
      * */
     public void getDamage(int damage, Player attacker) { this.life.damage(damage, attacker); }
 
@@ -309,4 +309,7 @@ public class Player implements Subscriber, Serializable, Taggable {
         if(!weaponList.contains(weaponCard)) throw new WeaponCardException("This user does not have this weapon:" + weaponCard.name);
     }
 
+    public Player getLastDamager() {
+        return this.life.getHurtMeLast();
+    }
 }

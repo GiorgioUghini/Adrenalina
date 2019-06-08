@@ -13,6 +13,7 @@ class Life implements Serializable {
     private Map<Player, Integer> myDamages;
     private List<Player> observingPlayers;
     private Player me;
+    private Player hurtMeLast;
 
     Life(Player me) {
         this.me = me;
@@ -41,12 +42,16 @@ class Life implements Serializable {
         return myDamages.values().stream().mapToInt(Integer::intValue).sum();
     }
 
+    Player getHurtMeLast() {
+        return hurtMeLast;
+    }
+
     void damage(int damage, Player attacker) {
         int additionalDamage = me.getMarksFromPlayer(attacker);
         me.removeAllMarkFromPlayer(attacker);
         damage = damage + additionalDamage;
         int totalDamage = myDamages.values().stream().mapToInt(Integer::intValue).sum();
-
+        hurtMeLast = attacker;
         if (totalDamage+damage > MAX_LIFEPOINTS) {
             damage = MAX_LIFEPOINTS - totalDamage;
         }
