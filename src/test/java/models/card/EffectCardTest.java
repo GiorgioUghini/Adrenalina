@@ -6,9 +6,7 @@ import models.player.Ammo;
 import models.player.Player;
 import org.junit.Test;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -111,6 +109,65 @@ public class EffectCardTest {
         assertEquals(1, playersToDamage.size());
         assertTrue(playersToDamage.containsKey(player2));
         lanciarazzi.reset();
+    }
+
+    @Test
+    public void testAreaVisibile(){
+        WeaponCard distruttore = getCard("Distruttore");
+        List<WeaponCard> weaponCards = new ArrayList<>();
+        weaponCards.add(distruttore);
+        Player me = new Player("a", "password");
+        Player p1 = new Player("b", "password");
+        Player p2 = new Player("c", "password");
+        Player p3 = new Player("d", "password");
+        GameMap gameMap = MapGenerator.generate(1);
+        Set<SpawnPoint> spawnPoints = gameMap.getSpawnPoints();
+        SpawnPoint yellow = null;
+        SpawnPoint red = null;
+        for(SpawnPoint s : spawnPoints){
+            if(s.getColor().equals(RoomColor.YELLOW)){
+                yellow = s;
+            }else if(s.getColor().equals(RoomColor.RED)){
+                red = s;
+            }
+        }
+        if(yellow == null) assert false;
+        gameMap.spawnPlayer(me, yellow);
+        gameMap.spawnPlayer(p1, yellow);
+        gameMap.spawnPlayer(p2, yellow);
+        gameMap.spawnPlayer(p3, red);
+        gameMap.movePlayer(me, yellow.getNextSquare(CardinalDirection.TOP).getNextSquare(CardinalDirection.LEFT));
+        Ammo ammo = new Ammo(3,3,3);
+        me.setAmmo(ammo);
+        me.setWeaponList(weaponCards);
+        me.playWeapon(distruttore);
+        List<Effect> activableEffects = me.getWeaponEffects().getLegitEffects();
+        assertEquals(1, activableEffects.size());
+        Effect effect = activableEffects.get(0);
+        assertEquals("Effetto base", effect.name);
+        me.playWeaponEffect(effect);
+        Action nextAction;
+        while((nextAction = me.playNextWeaponAction())!=null){
+            if(nextAction.type.equals(ActionType.SELECT) && !nextAction.select.auto){
+                Selectable selectable = distruttore.getSelectable();
+                assertEquals(2, selectable.get().size());
+                distruttore.select(p1);
+            }
+        }
+        assertEquals(2, p1.getTotalDamage());
+        activableEffects = me.getWeaponEffects().getLegitEffects();
+        assertEquals(1, activableEffects.size());
+        me.playWeaponEffect(activableEffects.get(0));
+        assertEquals(2, me.getAmmo().red);
+        while((nextAction = me.playNextWeaponAction())!=null){
+            if(nextAction.type.equals(ActionType.SELECT) && !nextAction.select.auto){
+                Selectable selectable = distruttore.getSelectable();
+                assertEquals(1, selectable.get().size());
+                assertTrue(selectable.get().contains(p2));
+                distruttore.select(p2);
+            }
+        }
+        assertEquals(0, p2.getTotalDamage());
     }
 
     private WeaponCard getCard(String cardName){

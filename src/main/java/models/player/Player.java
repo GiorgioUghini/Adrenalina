@@ -259,6 +259,7 @@ public class Player implements Subscriber, Serializable, Taggable {
      *  */
     public Action playNextWeaponAction(){
         Action action = activeWeapon.playNextAction();
+        if(action==null) return null;
         switch (action.type){
             case MARK:
                 Map<Player, Integer> playersToMark = activeWeapon.getPlayersToMark();

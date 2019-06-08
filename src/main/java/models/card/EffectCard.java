@@ -178,7 +178,7 @@ public class EffectCard extends Card  {
      * @throws WeaponCardException if the current action is not a mark */
     public Map<Player, Integer> getPlayersToMark(){
         checkActiveAction(ActionType.MARK);
-        return new DamageEngine(activeAction.damage, selectedPlayers, selectedSquares, selectedRooms, gameMap, me).getDamages();
+        return new DamageEngine(activeAction.mark, selectedPlayers, selectedSquares, selectedRooms, gameMap, me).getDamages();
     }
 
     public Map<Player, Square> getPlayersMoves(){
