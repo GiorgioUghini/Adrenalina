@@ -2,18 +2,21 @@ package network;
 
 import models.card.Effect;
 import models.card.Taggable;
+import models.card.WeaponCard;
 import models.map.RoomColor;
 import models.map.Square;
 import network.requests.*;
 import network.responses.CardEffectsResponse;
 import network.responses.EndTurnResponse;
 import network.responses.FinishCardResponse;
+import network.responses.ReloadResponse;
 import utils.Constants;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 
 
 public class SocketConnection implements Connection {
@@ -148,6 +151,16 @@ public class SocketConnection implements Connection {
     public void run(Square square) {
         try {
             RunRequest request = new RunRequest(square);
+            write(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void reload(List<WeaponCard> weapons) {
+        try {
+            ReloadRequest request = new ReloadRequest(weapons);
             write(request);
         } catch (IOException e) {
             e.printStackTrace();

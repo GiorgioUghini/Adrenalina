@@ -2,6 +2,7 @@ package network;
 
 import models.card.Effect;
 import models.card.Taggable;
+import models.card.WeaponCard;
 import models.map.RoomColor;
 import models.map.Square;
 
@@ -9,6 +10,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.List;
 import java.util.Timer;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -156,6 +158,17 @@ public class RMIConnection implements Connection {
         try {
             String token = Client.getInstance().getConnection().getToken();
             Response response = remoteMethods.run(token, square);
+            Client.getInstance().getConnection().receiveResponse(response);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void reload(List<WeaponCard> weapons) {
+        try {
+            String token = Client.getInstance().getConnection().getToken();
+            Response response = remoteMethods.reload(token, weapons);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
             e.printStackTrace();

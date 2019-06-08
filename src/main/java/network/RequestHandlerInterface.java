@@ -18,4 +18,5 @@ public interface RequestHandlerInterface {
     Response handle(EndTurnRequest request) throws RemoteException;
     Response handle(GrabRequest request) throws RemoteException;
     Response handle(RunRequest request) throws RemoteException;
+    Response handle(ReloadRequest request) throws RemoteException;
 }

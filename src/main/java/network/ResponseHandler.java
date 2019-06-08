@@ -183,5 +183,10 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     }
 
+    @Override
+    public void handle(ReloadResponse response) {
+
+    }
+
 
 }

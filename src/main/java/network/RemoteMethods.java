@@ -176,4 +176,9 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     public Response run(String token, Square square) throws RemoteException {
         return new RunResponse();
     }
+
+    @Override
+    public Response reload(String token, List<WeaponCard> weapons) throws RemoteException {
+        return new ReloadResponse();
+    }
 }

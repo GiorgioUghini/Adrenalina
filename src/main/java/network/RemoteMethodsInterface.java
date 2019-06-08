@@ -2,6 +2,7 @@ package network;
 
 import models.card.Effect;
 import models.card.Taggable;
+import models.card.WeaponCard;
 import models.map.RoomColor;
 import models.map.Square;
 import network.responses.RegisterPlayerResponse;
@@ -28,4 +29,5 @@ public interface RemoteMethodsInterface extends Remote {
     Response endTurn(String token) throws  RemoteException;
     Response grab(String token) throws  RemoteException;
     Response run(String token, Square square) throws  RemoteException;
+    Response reload(String token, List<WeaponCard> weapons) throws  RemoteException;
 }

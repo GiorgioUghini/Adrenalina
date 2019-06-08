@@ -45,4 +45,6 @@ public interface ResponseHandlerInterface {
     void handle(GrabResponse response);
 
     void handle(RunResponse response);
+
+    void handle(ReloadResponse response);
 }

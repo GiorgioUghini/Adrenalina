@@ -2,6 +2,7 @@ package network;
 
 import models.card.Effect;
 import models.card.Taggable;
+import models.card.WeaponCard;
 import models.map.RoomColor;
 import models.map.Square;
 
@@ -24,5 +25,6 @@ public interface Connection {
     void endTurn();
     void grab();
     void run(Square square);
+    void reload(List<WeaponCard> weapons);
     void receiveResponse(Response response);
 }
