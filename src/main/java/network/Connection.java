@@ -3,6 +3,7 @@ package network;
 import models.card.Effect;
 import models.card.Taggable;
 import models.map.RoomColor;
+import models.map.Square;
 
 import java.util.List;
 
@@ -22,5 +23,6 @@ public interface Connection {
     void finishCard();
     void endTurn();
     void grab();
+    void run(Square square);
     void receiveResponse(Response response);
 }

@@ -8,6 +8,7 @@ import models.card.*;
 import models.map.GameMap;
 import models.map.RoomColor;
 import models.map.SpawnPoint;
+import models.map.Square;
 import models.player.Player;
 import models.turn.TurnEvent;
 import network.responses.*;
@@ -169,5 +170,10 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     @Override
     public Response grab(String token) throws RemoteException {
         return new GrabResponse(); //TODO grabbare
+    }
+
+    @Override
+    public Response run(String token, Square square) throws RemoteException {
+        return new RunResponse();
     }
 }

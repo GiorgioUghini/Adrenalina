@@ -43,4 +43,6 @@ public interface ResponseHandlerInterface {
     void handle(EndTurnResponse response);
 
     void handle(GrabResponse response);
+
+    void handle(RunResponse response);
 }

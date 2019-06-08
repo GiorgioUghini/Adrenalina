@@ -79,4 +79,9 @@ public class RequestHandler implements RequestHandlerInterface {
         return remoteMethods.grab(request.getToken());
     }
 
+    @Override
+    public Response handle(RunRequest request) throws RemoteException {
+        return remoteMethods.run(request.getToken(), request.square);
+    }
+
 }

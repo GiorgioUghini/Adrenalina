@@ -17,4 +17,5 @@ public interface RequestHandlerInterface {
     Response handle(FinishCardRequest request) throws RemoteException;
     Response handle(EndTurnRequest request) throws RemoteException;
     Response handle(GrabRequest request) throws RemoteException;
+    Response handle(RunRequest request) throws RemoteException;
 }

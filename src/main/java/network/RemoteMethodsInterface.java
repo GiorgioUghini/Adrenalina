@@ -3,6 +3,7 @@ package network;
 import models.card.Effect;
 import models.card.Taggable;
 import models.map.RoomColor;
+import models.map.Square;
 import network.responses.RegisterPlayerResponse;
 import network.responses.ValidActionsResponse;
 import network.responses.WaitingPlayerResponse;
@@ -26,4 +27,5 @@ public interface RemoteMethodsInterface extends Remote {
     Response tagElement(String token, Taggable taggable) throws  RemoteException;
     Response endTurn(String token) throws  RemoteException;
     Response grab(String token) throws  RemoteException;
+    Response run(String token, Square square) throws  RemoteException;
 }

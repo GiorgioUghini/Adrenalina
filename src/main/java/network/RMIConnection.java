@@ -3,6 +3,7 @@ package network;
 import models.card.Effect;
 import models.card.Taggable;
 import models.map.RoomColor;
+import models.map.Square;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -144,6 +145,17 @@ public class RMIConnection implements Connection {
         try {
             String token = Client.getInstance().getConnection().getToken();
             Response response = remoteMethods.grab(token);
+            Client.getInstance().getConnection().receiveResponse(response);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void run(Square square) {
+        try {
+            String token = Client.getInstance().getConnection().getToken();
+            Response response = remoteMethods.run(token, square);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
             e.printStackTrace();

@@ -3,6 +3,7 @@ package network;
 import models.card.Effect;
 import models.card.Taggable;
 import models.map.RoomColor;
+import models.map.Square;
 import network.requests.*;
 import network.responses.CardEffectsResponse;
 import network.responses.EndTurnResponse;
@@ -137,6 +138,16 @@ public class SocketConnection implements Connection {
     public void grab() {
         try {
             GrabRequest request = new GrabRequest();
+            write(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void run(Square square) {
+        try {
+            RunRequest request = new RunRequest(square);
             write(request);
         } catch (IOException e) {
             e.printStackTrace();
