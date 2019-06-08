@@ -134,6 +134,16 @@ public class SocketConnection implements Connection {
     }
 
     @Override
+    public void grab() {
+        try {
+            GrabRequest request = new GrabRequest();
+            write(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void receiveResponse(Response response) {
         response.handle(responseHandler);
     }

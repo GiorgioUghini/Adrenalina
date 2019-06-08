@@ -173,5 +173,10 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     }
 
+    @Override
+    public void handle(GrabResponse response) {
+
+    }
+
 
 }

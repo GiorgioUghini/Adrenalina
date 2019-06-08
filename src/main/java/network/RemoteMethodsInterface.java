@@ -25,4 +25,5 @@ public interface RemoteMethodsInterface extends Remote {
     Response finishCard(String token) throws  RemoteException;
     Response tagElement(String token, Taggable taggable) throws  RemoteException;
     Response endTurn(String token) throws  RemoteException;
+    Response grab(String token) throws  RemoteException;
 }

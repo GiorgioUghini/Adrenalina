@@ -21,5 +21,6 @@ public interface Connection {
     void playEffect(Effect effect);
     void finishCard();
     void endTurn();
+    void grab();
     void receiveResponse(Response response);
 }
