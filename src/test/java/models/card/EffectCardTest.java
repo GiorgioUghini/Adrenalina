@@ -170,9 +170,58 @@ public class EffectCardTest {
         assertEquals(0, p2.getTotalDamage());
     }
 
+    @Test
+    public void testCannoneVortex(){
+        GameMap gameMap = MapGenerator.generate(1);
+        Player me = new Player("me", "password");
+        Player p1 = new Player("p1", "password");
+        Player p2 = new Player("p2", "password");
+        Player p3 = new Player("p3", "password");
+        WeaponCard cannoneVortex = getCard("Cannone vortex");
+        Set<SpawnPoint> spawnPoints = gameMap.getSpawnPoints();
+        SpawnPoint yellow = null;
+        SpawnPoint red = null;
+        for(SpawnPoint sp : spawnPoints){
+            if(sp.getColor().equals(RoomColor.YELLOW)){
+                yellow = sp;
+            }else if(sp.getColor().equals(RoomColor.RED)){
+                red = sp;
+            }
+        }
+        gameMap.spawnPlayer(me, yellow);
+        gameMap.spawnPlayer(p1, yellow);
+        gameMap.spawnPlayer(p2, yellow);
+        gameMap.spawnPlayer(p3, red);
+        List<WeaponCard> myWeapons = new ArrayList<>();
+        myWeapons.add(cannoneVortex);
+        me.setWeaponList(myWeapons);
+        me.setAmmo(new Ammo(3,3,3));
+        me.playWeapon(cannoneVortex);
+        List<Effect> effects = me.getWeaponEffects().getLegitEffects();
+        assertEquals(1, effects.size());
+        Effect effect = effects.get(0);
+        assertEquals("Effetto base", effect.name);
+        me.playWeaponEffect(effect);
+        me.playNextWeaponAction(); //select square
+        Selectable selectable = cannoneVortex.getSelectable();
+        assertEquals(3, selectable.get().size());
+        Square selectedSquare = yellow.getNextSquare(CardinalDirection.TOP);
+        assertTrue(selectable.get().contains(selectedSquare));
+        cannoneVortex.select(selectedSquare);
+        me.playNextWeaponAction(); //select player
+        selectable = cannoneVortex.getSelectable();
+        assertEquals(2, selectable.get().size());
+        assertTrue(selectable.get().contains(p1));
+        assertTrue(selectable.get().contains(p2));
+        cannoneVortex.select(p1);
+        me.playNextWeaponAction(); //move P1 into vortex
+        assertEquals(selectedSquare, gameMap.getPlayerPosition(p1));
+        me.playNextWeaponAction(); // damage
+        assertEquals(2, p1.getTotalDamage());
+    }
+
     private WeaponCard getCard(String cardName){
         weaponDeck = new CardController().getWeaponDeck();
-        Ammo ammo = new Ammo(3,3,3);
         int deckSize = weaponDeck.size();
         WeaponCard weaponCard;
         for(int i = 0; i<deckSize; i++){

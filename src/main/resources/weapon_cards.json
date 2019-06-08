@@ -640,6 +640,7 @@
           {
             "type": "damage",
             "damage": {
+              "type": "player",
               "target": "enemy",
               "value": 2
             }

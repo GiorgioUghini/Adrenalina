@@ -277,7 +277,6 @@ public class Player implements Subscriber, Serializable, Taggable {
                 break;
             case MOVE:
                 Map<Player, Square> moves = activeWeapon.getPlayersMoves();
-                GameMap gameMap = Server.getInstance().getLobby().getMatch(this).getMap();
                 for(Map.Entry<Player, Square> entry : moves.entrySet()){
                     gameMap.movePlayer(entry.getKey(), entry.getValue());
                 }

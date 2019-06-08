@@ -368,7 +368,11 @@ public class GameMap {
     }
     /** A set of all the squares of the map, without any order
      * @return A set of all the squares of the map, without any order */
-    public Set<Square> getAllSquares() { return squares; }
+    public Set<Square> getAllSquares() {
+        Set<Square> out = new HashSet<>();
+        out.addAll(squares);
+        return out;
+    }
 
     /** Returns in a list all squares in a given cardinal direction until the end of the map, stop on walls if throughWalls=false
      * @param from the starting square, will return as the first element of the list
