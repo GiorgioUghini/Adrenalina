@@ -255,6 +255,35 @@ public class EffectCardTest {
         assertEquals(1, players.get(3).getTotalDamage());
     }
 
+    public void testNoSelection(){
+        WeaponCard razzoTermico = getCard("Razzo termico");
+        List<WeaponCard> myWeapons = new ArrayList<>();
+        myWeapons.add(razzoTermico);
+        List<Player> players = createTestPlayers(3);
+        GameMap gameMap = MapGenerator.generate(1);
+        SpawnPoint yellow = getSpawnPoint(gameMap, RoomColor.YELLOW);
+        SpawnPoint red = getSpawnPoint(gameMap, RoomColor.RED);
+        Player me = players.get(0);
+        me.setWeaponList(myWeapons);
+        gameMap.spawnPlayer(me, yellow);
+        gameMap.spawnPlayer(players.get(1), yellow);
+        gameMap.spawnPlayer(players.get(2), red);
+        gameMap.spawnPlayer(players.get(3), red);
+        me.setAmmo(new Ammo(3,3,3));
+        me.playWeapon(razzoTermico);
+        Effect effect = me.getWeaponEffects().getLegitEffects().get(0);
+        me.playWeaponEffect(effect);
+        me.playNextWeaponAction();
+        Selectable selectable = razzoTermico.getSelectable();
+        assertEquals(2, selectable.get().size());
+        assertTrue(selectable.get().contains(players.get(2)));
+        assertTrue(selectable.get().contains(players.get(3)));
+        me.playNextWeaponAction();
+        for (Player p : players){
+            assertEquals(0, p.getTotalDamage());
+        }
+    }
+
     private SpawnPoint getSpawnPoint(GameMap gameMap, RoomColor color){
         for(SpawnPoint s : gameMap.getSpawnPoints()){
             if(s.getColor().equals(color)){
