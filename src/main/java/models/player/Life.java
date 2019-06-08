@@ -120,6 +120,7 @@ class Life implements Serializable {
 
     void clearDamages() {
         myDamages.clear();
+        hurtMeLast = null;
     }
 
 
