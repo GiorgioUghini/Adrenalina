@@ -28,7 +28,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public List<Response> longPolling(String token) {
+    public synchronized List<Response> longPolling(String token) {
         RMIWrapper rmiWrapper = Server.getInstance().getConnection().getRMIWrapper(token);
         rmiWrapper.ping();
         List<Response> updates = new LinkedList<>(rmiWrapper.getUpdates());
@@ -37,7 +37,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public String handshake() throws RemoteException {
+    public synchronized String handshake() throws RemoteException {
         RMIWrapper rmiWrapper = new RMIWrapper();
         String token = Server.getInstance().getConnection().getToken(rmiWrapper);
         RMIStatusTask rmiStatusTask = new RMIStatusTask(rmiWrapper);
@@ -48,7 +48,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public Response registerPlayer(String username, String password, String token) {
+    public synchronized Response registerPlayer(String username, String password, String token) {
         Lobby lobby = Server.getInstance().getLobby();
         Player player = lobby.getPlayerByUsername(username);
         if (player != null) {
@@ -69,7 +69,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public ValidActionsResponse validActions(String token) {
+    public synchronized ValidActionsResponse validActions(String token) {
         Lobby lobby = Server.getInstance().getLobby();
         Player currentPlayer = lobby.getPlayer(token);
         Match currentMatch = lobby.getMatch(currentPlayer);
@@ -78,20 +78,20 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public WaitingPlayerResponse waitingPlayer() throws RemoteException {
+    public synchronized WaitingPlayerResponse waitingPlayer() throws RemoteException {
         List<String> waitingPlayers = Server.getInstance().getLobby().getWaitingPlayersUsername();
         return new WaitingPlayerResponse(waitingPlayers);
     }
 
     @Override
-    public Response chooseMap(String token, int map) throws RemoteException {
+    public synchronized Response chooseMap(String token, int map) throws RemoteException {
         Server.getInstance().getLobby().getMatch(token).createMap(map);
         Server.getInstance().getLobby().getMatch(token).addUpdate(new MapChosenUpdate(map));
         return new ChooseMapResponse();
     }
 
     @Override
-    public Response drawPowerUp(String token) throws RemoteException {
+    public synchronized Response drawPowerUp(String token) throws RemoteException {
        Match match = Server.getInstance().getLobby().getMatch(token);
        PowerUpCard card = (PowerUpCard) match.drawPowerUp();
        match.doAction(TurnEvent.DRAW);
@@ -99,7 +99,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public Response spawnPlayer(String token, RoomColor color) throws RemoteException {
+    public synchronized Response spawnPlayer(String token, RoomColor color) throws RemoteException {
         Player player = Server.getInstance().getLobby().getPlayer(token);
         Match match = Server.getInstance().getLobby().getMatch(player);
         GameMap map = match.getMap();
@@ -114,7 +114,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public Response cardEffects(String token, String cardName) throws RemoteException {
+    public synchronized Response cardEffects(String token, String cardName) throws RemoteException {
         Player player = Server.getInstance().getLobby().getPlayer(token);
         WeaponCard card = player.getWeaponList().stream().filter(w -> w.name.equals(cardName)).findFirst().orElse(null);
         player.playWeapon(card);
@@ -123,7 +123,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public Response playEffect(String token, Effect effect) throws RemoteException {
+    public synchronized Response playEffect(String token, Effect effect) throws RemoteException {
         Player player = Server.getInstance().getLobby().getPlayer(token);
         player.playWeaponEffect(effect);
         Action action;
@@ -138,14 +138,14 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public Response finishCard(String token) throws RemoteException {
+    public synchronized Response finishCard(String token) throws RemoteException {
         Player player = Server.getInstance().getLobby().getPlayer(token);
         player.resetWeapon();
         return new FinishCardResponse();
     }
 
     @Override
-    public Response tagElement(String token, Taggable taggable) throws RemoteException {
+    public synchronized Response tagElement(String token, Taggable taggable) throws RemoteException {
         Player player = Server.getInstance().getLobby().getPlayer(token);
         WeaponCard card = player.getActiveWeapon();
         card.select(taggable);
@@ -161,10 +161,8 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public Response endTurn(String token) throws RemoteException {
+    public synchronized Response endTurn(String token) throws RemoteException {
         Server.getInstance().getLobby().getMatch(token).nextTurn();
         return new EndTurnResponse();
     }
-
-
 }
