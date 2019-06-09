@@ -1,9 +1,6 @@
 package models;
 
-import models.card.Card;
-import models.card.Deck;
-import models.card.EffectCard;
-import models.card.WeaponDeck;
+import models.card.*;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -18,9 +15,9 @@ public class DeckTest {
     @Test
     public void draw() throws IOException {
         List<Card> cards = new LinkedList<>();
-        cards.add(new EffectCard());
-        cards.add(new EffectCard());
-        cards.add(new EffectCard());
+        cards.add(new WeaponCard());
+        cards.add(new WeaponCard());
+        cards.add(new PowerUpCard());
         Deck deck = new WeaponDeck(cards);
         int size = deck.size();
         Card card1 = deck.draw();
@@ -44,9 +41,9 @@ public class DeckTest {
     @Test
     public void shuffleDeck(){
         List<Card> cards = new LinkedList<>();
-        cards.add(new EffectCard());
-        cards.add(new EffectCard());
-        cards.add(new EffectCard());
+        cards.add(new WeaponCard());
+        cards.add(new WeaponCard());
+        cards.add(new PowerUpCard());
         Deck deck = new WeaponDeck(cards);
         int size1 = deck.size();
         deck.shuffle();
