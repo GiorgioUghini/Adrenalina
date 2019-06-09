@@ -17,6 +17,7 @@ public class Player implements Subscriber, Serializable, Taggable {
     private Ammo ammo;
     private List<WeaponCard> weaponList;
     private WeaponCard activeWeapon;
+    public PowerUpCard activePowerUp;
     private List<PowerUpCard> powerUpList;
     private Life life;
     private Mark marks;
@@ -234,6 +235,17 @@ public class Player implements Subscriber, Serializable, Taggable {
         activeWeapon = weaponCard;
     }
 
+    /** Activated the powerup card given as param paying the ammo, if it costs
+     * @param powerUpCard the card to activate
+     * @param ammo the cube you are paying to activate it. could either be null
+     * if the card is free or one (and only one) of the colors should be set to 1 */
+    public void playPowerUp(PowerUpCard powerUpCard, Ammo ammo){
+        checkHasPowerUp(powerUpCard);
+        powerUpCard.payPrice(this.ammo, ammo);
+        powerUpCard.activate(this);
+        activePowerUp = powerUpCard;
+    }
+
     public boolean canReloadWeapon(WeaponCard weaponCard){
         return weaponCard.canReload(ammo);
     }
@@ -266,6 +278,14 @@ public class Player implements Subscriber, Serializable, Taggable {
         activeWeapon.playEffect(e, ammo);
     }
 
+    public Action playNextWeaponAction(){
+        return playNextAction(activeWeapon);
+    }
+
+    public Action playNextPowerUpAction(){
+        return playNextAction(activePowerUp);
+    }
+
     /** if the action is a SELECT, you need to check the select TYPE and call one of the getSelectable[item] methods
      * of the weapon (obtainable with getActiveWeapon() method), if the select is of type "auto" just pick the first
      * selectable returned, otherwise ask the user to choose the item to select. Then, call one of the select[item]
@@ -274,36 +294,36 @@ public class Player implements Subscriber, Serializable, Taggable {
      * again.
      * @return the action being played. if null it means the effect is completed and you can play another effect
      *  */
-    public Action playNextWeaponAction(){
-        Action action = activeWeapon.playNextAction();
+    private Action playNextAction(EffectCard activeCard){
+        Action action = activeCard.playNextAction();
         if(action==null) return null;
         switch (action.type){
             case MARK:
-                Map<Player, Integer> playersToMark = activeWeapon.getPlayersToMark();
+                Map<Player, Integer> playersToMark = activeCard.getPlayersToMark();
                 for(Player p : playersToMark.keySet()){
                     int marks = playersToMark.get(p);
                     p.giveMark(marks, this);
                 }
                 break;
             case DAMAGE:
-                Map<Player, Integer> playersToDamage = activeWeapon.getPlayersToDamage();
+                Map<Player, Integer> playersToDamage = activeCard.getPlayersToDamage();
                 for(Player p : playersToDamage.keySet()){
                     int damage = playersToDamage.get(p);
                     p.getDamage(damage, this);
                 }
                 break;
             case MOVE:
-                Map<Player, Square> moves = activeWeapon.getPlayersMoves();
+                Map<Player, Square> moves = activeCard.getPlayersMoves();
                 for(Map.Entry<Player, Square> entry : moves.entrySet()){
                     gameMap.movePlayer(entry.getKey(), entry.getValue());
                 }
                 break;
             case SELECT:
                 if(!action.select.auto)break;
-                Selectable selectable = activeWeapon.getSelectable();
+                Selectable selectable = activeCard.getSelectable();
                 Set<Taggable> selectableSet = selectable.get();
                 if(selectableSet.isEmpty()) break;
-                activeWeapon.select((Taggable) selectableSet.toArray()[0]);
+                activeCard.select((Taggable) selectableSet.toArray()[0]);
         }
         return action;
     }
@@ -318,12 +338,25 @@ public class Player implements Subscriber, Serializable, Taggable {
             activeWeapon = null;
         }
     }
+    public void resetPowerUp(){
+        if(activePowerUp!=null){
+            activePowerUp.reset();
+            activePowerUp = null;
+        }
+    }
     public WeaponCard getActiveWeapon(){
         return activeWeapon;
     }
 
+    public PowerUpCard getActivePowerUp(){
+        return activePowerUp;
+    }
+
     private void checkHasWeapon(WeaponCard weaponCard){
         if(!weaponList.contains(weaponCard)) throw new WeaponCardException("This user does not have this weapon:" + weaponCard.name);
+    }
+    private void checkHasPowerUp(PowerUpCard powerUpCard){
+        if(!powerUpList.contains(powerUpCard)) throw new WeaponCardException("This user does not have this powerup:" + powerUpCard.name);
     }
 
     public Player getLastDamager() {

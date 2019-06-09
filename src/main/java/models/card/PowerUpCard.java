@@ -31,7 +31,9 @@ public class PowerUpCard extends EffectCard {
 
     public void payPrice(Ammo yourAmmo, Ammo whichAmmo){
         if(!hasEnoughAmmo(yourAmmo)) throw new WeaponCardException("Not enough ammo to pay");
-        pay(yourAmmo, whichAmmo);
+        if(hasPrice){
+            pay(yourAmmo, whichAmmo);
+        }
         this.pricePaid = true;
     }
     public boolean pricePaid(){
