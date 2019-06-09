@@ -26,6 +26,7 @@ public class Player implements Subscriber, Serializable, Taggable {
     private boolean online;
     private GameMap gameMap;
     private boolean hasJustStarted;
+    private Set<Player> playersDamageByMeThisTurn;
 
 
     /** Creates a new player object
@@ -45,6 +46,7 @@ public class Player implements Subscriber, Serializable, Taggable {
         activeWeapon = null;
         gameMap = null;
         hasJustStarted = true;
+        playersDamageByMeThisTurn = new HashSet<>();
         //token generation
     }
 
@@ -153,7 +155,22 @@ public class Player implements Subscriber, Serializable, Taggable {
      * @param damage the number of damage to give. Could be any number, without needs to check limitation of it.
      * @param attacker the player which is attacking
      * */
-    public void getDamage(int damage, Player attacker) { this.life.damage(damage, attacker); }
+    public void getDamage(int damage, Player attacker) {
+        this.life.damage(damage, attacker);
+        attacker.addDamagedPlayerToList(this);
+    }
+
+    private void addDamagedPlayerToList(Player damagedPlayer){
+        playersDamageByMeThisTurn.add(damagedPlayer);
+    }
+
+    public void onTurnEnded(){
+        this.playersDamageByMeThisTurn = new HashSet<>();
+    }
+
+    public Set<Player> getPlayersDamageByMeThisTurn(){
+        return playersDamageByMeThisTurn;
+    }
 
     /** Counts the points to assign to each player
      * @return a map between Player and the points to assign him

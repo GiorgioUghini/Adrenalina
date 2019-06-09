@@ -147,7 +147,11 @@ class SelectorEngine {
 
     private Set<Player> getAllPlayersWithTag(String tag){
         Set<Player> out = new HashSet<>();
-        if(selectedPlayers.containsKey(tag)){
+        if(tag.equals("last_damager")) {
+            out.add(me.getLastDamager());
+        }else if(tag.equals("damaged_from_me")){
+            out.addAll(me.getPlayersDamageByMeThisTurn());
+        }else if(selectedPlayers.containsKey(tag)){
             out.add(selectedPlayers.get(tag));
         }else if(selectedSquares.containsKey(tag)){
             out.addAll(gameMap.getPlayersOnSquare(selectedSquares.get(tag)));

@@ -186,6 +186,9 @@ public class Match {
      * Method that signal the start of the turn of a player. This method SHOULD be called each time a player starts his turn
      */
     public void nextTurn() {
+        for(Player player : playerList){
+            player.onTurnEnded();
+        }
         actualPlayerIndex = (actualPlayerIndex == playerList.size() - 1) ? 0 : actualPlayerIndex + 1;
         if ((frenzy != null) && (actualPlayerIndex == 0)) { //actualPlayerIndex == firstPlayerIndex
             frenzy = ActionGroup.FRENZY_TYPE_2;
