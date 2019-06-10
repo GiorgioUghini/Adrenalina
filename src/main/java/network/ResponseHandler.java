@@ -92,8 +92,10 @@ public class ResponseHandler implements ResponseHandlerInterface {
             }
         if(debug && Client.getInstance().getActions().keySet().contains(ActionType.RUN_NORMAL)){
             //TODO da spostare dopo
-            Client.getInstance().setCurrentActionType(ActionType.RUN_NORMAL);
-            Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
+            setTimeout(() -> {
+                Client.getInstance().setCurrentActionType(ActionType.RUN_NORMAL);
+                Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
+            },  2000);
             debug = false;
             //TODO da spostare dopo
         }
@@ -232,7 +234,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
             setTimeout(() -> {
                 Client.getInstance().setCurrentActionType(ActionType.RUN_NORMAL);
                 Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
-            }, 3000);
+            },  2000);
             debug2 = false;
         }
     }
