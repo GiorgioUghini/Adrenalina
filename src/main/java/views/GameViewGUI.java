@@ -54,6 +54,8 @@ public class GameViewGUI implements Initializable, GameView {
     private Button btnActionGroup2;
     @FXML
     private Button btnActionGroup3;
+    @FXML
+    private Button btnEndTurn;
 
 
     @FXML
@@ -297,6 +299,10 @@ public class GameViewGUI implements Initializable, GameView {
                     break;
             }
         });
+    }
+
+    public void setEnabledBtnEndTurn(boolean enable) {
+        btnEndTurn.setDisable(!enable);
     }
 
 
