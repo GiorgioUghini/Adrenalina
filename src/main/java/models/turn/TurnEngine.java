@@ -1,72 +1,48 @@
 package models.turn;
 
-import models.turn.state.StartedStateBehaviour;
-import models.turn.state.TurnStateBehaviour;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class TurnEngine {
 
-    private TurnType turnType;
-    private ActionGroup actionGroup;
-    private TurnStateBehaviour stateBehaviour;
-
-    public TurnEngine(TurnType turnType, ActionGroup actionGroup) {
-        this.turnType = turnType;
-        this.actionGroup = actionGroup;
-        this.stateBehaviour = new StartedStateBehaviour(turnType, actionGroup);
-    }
-
-    public TurnEngine(TurnStateBehaviour state) {
-        this.turnType = state.getTurnType();
-        this.actionGroup = state.getActionGroup();
-        this.stateBehaviour = state;
-
-    }
-
-    public TurnState getState() {
-        return stateBehaviour.getState();
-    }
-
-    public Set<TurnEvent> getValidEvents() {
-        return stateBehaviour.getValidEvents();
-    }
-
-    public void run() {
-        transition(TurnEvent.RUN);
-    }
-
-    public void draw() {
-        transition(TurnEvent.DRAW);
-    }
-
-    public void grab() {
-        transition(TurnEvent.GRAB);
-    }
-
-    public void shoot() {
-        transition(TurnEvent.SHOOT);
-    }
-
-    public void spawn() {
-        transition(TurnEvent.SPAWN);
-    }
-
-    public void reload() {
-        transition(TurnEvent.RELOAD);
-    }
-
-    public void end() {
-        transition(TurnEvent.END);
-    }
-
-    public void transition(TurnEvent event) {
-        TurnStateBehaviour nextBehaviour = stateBehaviour.transition(event);
-        if (nextBehaviour == null)
-            throw new RuntimeException("This move is not valid");
-        else
-            stateBehaviour = nextBehaviour;
+    public Map<ActionType,  List<TurnEvent>> getValidActions(TurnType turnType, ActionGroup actionGroup){
+        Map<ActionType,  List<TurnEvent>> map = new HashMap<>();
+        switch (turnType){
+            case START_GAME:
+                map.put(ActionType.START, new LinkedList<>(Arrays.asList(TurnEvent.DRAW, TurnEvent.DRAW, TurnEvent.SPAWN)));
+                break;
+            case RESPAWN:
+                map.put(ActionType.START, new LinkedList<>(Arrays.asList(TurnEvent.DRAW, TurnEvent.SPAWN)));
+                break;
+            case IN_GAME:
+                switch (actionGroup){
+                    case NORMAL:
+                        map.put(ActionType.RUN_NORMAL, new LinkedList<>(Collections.singletonList(TurnEvent.RUN_3)));
+                        map.put(ActionType.GRAB_NORMAL, new LinkedList<>(Arrays.asList(TurnEvent.RUN_1, TurnEvent.GRAB)));
+                        map.put(ActionType.SHOOT_NORMAL, new LinkedList<>(Collections.singletonList(TurnEvent.SHOOT)));
+                        break;
+                    case LOW_LIFE:
+                        map.put(ActionType.RUN_NORMAL, new LinkedList<>(Collections.singletonList(TurnEvent.RUN_3)));
+                        map.put(ActionType.GRAB_LOW_LIFE, new LinkedList<>(Arrays.asList(TurnEvent.RUN_2, TurnEvent.GRAB)));
+                        map.put(ActionType.SHOOT_NORMAL, new LinkedList<>(Collections.singletonList(TurnEvent.SHOOT)));
+                        break;
+                    case VERY_LOW_LIFE:
+                        map.put(ActionType.RUN_NORMAL, new LinkedList<>(Collections.singletonList(TurnEvent.RUN_3)));
+                        map.put(ActionType.GRAB_NORMAL, new LinkedList<>(Arrays.asList(TurnEvent.RUN_2, TurnEvent.GRAB)));
+                        map.put(ActionType.SHOOT_VERY_LOW_LIFE, new LinkedList<>(Arrays.asList(TurnEvent.RUN_1, TurnEvent.SHOOT)));
+                        break;
+                    case FRENZY_TYPE_1:
+                        map.put(ActionType.SHOOT_FRENZY_1, new LinkedList<>(Arrays.asList(TurnEvent.RUN_1, TurnEvent.RELOAD, TurnEvent.SHOOT)));
+                        map.put(ActionType.GRAB_FRENZY_1, new LinkedList<>(Arrays.asList(TurnEvent.RUN_2, TurnEvent.GRAB)));
+                        map.put(ActionType.RUN_FRENZY_1, new LinkedList<>(Collections.singletonList(TurnEvent.RUN_4)));
+                        break;
+                    case FRENZY_TYPE_2:
+                        map.put(ActionType.SHOOT_FRENZY_2, new LinkedList<>(Arrays.asList(TurnEvent.RUN_2, TurnEvent.RELOAD, TurnEvent.SHOOT)));
+                        map.put(ActionType.GRAB_FRENZY_2, new LinkedList<>(Arrays.asList(TurnEvent.RUN_3, TurnEvent.GRAB)));
+                        break;
+                        default:
+                }
+                break;
+        }
+        return  map;
     }
 }

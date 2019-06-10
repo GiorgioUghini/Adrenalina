@@ -14,6 +14,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import models.card.PowerUpCard;
 import models.card.WeaponCard;
+import models.map.Square;
+import models.turn.TurnEvent;
 import network.Client;
 
 import java.io.File;
@@ -129,7 +131,10 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     public void drawPowerUp() {
-        setBtnDrawPowerUpVisibility(false);
+        if(Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType()).stream().filter(t -> t == TurnEvent.DRAW).count() <= 1){
+            setBtnDrawPowerUpVisibility(false);
+            setBtnSpawnVisibility(true);
+        }
         gameController.drawPowerUp();
         gameController.getValidActions();
     }
@@ -142,7 +147,10 @@ public class GameViewGUI implements Initializable, GameView {
         canClickOnPowerUps = true;
     }
     public void run() {
-
+        Square square = null; //TODO get square
+        Client.getInstance().getConnection().run(Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType()).get(0), square);
+        setBtnRunVisibility(false);
+        gameController.getValidActions();
     }
     public void grabAmmo() {
 

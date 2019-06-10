@@ -40,6 +40,8 @@ public class SocketWrapper implements ConnectionWrapper {
 
     public synchronized void write(Object object) throws IOException {
         out.writeObject(object);
+        out.flush();
+        out.reset();
     }
 
     public void setUpdatePusher(UpdatePusher updatePusher){

@@ -5,6 +5,8 @@ import models.card.Taggable;
 import models.card.WeaponCard;
 import models.map.RoomColor;
 import models.map.Square;
+import models.turn.ActionType;
+import models.turn.TurnEvent;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -154,10 +156,10 @@ public class RMIConnection implements Connection {
     }
 
     @Override
-    public void run(Square square) {
+    public void run(TurnEvent turnEvent, Square square) {
         try {
             String token = Client.getInstance().getConnection().getToken();
-            Response response = remoteMethods.run(token, square);
+            Response response = remoteMethods.run(token, turnEvent, square);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -169,6 +171,17 @@ public class RMIConnection implements Connection {
         try {
             String token = Client.getInstance().getConnection().getToken();
             Response response = remoteMethods.reload(token, weapons);
+            Client.getInstance().getConnection().receiveResponse(response);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void action(ActionType actionType) {
+        try {
+            String token = Client.getInstance().getConnection().getToken();
+            Response response = remoteMethods.action(token, actionType);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
             e.printStackTrace();

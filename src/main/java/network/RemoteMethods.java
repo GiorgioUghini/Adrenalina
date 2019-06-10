@@ -1,5 +1,6 @@
 package network;
 
+import errors.CheatException;
 import errors.InvalidInputException;
 import errors.WrongPasswordException;
 import models.Lobby;
@@ -11,16 +12,14 @@ import models.map.SpawnPoint;
 import models.map.Square;
 import models.player.Player;
 import models.turn.TurnEvent;
+import models.turn.TurnType;
 import network.responses.*;
 import network.updates.MapChosenUpdate;
 import network.updates.NewPlayerUpdate;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.Timer;
+import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -74,7 +73,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         Lobby lobby = Server.getInstance().getLobby();
         Player currentPlayer = lobby.getPlayer(token);
         Match currentMatch = lobby.getMatch(currentPlayer);
-        Set actions = currentMatch.getPossibleAction(currentPlayer);
+        Map<models.turn.ActionType,  List<TurnEvent>>  actions = currentMatch.getPossibleAction(currentPlayer);
         return new ValidActionsResponse(actions);
     }
 
@@ -95,7 +94,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     public synchronized Response drawPowerUp(String token) throws RemoteException {
        Match match = Server.getInstance().getLobby().getMatch(token);
        PowerUpCard card = (PowerUpCard) match.drawPowerUp();
-       match.doAction(TurnEvent.DRAW);
+       match.turnEvent(TurnEvent.DRAW);
        return new DrawPowerUpResponse(card);
     }
 
@@ -106,11 +105,11 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         GameMap map = match.getMap();
         List<PowerUpCard> powerUpCards = player.getPowerUpList();
         if(!powerUpCards.stream().map(c -> c.color).collect(Collectors.toList()).contains(color)){
-            return new ErrorResponse(new InvalidInputException("You're cheating! You do not have a power up of that color"));
+            return new ErrorResponse(new CheatException());
         }
         SpawnPoint spawnPoint = map.getSpawnPoints().stream().filter(p -> p.getColor() == color).findFirst().orElse(null);
         map.spawnPlayer(player,spawnPoint);
-        match.doAction(TurnEvent.SPAWN);
+        match.turnEvent(TurnEvent.SPAWN);
         return new SpawnPlayerResponse();
     }
 
@@ -168,12 +167,40 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
+    public Response action(String token, models.turn.ActionType actionType) throws RemoteException {
+        Player player = Server.getInstance().getLobby().getPlayer(token);
+        Match match = Server.getInstance().getLobby().getMatch(player);
+        try{
+            match.action(actionType);
+        }
+        catch (Exception ex){
+            return new ErrorResponse(ex);
+        }
+        return new TurnActionResponse();
+    }
+
+    @Override
     public Response grab(String token) throws RemoteException {
         return new GrabResponse(); //TODO grabbare
     }
 
     @Override
-    public Response run(String token, Square square) throws RemoteException {
+    public Response run(String token, TurnEvent turnEvent, Square square) throws RemoteException {
+        Player player = Server.getInstance().getLobby().getPlayer(token);
+        Match match = Server.getInstance().getLobby().getMatch(player);
+        int distance = 3; // TODO calcolare distanza tra player e square!!
+        int max = 0;
+        if(turnEvent == TurnEvent.RUN_1)
+            max = 1;
+        else if(turnEvent == TurnEvent.RUN_2)
+            max = 2;
+        else if(turnEvent == TurnEvent.RUN_3)
+            max = 3;
+        else if(turnEvent == TurnEvent.RUN_4)
+            max = 4;
+        if(distance > max)
+            throw new CheatException();
+        match.turnEvent(turnEvent);
         return new RunResponse();
     }
 

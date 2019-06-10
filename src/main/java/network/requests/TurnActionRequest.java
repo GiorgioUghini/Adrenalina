@@ -1,22 +1,19 @@
 package network.requests;
 
-import models.map.Square;
-import models.turn.TurnEvent;
+import models.turn.ActionType;
 import network.Request;
 import network.RequestHandlerInterface;
 import network.Response;
 
 import java.rmi.RemoteException;
 
-public class RunRequest implements Request {
+public class TurnActionRequest implements Request {
 
     private String token;
-    public TurnEvent turnEvent;
-    public Square square;
+    public ActionType actionType;
 
-    public RunRequest(TurnEvent turnEvent, Square square){
-        this.square = square;
-        this.turnEvent = turnEvent;
+    public TurnActionRequest(ActionType actionType){
+        this.actionType = actionType;
     }
 
     @Override

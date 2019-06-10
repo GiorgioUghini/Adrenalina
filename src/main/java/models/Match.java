@@ -1,22 +1,19 @@
 package models;
 
 import controllers.CardController;
-import errors.PlayerNotOnMapException;
-import javafx.application.Platform;
+import errors.CheatException;
 import models.card.*;
 import models.map.GameMap;
 import models.map.MapGenerator;
 import models.player.Player;
 import models.turn.*;
+import models.turn.ActionType;
 import network.Response;
 import network.Server;
-import network.responses.EndTurnResponse;
 import network.updates.ChooseMapUpdate;
 import network.updates.NextTurnUpdate;
-import network.updates.StartGameUpdate;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Match {
     private List<Player> playerList;
@@ -25,16 +22,17 @@ public class Match {
     private WeaponDeck weaponDeck;
     private AmmoDeck ammoDeck;
     private GameMap gameMap;
+    private  Map<ActionType,  List<TurnEvent>> currentActions;
+    private ActionType currentActionType;
     //private Turn actualTurn;
-    private List<TurnEngine> turnEngines;
     private ActionGroup frenzy = null;
     private CardController cardController;
+    int round;
     //null -> noFrenzy, Type1, Type2
 
     public Match(List<Player> players) {
         playerList = new LinkedList<>(players);
         cardController = new CardController();
-        turnEngines = new ArrayList<>();
         powerUpDeck = cardController.getPowerUpDeck();
         weaponDeck = cardController.getWeaponDeck();
         ammoDeck = cardController.getAmmoDeck();
@@ -193,7 +191,6 @@ public class Match {
         if ((frenzy != null) && (actualPlayerIndex == 0)) { //actualPlayerIndex == firstPlayerIndex
             frenzy = ActionGroup.FRENZY_TYPE_2;
         }
-        turnEngines.clear();
         Player currentPlayer = playerList.get(actualPlayerIndex);
         TurnType turnType = null;
         if (currentPlayer.hasJustStarted()) {
@@ -203,51 +200,56 @@ public class Match {
         } else {
             turnType = TurnType.IN_GAME;
         }
-        turnEngines.add(new TurnEngine(turnType, currentPlayer.getLifeState()));
-        if (frenzy != ActionGroup.FRENZY_TYPE_2 && !currentPlayer.isDead() && !currentPlayer.hasJustStarted()) {
-            turnEngines.add(new TurnEngine(turnType, currentPlayer.getLifeState()));
-        }
+        currentActions = new TurnEngine().getValidActions(turnType, currentPlayer.getLifeState());
+        currentActionType = null;
+        round = currentPlayer.getLifeState() == ActionGroup.FRENZY_TYPE_2 ? 1: 2;
         addUpdate(new NextTurnUpdate(playerList.get(actualPlayerIndex).getName()));
     }
 
-    public void doAction(TurnEvent event) {
-        TurnEngine engine = turnEngines.stream().filter(e -> !(e.getValidEvents().size() == 1 && e.getValidEvents().contains(TurnEvent.END))).findFirst().orElse(null);
-        engine.transition(event);
+    public void action(ActionType actionType) {
+        if(!currentActions.keySet().contains(actionType))
+            throw new CheatException();
+        if(currentActionType == null){
+            currentActionType = actionType;
+        }
     }
 
+    public void turnEvent(TurnEvent turnEvent) {
+        if(!currentActions.get(currentActionType).contains(turnEvent))
+            throw new CheatException();
+        currentActions.get(currentActionType).subList(0, currentActions.get(currentActionType).indexOf(turnEvent) + 1).clear();
+        if(currentActions.get(currentActionType).isEmpty()){
+            currentActionType = null;
+            round = round -1;
+            if(round <= 0){
+                currentActions = new HashMap<>();
+            }
+            else{
+                Player currentPlayer = playerList.get(actualPlayerIndex);
+                TurnType turnType = null;
+                if (currentPlayer.hasJustStarted()) {
+                    turnType = TurnType.START_GAME;
+                } else if (currentPlayer.isDead()) {
+                    turnType = TurnType.RESPAWN;
+                } else {
+                    turnType = TurnType.IN_GAME;
+                }
+                currentActions = new TurnEngine().getValidActions(turnType, currentPlayer.getLifeState());
+            }
+        }
+    }
     /**
      * returns the set of possible moves (as a list) of the given player.
      *
      * @param p any player
      * @return a Set of possible moves of the player
      */
-    public Set<TurnEvent> getPossibleAction(Player p) {
+    public Map<ActionType,  List<TurnEvent>> getPossibleAction(Player p) {
         if (playerList.get(actualPlayerIndex).equals(p)) {
-            TurnEngine engine = turnEngines.stream().findFirst().orElse(null);
-            if (engine != null)
-                return engine.getValidEvents();
-            else
-                return new HashSet<TurnEvent>();
+            return currentActions;
         } else {
-            return new HashSet<TurnEvent>();
+            return new HashMap<>();
         }
-    }
-
-    /**
-     * given a player object and the list of moves he wants to do, returns true if he's allowed to do this moves
-     *
-     * @param p          any player
-     * @param actionList list of action the players wants to do
-     * @return true if he's allowed, false otherwise
-     */
-    public boolean confirmActions(Player p, List actionList) {
-        Set possibleActions = this.getPossibleAction(p);
-        for (Object o : possibleActions) {
-            if (isOrderedSubset(actionList, (List) o)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private boolean isOrderedSubset(List biggerList, List smallerList) {

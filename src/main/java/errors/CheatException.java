@@ -1,6 +1,6 @@
 package errors;
 
-public class CheatException extends Exception {
+public class CheatException extends RuntimeException {
     public CheatException(){
         super("Busted!");
     }

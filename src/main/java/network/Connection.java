@@ -5,6 +5,8 @@ import models.card.Taggable;
 import models.card.WeaponCard;
 import models.map.RoomColor;
 import models.map.Square;
+import models.turn.ActionType;
+import models.turn.TurnEvent;
 
 import java.util.List;
 
@@ -24,7 +26,8 @@ public interface Connection {
     void finishCard();
     void endTurn();
     void grab();
-    void run(Square square);
+    void run(TurnEvent turnEvent, Square square);
     void reload(List<WeaponCard> weapons);
+    void action(ActionType actionType);
     void receiveResponse(Response response);
 }

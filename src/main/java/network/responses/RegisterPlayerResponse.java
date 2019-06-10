@@ -18,6 +18,6 @@ public class RegisterPlayerResponse implements Response {
 
     @Override
     public void handle(ResponseHandlerInterface handler) {
-
+        handler.handle(this);
     }
 }
