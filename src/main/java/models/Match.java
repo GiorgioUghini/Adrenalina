@@ -214,6 +214,11 @@ public class Match {
         }
     }
 
+    public ActionType getCurrentActionType()
+    {
+        return currentActionType;
+    }
+
     public void turnEvent(TurnEvent turnEvent) {
         if(!currentActions.get(currentActionType).contains(turnEvent))
             throw new CheatException();

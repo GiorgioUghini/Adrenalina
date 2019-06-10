@@ -12,9 +12,16 @@ import java.util.Set;
 public class ValidActionsResponse implements Response {
 
     public Map<ActionType, List<TurnEvent>> actions;
+    public boolean newActions;
+
+    public ValidActionsResponse(Map<ActionType, List<TurnEvent>> actions, boolean newActions){
+        this.actions = actions;
+        this.newActions = newActions;
+    }
 
     public ValidActionsResponse(Map<ActionType, List<TurnEvent>> actions){
         this.actions = actions;
+        this.newActions = false;
     }
 
     @Override

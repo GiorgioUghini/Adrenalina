@@ -40,6 +40,9 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(ValidActionsResponse response) {
+        if(response.newActions){
+            Client.getInstance().setCurrentActionType(null);
+        }
         Client.getInstance().setActions(response.actions);
         if(response.actions.values().stream().filter(l -> !l.isEmpty()).count() > 0){
             Client.getInstance().getCurrentView().showMessage("You could do some actions. Chooose one from:");
