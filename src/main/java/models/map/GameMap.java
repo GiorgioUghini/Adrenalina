@@ -445,6 +445,29 @@ public class GameMap {
         throw new NoDirectionException();
     }
 
+    public Square getSquareByCoordinate(int x, int y){
+        Square square = getSquareById(0);
+        int x0 = 0;
+        int y0 = 0;
+        while(x0<x || y0<y){
+            boolean stuck = true;
+            for(int i=x0; i<x; i++){
+                if(!square.hasNextWalkable(CardinalDirection.RIGHT))break;
+                square = square.getNextSquare(CardinalDirection.RIGHT);
+                stuck = false;
+                x0++;
+            }
+            for(int j=y0; j<y;j++){
+                if(!square.hasNextWalkable(CardinalDirection.BOTTOM))break;
+                square = square.getNextSquare(CardinalDirection.BOTTOM);
+                stuck = false;
+                y0++;
+            }
+            if(stuck) return null;
+        }
+        return square;
+    }
+
     /** Check that a square is in the map
      * @param square the square being checked, cannot be null
      * @throws NullPointerException if square is null */
