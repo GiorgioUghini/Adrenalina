@@ -20,6 +20,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ResponseHandler implements ResponseHandlerInterface {
+
+    private boolean debug = true;
+
     @Override
     public void handle(RegisterPlayerResponse response) {
         Client clientInstance = Client.getInstance();
@@ -83,10 +86,11 @@ public class ResponseHandler implements ResponseHandlerInterface {
                 Client.getInstance().getCurrentView().showMessage(turnEvent.name());
                 Client.getInstance().getCurrentView().showMessage("\n");
             }
-        if(Client.getInstance().getActions().keySet().contains(ActionType.RUN_NORMAL)){
+        if(debug && Client.getInstance().getActions().keySet().contains(ActionType.RUN_NORMAL)){
             //TODO da spostare dopo
             Client.getInstance().setCurrentActionType(ActionType.RUN_NORMAL);
             Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
+            debug = false;
             //TODO da spostare dopo
         }
     }
@@ -218,7 +222,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(TurnActionResponse response) {
-
+        Client.getInstance().getConnection().validActions();
     }
 
 

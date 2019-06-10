@@ -202,7 +202,7 @@ public class Match {
         }
         currentActions = new TurnEngine().getValidActions(turnType, currentPlayer.getLifeState());
         currentActionType = null;
-        round = currentPlayer.getLifeState() == ActionGroup.FRENZY_TYPE_2 ? 1: 2;
+        round = (turnType == TurnType.IN_GAME && currentPlayer.getLifeState() != ActionGroup.FRENZY_TYPE_2) ? 2: 1;
         addUpdate(new NextTurnUpdate(playerList.get(actualPlayerIndex).getName()));
     }
 
