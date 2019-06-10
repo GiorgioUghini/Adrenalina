@@ -43,20 +43,20 @@ public class ResponseHandler implements ResponseHandlerInterface {
     public void handle(ValidActionsResponse response) {
         if(response.newActions){
             Client.getInstance().setCurrentActionType(null);
-        }
-        Client.getInstance().setActions(response.actions);
-        if(response.actions.values().stream().filter(l -> !l.isEmpty()).count() > 0){
-            Client.getInstance().getCurrentView().showMessage("You could do some actions. Chooose one from:");
-            int i = 0;
-            for(ActionType action : response.actions.keySet()){
-                ((GameView) Client.getInstance().getCurrentView()).setTextAndEnableBtnActionGroup(action.name(), ++i);
-                Client.getInstance().getCurrentView().showMessage("Action group " + action.name());
-                Client.getInstance().getCurrentView().showMessage("\n");
+            if(response.actions.values().stream().filter(l -> !l.isEmpty()).count() > 0){
+                Client.getInstance().getCurrentView().showMessage("You could do some actions. Chooose one from:");
+                int i = 0;
+                for(ActionType action : response.actions.keySet()){
+                    ((GameView) Client.getInstance().getCurrentView()).setTextAndEnableBtnActionGroup(action.name(), ++i);
+                    Client.getInstance().getCurrentView().showMessage("Action group " + action.name());
+                    Client.getInstance().getCurrentView().showMessage("\n");
+                }
+            }
+            else{
+                Client.getInstance().getCurrentView().showMessage("You can't really do any actions. Wait for your turn.");
             }
         }
-        else{
-            Client.getInstance().getCurrentView().showMessage("You can't really do any actions. Wait for your turn.");
-        }
+        Client.getInstance().setActions(response.actions);
         if(response.actions.keySet().size() == 1 && Client.getInstance().getCurrentActionType() == null){
             ActionType actionType = response.actions.keySet().stream().findFirst().orElse(null);
             Client.getInstance().setCurrentActionType(actionType);
