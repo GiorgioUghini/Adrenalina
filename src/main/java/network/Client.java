@@ -77,12 +77,12 @@ public class Client {
     }
 
     public ActionType getCurrentActionType(){
-        return currentActionType;
-    }
+            return currentActionType;
+        }
 
-    public void start(ViewType viewType) throws InterruptedException {
-        this.viewType = viewType;
-        if(viewType == ViewType.CLI){
+        public void start(ViewType viewType) throws InterruptedException {
+            this.viewType = viewType;
+            if(viewType == ViewType.CLI){
             menuView = new MenuViewCLI();
             //gameView = new GameViewCLI(); Later
         }

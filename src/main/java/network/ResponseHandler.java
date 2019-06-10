@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 public class ResponseHandler implements ResponseHandlerInterface {
 
     private boolean debug = true;
+    private boolean debug2 = true;
 
     @Override
     public void handle(RegisterPlayerResponse response) {
@@ -213,9 +214,27 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     }
 
+    public static void setTimeout(Runnable runnable, int delay){
+        new Thread(() -> {
+            try {
+                Thread.sleep(delay);
+                runnable.run();
+            }
+            catch (Exception e){
+                System.err.println(e);
+            }
+        }).start();
+    }
+
     @Override
     public void handle(RunResponse response) {
-
+        if(debug2){
+            setTimeout(() -> {
+                Client.getInstance().setCurrentActionType(ActionType.RUN_NORMAL);
+                Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
+            }, 3000);
+            debug2 = false;
+        }
     }
 
     @Override
