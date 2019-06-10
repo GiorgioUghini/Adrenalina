@@ -2,6 +2,7 @@ package views;
 
 import models.card.PowerUpCard;
 import models.card.WeaponCard;
+import models.turn.ActionType;
 
 public interface GameView extends View {
     void chooseSpawnPoint();
@@ -21,6 +22,6 @@ public interface GameView extends View {
     void getValidActions();
     void startTurn(String name);
 
-    void setTextAndEnableBtnActionGroup(String name, int btnNum);
+    void setTextAndEnableBtnActionGroup(ActionType actionType, int btnNum);
 
 }
