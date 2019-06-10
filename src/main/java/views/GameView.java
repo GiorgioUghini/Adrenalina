@@ -21,4 +21,6 @@ public interface GameView extends View {
     void getValidActions();
     void startTurn(String name);
 
+    void setTextAndEnableBtnActionGroup(String name, int btnNum);
+
 }

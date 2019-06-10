@@ -48,6 +48,13 @@ public class GameViewGUI implements Initializable, GameView {
     private Button btnReload;
     @FXML
     private Button btnUsePowerUp;
+    @FXML
+    private Button btnActionGroup1;
+    @FXML
+    private Button btnActionGroup2;
+    @FXML
+    private Button btnActionGroup3;
+
 
     @FXML
     private ImageView imgYourWeaponCard1;
@@ -255,5 +262,42 @@ public class GameViewGUI implements Initializable, GameView {
             removePowerUpToHand(Client.getInstance().getPlayer().getPowerUpList().get(3));
         }
     }
+
+    public void btnActionGroup1Clicked() {
+        Platform.runLater( () -> {
+            btnActionGroup1.setVisible(false);
+        });
+    }
+    public void btnActionGroup2Clicked() {
+        Platform.runLater( () -> {
+            btnActionGroup2.setVisible(false);
+        });
+    }
+    public void btnActionGroup3Clicked() {
+        Platform.runLater( () -> {
+            btnActionGroup3.setVisible(false);
+        });
+    }
+
+    @Override
+    public void setTextAndEnableBtnActionGroup(String name, int btnNum) {
+        Platform.runLater( () -> {
+            switch (btnNum) {
+                case 1:
+                    btnActionGroup1.setVisible(true);
+                    btnActionGroup1.setText(name);
+                    break;
+                case 2:
+                    btnActionGroup2.setVisible(true);
+                    btnActionGroup2.setText(name);
+                    break;
+                case 3:
+                    btnActionGroup3.setVisible(true);
+                    btnActionGroup3.setText(name);
+                    break;
+            }
+        });
+    }
+
 
 }
