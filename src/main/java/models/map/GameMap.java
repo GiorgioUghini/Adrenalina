@@ -445,6 +445,11 @@ public class GameMap {
         throw new NoDirectionException();
     }
 
+    /** Given as hypothesis that a top left square exists and has id 0, returns the square with the given coordinates
+     * having the point (0, 0) in the top left square
+     * @param x the x coordinate (left to right)
+     * @param y the y coordinate (top to bottom)
+     * @return a square if the coordinates are inside the map, null otherwise */
     public Square getSquareByCoordinate(int x, int y){
         Square square = getSquareById(0);
         int x0 = 0;
