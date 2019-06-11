@@ -457,13 +457,13 @@ public class GameMap {
         while(x0<x || y0<y){
             boolean stuck = true;
             for(int i=x0; i<x; i++){
-                if(!square.hasNextWalkable(CardinalDirection.RIGHT))break;
+                if(!square.hasNext(CardinalDirection.RIGHT))break;
                 square = square.getNextSquare(CardinalDirection.RIGHT);
                 stuck = false;
                 x0++;
             }
             for(int j=y0; j<y;j++){
-                if(!square.hasNextWalkable(CardinalDirection.BOTTOM))break;
+                if(!square.hasNext(CardinalDirection.BOTTOM))break;
                 square = square.getNextSquare(CardinalDirection.BOTTOM);
                 stuck = false;
                 y0++;
@@ -471,6 +471,34 @@ public class GameMap {
             if(stuck) return null;
         }
         return square;
+    }
+
+    public Coordinate getSquareCoordinates(Square square){
+        checkSquareIsInMap(square);
+        int x = 0;
+        int y = 0;
+        Square tmp = square;
+        boolean stuck = false;
+        while(!stuck){
+            stuck = true;
+            while(tmp.hasNext(CardinalDirection.LEFT)){
+                tmp = tmp.getNextSquare(CardinalDirection.LEFT);
+                x++;
+                stuck = false;
+            }
+            while(tmp.hasNext(CardinalDirection.TOP)){
+                tmp = tmp.getNextSquare(CardinalDirection.TOP);
+                y++;
+                stuck = false;
+            }
+        }
+        return new Coordinate(x, y);
+    }
+
+    public Coordinate getPlayerCoordinates(Player player){
+        checkPlayerInMap(player);
+        Square square = getPlayerPosition(player);
+        return getSquareCoordinates(square);
     }
 
     /** Check that a square is in the map

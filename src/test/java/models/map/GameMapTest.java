@@ -566,7 +566,7 @@ public class GameMapTest {
     }
 
     @Test
-    public void getSquareByCoordinate(){
+    public void getSquareByCoordinateTest(){
         GameMap gameMap = MapGenerator.generate(0);
         Square square = gameMap.getSquareByCoordinate(3, 1);
         assertEquals(RoomColor.YELLOW, square.getColor());
@@ -574,5 +574,24 @@ public class GameMapTest {
         assertNull(square);
         square = gameMap.getSquareByCoordinate(0,0);
         assertEquals(gameMap.getSquareById(0), square);
+    }
+
+    @Test
+    public void getSquareCoordinates(){
+        GameMap gameMap = MapGenerator.generate(0);
+        Square s = gameMap.getSquareByCoordinate(2, 2);
+        Coordinate coordinate = gameMap.getSquareCoordinates(s);
+        assertEquals(2, coordinate.getX());
+        assertEquals(2, coordinate.getY());
+
+        s = gameMap.getSquareByCoordinate(3,2);
+        coordinate = gameMap.getSquareCoordinates(s);
+        assertEquals(3, coordinate.getX());
+        assertEquals(2, coordinate.getY());
+
+        s = gameMap.getSquareByCoordinate(1,2);
+        coordinate = gameMap.getSquareCoordinates(s);
+        assertEquals(1, coordinate.getX());
+        assertEquals(2, coordinate.getY());
     }
 }
