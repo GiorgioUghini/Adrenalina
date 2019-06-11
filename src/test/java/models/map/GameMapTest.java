@@ -564,4 +564,15 @@ public class GameMapTest {
             assert true;
         }
     }
+
+    @Test
+    public void getSquareByCoordinate(){
+        GameMap gameMap = MapGenerator.generate(0);
+        Square square = gameMap.getSquareByCoordinate(3, 1);
+        assertEquals(RoomColor.YELLOW, square.getColor());
+        square = gameMap.getSquareByCoordinate(3, 0);
+        assertNull(square);
+        square = gameMap.getSquareByCoordinate(0,0);
+        assertEquals(gameMap.getSquareById(0), square);
+    }
 }

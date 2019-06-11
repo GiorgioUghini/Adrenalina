@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 public class ResponseHandler implements ResponseHandlerInterface {
 
     private boolean debug = true;
+    private boolean debug2 = true;
 
     @Override
     public void handle(RegisterPlayerResponse response) {
@@ -42,18 +43,20 @@ public class ResponseHandler implements ResponseHandlerInterface {
     public void handle(ValidActionsResponse response) {
         if(response.newActions){
             Client.getInstance().setCurrentActionType(null);
-        }
-        Client.getInstance().setActions(response.actions);
-        if(response.actions.values().stream().filter(l -> !l.isEmpty()).count() > 0){
-            Client.getInstance().getCurrentView().showMessage("You could do some actions. Chooose one from:");
-            for(ActionType action : response.actions.keySet()){
-                Client.getInstance().getCurrentView().showMessage("Action group " + action.name());
-                Client.getInstance().getCurrentView().showMessage("\n");
+            if(response.actions.values().stream().filter(l -> !l.isEmpty()).count() > 0){
+                Client.getInstance().getCurrentView().showMessage("You could do some actions. Chooose one from:");
+                int i = 0;
+                for(ActionType action : response.actions.keySet()){
+                    ((GameView) Client.getInstance().getCurrentView()).setTextAndEnableBtnActionGroup(action, ++i);
+                    Client.getInstance().getCurrentView().showMessage("Action group " + action.name());
+                    Client.getInstance().getCurrentView().showMessage("\n");
+                }
+            }
+            else{
+                Client.getInstance().getCurrentView().showMessage("You can't really do any actions. Wait for your turn.");
             }
         }
-        else{
-            Client.getInstance().getCurrentView().showMessage("You can't really do any actions. Wait for your turn.");
-        }
+        Client.getInstance().setActions(response.actions);
         if(response.actions.keySet().size() == 1 && Client.getInstance().getCurrentActionType() == null){
             ActionType actionType = response.actions.keySet().stream().findFirst().orElse(null);
             Client.getInstance().setCurrentActionType(actionType);
@@ -91,8 +94,10 @@ public class ResponseHandler implements ResponseHandlerInterface {
             }
         if(debug && Client.getInstance().getActions().keySet().contains(ActionType.RUN_NORMAL)){
             //TODO da spostare dopo
-            Client.getInstance().setCurrentActionType(ActionType.RUN_NORMAL);
-            Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
+            setTimeout(() -> {
+                Client.getInstance().setCurrentActionType(ActionType.RUN_NORMAL);
+                Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
+            },  2000);
             debug = false;
             //TODO da spostare dopo
         }
@@ -213,9 +218,27 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     }
 
+    public static void setTimeout(Runnable runnable, int delay){
+        new Thread(() -> {
+            try {
+                Thread.sleep(delay);
+                runnable.run();
+            }
+            catch (Exception e){
+                System.err.println(e);
+            }
+        }).start();
+    }
+
     @Override
     public void handle(RunResponse response) {
-
+        if(debug2){
+            setTimeout(() -> {
+                Client.getInstance().setCurrentActionType(ActionType.RUN_NORMAL);
+                Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
+            },  2000);
+            debug2 = false;
+        }
     }
 
     @Override
