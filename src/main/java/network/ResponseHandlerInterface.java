@@ -47,4 +47,6 @@ public interface ResponseHandlerInterface {
     void handle(RunResponse response);
 
     void handle(ReloadResponse response);
+
+    void handle(TurnActionResponse response);
 }

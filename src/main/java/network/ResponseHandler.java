@@ -5,15 +5,25 @@ import javafx.application.Platform;
 import models.card.Effect;
 import models.card.LegitEffects;
 import models.turn.ActionElement;
+import models.turn.ActionType;
 import models.turn.TurnEvent;
+import models.turn.TurnType;
 import network.responses.*;
 import network.updates.*;
 import views.GameView;
 import views.MenuView;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ResponseHandler implements ResponseHandlerInterface {
+
+    private boolean debug = true;
+    private boolean debug2 = true;
+
     @Override
     public void handle(RegisterPlayerResponse response) {
         Client clientInstance = Client.getInstance();
@@ -31,15 +41,37 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(ValidActionsResponse response) {
-        if(!response.actions.isEmpty()){
-            Client.getInstance().getCurrentView().showMessage("You could do some actions. Chooose one from:");
-            for(TurnEvent turnEvent : response.actions){
-
+        if(response.newActions){
+            Client.getInstance().setCurrentActionType(null);
+            if(response.actions.values().stream().filter(l -> !l.isEmpty()).count() > 0){
+                Client.getInstance().getCurrentView().showMessage("You could do some actions. Chooose one from:");
+                int i = 0;
+                for(ActionType action : response.actions.keySet()){
+                    ((GameView) Client.getInstance().getCurrentView()).setTextAndEnableBtnActionGroup(action, ++i);
+                    Client.getInstance().getCurrentView().showMessage("Action group " + action.name());
+                    Client.getInstance().getCurrentView().showMessage("\n");
+                }
+            }
+            else{
+                Client.getInstance().getCurrentView().showMessage("You can't really do any actions. Wait for your turn.");
+            }
+        }
+        Client.getInstance().setActions(response.actions);
+        if(response.actions.keySet().size() == 1 && Client.getInstance().getCurrentActionType() == null){
+            ActionType actionType = response.actions.keySet().stream().findFirst().orElse(null);
+            Client.getInstance().setCurrentActionType(actionType);
+            Client.getInstance().getConnection().action(actionType);
+        }
+        if(Client.getInstance().getCurrentActionType() != null)
+            for(TurnEvent turnEvent :  Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType())){
                 switch (turnEvent) {
                     case DRAW:
                         ((GameView) Client.getInstance().getCurrentView()).setBtnDrawPowerUpVisibility(true);
                         break;
-                    case RUN:
+                    case RUN_1:
+                    case RUN_2:
+                    case RUN_3:
+                    case RUN_4:
                         ((GameView) Client.getInstance().getCurrentView()).setBtnRunVisibility(true);
                         break;
                     case SHOOT:
@@ -49,20 +81,25 @@ public class ResponseHandler implements ResponseHandlerInterface {
                         ((GameView) Client.getInstance().getCurrentView()).setBtnReloadVisibility(true);
                         break;
                     case SPAWN:
-                        ((GameView) Client.getInstance().getCurrentView()).setBtnSpawnVisibility(true);
+                        if( Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType()).size() == 1 &&  Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType()).get(0) == TurnEvent.SPAWN)
+                            ((GameView) Client.getInstance().getCurrentView()).setBtnSpawnVisibility(true);
                         break;
                     case GRAB:
                         ((GameView) Client.getInstance().getCurrentView()).setBtnGrabAmmoVisibility(true);
                         break;
                     //NE MANCANO ALCUNI! TIPO I VARI USEPOWERUP
                 }
-
                 Client.getInstance().getCurrentView().showMessage(turnEvent.name());
                 Client.getInstance().getCurrentView().showMessage("\n");
             }
-        }
-        else{
-            Client.getInstance().getCurrentView().showMessage("You can't really do any actions. Wait for your turn.");
+        if(debug && Client.getInstance().getActions().keySet().contains(ActionType.RUN_NORMAL)){
+            //TODO da spostare dopo
+            setTimeout(() -> {
+                Client.getInstance().setCurrentActionType(ActionType.RUN_NORMAL);
+                Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
+            },  2000);
+            debug = false;
+            //TODO da spostare dopo
         }
     }
 
@@ -122,6 +159,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
     @Override
     public void handle(MapChosenUpdate response) {
         ((MenuView) Client.getInstance().getCurrentView()).mapChosen(response.getMap());
+        Client.getInstance().setCurrentTurnType(TurnType.START_GAME);
     }
 
     @Override
@@ -149,7 +187,9 @@ public class ResponseHandler implements ResponseHandlerInterface {
     @Override
     public void handle(SpawnPlayerResponse response) {
         Client.getInstance().getCurrentView().showMessage("You've successfully spawned!");
+        Client.getInstance().setCurrentActionType(null);
         ((GameView) Client.getInstance().getCurrentView()).getValidActions();
+        Client.getInstance().setCurrentTurnType(TurnType.IN_GAME);
         //TODO bho non lo so sei spawnato (Vai Giorgio)
     }
 
@@ -178,14 +218,37 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     }
 
+    public static void setTimeout(Runnable runnable, int delay){
+        new Thread(() -> {
+            try {
+                Thread.sleep(delay);
+                runnable.run();
+            }
+            catch (Exception e){
+                System.err.println(e);
+            }
+        }).start();
+    }
+
     @Override
     public void handle(RunResponse response) {
-
+        if(debug2){
+            setTimeout(() -> {
+                Client.getInstance().setCurrentActionType(ActionType.RUN_NORMAL);
+                Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
+            },  2000);
+            debug2 = false;
+        }
     }
 
     @Override
     public void handle(ReloadResponse response) {
 
+    }
+
+    @Override
+    public void handle(TurnActionResponse response) {
+        Client.getInstance().getConnection().validActions();
     }
 
 

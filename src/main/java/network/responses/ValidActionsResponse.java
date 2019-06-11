@@ -1,18 +1,27 @@
 package network.responses;
 
+import models.turn.ActionType;
 import models.turn.TurnEvent;
 import network.Response;
 import network.ResponseHandlerInterface;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class ValidActionsResponse implements Response {
 
-    public Set<TurnEvent> actions;
+    public Map<ActionType, List<TurnEvent>> actions;
+    public boolean newActions;
 
-    public ValidActionsResponse(Set actions){
+    public ValidActionsResponse(Map<ActionType, List<TurnEvent>> actions, boolean newActions){
         this.actions = actions;
+        this.newActions = newActions;
+    }
+
+    public ValidActionsResponse(Map<ActionType, List<TurnEvent>> actions){
+        this.actions = actions;
+        this.newActions = false;
     }
 
     @Override

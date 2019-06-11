@@ -5,6 +5,9 @@ import models.card.Taggable;
 import models.card.WeaponCard;
 import models.map.RoomColor;
 import models.map.Square;
+import models.turn.ActionType;
+import models.turn.TurnEvent;
+import models.turn.TurnType;
 import network.responses.RegisterPlayerResponse;
 import network.responses.ValidActionsResponse;
 import network.responses.WaitingPlayerResponse;
@@ -27,7 +30,8 @@ public interface RemoteMethodsInterface extends Remote {
     Response finishCard(String token) throws  RemoteException;
     Response tagElement(String token, Taggable taggable) throws  RemoteException;
     Response endTurn(String token) throws  RemoteException;
+    Response action(String token, ActionType actionType) throws RemoteException;
     Response grab(String token) throws  RemoteException;
-    Response run(String token, Square square) throws  RemoteException;
+    Response run(String token, TurnEvent turnEvent, Square square) throws  RemoteException;
     Response reload(String token, List<WeaponCard> weapons) throws  RemoteException;
 }

@@ -14,11 +14,17 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import models.card.PowerUpCard;
 import models.card.WeaponCard;
+import models.map.Square;
+import models.turn.ActionGroup;
+import models.turn.ActionType;
+import models.turn.TurnEvent;
 import network.Client;
 
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class GameViewGUI implements Initializable, GameView {
@@ -46,6 +52,15 @@ public class GameViewGUI implements Initializable, GameView {
     private Button btnReload;
     @FXML
     private Button btnUsePowerUp;
+    @FXML
+    private Button btnActionGroup1;
+    @FXML
+    private Button btnActionGroup2;
+    @FXML
+    private Button btnActionGroup3;
+    @FXML
+    private Button btnEndTurn;
+
 
     @FXML
     private ImageView imgYourWeaponCard1;
@@ -68,6 +83,8 @@ public class GameViewGUI implements Initializable, GameView {
     private ArrayList<ImageView> weaponSpaces = new ArrayList<>();
     private ArrayList<PowerUpCard> myPowerUpsCardOrdered = new ArrayList<>();
     private ArrayList<PowerUpCard> myWeaponsCardOrdered = new ArrayList<>();
+    
+    private HashMap<Integer, ActionType> buttonActionTypeMap = new HashMap<>();
 
     private boolean canClickOnPowerUps = false;
 
@@ -129,7 +146,10 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     public void drawPowerUp() {
-        setBtnDrawPowerUpVisibility(false);
+        if(Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType()).stream().filter(t -> t == TurnEvent.DRAW).count() <= 1){
+            setBtnDrawPowerUpVisibility(false);
+            setBtnSpawnVisibility(true);
+        }
         gameController.drawPowerUp();
         gameController.getValidActions();
     }
@@ -142,7 +162,10 @@ public class GameViewGUI implements Initializable, GameView {
         canClickOnPowerUps = true;
     }
     public void run() {
-
+        Square square = null; //TODO get square
+        Client.getInstance().getConnection().run(Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType()).get(0), square);
+        setBtnRunVisibility(false);
+        gameController.getValidActions();
     }
     public void grabAmmo() {
 
@@ -247,5 +270,52 @@ public class GameViewGUI implements Initializable, GameView {
             removePowerUpToHand(Client.getInstance().getPlayer().getPowerUpList().get(3));
         }
     }
+
+    public void btnActionGroup1Clicked() {
+        Platform.runLater( () -> {
+            btnActionGroup1.setVisible(false);
+        });
+        ActionType tipo = buttonActionTypeMap.get(1);
+    }
+    public void btnActionGroup2Clicked() {
+        Platform.runLater( () -> {
+            btnActionGroup2.setVisible(false);
+        });
+        ActionType tipo = buttonActionTypeMap.get(2);
+    }
+    public void btnActionGroup3Clicked() {
+        Platform.runLater( () -> {
+            btnActionGroup3.setVisible(false);
+        });
+        ActionType tipo = buttonActionTypeMap.get(3);
+    }
+
+    @Override
+    public void setTextAndEnableBtnActionGroup(ActionType actionType, int btnNum) {
+        Platform.runLater( () -> {
+            switch (btnNum) {
+                case 1:
+                    btnActionGroup1.setVisible(true);
+                    btnActionGroup1.setText(actionType.name());
+                    buttonActionTypeMap.put(1, actionType);
+                    break;
+                case 2:
+                    btnActionGroup2.setVisible(true);
+                    btnActionGroup2.setText(actionType.name());
+                    buttonActionTypeMap.put(2, actionType);
+                    break;
+                case 3:
+                    btnActionGroup3.setVisible(true);
+                    btnActionGroup3.setText(actionType.name());
+                    buttonActionTypeMap.put(3, actionType);
+                    break;
+            }
+        });
+    }
+
+    public void setEnabledBtnEndTurn(boolean enable) {
+        btnEndTurn.setDisable(!enable);
+    }
+
 
 }

@@ -5,6 +5,8 @@ import models.card.Taggable;
 import models.card.WeaponCard;
 import models.map.RoomColor;
 import models.map.Square;
+import models.turn.ActionType;
+import models.turn.TurnEvent;
 import network.requests.*;
 import network.responses.CardEffectsResponse;
 import network.responses.EndTurnResponse;
@@ -148,9 +150,9 @@ public class SocketConnection implements Connection {
     }
 
     @Override
-    public void run(Square square) {
+    public void run(TurnEvent turnEvent, Square square) {
         try {
-            RunRequest request = new RunRequest(square);
+            RunRequest request = new RunRequest(turnEvent, square);
             write(request);
         } catch (IOException e) {
             e.printStackTrace();
@@ -161,6 +163,16 @@ public class SocketConnection implements Connection {
     public void reload(List<WeaponCard> weapons) {
         try {
             ReloadRequest request = new ReloadRequest(weapons);
+            write(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void action(ActionType actionType) {
+        try {
+            TurnActionRequest request = new TurnActionRequest(actionType);
             write(request);
         } catch (IOException e) {
             e.printStackTrace();
