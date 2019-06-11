@@ -4,23 +4,31 @@ import controllers.GameController;
 import controllers.ResourceController;
 import controllers.ScreenController;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import models.card.PowerUpCard;
 import models.card.WeaponCard;
 import models.map.Square;
+import models.turn.ActionGroup;
+import models.turn.ActionType;
 import models.turn.TurnEvent;
 import network.Client;
 
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class GameViewGUI implements Initializable, GameView {
@@ -48,6 +56,18 @@ public class GameViewGUI implements Initializable, GameView {
     private Button btnReload;
     @FXML
     private Button btnUsePowerUp;
+    @FXML
+    private Button btnActionGroup1;
+    @FXML
+    private Button btnActionGroup2;
+    @FXML
+    private Button btnActionGroup3;
+    @FXML
+    private Button btnEndTurn;
+
+    @FXML
+    private GridPane grid00;
+
 
     @FXML
     private ImageView imgYourWeaponCard1;
@@ -70,6 +90,8 @@ public class GameViewGUI implements Initializable, GameView {
     private ArrayList<ImageView> weaponSpaces = new ArrayList<>();
     private ArrayList<PowerUpCard> myPowerUpsCardOrdered = new ArrayList<>();
     private ArrayList<PowerUpCard> myWeaponsCardOrdered = new ArrayList<>();
+
+    private HashMap<Integer, ActionType> buttonActionTypeMap = new HashMap<>();
 
     private boolean canClickOnPowerUps = false;
 
@@ -227,6 +249,35 @@ public class GameViewGUI implements Initializable, GameView {
         Platform.runLater( () -> { btnUsePowerUp.setDisable(!isVisible); });
     }
 
+    private void addOnPane(GridPane pane, Node node) {
+        switch(pane.getChildren().size()) {
+            case 0:
+                pane.add(node,1,2);
+                break;
+            case 1:
+                pane.add(node,2,2);
+                break;
+            case 2:
+                pane.add(node,1,3);
+                break;
+            case 3:
+                pane.add(node,2,3);
+                break;
+            case 4:
+                pane.add(node,1,1);
+                break;
+            default:
+                pane.add(node,2,1);
+                break;
+        }
+    }
+
+    public void drawPlayerToken() {
+        Circle circle = new Circle(0.0d,0.0d,17.0d);
+        circle.setFill(Color.RED);
+        addOnPane(grid00, circle);
+    }
+
     public void powerUp1Clicked() {
         if (canClickOnPowerUps && (!Client.getInstance().getPlayer().getPowerUpList().isEmpty())) {
             canClickOnPowerUps = false;
@@ -255,5 +306,52 @@ public class GameViewGUI implements Initializable, GameView {
             removePowerUpToHand(Client.getInstance().getPlayer().getPowerUpList().get(3));
         }
     }
+
+    public void btnActionGroup1Clicked() {
+        Platform.runLater( () -> {
+            btnActionGroup1.setVisible(false);
+        });
+        ActionType tipo = buttonActionTypeMap.get(1);
+    }
+    public void btnActionGroup2Clicked() {
+        Platform.runLater( () -> {
+            btnActionGroup2.setVisible(false);
+        });
+        ActionType tipo = buttonActionTypeMap.get(2);
+    }
+    public void btnActionGroup3Clicked() {
+        Platform.runLater( () -> {
+            btnActionGroup3.setVisible(false);
+        });
+        ActionType tipo = buttonActionTypeMap.get(3);
+    }
+
+    @Override
+    public void setTextAndEnableBtnActionGroup(ActionType actionType, int btnNum) {
+        Platform.runLater( () -> {
+            switch (btnNum) {
+                case 1:
+                    btnActionGroup1.setVisible(true);
+                    btnActionGroup1.setText(actionType.name());
+                    buttonActionTypeMap.put(1, actionType);
+                    break;
+                case 2:
+                    btnActionGroup2.setVisible(true);
+                    btnActionGroup2.setText(actionType.name());
+                    buttonActionTypeMap.put(2, actionType);
+                    break;
+                case 3:
+                    btnActionGroup3.setVisible(true);
+                    btnActionGroup3.setText(actionType.name());
+                    buttonActionTypeMap.put(3, actionType);
+                    break;
+            }
+        });
+    }
+
+    public void setEnabledBtnEndTurn(boolean enable) {
+        btnEndTurn.setDisable(!enable);
+    }
+
 
 }
