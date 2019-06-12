@@ -312,18 +312,24 @@ public class GameViewGUI implements Initializable, GameView {
             btnActionGroup1.setVisible(false);
         });
         ActionType tipo = buttonActionTypeMap.get(1);
+        Client.getInstance().setCurrentActionType(tipo);
+        Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
     }
     public void btnActionGroup2Clicked() {
         Platform.runLater( () -> {
             btnActionGroup2.setVisible(false);
         });
         ActionType tipo = buttonActionTypeMap.get(2);
+        Client.getInstance().setCurrentActionType(tipo);
+        Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
     }
     public void btnActionGroup3Clicked() {
         Platform.runLater( () -> {
             btnActionGroup3.setVisible(false);
         });
         ActionType tipo = buttonActionTypeMap.get(3);
+        Client.getInstance().setCurrentActionType(tipo);
+        Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
     }
 
     @Override

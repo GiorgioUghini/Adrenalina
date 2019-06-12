@@ -21,9 +21,6 @@ import java.util.stream.Collectors;
 
 public class ResponseHandler implements ResponseHandlerInterface {
 
-    private boolean debug = true;
-    private boolean debug2 = true;
-
     @Override
     public void handle(RegisterPlayerResponse response) {
         Client clientInstance = Client.getInstance();
@@ -92,15 +89,17 @@ public class ResponseHandler implements ResponseHandlerInterface {
                 Client.getInstance().getCurrentView().showMessage(turnEvent.name());
                 Client.getInstance().getCurrentView().showMessage("\n");
             }
-        if(debug && Client.getInstance().getActions().keySet().contains(ActionType.RUN_NORMAL)){
-            //TODO da spostare dopo
+        /*
+                if(debug && Client.getInstance().getActions().keySet().contains(ActionType.RUN_NORMAL)){
+
             setTimeout(() -> {
                 Client.getInstance().setCurrentActionType(ActionType.RUN_NORMAL);
                 Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
             },  2000);
             debug = false;
-            //TODO da spostare dopo
+
         }
+         */
     }
 
     @Override
@@ -218,27 +217,9 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     }
 
-    public static void setTimeout(Runnable runnable, int delay){
-        new Thread(() -> {
-            try {
-                Thread.sleep(delay);
-                runnable.run();
-            }
-            catch (Exception e){
-                System.err.println(e);
-            }
-        }).start();
-    }
-
     @Override
     public void handle(RunResponse response) {
-        if(debug2){
-            setTimeout(() -> {
-                Client.getInstance().setCurrentActionType(ActionType.RUN_NORMAL);
-                Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
-            },  2000);
-            debug2 = false;
-        }
+
     }
 
     @Override
