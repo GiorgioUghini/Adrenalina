@@ -25,6 +25,7 @@ public class Client {
     private Map<ActionType, List<TurnEvent>> actions;
     private TurnType currentTurnType;
     private ActionType currentActionType;
+    private boolean showActions, showEvents = false;
 
     private int mapNum;
 
@@ -111,5 +112,21 @@ public class Client {
 
     public void setCurrentView(View currentView) {
         this.currentView = currentView;
+    }
+
+    public boolean getShowActions() {
+        return showActions;
+    }
+
+    public void setShowActions(boolean showActions) {
+        this.showActions = showActions;
+    }
+
+    public boolean getShowEvents() {
+        return showEvents;
+    }
+
+    public void setShowEvents(boolean showEvents) {
+        this.showEvents = showEvents;
     }
 }

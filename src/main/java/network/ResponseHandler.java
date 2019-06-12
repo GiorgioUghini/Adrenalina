@@ -38,29 +38,17 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(ValidActionsResponse response) {
-        if(response.newActions){
+        if (response.newActions) {
             Client.getInstance().setCurrentActionType(null);
-            if(response.actions.values().stream().filter(l -> !l.isEmpty()).count() > 0){
-                Client.getInstance().getCurrentView().showMessage("You could do some actions. Chooose one from:");
-                int i = 0;
-                for(ActionType action : response.actions.keySet()){
-                    ((GameView) Client.getInstance().getCurrentView()).setTextAndEnableBtnActionGroup(action, ++i);
-                    Client.getInstance().getCurrentView().showMessage("Action group " + action.name());
-                    Client.getInstance().getCurrentView().showMessage("\n");
-                }
-            }
-            else{
-                Client.getInstance().getCurrentView().showMessage("You can't really do any actions. Wait for your turn.");
-            }
         }
         Client.getInstance().setActions(response.actions);
-        if(response.actions.keySet().size() == 1 && Client.getInstance().getCurrentActionType() == null){
+        if (response.actions.keySet().size() == 1 && Client.getInstance().getCurrentActionType() == null) { // auto-action
             ActionType actionType = response.actions.keySet().stream().findFirst().orElse(null);
             Client.getInstance().setCurrentActionType(actionType);
             Client.getInstance().getConnection().action(actionType);
         }
-        if(Client.getInstance().getCurrentActionType() != null)
-            for(TurnEvent turnEvent :  Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType())){
+        if (Client.getInstance().getCurrentActionType() != null)
+            for (TurnEvent turnEvent : Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType())) {
                 switch (turnEvent) {
                     case DRAW:
                         ((GameView) Client.getInstance().getCurrentView()).setBtnDrawPowerUpVisibility(true);
@@ -78,7 +66,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
                         ((GameView) Client.getInstance().getCurrentView()).setBtnReloadVisibility(true);
                         break;
                     case SPAWN:
-                        if( Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType()).size() == 1 &&  Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType()).get(0) == TurnEvent.SPAWN)
+                        if (Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType()).size() == 1 && Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType()).get(0) == TurnEvent.SPAWN)
                             ((GameView) Client.getInstance().getCurrentView()).setBtnSpawnVisibility(true);
                         break;
                     case GRAB:
@@ -86,33 +74,36 @@ public class ResponseHandler implements ResponseHandlerInterface {
                         break;
                     //NE MANCANO ALCUNI! TIPO I VARI USEPOWERUP
                 }
-                Client.getInstance().getCurrentView().showMessage(turnEvent.name());
-                Client.getInstance().getCurrentView().showMessage("\n");
             }
-        /*
-                if(debug && Client.getInstance().getActions().keySet().contains(ActionType.RUN_NORMAL)){
-
-            setTimeout(() -> {
-                Client.getInstance().setCurrentActionType(ActionType.RUN_NORMAL);
-                Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
-            },  2000);
-            debug = false;
-
+        if (Client.getInstance().getShowActions() && Client.getInstance().getActions().keySet().size() > 1) {
+            int i = 0;
+            for (ActionType action : Client.getInstance().getActions().keySet()) {
+                ((GameView) Client.getInstance().getCurrentView()).setTextAndEnableBtnActionGroup(action, ++i);
+                Client.getInstance().getCurrentView().showMessage("Action group: " + action.name());
+            }
+            Client.getInstance().setShowActions(false);
         }
-         */
+        if (Client.getInstance().getShowEvents()) {
+            if(Client.getInstance().getCurrentActionType() != null){
+                for (TurnEvent event : Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType())) {
+                    Client.getInstance().getCurrentView().showMessage("Event: " + event.name());
+                }
+            }
+
+            Client.getInstance().setShowEvents(false);
+        }
     }
+
 
     @Override
     public void handle(ErrorResponse response) {
         Client.getInstance().getCurrentView().printError("Errore gestito dal server"); //DEBUG
         try {
             throw response.exception;
-        }
-        catch (InvalidInputException inputEx){
+        } catch (InvalidInputException inputEx) {
             String error = inputEx.getMessage();
             Client.getInstance().getCurrentView().printError(error);
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             String error = ex.getMessage();
             Client.getInstance().getCurrentView().printError(error);
         }
@@ -139,7 +130,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
     public void handle(CardEffectsResponse response) {
         // TODO: Questo è solo un placeholder!!!! Bisogna far scegliere all'utente tra gli effect.name
         LegitEffects legitEffects = response.legitEffects;
-        for(Effect effect : legitEffects.getLegitEffects()){
+        for (Effect effect : legitEffects.getLegitEffects()) {
             Client.getInstance().getCurrentView().showMessage(effect.name);
         }
     }
@@ -163,8 +154,10 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(NextTurnUpdate response) {
+        Client.getInstance().setShowActions(true);
         try {
             ((GameView) Client.getInstance().getCurrentView()).startTurn(response.name);
+
         } catch (Exception e) {
             Client.getInstance();
         }
@@ -178,7 +171,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
     @Override
     public void handle(DrawPowerUpResponse response) {
         ((GameView) Client.getInstance().getCurrentView()).addPowerUpToHand(response.getCard());
-        Platform.runLater( () -> {
+        Platform.runLater(() -> {
             Client.getInstance().getCurrentView().showMessage("You drawn " + response.getCard().name + " and its color is " + response.getCard().color.name());
         });
     }
@@ -214,12 +207,16 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(GrabResponse response) {
-
+        Client.getInstance().setShowActions(true);
+        Client.getInstance().setShowEvents(true);
+        Client.getInstance().getConnection().validActions();
     }
 
     @Override
     public void handle(RunResponse response) {
-
+        Client.getInstance().setShowActions(true);
+        Client.getInstance().setShowEvents(true);
+        Client.getInstance().getConnection().validActions();
     }
 
     @Override
@@ -229,6 +226,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(TurnActionResponse response) {
+        Client.getInstance().setShowEvents(true);
         Client.getInstance().getConnection().validActions();
     }
 
