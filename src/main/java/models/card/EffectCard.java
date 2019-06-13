@@ -1,31 +1,23 @@
 package models.card;
 
-import errors.NoActiveEffectException;
 import errors.WeaponCardException;
 import models.map.GameMap;
 import models.map.RoomColor;
 import models.map.Square;
-import models.player.Ammo;
 import models.player.Player;
 
 import java.util.*;
 
 public abstract class EffectCard extends Card {
     public String name;
-
-
     public String image;
-
-
     protected boolean activated = false;
-
     protected Action activeAction;
     protected Map<String, Player> selectedPlayers;
     protected Map<String, Square> selectedSquares;
     protected Map<String, RoomColor> selectedRooms;
     protected GameMap gameMap;
     protected Player me;
-
     public EffectCard() {
         init();
     }

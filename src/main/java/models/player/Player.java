@@ -102,13 +102,18 @@ public class Player implements Subscriber, Serializable, Taggable {
         return powerUpCard;
     }
 
+    public void throwPowerUp(PowerUpCard powerUpCard){
+        match.throwPowerUp(powerUpCard);
+        this.powerUpList.remove(powerUpCard);
+    }
+
     /** Pays the draw price of the card and adds it to the weapons list
      * @param drawn the card to draw
      * @param toRelease the card to release to grab the new one. Can be null unless you already have 3 weapons
      * @throws TooManyCardsException if you have 3 cards in your hand and toRelease is null
      * @throws CheatException if you do not have the card toRelease */
     public void drawWeaponCard(WeaponCard drawn, WeaponCard toRelease) {
-        if(!drawn.canDraw(ammo)) throw new NotEnoughAmmoException();
+        if(!drawn.canDraw(ammo, powerUpList)) throw new NotEnoughAmmoException();
         SpawnPoint myPosition = (SpawnPoint) gameMap.getPlayerPosition(this);
         if(weaponList.size()==3){
             if(toRelease==null) throw new TooManyCardsException("You already have 3 weapons, select one to leave");
@@ -276,6 +281,7 @@ public class Player implements Subscriber, Serializable, Taggable {
     }
 
     /** Activates the weapon card given as param
+     * @throws WeaponCardException if the weapon is already active
      * @throws WeaponCardException if you do not have this weapon
      * @throws WeaponCardException if the weapon is not loaded
      * */
@@ -288,10 +294,15 @@ public class Player implements Subscriber, Serializable, Taggable {
     /** Activated the powerup card given as param paying the ammo, if it costs
      * @param powerUpCard the card to activate
      * @param ammo the cube you are paying to activate it. could either be null
+     * @param paymentPowerUpCard the powerup card you are using to pay for the activation of this card
      * if the card is free or one (and only one) of the colors should be set to 1
      * @throws WeaponCardException if you cannot activate it */
-    public void playPowerUp(PowerUpCard powerUpCard, Ammo ammo){
+    public void playPowerUp(PowerUpCard powerUpCard, Ammo ammo, PowerUpCard paymentPowerUpCard){
         checkHasPowerUp(powerUpCard);
+        if(paymentPowerUpCard!=null){
+            checkHasPowerUp(paymentPowerUpCard);
+            if(paymentPowerUpCard.equals(powerUpCard)) throw new WeaponCardException("You cannot use the power up you are playing to activate it");
+        }
         if(activePowerUp!=null) throw new WeaponCardException("You are already playing a powerup");
         switch (powerUpCard.when){
             case "on_damage_dealt":
@@ -308,13 +319,13 @@ public class Player implements Subscriber, Serializable, Taggable {
             default:
                 throw new WeaponCardException("Unhandled 'when' case in powerup " + powerUpCard.name + ": " + powerUpCard.when);
         }
-        powerUpCard.payPrice(this.ammo, ammo);
+        powerUpCard.payPrice(this.ammo, ammo, paymentPowerUpCard);
         powerUpCard.activate(this);
         activePowerUp = powerUpCard;
     }
 
     public boolean canReloadWeapon(WeaponCard weaponCard){
-        return weaponCard.canReload(ammo);
+        return weaponCard.canReload(ammo, powerUpList);
     }
 
     /**
@@ -322,17 +333,17 @@ public class Player implements Subscriber, Serializable, Taggable {
      * @throws WeaponCardException if you do not have that weapon
      * @throws WeaponCardException if the weapon is already loaded
      * @throws WeaponCardException if you do not have enough ammo to reload */
-    public void loadWeapon(WeaponCard weaponCard){
+    public void loadWeapon(WeaponCard weaponCard, PowerUpCard powerUpCard){
         checkHasWeapon(weaponCard);
         if(weaponCard.isLoaded()) throw new WeaponCardException("The weapon is already loaded");
-        weaponCard.load(ammo);
+        weaponCard.load(ammo, powerUpCard);
     }
 
     /**
      * @return an object containing all the card effects with a TRUE flag on those that can be played.
      * all the flags are set to FALSE if the weapon has not been activated */
     public LegitEffects getWeaponEffects(){
-        LegitEffects out = activeWeapon.getEffects(ammo);
+        LegitEffects out = activeWeapon.getEffects(ammo, powerUpList);
         if(out.getLegitEffects().isEmpty()){
             this.resetWeapon();
         }
@@ -341,8 +352,8 @@ public class Player implements Subscriber, Serializable, Taggable {
 
     /** Activates the effect and gives access to playNextWeaponAction() method
      * @throws WeaponCardException if you do not have enough ammo to activate this effect */
-    public void playWeaponEffect(Effect e){
-        activeWeapon.playEffect(e, ammo);
+    public void playWeaponEffect(Effect e, PowerUpCard powerUpCard){
+        activeWeapon.playEffect(e, ammo, powerUpCard);
     }
 
     public Action playNextWeaponAction(){
@@ -352,7 +363,10 @@ public class Player implements Subscriber, Serializable, Taggable {
     /** Plays the next action of the powerup. if this method returns null, the active powerup has already been set to null */
     public Action playNextPowerUpAction(){
         Action nextAction = playNextAction(activePowerUp);
-        if(nextAction==null) activePowerUp = null;
+        if(nextAction==null){
+            throwPowerUp(activePowerUp);
+            activePowerUp = null;
+        }
         return nextAction;
     }
 

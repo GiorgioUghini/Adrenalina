@@ -1,6 +1,5 @@
 package models.card;
 
-import errors.NoActiveEffectException;
 import errors.WeaponCardException;
 import models.map.RoomColor;
 import models.player.Ammo;
@@ -29,12 +28,11 @@ public class PowerUpCard extends EffectCard {
         return this.hasPrice;
     }
 
-    public void payPrice(Ammo yourAmmo, Ammo whichAmmo){
-        if(!hasEnoughAmmo(yourAmmo, whichAmmo)) throw new WeaponCardException("Not enough ammo to pay");
+    public void payPrice(Ammo yourAmmo, Ammo whichAmmo, PowerUpCard powerUpCard){
+        if(!hasPrice) return;
+        if(!hasEnoughAmmo(yourAmmo, whichAmmo, powerUpCard)) throw new WeaponCardException("Not enough ammo to pay");
         if(whichAmmo!=null && (whichAmmo.red+whichAmmo.yellow+whichAmmo.blue) != 1) throw new WeaponCardException("You have to pay exactly one ammo of any color");
-        if(hasPrice){
-            pay(yourAmmo, whichAmmo);
-        }
+        pay(yourAmmo, whichAmmo, powerUpCard);
         this.pricePaid = true;
     }
     public boolean pricePaid(){
@@ -44,7 +42,7 @@ public class PowerUpCard extends EffectCard {
     @Override
     public void activate(Player me){
         if(me==null) throw new NullPointerException("Player cannot be null");
-        if(!pricePaid) throw new WeaponCardException("You need to pay this powerup price to active it. card: " + this.name);
+        if(hasPrice && !pricePaid) throw new WeaponCardException("You need to pay this powerup price to active it. card: " + this.name);
         this.activated = true;
         this.gameMap = me.getGameMap();
         this.me = me;
@@ -53,7 +51,7 @@ public class PowerUpCard extends EffectCard {
     /** activates the next action inside the effect. Must be called for the first action too. It also cancels the active effect and action if
      * there are no more actions. In this case, on the last call it returned null
      * @return the action that has just been activated, or null if there are no more actions
-     * @throws NoActiveEffectException if no effect is active at the moment
+     * @throws WeaponCardException if the card has not been activated
      * */
     @Override
     public Action playNextAction(){
@@ -65,25 +63,25 @@ public class PowerUpCard extends EffectCard {
         int lastActionIndex = effects.indexOf(activeAction);
         if(lastActionIndex == effects.size()-1){
             activeAction = null;
+            activated = false;
             return null;
         }
         activeAction = effects.get(lastActionIndex + 1);
         return activeAction;
     }
 
-    private boolean hasEnoughAmmo(Ammo ammo, Ammo whichAmmo){
+    private boolean hasEnoughAmmo(Ammo ammo, Ammo whichAmmo, PowerUpCard powerUpCard){
         if(!hasPrice) return true;
+        if(powerUpCard != null) return true;
         if(whichAmmo==null) return false;
-        return (
-            ammo.red >= whichAmmo.red &&
-            ammo.blue >= whichAmmo.blue &&
-            ammo.yellow >= whichAmmo.yellow
-        );
+        return ammo.isGreaterThanOrEqual(whichAmmo);
     }
 
-    private void pay(Ammo yourAmmo, Ammo whichAmmo){
-        yourAmmo.yellow -= whichAmmo.yellow;
-        yourAmmo.red -= whichAmmo.red;
-        yourAmmo.blue -= whichAmmo.blue;
+    private void pay(Ammo yourAmmo, Ammo whichAmmo, PowerUpCard powerUpCard){
+        if(powerUpCard!=null){
+            me.throwPowerUp(powerUpCard);
+        }else{
+            yourAmmo.remove(whichAmmo);
+        }
     }
 }

@@ -46,29 +46,31 @@ public class WeaponCard extends EffectCard {
     /** Removes the necessary ammos from the "ammo" param to reload the card. You can check if you have enough ammo to reload by calling canReload(ammo) method
      * @param ammo the ammo the player has, the reload cost will be deducted from here. ATTENTION: this function modifies the param
      * @throws WeaponCardException if the given ammo is not enough to reload. */
-    public void load(Ammo ammo){
-        if(!hasEnoughAmmo(ammo, reloadPrice)) throw new WeaponCardException("Not enough ammo to reload");
-        pay(reloadPrice, ammo);
+    public void load(Ammo ammo, PowerUpCard powerUpCard){
+        if(!hasEnoughAmmo(ammo, powerUpCard, reloadPrice)) throw new WeaponCardException("Not enough ammo to reload");
+        pay(reloadPrice, ammo, powerUpCard);
         loaded = true;
     }
 
     /** @param ammo your ammo availability
      *  @return true if the provided ammos are enough to reload. */
-    public boolean canReload(Ammo ammo){
-        return hasEnoughAmmo(ammo, reloadPrice);
+    public boolean canReload(Ammo ammo, List<PowerUpCard> powerUpCards){
+        return hasEnoughAmmo(ammo, powerUpCards, reloadPrice);
     }
 
-    public boolean canDraw(Ammo ammo){
-        return hasEnoughAmmo(ammo, drawPrice);
+    public boolean canDraw(Ammo ammo, List<PowerUpCard> powerUpCards){
+        return hasEnoughAmmo(ammo, powerUpCards, drawPrice);
     }
 
-    /** If the card is loaded, activate it
+    /** If the card is loaded, activate it and unload it
      * @param me the player who is going to use the card
+     * @throws WeaponCardException if the weapon is already active
      * @throws WeaponCardException if the weapon is not loaded
      * @throws NullPointerException if player is null */
     @Override
     public void activate(Player me){
         if(me==null) throw new NullPointerException("Player cannot be null");
+        if(activated) throw new WeaponCardException("Weapon is already active");
         if(!isLoaded()) throw new WeaponCardException("The weapon is not loaded, cannot activate");
         this.activated = true;
         this.loaded = false;
@@ -80,9 +82,9 @@ public class WeaponCard extends EffectCard {
      * to get any activable effect
      * @param ammo your ammo
      * @return all the effects with the flag set to false if the card has not been activated */
-    public LegitEffects getEffects(Ammo ammo){
+    public LegitEffects getEffects(Ammo ammo, List<PowerUpCard> powerUpCards){
         if(!activated) return noActivableEffects();
-        LegitEffects out = getAffordableEffects(ammo);
+        LegitEffects out = getAffordableEffects(ammo, powerUpCards);
         if(exclusive){
             if(activatedEffects.isEmpty()){
                 return out;
@@ -102,9 +104,9 @@ public class WeaponCard extends EffectCard {
      * @param effect the effect to play
      * @param ammo ATTENTION: this param will be modified if the effect activation was successfull. The effect price will be deducted from it
      * @throws WeaponCardException if you do not have enough ammo to activate the effect */
-    public void playEffect(Effect effect, Ammo ammo){
-        if(!hasEnoughAmmo(ammo, effect.price))throw new WeaponCardException("Not enough ammo to activate this effect");
-        pay(effect.price, ammo);
+    public void playEffect(Effect effect, Ammo ammo, PowerUpCard powerUpCard){
+        if(!hasEnoughAmmo(ammo, powerUpCard, effect.price))throw new WeaponCardException("Not enough ammo to activate this effect");
+        pay(effect.price, ammo, powerUpCard);
         activatedEffects.add(effect);
         activeEffect = effect;
     }
@@ -146,22 +148,27 @@ public class WeaponCard extends EffectCard {
     }
 
     /** Loops all effects and returns them, those that can be bought will have a TRUE flag */
-    private LegitEffects getAffordableEffects(Ammo ammo){
+    private LegitEffects getAffordableEffects(Ammo ammo, List<PowerUpCard> powerUpCards){
         LegitEffects out = new LegitEffects();
         for(Effect e : effects){
-            boolean affordable = hasEnoughAmmo(ammo, e.price);
+            boolean affordable = hasEnoughAmmo(ammo, powerUpCards, e.price);
             out.addEffect(e, affordable);
         }
         return out;
     }
 
     /** Check if you have enough ammo to activate this card */
-    private boolean hasEnoughAmmo(Ammo ammo, Ammo price){
-        return (
-                ammo.red >= price.red &&
-                        ammo.yellow >= price.yellow &&
-                        ammo.blue >= price.blue
-        );
+    private boolean hasEnoughAmmo(Ammo ammo, List<PowerUpCard> powerUpCards, Ammo price){
+        Ammo tot = ammo.getCopy();
+        for(PowerUpCard card : powerUpCards){
+            tot.add(new Ammo(card));
+        }
+        return ammo.isGreaterThanOrEqual(price);
+    }
+    private boolean hasEnoughAmmo(Ammo ammo, PowerUpCard powerUpCard, Ammo price){
+        List<PowerUpCard> powerUpCards = new ArrayList<>();
+        if(powerUpCard!=null) powerUpCards.add(powerUpCard);
+        return hasEnoughAmmo(ammo, powerUpCards, price);
     }
 
     /** Get all effects with orderId equal to the one given as param or orderId=-1 */
@@ -183,9 +190,13 @@ public class WeaponCard extends EffectCard {
         return new LegitEffects(map);
     }
 
-    private void pay(Ammo price, Ammo ammo){
-        ammo.blue -= price.blue;
-        ammo.red -= price.red;
-        ammo.yellow -= price.yellow;
+    private void pay(Ammo price, Ammo ammo, PowerUpCard powerUpCard){
+        Ammo newPrice = price.getCopy();
+        if(powerUpCard!=null){
+            Ammo powerAmmo = new Ammo(powerUpCard);
+            newPrice.remove(powerAmmo);
+            me.throwPowerUp(powerUpCard);
+        }
+        ammo.remove(newPrice);
     }
 }

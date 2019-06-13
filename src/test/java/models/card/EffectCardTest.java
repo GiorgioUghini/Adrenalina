@@ -16,24 +16,21 @@ public class EffectCardTest {
     @Test
     public void testActivation(){
         weaponDeck = new CardController().getWeaponDeck();
-        Ammo ammo = new Ammo();
-        ammo.blue = 3;
-        ammo.yellow = 3;
-        ammo.red = 3;
+        Ammo ammo = new Ammo(3,3,3);
         int deckSize = weaponDeck.size();
         for(int i = 0; i<deckSize; i++){
             WeaponCard weaponCard = (WeaponCard) weaponDeck.draw();
-            assertEquals(0, weaponCard.getEffects(ammo).getLegitEffects().size());
+            assertEquals(0, weaponCard.getEffects(ammo, null).getLegitEffects().size());
             weaponCard.activate(new Player("player1", "password"));
-            LegitEffects effects = weaponCard.getEffects(ammo);
+            LegitEffects effects = weaponCard.getEffects(ammo, new ArrayList<>());
             Ammo effectPrice;
             Effect chosenEffect;
             if(weaponCard.exclusive){
                 assertEquals(effects.getAllEffects().size(), effects.getLegitEffects().size());
                 chosenEffect = effects.getLegitEffects().get(0);
                 effectPrice = chosenEffect.price;
-                weaponCard.playEffect(effects.getLegitEffects().get(0), ammo);
-                effects = weaponCard.getEffects(ammo);
+                weaponCard.playEffect(effects.getLegitEffects().get(0), ammo, null);
+                effects = weaponCard.getEffects(ammo, new ArrayList<>());
                 assertEquals(0, effects.getLegitEffects().size());
             }else{
                 for(Effect e : effects.getLegitEffects()){
@@ -41,7 +38,7 @@ public class EffectCardTest {
                 }
                 chosenEffect = effects.getLegitEffects().get(0);
                 effectPrice = chosenEffect.price;
-                weaponCard.playEffect(chosenEffect, ammo);
+                weaponCard.playEffect(chosenEffect, ammo, null);
                 for(Effect e : effects.getLegitEffects()){
                     assertTrue(e.orderId==0 || e.orderId==1 || e.orderId == -1);
                 }
@@ -66,15 +63,13 @@ public class EffectCardTest {
         }else{
             gameMap.movePlayer(player2, spawnPoint.getNextSquare(CardinalDirection.LEFT));
         }
-
-
         WeaponCard lanciarazzi = getCard("Lanciarazzi");
         lanciarazzi.activate(player1);
         Ammo ammo = new Ammo(3, 3, 3);
-        List<Effect> effects = lanciarazzi.getEffects(ammo).getLegitEffects();
+        List<Effect> effects = lanciarazzi.getEffects(ammo, new ArrayList<>()).getLegitEffects();
         for(Effect e : effects){
             if(e.name.equals("Effetto base")){
-                lanciarazzi.playEffect(e, ammo);
+                lanciarazzi.playEffect(e, ammo, null);
             }
         }
         lanciarazzi.playNextAction(); //select
@@ -94,9 +89,9 @@ public class EffectCardTest {
         assertTrue(playersToDamage.containsKey(player2));
         assertEquals(1, playersToDamage.size());
         boolean effectFound = false;
-        for(Effect e : lanciarazzi.getEffects(ammo).getLegitEffects()){
+        for(Effect e : lanciarazzi.getEffects(ammo, new ArrayList<>()).getLegitEffects()){
             if(e.name.equals("Testata a frammentazione")){
-                lanciarazzi.playEffect(e, ammo);
+                lanciarazzi.playEffect(e, ammo, null);
                 effectFound = true;
             }
         }
@@ -145,7 +140,7 @@ public class EffectCardTest {
         assertEquals(1, activableEffects.size());
         Effect effect = activableEffects.get(0);
         assertEquals("Effetto base", effect.name);
-        me.playWeaponEffect(effect);
+        me.playWeaponEffect(effect, null);
         Action nextAction;
         while((nextAction = me.playNextWeaponAction())!=null){
             if(nextAction.type.equals(ActionType.SELECT) && !nextAction.select.auto){
@@ -157,7 +152,7 @@ public class EffectCardTest {
         assertEquals(2, p1.getTotalDamage());
         activableEffects = me.getWeaponEffects().getLegitEffects();
         assertEquals(1, activableEffects.size());
-        me.playWeaponEffect(activableEffects.get(0));
+        me.playWeaponEffect(activableEffects.get(0), null);
         assertEquals(2, me.getAmmo().red);
         while((nextAction = me.playNextWeaponAction())!=null){
             if(nextAction.type.equals(ActionType.SELECT) && !nextAction.select.auto){
@@ -201,7 +196,7 @@ public class EffectCardTest {
         assertEquals(1, effects.size());
         Effect effect = effects.get(0);
         assertEquals("Effetto base", effect.name);
-        me.playWeaponEffect(effect);
+        me.playWeaponEffect(effect, null);
         me.playNextWeaponAction(); //select square
         Selectable selectable = cannoneVortex.getSelectable();
         assertEquals(3, selectable.get().size());
@@ -241,7 +236,7 @@ public class EffectCardTest {
         assertEquals(2, effects.size());
         for(Effect e : effects){
             if(e.name.equals("Modalità base")){
-                me.playWeaponEffect(e);
+                me.playWeaponEffect(e, null);
             }
         }
         vulcanizzatore.playNextAction(); //select room
@@ -272,7 +267,7 @@ public class EffectCardTest {
         me.setAmmo(new Ammo(3,3,3));
         me.playWeapon(razzoTermico);
         Effect effect = me.getWeaponEffects().getLegitEffects().get(0);
-        me.playWeaponEffect(effect);
+        me.playWeaponEffect(effect, null);
         me.playNextWeaponAction();
         Selectable selectable = razzoTermico.getSelectable();
         assertEquals(2, selectable.get().size());
