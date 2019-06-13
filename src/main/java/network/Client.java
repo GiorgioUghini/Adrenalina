@@ -3,6 +3,7 @@ package network;
 import errors.InvalidViewTypeException;
 import errors.NotImplementedException;
 import models.card.Action;
+import models.map.Coordinate;
 import models.map.GameMap;
 import models.player.Player;
 import models.turn.ActionType;
@@ -10,6 +11,7 @@ import models.turn.TurnEvent;
 import models.turn.TurnType;
 import views.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +31,8 @@ public class Client {
     private GameMap map;
     private List<Player> players;
     private boolean showActions, showEvents = false;
+
+    private HashMap<Player, Coordinate> playerCoordinateMap = new HashMap<>();
 
     private int mapNum;
 
@@ -50,6 +54,10 @@ public class Client {
 
     private Client() {
 
+    }
+
+    public Map<Player, Coordinate> getPlayerCoordinateMap() {
+        return playerCoordinateMap;
     }
 
     public TurnType getCurrentTurnType(){

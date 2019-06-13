@@ -319,22 +319,22 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     private void drawPlayerToken(GridPane pane, int i) {
-        boolean draw = true;
+        Platform.runLater( () -> {
+            Circle circle = new Circle(0.0d,0.0d,17.0d);
+            circle.setFill(Color.rgb(255-i*51,i*51,(150+i*51) % 255));
+            addOnPane(pane, circle);
+        });
+    }
+
+    private void deletePlayerToken(GridPane pane, int i) {
         Circle circle1 = new Circle(0.0d,0.0d,17.0d);
         circle1.setFill(Color.rgb(255-i*51,i*51,(150+i*51) % 255));
         for (Node n : pane.getChildren()) {
             if (n.getClass() == circle1.getClass()) {
                 if (((Circle) n).getFill().equals(circle1.getFill())) {
-                    draw = false;
+                    Platform.runLater( () -> pane.getChildren().remove(n));
                 }
             }
-        }
-        if (draw) {
-            Platform.runLater( () -> {
-                Circle circle = new Circle(0.0d,0.0d,17.0d);
-                circle.setFill(Color.rgb(255-i*51,i*51,(150+i*51) % 255));
-                addOnPane(pane, circle);
-            });
         }
     }
 
@@ -343,7 +343,12 @@ public class GameViewGUI implements Initializable, GameView {
         for (Player p : Client.getInstance().getPlayers()) {
             try {
                 Coordinate c = map.getPlayerCoordinates(p);
-                drawPlayerToken(paneList.get(c.getX()).get(c.getY()), Client.getInstance().getPlayers().indexOf(p));
+                if (!Client.getInstance().getPlayerCoordinateMap().get(p).equals(c)) {
+                    deletePlayerToken(paneList.get(c.getX()).get(c.getY()), Client.getInstance().getPlayers().indexOf(p));
+                    drawPlayerToken(paneList.get(c.getX()).get(c.getY()), Client.getInstance().getPlayers().indexOf(p));
+                    Client.getInstance().getPlayerCoordinateMap().put(p, c);
+                }
+
             }
             catch (PlayerNotOnMapException e) {
                 //Nothing to do, just don't draw it.
