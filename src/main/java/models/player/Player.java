@@ -1,6 +1,7 @@
 package models.player;
 
 import errors.WeaponCardException;
+import models.Match;
 import models.card.*;
 import models.map.GameMap;
 import models.map.Square;
@@ -28,6 +29,7 @@ public class Player implements Subscriber, Serializable, Taggable {
     private GameMap gameMap;
     private boolean hasJustStarted;
     private Set<Player> playersDamageByMeThisTurn;
+    private Match match;
 
 
     /** Creates a new player object
@@ -223,6 +225,14 @@ public class Player implements Subscriber, Serializable, Taggable {
 
     public GameMap getGameMap(){
         return gameMap;
+    }
+
+    public void setMatch(Match match){
+        this.match = match;
+    }
+
+    public Match getMatch(){
+        return match;
     }
 
     /** Activates the weapon card given as param
