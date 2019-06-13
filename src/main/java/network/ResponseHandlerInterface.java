@@ -49,4 +49,6 @@ public interface ResponseHandlerInterface {
     void handle(ReloadResponse response);
 
     void handle(TurnActionResponse response);
+
+    void handle(MapUpdate response);
 }

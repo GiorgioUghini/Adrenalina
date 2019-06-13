@@ -4,11 +4,12 @@ import errors.CardAlreadyExistsException;
 import models.card.Card;
 import models.card.WeaponCard;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class SpawnPoint extends Square {
+public class SpawnPoint extends Square implements Serializable {
     private Set<WeaponCard> cards;
 
     public SpawnPoint(RoomColor color, int id, UUID mapId){

@@ -4,9 +4,10 @@ import errors.NotWallException;
 import models.card.Card;
 import models.card.Taggable;
 
+import java.io.Serializable;
 import java.util.*;
 
-public abstract class Square implements Taggable {
+public abstract class Square implements Taggable, Serializable {
     private RoomColor color;
     private boolean isSpawnPoint;
     private Map<CardinalDirection, SquareLink> links;

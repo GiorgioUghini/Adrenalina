@@ -3,6 +3,7 @@ package network;
 import errors.InvalidViewTypeException;
 import errors.NotImplementedException;
 import models.card.Action;
+import models.map.GameMap;
 import models.player.Player;
 import models.turn.ActionType;
 import models.turn.TurnEvent;
@@ -25,6 +26,7 @@ public class Client {
     private Map<ActionType, List<TurnEvent>> actions;
     private TurnType currentTurnType;
     private ActionType currentActionType;
+    private GameMap map;
     private boolean showActions, showEvents = false;
 
     private int mapNum;
@@ -128,5 +130,13 @@ public class Client {
 
     public void setShowEvents(boolean showEvents) {
         this.showEvents = showEvents;
+    }
+
+    public GameMap getMap() {
+        return map;
+    }
+
+    public void setMap(GameMap map) {
+        this.map = map;
     }
 }

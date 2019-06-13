@@ -4,7 +4,6 @@ import errors.InvalidInputException;
 import javafx.application.Platform;
 import models.card.Effect;
 import models.card.LegitEffects;
-import models.turn.ActionElement;
 import models.turn.ActionType;
 import models.turn.TurnEvent;
 import models.turn.TurnType;
@@ -12,12 +11,6 @@ import network.responses.*;
 import network.updates.*;
 import views.GameView;
 import views.MenuView;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class ResponseHandler implements ResponseHandlerInterface {
 
@@ -148,7 +141,8 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(MapChosenUpdate response) {
-        ((MenuView) Client.getInstance().getCurrentView()).mapChosen(response.getMap());
+        ((MenuView) Client.getInstance().getCurrentView()).mapChosen(response.mapIndex);
+        Client.getInstance().setMap(response.map);
         Client.getInstance().setCurrentTurnType(TurnType.START_GAME);
     }
 
@@ -228,6 +222,11 @@ public class ResponseHandler implements ResponseHandlerInterface {
     public void handle(TurnActionResponse response) {
         Client.getInstance().setShowEvents(true);
         Client.getInstance().getConnection().validActions();
+    }
+
+    @Override
+    public void handle(MapUpdate response) {
+        Client.getInstance().setMap(response.map);
     }
 
 

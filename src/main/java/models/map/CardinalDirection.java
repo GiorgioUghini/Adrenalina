@@ -1,6 +1,8 @@
 package models.map;
 
-public enum CardinalDirection {
+import java.io.Serializable;
+
+public enum CardinalDirection implements Serializable {
     TOP,
     RIGHT,
     BOTTOM,

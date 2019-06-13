@@ -1,6 +1,8 @@
 package models.map;
 
-public enum LinkType {
+import java.io.Serializable;
+
+public enum LinkType implements Serializable {
     DOOR,
     WALL,
     NOTHING

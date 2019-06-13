@@ -3,9 +3,11 @@ package models.map;
 import errors.CardAlreadyExistsException;
 import models.card.AmmoCard;
 import models.card.Card;
+
+import java.io.Serializable;
 import java.util.UUID;
 
-public class AmmoPoint extends Square {
+public class AmmoPoint extends Square implements Serializable {
     private AmmoCard ammoCard;
 
     public AmmoPoint(RoomColor color, int id, UUID mapId){

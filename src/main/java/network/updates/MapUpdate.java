@@ -4,13 +4,11 @@ import models.map.GameMap;
 import network.Response;
 import network.ResponseHandlerInterface;
 
-public class MapChosenUpdate implements Response {
-    public int mapIndex;
+public class MapUpdate implements Response {
     public GameMap map;
 
-    public MapChosenUpdate(GameMap map, int mapIndex) {
+    public MapUpdate(GameMap map) {
         this.map = map;
-        this.mapIndex = mapIndex;
     }
 
     @Override

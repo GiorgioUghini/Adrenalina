@@ -2,7 +2,9 @@ package models.map;
 
 import errors.NotWallException;
 
-public class SquareLink {
+import java.io.Serializable;
+
+public class SquareLink implements Serializable {
     private Square square;
     private LinkType linkType;
 

@@ -2,9 +2,10 @@ package models.map;
 
 import models.player.Player;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class PlayerSquare {
+public class PlayerSquare implements Serializable {
     private Map<Player, Square> hashMap;
 
     public PlayerSquare(){

@@ -87,7 +87,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     @Override
     public synchronized Response chooseMap(String token, int map) throws RemoteException {
         Server.getInstance().getLobby().getMatch(token).createMap(map);
-        Server.getInstance().getLobby().getMatch(token).addUpdate(new MapChosenUpdate(map));
+        Server.getInstance().getLobby().getMatch(token).addUpdate(new MapChosenUpdate(Server.getInstance().getLobby().getMatch(token).getMap(), map));
         return new ChooseMapResponse();
     }
 
