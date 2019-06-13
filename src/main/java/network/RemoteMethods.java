@@ -187,7 +187,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             }
         }
         match.addUpdate(new MapUpdate(match.getMap()));
-        return new FinishCardResponse();
+        return new FinishPowerUpResponse();
     }
 
     @Override
@@ -259,6 +259,6 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             }
         }
         match.addUpdate(new MapUpdate(match.getMap()));
-        return new FinishCardResponse();
+        return new FinishPowerUpResponse();
     }
 }
