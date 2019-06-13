@@ -114,9 +114,7 @@ public class Match {
      * @return the card that is drawn.
      */
     public Card drawPowerUp() {
-        Card drawn = powerUpDeck.draw();
-        playerList.get(actualPlayerIndex).drawPowerUp((PowerUpCard) drawn);
-        return drawn;
+        return powerUpDeck.draw();
     }
 
     /**

@@ -6,6 +6,7 @@ import errors.TooManyCardsException;
 import errors.WeaponCardException;
 import models.Match;
 import models.card.*;
+import models.map.AmmoPoint;
 import models.map.GameMap;
 import models.map.SpawnPoint;
 import models.map.Square;
@@ -83,12 +84,26 @@ public class Player implements Subscriber, Serializable, Taggable {
         //TODO: What to do when the states changes?
     }
 
-    public void drawPowerUp(PowerUpCard drawn) {
-        powerUpList.add(drawn);
+    public void drawAmmoCard(){
+        AmmoPoint mySquare = (AmmoPoint) gameMap.getPlayerPosition(this);
+        AmmoCard ammoCard = mySquare.drawCard();
+        this.ammo.add(ammoCard.getAmmo());
+        if(ammoCard.hasPowerup()){
+            drawPowerUp();
+        }
+    }
+
+    public void drawPowerUp() {
+        if(powerUpList.size() < 3 ){
+            powerUpList.add((PowerUpCard) match.drawPowerUp());
+        }
     }
 
     /** Pays the draw price of the card and adds it to the weapons list
-     * @throws TooManyCardsException if you have 3 cards in your hand and toRelease is null  */
+     * @param drawn the card to draw
+     * @param toRelease the card to release to grab the new one. Can be null unless you already have 3 weapons
+     * @throws TooManyCardsException if you have 3 cards in your hand and toRelease is null
+     * @throws CheatException if you do not have the card toRelease */
     public void drawWeaponCard(WeaponCard drawn, WeaponCard toRelease) {
         if(!drawn.canDraw(ammo)) throw new NotEnoughAmmoException();
         SpawnPoint myPosition = (SpawnPoint) gameMap.getPlayerPosition(this);

@@ -27,7 +27,9 @@ public class PowerupTest {
         match.createMap(0);
         GameMap gameMap = match.getMap();
         PowerUpCard teletrasporto = getPowerupByName("Teletrasporto");
-        me.drawPowerUp(teletrasporto);
+        List<PowerUpCard> myPowerups = new ArrayList<>();
+        myPowerups.add(teletrasporto);
+        me.setPowerUpList(myPowerups);
         Set<SpawnPoint> spawnPoints = gameMap.getSpawnPoints();
         SpawnPoint destSquare = null;
         for(SpawnPoint spawnPoint : spawnPoints){
