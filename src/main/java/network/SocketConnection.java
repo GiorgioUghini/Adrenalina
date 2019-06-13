@@ -182,9 +182,9 @@ public class SocketConnection implements Connection {
     }
 
     @Override
-    public void playPowerUp(String powerUpName, String color) {
+    public void playPowerUp(String powerUpName, Ammo ammo, PowerUpCard powerUpAmmo) {
         try {
-            PlayPowerUpRequest request = new PlayPowerUpRequest(powerUpName, color);
+            PlayPowerUpRequest request = new PlayPowerUpRequest(powerUpName, ammo, powerUpAmmo);
             write(request);
         } catch (IOException e) {
             e.printStackTrace();

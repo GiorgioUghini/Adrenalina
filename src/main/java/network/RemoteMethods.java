@@ -224,7 +224,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public Response playPowerUp(String token, String powerUpName, String color) throws RemoteException {
+    public Response playPowerUp(String token, String powerUpName, Ammo ammo, PowerUpCard powerUpAmmo) throws RemoteException {
         return null;
     }
 }

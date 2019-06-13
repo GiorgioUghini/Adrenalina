@@ -191,10 +191,10 @@ public class RMIConnection implements Connection {
     }
 
     @Override
-    public void playPowerUp(String powerUpName, String color) {
+    public void playPowerUp(String powerUpName, Ammo ammo, PowerUpCard powerUpAmmo) {
         try {
             String token = Client.getInstance().getConnection().getToken();
-            Response response = remoteMethods.playPowerUp(token, powerUpName, color);
+            Response response = remoteMethods.playPowerUp(token, powerUpName, ammo, powerUpAmmo);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
             e.printStackTrace();

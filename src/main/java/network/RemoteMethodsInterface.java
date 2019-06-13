@@ -36,5 +36,5 @@ public interface RemoteMethodsInterface extends Remote {
     Response grab(String token) throws  RemoteException;
     Response run(String token, TurnEvent turnEvent, Square square) throws  RemoteException;
     Response reload(String token, List<WeaponCard> weapons) throws  RemoteException;
-    Response playPowerUp(String token, String powerUpName, String color) throws  RemoteException;
+    Response playPowerUp(String token, String powerUpName, Ammo ammo, PowerUpCard powerUpAmmo) throws  RemoteException;
 }

@@ -1,5 +1,7 @@
 package network.requests;
 
+import models.card.PowerUpCard;
+import models.player.Ammo;
 import network.Request;
 import network.RequestHandlerInterface;
 import network.Response;
@@ -9,12 +11,14 @@ import java.rmi.RemoteException;
 public class PlayPowerUpRequest implements Request {
 
     private String token;
-    public String color;
+    public Ammo ammo;
+    public PowerUpCard powerUpAmmo;
     public String powerUpName;
 
-    public PlayPowerUpRequest(String powerUpName, String color){
+    public PlayPowerUpRequest(String powerUpName, Ammo ammo, PowerUpCard powerUpAmmo){
         this.powerUpName = powerUpName;
-        this.color = color;
+        this.ammo = ammo;
+        this.powerUpAmmo = powerUpAmmo;
     }
 
     @Override
