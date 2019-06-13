@@ -36,6 +36,9 @@ public class Match {
         powerUpDeck = cardController.getPowerUpDeck();
         weaponDeck = cardController.getWeaponDeck();
         ammoDeck = cardController.getAmmoDeck();
+        for(Player p : players){
+            p.setMatch(this);
+        }
     }
 
     @Override
@@ -276,6 +279,14 @@ public class Match {
 
     public Player getPlayerByUsername(String username) {
         return playerList.stream().filter(f -> f.getName().equals(username)).findFirst().orElse(null);
+    }
+
+    public Player getCurrentPlayer(){
+        return playerList.get(actualPlayerIndex);
+    }
+
+    public boolean isDoingAction(){
+        return currentActionType!=null;
     }
 
 }

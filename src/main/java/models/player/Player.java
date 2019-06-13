@@ -1,6 +1,7 @@
 package models.player;
 
 import errors.WeaponCardException;
+import models.Match;
 import models.card.*;
 import models.map.GameMap;
 import models.map.Square;
@@ -27,7 +28,8 @@ public class Player implements Subscriber, Serializable, Taggable {
     private boolean online;
     private GameMap gameMap;
     private boolean hasJustStarted;
-    private Set<Player> playersDamageByMeThisTurn;
+    private Set<Player> playersDamagedByMeThisTurn;
+    private Match match;
 
 
     /** Creates a new player object
@@ -47,7 +49,7 @@ public class Player implements Subscriber, Serializable, Taggable {
         activeWeapon = null;
         gameMap = null;
         hasJustStarted = true;
-        playersDamageByMeThisTurn = new HashSet<>();
+        playersDamagedByMeThisTurn = new HashSet<>();
         //token generation
     }
 
@@ -162,15 +164,15 @@ public class Player implements Subscriber, Serializable, Taggable {
     }
 
     private void addDamagedPlayerToList(Player damagedPlayer){
-        playersDamageByMeThisTurn.add(damagedPlayer);
+        playersDamagedByMeThisTurn.add(damagedPlayer);
     }
 
     public void onTurnEnded(){
-        this.playersDamageByMeThisTurn = new HashSet<>();
+        this.playersDamagedByMeThisTurn = new HashSet<>();
     }
 
-    public Set<Player> getPlayersDamageByMeThisTurn(){
-        return playersDamageByMeThisTurn;
+    public Set<Player> getPlayersDamagedByMeThisTurn(){
+        return playersDamagedByMeThisTurn;
     }
 
     /** Counts the points to assign to each player
@@ -225,6 +227,14 @@ public class Player implements Subscriber, Serializable, Taggable {
         return gameMap;
     }
 
+    public void setMatch(Match match){
+        this.match = match;
+    }
+
+    public Match getMatch(){
+        return match;
+    }
+
     /** Activates the weapon card given as param
      * @throws WeaponCardException if you do not have this weapon
      * @throws WeaponCardException if the weapon is not loaded
@@ -238,9 +248,26 @@ public class Player implements Subscriber, Serializable, Taggable {
     /** Activated the powerup card given as param paying the ammo, if it costs
      * @param powerUpCard the card to activate
      * @param ammo the cube you are paying to activate it. could either be null
-     * if the card is free or one (and only one) of the colors should be set to 1 */
+     * if the card is free or one (and only one) of the colors should be set to 1
+     * @throws WeaponCardException if you cannot activate it */
     public void playPowerUp(PowerUpCard powerUpCard, Ammo ammo){
         checkHasPowerUp(powerUpCard);
+        if(activePowerUp!=null) throw new WeaponCardException("You are already playing a powerup");
+        switch (powerUpCard.when){
+            case "on_damage_dealt":
+                if(playersDamagedByMeThisTurn.size()==0) throw new WeaponCardException("You can only play this card if you damaged someone in this turn");
+                break;
+            case "my_turn":
+                if(!(match.getCurrentPlayer().equals(this) && !match.isDoingAction())) throw  new WeaponCardException("You can only play this powerup in your turn");
+                break;
+            case "on_damage_received":
+                Player lastDamager = getLastDamager();
+                if(lastDamager==null) throw new WeaponCardException("You did not receive any damages so you cannot activate this powerup");
+                if(!lastDamager.equals(match.getCurrentPlayer())) throw new WeaponCardException("You did non receive any damages in this turn so you cannot activate this powerup");
+                break;
+            default:
+                throw new WeaponCardException("Unhandled 'when' case in powerup " + powerUpCard.name + ": " + powerUpCard.when);
+        }
         powerUpCard.payPrice(this.ammo, ammo);
         powerUpCard.activate(this);
         activePowerUp = powerUpCard;
@@ -282,8 +309,11 @@ public class Player implements Subscriber, Serializable, Taggable {
         return playNextAction(activeWeapon);
     }
 
+    /** Plays the next action of the powerup. if this method returns null, the active powerup has already been set to null */
     public Action playNextPowerUpAction(){
-        return playNextAction(activePowerUp);
+        Action nextAction = playNextAction(activePowerUp);
+        if(nextAction==null) activePowerUp = null;
+        return nextAction;
     }
 
     /** if the action is a SELECT, you need to check the select TYPE and call one of the getSelectable[item] methods

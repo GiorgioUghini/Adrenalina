@@ -150,7 +150,7 @@ class SelectorEngine {
         if(tag.equals("last_damager")) {
             out.add(me.getLastDamager());
         }else if(tag.equals("damaged_from_me")){
-            out.addAll(me.getPlayersDamageByMeThisTurn());
+            out.addAll(me.getPlayersDamagedByMeThisTurn());
         }else if(selectedPlayers.containsKey(tag)){
             out.add(selectedPlayers.get(tag));
         }else if(selectedSquares.containsKey(tag)){
