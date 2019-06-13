@@ -34,13 +34,67 @@
   },
   {
     "name": "Granata Venom",
-    "effects": [],
+    "when": "on_damage_received",
+    "effects": [
+      {
+        "type": "select",
+        "select": {
+          "type": "player",
+          "id": "damager",
+          "auto": true,
+          "radix": [
+            {
+              "ref": "me",
+              "area": "visible"
+            }
+          ],
+          "rules": {
+            "include": ["last_damager"]
+          }
+        }
+      },
+      {
+        "type": "mark",
+        "mark":{
+          "type": "player",
+          "target": "damager",
+          "value": 1
+        }
+      }
+    ],
     "color": "red",
     "image": "AD_powerups_IT_023.png"
   },
   {
     "name": "Granata Venom",
-    "effects": [],
+    "when": "on_damage_received",
+    "effects": [
+      {
+        "type": "select",
+        "select": {
+          "type": "player",
+          "id": "damager",
+          "auto": true,
+          "radix": [
+            {
+              "ref": "me",
+              "area": "visible"
+            }
+          ],
+          "rules": {
+            "include": ["last_damager"]
+          }
+        }
+      },
+      {
+        "type": "mark",
+        "mark":{
+          "type": "player",
+          "target": "damager",
+          "value": 1
+        }
+      }
+    ],
     "color": "yellow",
     "image": "AD_powerups_IT_024.png"
   },
@@ -73,13 +127,55 @@
   },
   {
     "name": "Mirino",
-    "effects": [],
+    "when": "on_damage_dealt",
+    "hasPrice": true,
+    "effects": [
+      {
+        "type": "select",
+        "select": {
+          "type": "player",
+          "id": "enemy",
+          "rules": {
+            "include": ["damaged_from_me"]
+          }
+        }
+      },
+      {
+        "type": "damage",
+        "damage": {
+          "type": "player",
+          "target": "enemy",
+          "value": 1
+        }
+      }
+    ],
     "color": "red",
     "image": "AD_powerups_IT_026.png"
   },
   {
     "name": "Mirino",
-    "effects": [],
+    "when": "on_damage_dealt",
+    "hasPrice": true,
+    "effects": [
+      {
+        "type": "select",
+        "select": {
+          "type": "player",
+          "id": "enemy",
+          "rules": {
+            "include": ["damaged_from_me"]
+          }
+        }
+      },
+      {
+        "type": "damage",
+        "damage": {
+          "type": "player",
+          "target": "enemy",
+          "value": 1
+        }
+      }
+    ],
     "color": "yellow",
     "image": "AD_powerups_IT_027.png"
   },
@@ -129,7 +225,39 @@
   },
   {
     "name": "Raggio cinetico",
-    "effects": [],
+    "when": "my_turn",
+    "effects": [
+      {
+        "type": "select",
+        "select": {
+          "type": "player",
+          "id": "moved_player",
+          "radix": []
+        }
+      },
+      {
+        "type": "select",
+        "select": {
+          "type": "square",
+          "id": "dest_square",
+          "radix": [
+            {
+              "ref": "moved_player",
+              "area": "cardinal",
+              "max": 2,
+              "throughWalls": false
+            }
+          ]
+        }
+      },
+      {
+        "type": "move",
+        "move": {
+          "target": "moved_player",
+          "dest": "dest_square"
+        }
+      }
+    ],
     "color": "yellow",
     "image": "AD_powerups_IT_0210.png"
   },
@@ -158,13 +286,47 @@
   },
   {
     "name": "Teletrasporto",
-    "effects": [],
+    "when": "my_turn",
+    "effects": [
+      {
+        "type": "select",
+        "select": {
+          "type": "square",
+          "id": "dest_square",
+          "radix": []
+        }
+      },
+      {
+        "type": "move",
+        "move": {
+          "target": "me",
+          "dest": "dest_square"
+        }
+      }
+    ],
     "color": "red",
     "image": "AD_powerups_IT_0212.png"
   },
   {
     "name": "Teletrasporto",
-    "effects": [],
+    "when": "my_turn",
+    "effects": [
+      {
+        "type": "select",
+        "select": {
+          "type": "square",
+          "id": "dest_square",
+          "radix": []
+        }
+      },
+      {
+        "type": "move",
+        "move": {
+          "target": "me",
+          "dest": "dest_square"
+        }
+      }
+    ],
     "color": "yellow",
     "image": "AD_powerups_IT_0213.png"
   }
