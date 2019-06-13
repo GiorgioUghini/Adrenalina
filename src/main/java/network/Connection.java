@@ -24,6 +24,7 @@ public interface Connection {
     void drawPowerUpCard();
     void spawnPlayer(RoomColor color);
     void tagElement(Taggable taggable);
+    void powerUpTagElement(Taggable taggable);
     void playEffect(Effect effect, Ammo ammo, PowerUpCard powerUpCard);
     void finishCard();
     void endTurn();

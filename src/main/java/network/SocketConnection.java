@@ -112,6 +112,16 @@ public class SocketConnection implements Connection {
     }
 
     @Override
+    public void powerUpTagElement(Taggable taggable) {
+        try {
+            PowerUpTagElementRequest request = new PowerUpTagElementRequest(taggable);
+            write(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void playEffect(Effect effect, Ammo ammo, PowerUpCard powerUpCard) {
         try {
             PlayEffectRequest request = new PlayEffectRequest(effect, ammo, powerUpCard);

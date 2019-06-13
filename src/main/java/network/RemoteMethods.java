@@ -174,6 +174,11 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
+    public Response powerUpTagElement(String token, Taggable taggable) throws RemoteException {
+        return new FinishCardResponse();
+    }
+
+    @Override
     public synchronized Response endTurn(String token) throws RemoteException {
         Server.getInstance().getLobby().getMatch(token).nextTurn();
         return new EndTurnResponse();

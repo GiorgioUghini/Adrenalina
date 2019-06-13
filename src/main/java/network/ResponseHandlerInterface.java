@@ -36,6 +36,8 @@ public interface ResponseHandlerInterface {
 
     void handle(SelectResponse response);
 
+    void handle(PowerUpSelectResponse response);
+
     void handle(FinishCardResponse response);
 
     void handle(FinishEffectResponse response);

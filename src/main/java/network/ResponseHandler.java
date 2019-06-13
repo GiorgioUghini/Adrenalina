@@ -184,6 +184,11 @@ public class ResponseHandler implements ResponseHandlerInterface {
     }
 
     @Override
+    public void handle(PowerUpSelectResponse response) {
+
+    }
+
+    @Override
     public void handle(FinishCardResponse response) {
         // TODO andare avanti col turno sul client, è finito uno SHOOT
     }

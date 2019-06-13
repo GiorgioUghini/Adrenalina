@@ -114,6 +114,17 @@ public class RMIConnection implements Connection {
     }
 
     @Override
+    public void powerUpTagElement(Taggable taggable) {
+        try {
+            String token = Client.getInstance().getConnection().getToken();
+            Response response = remoteMethods.powerUpTagElement(token, taggable);
+            Client.getInstance().getConnection().receiveResponse(response);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void playEffect(Effect effect, Ammo ammo, PowerUpCard powerUpCard) {
         try {
             String token = Client.getInstance().getConnection().getToken();
