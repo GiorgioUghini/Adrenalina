@@ -13,6 +13,7 @@ import network.Server;
 import network.updates.ChooseMapUpdate;
 import network.updates.NextTurnUpdate;
 
+import java.io.Serializable;
 import java.util.*;
 
 public class Match {

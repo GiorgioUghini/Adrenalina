@@ -2,8 +2,6 @@ package models.map;
 
 import errors.*;
 import models.player.Player;
-import network.Server;
-import network.updates.MapUpdate;
 
 import java.io.Serializable;
 import java.util.*;
@@ -11,7 +9,6 @@ import java.util.*;
 public class GameMap implements Serializable {
     private Set<Square> squares;
     private PlayerSquare positions;
-    private Set<Player> players;
     private Set<SpawnPoint> spawnPoints;
     private int squareId;
     private Set<RoomColor> rooms;
@@ -209,7 +206,6 @@ public class GameMap implements Serializable {
         if(positions.hasPlayer(player)) throw new PlayerAlreadyOnMapException();
         positions.addPlayer(player, spawnPoint);
         player.setGameMap(this);
-        Server.getInstance().getLobby().getMatch(player).addUpdate(new MapUpdate(this));
     }
     /** Move player to a square in the map
      * @param player
