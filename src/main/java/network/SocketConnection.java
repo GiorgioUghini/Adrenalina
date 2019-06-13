@@ -180,6 +180,16 @@ public class SocketConnection implements Connection {
     }
 
     @Override
+    public void playPowerUp(String powerUpName, String color) {
+        try {
+            PlayPowerUpRequest request = new PlayPowerUpRequest(powerUpName, color);
+            write(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void receiveResponse(Response response) {
         response.handle(responseHandler);
     }

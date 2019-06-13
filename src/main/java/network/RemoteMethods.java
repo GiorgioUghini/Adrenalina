@@ -15,6 +15,7 @@ import models.turn.TurnEvent;
 import models.turn.TurnType;
 import network.responses.*;
 import network.updates.MapChosenUpdate;
+import network.updates.MapUpdate;
 import network.updates.NewPlayerUpdate;
 
 import java.rmi.RemoteException;
@@ -110,6 +111,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         }
         SpawnPoint spawnPoint = map.getSpawnPoints().stream().filter(p -> p.getColor() == color).findFirst().orElse(null);
         map.spawnPlayer(player,spawnPoint);
+        match.addUpdate(new MapUpdate(match.getMap()));
         match.turnEvent(TurnEvent.SPAWN);
         return new SpawnPlayerResponse();
     }
@@ -208,5 +210,10 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     @Override
     public Response reload(String token, List<WeaponCard> weapons) throws RemoteException {
         return new ReloadResponse();
+    }
+
+    @Override
+    public Response playPowerUp(String token, String powerUpName, String color) throws RemoteException {
+        return null;
     }
 }

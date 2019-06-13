@@ -29,5 +29,6 @@ public interface Connection {
     void run(TurnEvent turnEvent, Square square);
     void reload(List<WeaponCard> weapons);
     void action(ActionType actionType);
+    void playPowerUp(String powerUpName, String color);
     void receiveResponse(Response response);
 }

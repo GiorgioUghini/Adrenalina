@@ -29,7 +29,7 @@ public class Player implements Subscriber, Serializable, Taggable {
     private GameMap gameMap;
     private boolean hasJustStarted;
     private Set<Player> playersDamagedByMeThisTurn;
-    private Match match;
+    private transient Match match;
 
 
     /** Creates a new player object

@@ -94,4 +94,9 @@ public class RequestHandler implements RequestHandlerInterface {
         return remoteMethods.action(request.getToken(), request.actionType);
     }
 
+    @Override
+    public Response handle(PlayPowerUpRequest request) throws RemoteException {
+        return remoteMethods.playPowerUp(request.getToken(), request.color, request.powerUpName);
+    }
+
 }

@@ -189,6 +189,17 @@ public class RMIConnection implements Connection {
     }
 
     @Override
+    public void playPowerUp(String powerUpName, String color) {
+        try {
+            String token = Client.getInstance().getConnection().getToken();
+            Response response = remoteMethods.playPowerUp(token, powerUpName, color);
+            Client.getInstance().getConnection().receiveResponse(response);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void receiveResponse(Response response) {
         response.handle(responseHandler);
     }
