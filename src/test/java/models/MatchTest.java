@@ -15,21 +15,16 @@ public class MatchTest {
         Player pl2 = new Player( "Giorgio", "");
         Player pl3 = new Player( "Vila", "");
         List<Player> players = new LinkedList<>();
-        players.add(pl3);
         players.add(pl2);
+        players.add(pl3);
         players.add(pl1);
         Match m = new Match(players);
-        m.setFirstPlayer(pl2);
         assertEquals(pl2, m.getFirstPlayer());
 
         Map possibleActions = m.getPossibleAction(pl2);
-        assertTrue(possibleActions.isEmpty());
+        assertTrue(possibleActions == null || possibleActions.isEmpty());
 
         m.chooseMapAndStartMatch();
-        possibleActions = m.getPossibleAction(pl2);
-        assertFalse(possibleActions.isEmpty());
-
-        m.nextTurn();
         possibleActions = m.getPossibleAction(pl2);
         assertFalse(possibleActions.isEmpty());
 

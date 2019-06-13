@@ -181,7 +181,7 @@ public class Match {
      * Method that signal the start of the match. This method SHOULD be called once when the match is ready to start.
      */
     public void chooseMapAndStartMatch() {
-        actualPlayerIndex = 0;
+        actualPlayerIndex = -1;
         ChooseMapUpdate update = new ChooseMapUpdate(playerList.get(0).getName());
         addUpdate(update);
         nextTurn();
