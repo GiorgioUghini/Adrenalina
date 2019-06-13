@@ -126,7 +126,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     public Response playEffect(String token, Effect effect, Ammo ammo, PowerUpCard powerUpCard) throws RemoteException {
         Player player = Server.getInstance().getLobby().getPlayer(token);
         Match match = Server.getInstance().getLobby().getMatch(player);
-        player.playWeaponEffect(effect);
+        player.playWeaponEffect(effect, powerUpCard);
         Action action;
         while ((action = player.playNextWeaponAction()) != null){
             if(action.type == ActionType.SELECT && !action.select.auto){
@@ -143,7 +143,9 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     public synchronized Response cardEffects(String token, String cardName) throws RemoteException {
         Player player = Server.getInstance().getLobby().getPlayer(token);
         WeaponCard card = player.getWeaponList().stream().filter(w -> w.name.equals(cardName)).findFirst().orElse(null);
-        player.playWeapon(card);
+        if(player.getActiveWeapon()==null){
+            player.playWeapon(card);
+        }
         LegitEffects legitEffects = player.getWeaponEffects();
         return new CardEffectsResponse(legitEffects);
     }

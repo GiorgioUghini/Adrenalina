@@ -113,7 +113,7 @@ public class Player implements Subscriber, Serializable, Taggable {
      * @throws TooManyCardsException if you have 3 cards in your hand and toRelease is null
      * @throws CheatException if you do not have the card toRelease */
     public void drawWeaponCard(WeaponCard drawn, WeaponCard toRelease) {
-        if(!drawn.canDraw(ammo)) throw new NotEnoughAmmoException();
+        if(!drawn.canDraw(ammo, powerUpList)) throw new NotEnoughAmmoException();
         SpawnPoint myPosition = (SpawnPoint) gameMap.getPlayerPosition(this);
         if(weaponList.size()==3){
             if(toRelease==null) throw new TooManyCardsException("You already have 3 weapons, select one to leave");
@@ -281,6 +281,7 @@ public class Player implements Subscriber, Serializable, Taggable {
     }
 
     /** Activates the weapon card given as param
+     * @throws WeaponCardException if the weapon is already active
      * @throws WeaponCardException if you do not have this weapon
      * @throws WeaponCardException if the weapon is not loaded
      * */
@@ -319,7 +320,7 @@ public class Player implements Subscriber, Serializable, Taggable {
     }
 
     public boolean canReloadWeapon(WeaponCard weaponCard){
-        return weaponCard.canReload(ammo);
+        return weaponCard.canReload(ammo, powerUpList);
     }
 
     /**
@@ -327,17 +328,17 @@ public class Player implements Subscriber, Serializable, Taggable {
      * @throws WeaponCardException if you do not have that weapon
      * @throws WeaponCardException if the weapon is already loaded
      * @throws WeaponCardException if you do not have enough ammo to reload */
-    public void loadWeapon(WeaponCard weaponCard){
+    public void loadWeapon(WeaponCard weaponCard, PowerUpCard powerUpCard){
         checkHasWeapon(weaponCard);
         if(weaponCard.isLoaded()) throw new WeaponCardException("The weapon is already loaded");
-        weaponCard.load(ammo);
+        weaponCard.load(ammo, powerUpCard);
     }
 
     /**
      * @return an object containing all the card effects with a TRUE flag on those that can be played.
      * all the flags are set to FALSE if the weapon has not been activated */
     public LegitEffects getWeaponEffects(){
-        LegitEffects out = activeWeapon.getEffects(ammo);
+        LegitEffects out = activeWeapon.getEffects(ammo, powerUpList);
         if(out.getLegitEffects().isEmpty()){
             this.resetWeapon();
         }
@@ -346,8 +347,8 @@ public class Player implements Subscriber, Serializable, Taggable {
 
     /** Activates the effect and gives access to playNextWeaponAction() method
      * @throws WeaponCardException if you do not have enough ammo to activate this effect */
-    public void playWeaponEffect(Effect e){
-        activeWeapon.playEffect(e, ammo);
+    public void playWeaponEffect(Effect e, PowerUpCard powerUpCard){
+        activeWeapon.playEffect(e, ammo, powerUpCard);
     }
 
     public Action playNextWeaponAction(){
