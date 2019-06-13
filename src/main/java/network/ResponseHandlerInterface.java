@@ -42,6 +42,8 @@ public interface ResponseHandlerInterface {
 
     void handle(FinishEffectResponse response);
 
+    void handle(FinishPowerUpResponse response);
+
     void handle(EndTurnResponse response);
 
     void handle(GrabResponse response);

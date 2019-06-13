@@ -199,6 +199,11 @@ public class ResponseHandler implements ResponseHandlerInterface {
     }
 
     @Override
+    public void handle(FinishPowerUpResponse response) {
+
+    }
+
+    @Override
     public void handle(EndTurnResponse response) {
 
     }
