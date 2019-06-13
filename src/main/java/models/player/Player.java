@@ -93,10 +93,13 @@ public class Player implements Subscriber, Serializable, Taggable {
         }
     }
 
-    public void drawPowerUp() {
+    public PowerUpCard drawPowerUp() {
+        PowerUpCard powerUpCard = null;
         if(powerUpList.size() < 3 ){
-            powerUpList.add((PowerUpCard) match.drawPowerUp());
+            powerUpCard = (PowerUpCard) match.drawPowerUp();
+            powerUpList.add(powerUpCard);
         }
+        return powerUpCard;
     }
 
     /** Pays the draw price of the card and adds it to the weapons list

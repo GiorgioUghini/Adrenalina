@@ -99,8 +99,9 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
 
     @Override
     public synchronized Response drawPowerUp(String token) throws RemoteException {
-       Match match = Server.getInstance().getLobby().getMatch(token);
-       PowerUpCard card = (PowerUpCard) match.drawPowerUp();
+        Player player = Server.getInstance().getLobby().getPlayer(token);
+       Match match = Server.getInstance().getLobby().getMatch(player);
+       PowerUpCard card = player.drawPowerUp();
        match.turnEvent(TurnEvent.DRAW);
        return new DrawPowerUpResponse(card);
     }
