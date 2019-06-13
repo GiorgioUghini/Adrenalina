@@ -30,10 +30,13 @@ public class AmmoCardTest {
     public void testDeck() {
         CardController controller = new CardController();
         AmmoDeck deck = controller.getAmmoDeck();
-        for(int i=0; i<deck.size(); i++){
+        int deckSize = deck.size();
+        boolean atLeastOnePowerup = false;
+        for(int i=0; i<deckSize; i++){
             AmmoCard card = (AmmoCard) deck.draw();
+            if(card.hasPowerup()) atLeastOnePowerup = true;
             assertTrue(card.getBlue()>-1 && card.getBlue()<4);
         }
-
+        assertTrue(atLeastOnePowerup);
     }
 }

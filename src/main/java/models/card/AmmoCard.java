@@ -1,6 +1,7 @@
 package models.card;
 
 import errors.InvalidAmmoException;
+import models.player.Ammo;
 
 public class AmmoCard extends Card {
     private int red;
@@ -25,6 +26,9 @@ public class AmmoCard extends Card {
     public int getRed(){return red;}
     public int getYellow(){return yellow;}
     public int getBlue(){return blue;}
+    public Ammo getAmmo(){
+        return new Ammo(red, blue, yellow);
+    }
     public boolean hasPowerup(){return powerup;}
 
     private boolean validateAmmo(int n){
