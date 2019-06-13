@@ -165,7 +165,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         Action action;
         while ((action = player.playNextWeaponAction()) != null){
             if(action.type == ActionType.SELECT && !action.select.auto){
-                Selectable selectable = player.getActiveWeapon().getSelectable();
+                Selectable selectable = card.getSelectable();
                 return new SelectResponse(selectable);
             }
         }
@@ -175,6 +175,18 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
 
     @Override
     public Response powerUpTagElement(String token, Taggable taggable) throws RemoteException {
+        Player player = Server.getInstance().getLobby().getPlayer(token);
+        Match match = player.getMatch();
+        PowerUpCard card = player.getActivePowerUp();
+        card.select(taggable);
+        Action action;
+        while ((action = player.playNextWeaponAction()) != null){
+            if(action.type == ActionType.SELECT && !action.select.auto){
+                Selectable selectable = player.getActivePowerUp().getSelectable();
+                return new SelectResponse(selectable);
+            }
+        }
+        match.addUpdate(new MapUpdate(match.getMap()));
         return new FinishCardResponse();
     }
 
@@ -235,6 +247,18 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
 
     @Override
     public Response playPowerUp(String token, String powerUpName, Ammo ammo, PowerUpCard powerUpAmmo) throws RemoteException {
-        return null;
+        Player player = Server.getInstance().getLobby().getPlayer(token);
+        Match match = Server.getInstance().getLobby().getMatch(player);
+        PowerUpCard powerUpCard = player.getPowerUpList().stream().filter(c -> c.name.equals(powerUpName)).findFirst().orElse(null);
+        player.playPowerUp(powerUpCard, ammo, powerUpAmmo);
+        Action action;
+        while ((action = player.playNextWeaponAction()) != null){
+            if(action.type == ActionType.SELECT && !action.select.auto){
+                Selectable selectable = powerUpCard.getSelectable();
+                return new SelectResponse(selectable);
+            }
+        }
+        match.addUpdate(new MapUpdate(match.getMap()));
+        return new FinishCardResponse();
     }
 }
