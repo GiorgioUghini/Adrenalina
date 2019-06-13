@@ -3,6 +3,7 @@ package views;
 import controllers.GameController;
 import controllers.ResourceController;
 import controllers.ScreenController;
+import errors.PlayerNotOnMapException;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -18,18 +19,19 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import models.card.PowerUpCard;
 import models.card.WeaponCard;
+import models.map.Coordinate;
+import models.map.GameMap;
 import models.map.Square;
+import models.player.Player;
 import models.turn.ActionGroup;
 import models.turn.ActionType;
 import models.turn.TurnEvent;
 import network.Client;
+import utils.Console;
 
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class GameViewGUI implements Initializable, GameView {
 
@@ -67,6 +69,30 @@ public class GameViewGUI implements Initializable, GameView {
 
     @FXML
     private GridPane grid00;
+    @FXML
+    private GridPane grid01;
+    @FXML
+    private GridPane grid02;
+    @FXML
+    private GridPane grid10;
+    @FXML
+    private GridPane grid11;
+    @FXML
+    private GridPane grid12;
+    @FXML
+    private GridPane grid20;
+    @FXML
+    private GridPane grid21;
+    @FXML
+    private GridPane grid22;
+    @FXML
+    private GridPane grid30;
+    @FXML
+    private GridPane grid31;
+    @FXML
+    private GridPane grid32;
+
+    private ArrayList<ArrayList<GridPane>> paneList = new ArrayList<>();
 
 
     @FXML
@@ -114,6 +140,26 @@ public class GameViewGUI implements Initializable, GameView {
         weaponSpaces.add(imgYourWeaponCard2);
         weaponSpaces.add(imgYourWeaponCard3);
         weaponSpaces.add(imgYourWeaponCard4);
+        ArrayList<GridPane> x0 = new ArrayList<GridPane>();
+        x0.add(grid00);
+        x0.add(grid01);
+        x0.add(grid02);
+        ArrayList<GridPane> x1 = new ArrayList<GridPane>();
+        x1.add(grid10);
+        x1.add(grid11);
+        x1.add(grid12);
+        ArrayList<GridPane> x2 = new ArrayList<GridPane>();
+        x2.add(grid20);
+        x2.add(grid21);
+        x2.add(grid22);
+        ArrayList<GridPane> x3 = new ArrayList<GridPane>();
+        x3.add(grid30);
+        x3.add(grid31);
+        x3.add(grid32);
+        paneList.add(x0);
+        paneList.add(x1);
+        paneList.add(x2);
+        paneList.add(x3);
         Platform.runLater(this::getValidActions);
     }
 
@@ -272,10 +318,37 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
-    public void drawPlayerToken() {
-        Circle circle = new Circle(0.0d,0.0d,17.0d);
-        circle.setFill(Color.RED);
-        addOnPane(grid00, circle);
+    private void drawPlayerToken(GridPane pane, int i) {
+        boolean draw = true;
+        Circle circle1 = new Circle(0.0d,0.0d,17.0d);
+        circle1.setFill(Color.rgb(255-i*51,i*51,(150+i*51) % 255));
+        for (Node n : pane.getChildren()) {
+            if (n.getClass() == circle1.getClass()) {
+                if (((Circle) n).getFill().equals(circle1.getFill())) {
+                    draw = false;
+                }
+            }
+        }
+        if (draw) {
+            Platform.runLater( () -> {
+                Circle circle = new Circle(0.0d,0.0d,17.0d);
+                circle.setFill(Color.rgb(255-i*51,i*51,(150+i*51) % 255));
+                addOnPane(pane, circle);
+            });
+        }
+    }
+
+    @Override
+    public void updateMapView(GameMap map) {
+        for (Player p : Client.getInstance().getPlayers()) {
+            try {
+                Coordinate c = map.getPlayerCoordinates(p);
+                drawPlayerToken(paneList.get(c.getX()).get(c.getY()), Client.getInstance().getPlayers().indexOf(p));
+            }
+            catch (PlayerNotOnMapException e) {
+                //Nothing to do, just don't draw it.
+            }
+        }
     }
 
     public void powerUp1Clicked() {
