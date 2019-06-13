@@ -198,10 +198,10 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public Response run(String token, TurnEvent turnEvent, Square square) throws RemoteException {
+    public Response run(String token, TurnEvent turnEvent, Square targetSquare) throws RemoteException {
         Player player = Server.getInstance().getLobby().getPlayer(token);
         Match match = Server.getInstance().getLobby().getMatch(player);
-        int distance = 3; // TODO calcolare distanza tra player e square!!
+        GameMap map = match.getMap();
         int max = 0;
         if(turnEvent == TurnEvent.RUN_1)
             max = 1;
@@ -211,8 +211,10 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             max = 3;
         else if(turnEvent == TurnEvent.RUN_4)
             max = 4;
-        if(distance > max)
+        Square playerSquare = map.getPlayerPosition(player);
+        if(!map.getAllSquaresAtDistanceLessThanOrEquals(playerSquare, max).contains(targetSquare))
             throw new CheatException();
+        map.movePlayer(player, targetSquare);
         match.turnEvent(turnEvent);
         match.addUpdate(new MapUpdate(match.getMap()));
         return new RunResponse();
