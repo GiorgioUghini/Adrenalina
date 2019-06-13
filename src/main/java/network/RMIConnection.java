@@ -1,10 +1,12 @@
 package network;
 
 import models.card.Effect;
+import models.card.PowerUpCard;
 import models.card.Taggable;
 import models.card.WeaponCard;
 import models.map.RoomColor;
 import models.map.Square;
+import models.player.Ammo;
 import models.turn.ActionType;
 import models.turn.TurnEvent;
 
@@ -112,10 +114,10 @@ public class RMIConnection implements Connection {
     }
 
     @Override
-    public void playEffect(Effect effect) {
+    public void playEffect(Effect effect, Ammo ammo, PowerUpCard powerUpCard) {
         try {
             String token = Client.getInstance().getConnection().getToken();
-            Response response = remoteMethods.playEffect(token, effect);
+            Response response = remoteMethods.playEffect(token, effect, ammo, powerUpCard);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -189,10 +191,10 @@ public class RMIConnection implements Connection {
     }
 
     @Override
-    public void playPowerUp(String powerUpName, String color) {
+    public void playPowerUp(String powerUpName, Ammo ammo, PowerUpCard powerUpAmmo) {
         try {
             String token = Client.getInstance().getConnection().getToken();
-            Response response = remoteMethods.playPowerUp(token, powerUpName, color);
+            Response response = remoteMethods.playPowerUp(token, powerUpName, ammo, powerUpAmmo);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
             e.printStackTrace();
