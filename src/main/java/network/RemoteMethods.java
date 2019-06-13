@@ -17,6 +17,7 @@ import network.responses.*;
 import network.updates.MapChosenUpdate;
 import network.updates.MapUpdate;
 import network.updates.NewPlayerUpdate;
+import network.updates.StartGameUpdate;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -87,8 +88,11 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
 
     @Override
     public synchronized Response chooseMap(String token, int map) throws RemoteException {
-        Server.getInstance().getLobby().getMatch(token).createMap(map);
-        Server.getInstance().getLobby().getMatch(token).addUpdate(new MapChosenUpdate(Server.getInstance().getLobby().getMatch(token).getMap(), map));
+        Player player = Server.getInstance().getLobby().getPlayer(token);
+        Match match = Server.getInstance().getLobby().getMatch(player);
+        match.createMap(map);
+        match.addUpdate(new MapChosenUpdate(match.getMap(), map));
+        match.addUpdate(new StartGameUpdate(match.getPlayers()));
         return new ChooseMapResponse();
     }
 

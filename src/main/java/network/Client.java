@@ -27,6 +27,7 @@ public class Client {
     private TurnType currentTurnType;
     private ActionType currentActionType;
     private GameMap map;
+    private List<Player> players;
     private boolean showActions, showEvents = false;
 
     private int mapNum;
@@ -138,5 +139,13 @@ public class Client {
 
     public void setMap(GameMap map) {
         this.map = map;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
     }
 }

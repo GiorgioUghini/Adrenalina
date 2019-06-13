@@ -104,8 +104,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(StartGameUpdate response) {
-        ((MenuView) Client.getInstance().getCurrentView()).startGame();
-        //Client.getInstance().getConnection().validActions();
+        Client.getInstance().setPlayers(response.players);
     }
 
     @Override
