@@ -294,10 +294,15 @@ public class Player implements Subscriber, Serializable, Taggable {
     /** Activated the powerup card given as param paying the ammo, if it costs
      * @param powerUpCard the card to activate
      * @param ammo the cube you are paying to activate it. could either be null
+     * @param paymentPowerUpCard the powerup card you are using to pay for the activation of this card
      * if the card is free or one (and only one) of the colors should be set to 1
      * @throws WeaponCardException if you cannot activate it */
-    public void playPowerUp(PowerUpCard powerUpCard, Ammo ammo){
+    public void playPowerUp(PowerUpCard powerUpCard, Ammo ammo, PowerUpCard paymentPowerUpCard){
         checkHasPowerUp(powerUpCard);
+        if(paymentPowerUpCard!=null){
+            checkHasPowerUp(paymentPowerUpCard);
+            if(paymentPowerUpCard.equals(powerUpCard)) throw new WeaponCardException("You cannot use the power up you are playing to activate it");
+        }
         if(activePowerUp!=null) throw new WeaponCardException("You are already playing a powerup");
         switch (powerUpCard.when){
             case "on_damage_dealt":
@@ -314,7 +319,7 @@ public class Player implements Subscriber, Serializable, Taggable {
             default:
                 throw new WeaponCardException("Unhandled 'when' case in powerup " + powerUpCard.name + ": " + powerUpCard.when);
         }
-        powerUpCard.payPrice(this.ammo, ammo);
+        powerUpCard.payPrice(this.ammo, ammo, paymentPowerUpCard);
         powerUpCard.activate(this);
         activePowerUp = powerUpCard;
     }

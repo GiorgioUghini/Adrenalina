@@ -43,7 +43,7 @@ public class PowerupTest {
         while (!match.getCurrentPlayer().equals(me)){
             match.nextTurn();
         }
-        me.playPowerUp(teletrasporto, null);
+        me.playPowerUp(teletrasporto, null, null);
         me.playNextPowerUpAction(); //select
         Selectable landingSquares = teletrasporto.getSelectable();
         assertEquals(gameMap.getAllSquares().size(), landingSquares.get().size());
