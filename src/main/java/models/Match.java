@@ -20,6 +20,7 @@ public class Match {
     private List<Player> playerList;
     private int actualPlayerIndex = 0;
     private PowerUpDeck powerUpDeck;
+    private List<Card> thrownPowerUps;
     private WeaponDeck weaponDeck;
     private AmmoDeck ammoDeck;
     private GameMap gameMap;
@@ -35,6 +36,7 @@ public class Match {
         playerList = new LinkedList<>(players);
         cardController = new CardController();
         powerUpDeck = cardController.getPowerUpDeck();
+        thrownPowerUps = new ArrayList<>();
         weaponDeck = cardController.getWeaponDeck();
         ammoDeck = cardController.getAmmoDeck();
         for(Player p : players){
@@ -114,7 +116,17 @@ public class Match {
      * @return the card that is drawn.
      */
     public Card drawPowerUp() {
-        return powerUpDeck.draw();
+        Card card = powerUpDeck.draw();
+        if(powerUpDeck.size()==0){
+            powerUpDeck = new PowerUpDeck(thrownPowerUps);
+            powerUpDeck.shuffle();
+            thrownPowerUps = new ArrayList<>();
+        }
+        return card;
+    }
+
+    public void throwPowerUp(PowerUpCard powerUpCard){
+        thrownPowerUps.add(powerUpCard);
     }
 
     /**

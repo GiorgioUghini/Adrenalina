@@ -102,6 +102,11 @@ public class Player implements Subscriber, Serializable, Taggable {
         return powerUpCard;
     }
 
+    public void throwPowerUp(PowerUpCard powerUpCard){
+        match.throwPowerUp(powerUpCard);
+        this.powerUpList.remove(powerUpCard);
+    }
+
     /** Pays the draw price of the card and adds it to the weapons list
      * @param drawn the card to draw
      * @param toRelease the card to release to grab the new one. Can be null unless you already have 3 weapons
@@ -352,7 +357,10 @@ public class Player implements Subscriber, Serializable, Taggable {
     /** Plays the next action of the powerup. if this method returns null, the active powerup has already been set to null */
     public Action playNextPowerUpAction(){
         Action nextAction = playNextAction(activePowerUp);
-        if(nextAction==null) activePowerUp = null;
+        if(nextAction==null){
+            throwPowerUp(activePowerUp);
+            activePowerUp = null;
+        }
         return nextAction;
     }
 
