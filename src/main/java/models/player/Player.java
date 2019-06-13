@@ -1,9 +1,13 @@
 package models.player;
 
+import errors.CheatException;
+import errors.NotEnoughAmmoException;
+import errors.TooManyCardsException;
 import errors.WeaponCardException;
 import models.Match;
 import models.card.*;
 import models.map.GameMap;
+import models.map.SpawnPoint;
 import models.map.Square;
 import models.turn.ActionGroup;
 import network.Server;
@@ -81,6 +85,24 @@ public class Player implements Subscriber, Serializable, Taggable {
 
     public void drawPowerUp(PowerUpCard drawn) {
         powerUpList.add(drawn);
+    }
+
+    /** Pays the draw price of the card and adds it to the weapons list
+     * @throws TooManyCardsException if you have 3 cards in your hand and toRelease is null  */
+    public void drawWeaponCard(WeaponCard drawn, WeaponCard toRelease) {
+        if(!drawn.canDraw(ammo)) throw new NotEnoughAmmoException();
+        SpawnPoint myPosition = (SpawnPoint) gameMap.getPlayerPosition(this);
+        if(weaponList.size()==3){
+            if(toRelease==null) throw new TooManyCardsException("You already have 3 weapons, select one to leave");
+            if(!weaponList.contains(toRelease)) throw new CheatException("You do not have the card you are trying to release");
+            myPosition.drawCard(drawn);
+            myPosition.addCard(toRelease);
+            weaponList.remove(toRelease);
+        }else{
+            myPosition.drawCard(drawn);
+        }
+        ammo.remove(drawn.getDrawPrice());
+        weaponList.add(drawn);
     }
 
     public void setName(String name) {

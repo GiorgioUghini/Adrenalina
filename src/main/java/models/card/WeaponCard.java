@@ -9,7 +9,8 @@ import java.util.*;
 
 public class WeaponCard extends EffectCard {
     public Boolean exclusive;
-    public Ammo price;
+    public Ammo drawPrice;
+    public Ammo reloadPrice;
 
     private boolean loaded;
     public List<Effect> effects;
@@ -29,8 +30,13 @@ public class WeaponCard extends EffectCard {
     }
 
     /** @return the price to reload the ammo, as indicated in the top-left corner of the card */
-    public Ammo getPrice(){
-        return this.price;
+    public Ammo getReloadPrice(){
+        return this.reloadPrice;
+    }
+
+    /** @return the price to draw the ammo */
+    public Ammo getDrawPrice(){
+        return this.reloadPrice;
     }
 
     public boolean isLoaded(){
@@ -41,15 +47,19 @@ public class WeaponCard extends EffectCard {
      * @param ammo the ammo the player has, the reload cost will be deducted from here. ATTENTION: this function modifies the param
      * @throws WeaponCardException if the given ammo is not enough to reload. */
     public void load(Ammo ammo){
-        if(!hasEnoughAmmo(ammo, price)) throw new WeaponCardException("Not enough ammo to reload");
-        pay(price, ammo);
+        if(!hasEnoughAmmo(ammo, reloadPrice)) throw new WeaponCardException("Not enough ammo to reload");
+        pay(reloadPrice, ammo);
         loaded = true;
     }
 
     /** @param ammo your ammo availability
      *  @return true if the provided ammos are enough to reload. */
     public boolean canReload(Ammo ammo){
-        return hasEnoughAmmo(ammo, price);
+        return hasEnoughAmmo(ammo, reloadPrice);
+    }
+
+    public boolean canDraw(Ammo ammo){
+        return hasEnoughAmmo(ammo, drawPrice);
     }
 
     /** If the card is loaded, activate it
