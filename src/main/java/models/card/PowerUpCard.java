@@ -13,7 +13,7 @@ public class PowerUpCard extends EffectCard {
     public boolean hasPrice = false;
     private boolean pricePaid = false;
     public String when;
-    public List<Action> effect;
+    public List<Action> effects;
 
     public PowerUpCard(){
         super();
@@ -30,7 +30,8 @@ public class PowerUpCard extends EffectCard {
     }
 
     public void payPrice(Ammo yourAmmo, Ammo whichAmmo){
-        if(!hasEnoughAmmo(yourAmmo)) throw new WeaponCardException("Not enough ammo to pay");
+        if(!hasEnoughAmmo(yourAmmo, whichAmmo)) throw new WeaponCardException("Not enough ammo to pay");
+        if(whichAmmo!=null && (whichAmmo.red+whichAmmo.yellow+whichAmmo.blue) != 1) throw new WeaponCardException("You have to pay exactly one ammo of any color");
         if(hasPrice){
             pay(yourAmmo, whichAmmo);
         }
@@ -58,23 +59,25 @@ public class PowerUpCard extends EffectCard {
     public Action playNextAction(){
         if (!this.activated) throw new WeaponCardException("Card must be activated before it can play any action");
         if(activeAction == null) {
-            activeAction = effect.get(0);
+            activeAction = effects.get(0);
             return activeAction;
         }
-        int lastActionIndex = effect.indexOf(activeAction);
-        if(lastActionIndex == effect.size()-1){
+        int lastActionIndex = effects.indexOf(activeAction);
+        if(lastActionIndex == effects.size()-1){
             activeAction = null;
             return null;
         }
-        activeAction = effect.get(lastActionIndex + 1);
+        activeAction = effects.get(lastActionIndex + 1);
         return activeAction;
     }
 
-    private boolean hasEnoughAmmo(Ammo ammo){
-        return (!hasPrice ||
-                ammo.red > 0 ||
-                ammo.blue > 0 ||
-                ammo.yellow > 0
+    private boolean hasEnoughAmmo(Ammo ammo, Ammo whichAmmo){
+        if(!hasPrice) return true;
+        if(whichAmmo==null) return false;
+        return (
+            ammo.red >= whichAmmo.red &&
+            ammo.blue >= whichAmmo.blue &&
+            ammo.yellow >= whichAmmo.yellow
         );
     }
 
