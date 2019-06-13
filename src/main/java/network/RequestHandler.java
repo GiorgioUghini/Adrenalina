@@ -56,7 +56,7 @@ public class RequestHandler implements RequestHandlerInterface {
 
     @Override
     public Response handle(PlayEffectRequest request) throws RemoteException {
-        return remoteMethods.playEffect(request.getToken(), request.effect);
+        return remoteMethods.playEffect(request.getToken(), request.effect, request.ammo, request.powerUpCard);
     }
 
     @Override

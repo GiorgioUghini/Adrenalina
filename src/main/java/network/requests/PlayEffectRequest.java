@@ -1,6 +1,8 @@
 package network.requests;
 
 import models.card.Effect;
+import models.card.PowerUpCard;
+import models.player.Ammo;
 import network.Request;
 import network.RequestHandlerInterface;
 import network.Response;
@@ -11,9 +13,13 @@ public class PlayEffectRequest implements Request {
 
     private String token;
     public Effect effect;
+    public Ammo ammo;
+    public PowerUpCard powerUpCard;
 
-    public PlayEffectRequest(Effect effect){
+    public PlayEffectRequest(Effect effect, Ammo ammo, PowerUpCard powerUpCard){
         this.effect = effect;
+        this.ammo = ammo;
+        this.powerUpCard = powerUpCard;
     }
 
     @Override

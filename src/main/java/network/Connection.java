@@ -1,10 +1,12 @@
 package network;
 
 import models.card.Effect;
+import models.card.PowerUpCard;
 import models.card.Taggable;
 import models.card.WeaponCard;
 import models.map.RoomColor;
 import models.map.Square;
+import models.player.Ammo;
 import models.turn.ActionType;
 import models.turn.TurnEvent;
 
@@ -22,7 +24,7 @@ public interface Connection {
     void drawPowerUpCard();
     void spawnPlayer(RoomColor color);
     void tagElement(Taggable taggable);
-    void playEffect(Effect effect);
+    void playEffect(Effect effect, Ammo ammo, PowerUpCard powerUpCard);
     void finishCard();
     void endTurn();
     void grab();

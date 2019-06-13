@@ -1,10 +1,12 @@
 package network;
 
 import models.card.Effect;
+import models.card.PowerUpCard;
 import models.card.Taggable;
 import models.card.WeaponCard;
 import models.map.RoomColor;
 import models.map.Square;
+import models.player.Ammo;
 import models.turn.ActionType;
 import models.turn.TurnEvent;
 import network.requests.*;
@@ -110,9 +112,9 @@ public class SocketConnection implements Connection {
     }
 
     @Override
-    public void playEffect(Effect effect) {
+    public void playEffect(Effect effect, Ammo ammo, PowerUpCard powerUpCard) {
         try {
-            PlayEffectRequest request = new PlayEffectRequest(effect);
+            PlayEffectRequest request = new PlayEffectRequest(effect, ammo, powerUpCard);
             write(request);
         } catch (IOException e) {
             e.printStackTrace();

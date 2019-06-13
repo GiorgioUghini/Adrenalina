@@ -10,6 +10,7 @@ import models.map.GameMap;
 import models.map.RoomColor;
 import models.map.SpawnPoint;
 import models.map.Square;
+import models.player.Ammo;
 import models.player.Player;
 import models.turn.TurnEvent;
 import models.turn.TurnType;
@@ -121,16 +122,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public synchronized Response cardEffects(String token, String cardName) throws RemoteException {
-        Player player = Server.getInstance().getLobby().getPlayer(token);
-        WeaponCard card = player.getWeaponList().stream().filter(w -> w.name.equals(cardName)).findFirst().orElse(null);
-        player.playWeapon(card);
-        LegitEffects legitEffects = player.getWeaponEffects();
-        return new CardEffectsResponse(legitEffects);
-    }
-
-    @Override
-    public synchronized Response playEffect(String token, Effect effect) throws RemoteException {
+    public Response playEffect(String token, Effect effect, Ammo ammo, PowerUpCard powerUpCard) throws RemoteException {
         Player player = Server.getInstance().getLobby().getPlayer(token);
         Match match = Server.getInstance().getLobby().getMatch(player);
         player.playWeaponEffect(effect);
@@ -144,6 +136,15 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         LegitEffects legitEffects = player.getWeaponEffects();
         match.addUpdate(new MapUpdate(match.getMap()));
         return legitEffects.getLegitEffects().isEmpty() ? new FinishCardResponse() : new FinishEffectResponse();
+    }
+
+    @Override
+    public synchronized Response cardEffects(String token, String cardName) throws RemoteException {
+        Player player = Server.getInstance().getLobby().getPlayer(token);
+        WeaponCard card = player.getWeaponList().stream().filter(w -> w.name.equals(cardName)).findFirst().orElse(null);
+        player.playWeapon(card);
+        LegitEffects legitEffects = player.getWeaponEffects();
+        return new CardEffectsResponse(legitEffects);
     }
 
     @Override
