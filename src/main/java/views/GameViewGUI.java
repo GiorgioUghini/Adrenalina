@@ -214,10 +214,13 @@ public class GameViewGUI implements Initializable, GameView {
         showMessage("Please click on the power up card you wish to DISCARD and spawn accordingly.");
         canClickOnPowerUps = true;
     }
-    public void run() {
-        Square square = null; //TODO get square
-        Client.getInstance().getConnection().run(Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType()).get(0), square);
+    public void runBtnClicked() {
         setBtnRunVisibility(false);
+        showMessage("Please click on the map where you want to go.");
+    }
+    public void run(Square square) {
+        TurnEvent te = Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType()).get(0);
+        Client.getInstance().getConnection().run(te, square);
         gameController.getValidActions();
     }
     public void grabAmmo() {
@@ -343,7 +346,7 @@ public class GameViewGUI implements Initializable, GameView {
         for (Player p : Client.getInstance().getPlayers()) {
             try {
                 Coordinate c = map.getPlayerCoordinates(p);
-                if (!Client.getInstance().getPlayerCoordinateMap().get(p).equals(c)) {
+                if (!c.equals(Client.getInstance().getPlayerCoordinateMap().get(p))) {
                     deletePlayerToken(paneList.get(c.getX()).get(c.getY()), Client.getInstance().getPlayers().indexOf(p));
                     drawPlayerToken(paneList.get(c.getX()).get(c.getY()), Client.getInstance().getPlayers().indexOf(p));
                     Client.getInstance().getPlayerCoordinateMap().put(p, c);
@@ -384,6 +387,44 @@ public class GameViewGUI implements Initializable, GameView {
             removePowerUpToHand(Client.getInstance().getPlayer().getPowerUpList().get(3));
         }
     }
+
+    public void pane00Clicked() {
+        run(Client.getInstance().getMap().getSquareByCoordinate(0, 0));
+    }
+    public void pane01Clicked() {
+        run(Client.getInstance().getMap().getSquareByCoordinate(0, 1));
+    }
+    public void pane02Clicked() {
+        run(Client.getInstance().getMap().getSquareByCoordinate(0, 2));
+    }
+    public void pane10Clicked() {
+        run(Client.getInstance().getMap().getSquareByCoordinate(1, 0));
+    }
+    public void pane11Clicked() {
+        run(Client.getInstance().getMap().getSquareByCoordinate(1, 1));
+    }
+    public void pane12Clicked() {
+        run(Client.getInstance().getMap().getSquareByCoordinate(1, 2));
+    }
+    public void pane20Clicked() {
+        run(Client.getInstance().getMap().getSquareByCoordinate(2, 0));
+    }
+    public void pane21Clicked() {
+        run(Client.getInstance().getMap().getSquareByCoordinate(2, 1));
+    }
+    public void pane22Clicked() {
+        run(Client.getInstance().getMap().getSquareByCoordinate(2, 2));
+    }
+    public void pane30Clicked() {
+        run(Client.getInstance().getMap().getSquareByCoordinate(3, 0));
+    }
+    public void pane31Clicked() {
+        run(Client.getInstance().getMap().getSquareByCoordinate(3, 1));
+    }
+    public void pane32Clicked() {
+        run(Client.getInstance().getMap().getSquareByCoordinate(3, 2));
+    }
+
 
     public void btnActionGroup1Clicked() {
         Platform.runLater( () -> {
