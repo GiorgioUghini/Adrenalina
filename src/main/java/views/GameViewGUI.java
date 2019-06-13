@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import models.card.PowerUpCard;
 import models.card.WeaponCard;
@@ -347,7 +348,11 @@ public class GameViewGUI implements Initializable, GameView {
             try {
                 Coordinate c = map.getPlayerCoordinates(p);
                 if (!c.equals(Client.getInstance().getPlayerCoordinateMap().get(p))) {
-                    deletePlayerToken(paneList.get(c.getX()).get(c.getY()), Client.getInstance().getPlayers().indexOf(p));
+                    for (List<GridPane> l : paneList) {
+                        for (GridPane pane : l) {
+                            deletePlayerToken(pane, Client.getInstance().getPlayers().indexOf(p));
+                        }
+                    }
                     drawPlayerToken(paneList.get(c.getX()).get(c.getY()), Client.getInstance().getPlayers().indexOf(p));
                     Client.getInstance().getPlayerCoordinateMap().put(p, c);
                 }
