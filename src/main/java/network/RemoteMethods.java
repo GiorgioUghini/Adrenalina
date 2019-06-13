@@ -128,6 +128,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     @Override
     public synchronized Response playEffect(String token, Effect effect) throws RemoteException {
         Player player = Server.getInstance().getLobby().getPlayer(token);
+        Match match = Server.getInstance().getLobby().getMatch(player);
         player.playWeaponEffect(effect);
         Action action;
         while ((action = player.playNextWeaponAction()) != null){
@@ -137,6 +138,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             }
         }
         LegitEffects legitEffects = player.getWeaponEffects();
+        match.addUpdate(new MapUpdate(match.getMap()));
         return legitEffects.getLegitEffects().isEmpty() ? new FinishCardResponse() : new FinishEffectResponse();
     }
 
@@ -184,6 +186,9 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
 
     @Override
     public Response grab(String token) throws RemoteException {
+        Player player = Server.getInstance().getLobby().getPlayer(token);
+        Match match = Server.getInstance().getLobby().getMatch(player);
+        match.addUpdate(new MapUpdate(match.getMap()));
         return new GrabResponse(); //TODO grabbare
     }
 
@@ -204,6 +209,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         if(distance > max)
             throw new CheatException();
         match.turnEvent(turnEvent);
+        match.addUpdate(new MapUpdate(match.getMap()));
         return new RunResponse();
     }
 
