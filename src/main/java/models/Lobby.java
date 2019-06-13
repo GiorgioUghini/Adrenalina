@@ -39,19 +39,17 @@ public class Lobby {
     public synchronized Player registerPlayer(String username, String password, String token) {
         Player p = new Player(username, password);
         waitingPlayers.add(p);
-        new Thread(() -> {
-            if (waitingPlayers.size() == 2) {
-                if (activeCountdown != null) {
-                    activeCountdown.cancel(true);
-                    activeCountdown = null;
-                }
-                chooseMapAndStartMatch();
-            }
-            if (waitingPlayers.size() >= 3) {
-                startCountdown();
-            }
-        }).start();
         tokenPlayerMap.add(token, p);
+        if (waitingPlayers.size() == 5) {
+            if (activeCountdown != null) {
+                activeCountdown.cancel(true);
+                activeCountdown = null;
+            }
+            chooseMapAndStartMatch();
+        }
+        if (waitingPlayers.size() >= 3) {
+            startCountdown();
+        }
         return p;
     }
 
