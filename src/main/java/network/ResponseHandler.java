@@ -1,5 +1,6 @@
 package network;
 
+import controllers.ScreenController;
 import errors.InvalidInputException;
 import javafx.application.Platform;
 import models.card.Effect;
@@ -109,8 +110,9 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(PlayerDisconnectUpdate response) {
+        Client.getInstance().getCurrentView().onPlayerDisconnected(response.getName());
         //IF WE ARE IN MENU VIEW:
-        ((MenuView) Client.getInstance().getCurrentView()).onPlayerDisconnected(response.getName());
+
     }
 
     @Override

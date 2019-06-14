@@ -364,6 +364,16 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    @Override
+    public void onNewPlayer(String playerName) {
+        showMessage("Player " + playerName + " connected!");
+    }
+
+    @Override
+    public void onPlayerDisconnected(String name) {
+        showMessage("Player " + name + " disconnected!");
+    }
+
     public void powerUp1Clicked() {
         if (canClickOnPowerUps && (!Client.getInstance().getPlayer().getPowerUpList().isEmpty())) {
             canClickOnPowerUps = false;

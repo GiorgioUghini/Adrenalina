@@ -25,6 +25,8 @@ public interface GameView extends View {
 
     void updateMapView(GameMap map);
 
+
+
     void setTextAndEnableBtnActionGroup(ActionType actionType, int btnNum);
 
 }
