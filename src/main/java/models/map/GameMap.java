@@ -374,6 +374,26 @@ public class GameMap implements Serializable {
         return out;
     }
 
+    /**
+     * @return all the ammo points that have no ammo cards and all the spawnpoints with less than 3 weapons */
+    public Set<Square> getSquaresToRefill(){
+        Set<Square> out = new HashSet<>();
+        for(Square s : getAllSquares()){
+            if(!s.isSpawnPoint()){
+                AmmoPoint ammoPoint = (AmmoPoint) s;
+                if(ammoPoint.showCard()==null){
+                    out.add(ammoPoint);
+                }
+            }else{
+                SpawnPoint spawnPoint = (SpawnPoint) s;
+                if(spawnPoint.showCards().size()<3){
+                    out.add(s);
+                }
+            }
+        }
+        return out;
+    }
+
     /** Returns in a list all squares in a given cardinal direction until the end of the map, stop on walls if throughWalls=false
      * @param from the starting square, will return as the first element of the list
      * @param direction the cardinal direction
