@@ -3,8 +3,7 @@ package models;
 import controllers.CardController;
 import errors.CheatException;
 import models.card.*;
-import models.map.GameMap;
-import models.map.MapGenerator;
+import models.map.*;
 import models.player.Player;
 import models.turn.*;
 import models.turn.ActionType;
@@ -198,6 +197,7 @@ public class Match {
      * Method that signal the start of the turn of a player. This method SHOULD be called each time a player starts his turn
      */
     public void nextTurn() {
+        refillCards();
         for(Player player : playerList){
             player.onTurnEnded();
         }
@@ -298,6 +298,23 @@ public class Match {
 
     public boolean isDoingAction(){
         return currentActionType!=null;
+    }
+
+    private void refillCards(){
+        Set<Square> toRefill = gameMap.getSquaresToRefill();
+        for(Square s : toRefill){
+            if(s.isSpawnPoint()){
+                SpawnPoint spawnPoint = (SpawnPoint) s;
+                while(spawnPoint.showCards().size()<3){
+                    Card weaponCard = weaponDeck.draw();
+                    spawnPoint.addCard(weaponCard);
+                }
+            }else{
+                AmmoPoint ammoPoint = (AmmoPoint) s;
+                Card ammoCard = ammoDeck.draw();
+                ammoPoint.addCard(ammoCard);
+            }
+        }
     }
 
 }
