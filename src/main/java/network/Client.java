@@ -92,11 +92,15 @@ public class Client {
             return currentActionType;
         }
 
-        public void start(ViewType viewType) throws InterruptedException {
-            this.viewType = viewType;
-            if(viewType == ViewType.CLI){
+    public void activateGameViewCLI() {
+        gameView = new GameViewCLI();
+        currentView = gameView;
+    }
+
+    public void start(ViewType viewType) throws InterruptedException {
+        this.viewType = viewType;
+        if(viewType == ViewType.CLI){
             menuView = new MenuViewCLI();
-            //gameView = new GameViewCLI(); Later
         }
         else if(viewType == ViewType.GUI){
             menuView = new MenuViewGUI();

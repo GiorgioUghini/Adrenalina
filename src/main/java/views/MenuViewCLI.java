@@ -1,6 +1,7 @@
 package views;
 
 import controllers.MenuController;
+import network.Client;
 import network.ConnectionType;
 import utils.Console;
 
@@ -99,6 +100,7 @@ public class MenuViewCLI implements MenuView {
     @Override
     public void startGame() {
         Console.println("The game is starting");
+        Client.getInstance().activateGameViewCLI();
     }
 
     @Override
@@ -112,8 +114,9 @@ public class MenuViewCLI implements MenuView {
     }
 
     @Override
-    public void mapChosen(int map) {
-        printMapNum(map);
+    public void mapChosen(int mapNum) {
+        Client.getInstance().setMapNum(mapNum);
+        startGame();
     }
 
     @Override
@@ -153,43 +156,4 @@ public class MenuViewCLI implements MenuView {
         }
     }
 
-    private void printMapNum(int num) {
-        println("╔═══════════════════════════════════════╗");
-        println("║             ADRENALINE MAP            ║");
-        println("╠═════════╦═════════╦═════════╦═════════╣");
-        switch (num) {
-            case 0:
-                print("║         ║ "); printColor("CELL 12", COLOR.BLU); print("   "); printColor("CELL 22", COLOR.BLU);  print("   "); printColor("CELL 32", COLOR.BLU);  println(" ║ ");
-                println("╠═════════╬═══   ═══╬═════════╬═══   ═══╬");
-                print("║ "); printColor("CELL 01", COLOR.YELLOW); print("   "); printColor("CELL 11", COLOR.PURPLE); print(" ║ "); printColor("CELL 21", COLOR.RED);  print(" ║ "); printColor("CELL 22", COLOR.RED);  println(" ║ ");
-                println("╠═════════╬═════════╬═══   ═══╬═════════╣");
-                print("║ "); printColor("CELL 00", COLOR.YELLOW); print("   "); printColor("CELL 10", COLOR.WHITE); print(" ║ "); printColor("CELL 20", COLOR.WHITE);  print(" ║ "); println("        ║ ");
-                println("╚═════════╩═════════╩═════════╩═════════╝");
-                break;
-            case 1:
-                print("║ "); printColor("CELL 02", COLOR.BLU); print("   "); printColor("CELL 12", COLOR.BLU); print("   "); printColor("CELL 22", COLOR.BLU);  print("   "); printColor("CELL 32", COLOR.GREEN);  println(" ║ ");
-                println("╠═══   ═══╬═════════╬═══   ═══╬═══   ═══╬");
-                print("║ "); printColor("CELL 01", COLOR.RED); print("   "); printColor("CELL 11", COLOR.RED); print(" ║ "); printColor("CELL 21", COLOR.YELLOW);  print(" ║ "); printColor("CELL 31", COLOR.YELLOW);  println(" ║ ");
-                println("╠═════════╬═══   ═══╬═══   ═══╬═══   ═══╣");
-                print("║         ║ "); printColor("CELL 00", COLOR.WHITE); print("   "); printColor("CELL 10", COLOR.YELLOW);  print("   "); printColor("CELL 20", COLOR.YELLOW);  println(" ║ ");
-                println("╚═════════╩═════════╩═════════╩═════════╝");
-                break;
-            case 2:
-                print("║ "); printColor("CELL 02", COLOR.RED); print("   "); printColor("CELL 12", COLOR.BLU); print("   "); printColor("CELL 22", COLOR.BLU);  print("   "); printColor("CELL 32", COLOR.GREEN);  println(" ║ ");
-                println("╠═══   ═══╬═══   ═══╬═══   ═══╬═══   ═══╬");
-                print("║ "); printColor("CELL 01", COLOR.RED); print(" ║ "); printColor("CELL 11", COLOR.PURPLE); print(" ║ "); printColor("CELL 21", COLOR.YELLOW);  print("   "); printColor("CELL 31", COLOR.YELLOW);  println(" ║ ");
-                println("╠═══   ═══╬═══   ═══╬═══   ═══╬═══   ═══╣");
-                print("║ "); printColor("CELL 00", COLOR.WHITE); print("   "); printColor("CELL 10", COLOR.WHITE); print("   "); printColor("CELL 20", COLOR.YELLOW);  print("   "); printColor("CELL 30", COLOR.YELLOW);  println(" ║ ");
-                println("╚═════════╩═════════╩═════════╩═════════╝");
-                break;
-            case 3:
-                print("║         ║ "); printColor("CELL 12", COLOR.BLU); print("   "); printColor("CELL 22", COLOR.BLU);  print("   "); printColor("CELL 32", COLOR.RED);  println(" ║ ");
-                println("╠═════════╬═══   ═══╬═══   ═══╬═══   ═══╬");
-                print("║ "); printColor("CELL 01", COLOR.YELLOW); print("   "); printColor("CELL 11", COLOR.PURPLE); print("   "); printColor("CELL 21", COLOR.PURPLE);  print(" ║ "); printColor("CELL 31", COLOR.RED);  println(" ║ ");
-                println("╠═══   ═══╬═════════╬═══   ═══╬═══   ═══╣");
-                print("║ "); printColor("CELL 00", COLOR.YELLOW); print("   "); printColor("CELL 10", COLOR.WHITE); print("   "); printColor("CELL 20", COLOR.WHITE);  print("   "); printColor("CELL 30", COLOR.WHITE);  println(" ║ ");
-                println("╚═════════╩═════════╩═════════╩═════════╝");
-                break;
-        }
-    }
 }
