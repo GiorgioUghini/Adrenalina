@@ -14,12 +14,15 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
+import models.card.AmmoCard;
 import models.card.PowerUpCard;
 import models.card.WeaponCard;
+import models.map.AmmoPoint;
 import models.map.Coordinate;
 import models.map.GameMap;
 import models.map.Square;
@@ -300,43 +303,69 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     private void addOnPane(GridPane pane, Node node) {
-        switch(pane.getChildren().size()) {
-            case 0:
-                pane.add(node,1,2);
-                break;
-            case 1:
-                pane.add(node,2,2);
-                break;
-            case 2:
-                pane.add(node,1,3);
-                break;
-            case 3:
-                pane.add(node,2,3);
-                break;
-            case 4:
-                pane.add(node,1,1);
-                break;
-            default:
-                pane.add(node,2,1);
-                break;
-        }
+        Platform.runLater( () -> {
+            switch (pane.getChildren().size()) {
+                case 0:
+                    pane.add(node, 1, 2);
+                    break;
+                case 1:
+                    pane.add(node, 2, 2);
+                    break;
+                case 2:
+                    pane.add(node, 1, 3);
+                    break;
+                case 3:
+                    pane.add(node, 2, 3);
+                    break;
+                case 4:
+                    pane.add(node, 1, 1);
+                    break;
+                default:
+                    pane.add(node, 2, 1);
+                    break;
+            }
+        });
     }
 
-    private void drawPlayerToken(GridPane pane, int i) {
+    private void removeFromPane(GridPane pane, Node node) {
         Platform.runLater( () -> {
-            Circle circle = new Circle(0.0d,0.0d,17.0d);
-            circle.setFill(Color.rgb(255-i*51,i*51,(150+i*51) % 255));
-            addOnPane(pane, circle);
+            pane.getChildren().remove(node);
+            ArrayList<Node> arr = new ArrayList<>(pane.getChildren());
+            pane.getChildren().clear();
+            for (Node n : arr) {
+                addOnPane(pane, n);
+            }
         });
+    }
+
+    //TODO MAP 3 IN INCORRECT FIX ASAPPPPP!!!!!!
+
+    private void drawPlayerToken(GridPane pane, int i) {
+        Circle circle = new Circle(0.0d,0.0d,17.0d);
+        circle.setFill(Color.rgb(255-i*51,i*51,(150+i*51) % 255));
+        addOnPane(pane, circle);
     }
 
     private void deletePlayerToken(GridPane pane, int i) {
         Circle circle1 = new Circle(0.0d,0.0d,17.0d);
         circle1.setFill(Color.rgb(255-i*51,i*51,(150+i*51) % 255));
-        for (Node n : pane.getChildren()) {
+        for (int num = 0; pane.getChildren().size() > num; num++) {
+            Node n = pane.getChildren().get(num);
             if (n.getClass() == circle1.getClass()) {
                 if (((Circle) n).getFill().equals(circle1.getFill())) {
-                    Platform.runLater( () -> pane.getChildren().remove(n));
+                    removeFromPane(pane, n);
+                }
+            }
+        }
+    }
+
+    private void deleteAmmoImage(GridPane pane, String imageName) {
+        Image imgActual = new Image(imageName);
+        for (int num = 0; pane.getChildren().size() > num; num++) {
+            Node n = pane.getChildren().get(num);
+            if (n.getClass().equals(ImageView.class)) {
+                if (((ImageView) n).getImage().getUrl().equals(imgActual.getUrl())) {
+                    removeFromPane(pane, n);
                 }
             }
         }
@@ -344,24 +373,46 @@ public class GameViewGUI implements Initializable, GameView {
 
     @Override
     public void updateMapView(GameMap map) {
+        //UPDATE PLAYERS POSITIONS
         for (Player p : Client.getInstance().getPlayers()) {
             try {
                 Coordinate c = map.getPlayerCoordinates(p);
-                if (!c.equals(Client.getInstance().getPlayerCoordinateMap().get(p))) {
-                    for (List<GridPane> l : paneList) {
-                        for (GridPane pane : l) {
-                            deletePlayerToken(pane, Client.getInstance().getPlayers().indexOf(p));
-                        }
+                Coordinate oldCoord = Client.getInstance().getPlayerCoordinateMap().get(p);
+                if (!c.equals(oldCoord)) {
+                    if (oldCoord != null) {
+                        deletePlayerToken(paneList.get(oldCoord.getX()).get(oldCoord.getY()), Client.getInstance().getPlayers().indexOf(p));
                     }
                     drawPlayerToken(paneList.get(c.getX()).get(c.getY()), Client.getInstance().getPlayers().indexOf(p));
                     Client.getInstance().getPlayerCoordinateMap().put(p, c);
                 }
-
             }
             catch (PlayerNotOnMapException e) {
                 //Nothing to do, just don't draw it.
             }
         }
+
+        //UPDATE AMMO'S
+        for (int x = 0; x<4; x++) {
+            for (int y=0; y<3; y++) {
+                Square square = map.getSquareByCoordinate(x, y);
+                if (square == null) continue;
+                if (square.isSpawnPoint()) {
+                    //TODO: Spawn point handling
+                } else {
+                    AmmoPoint ammoPoint = (AmmoPoint) square;
+                    AmmoCard ammoCard = ammoPoint.showCard();
+                    String imageName = String.format("ammo/%d%d%d%s.png", ammoCard.getRed(), ammoCard.getBlue(), ammoCard.getYellow(), ammoCard.hasPowerup() ? "y" : "n");
+                    Image image = new Image(imageName);
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitWidth(45);
+                    imageView.setFitHeight(45);
+                    GridPane panetoadd = paneList.get(x).get(y);
+                    deleteAmmoImage(panetoadd, imageName);
+                    addOnPane(panetoadd, imageView);
+                }
+            }
+        }
+
     }
 
     @Override
