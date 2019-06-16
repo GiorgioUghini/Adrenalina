@@ -165,7 +165,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(DrawPowerUpResponse response) {
-        ((GameView) Client.getInstance().getCurrentView()).addPowerUpToHand(response.getCard());
+        //((GameView) Client.getInstance().getCurrentView()).addPowerUpToHand(response.getCard());
         Platform.runLater(() -> {
             Client.getInstance().getCurrentView().showMessage("You drawn " + response.getCard().name + " and its color is " + response.getCard().color.name());
         });
@@ -245,12 +245,12 @@ public class ResponseHandler implements ResponseHandlerInterface {
     public void handle(PlayerUpdate response) {
         Player me = Client.getInstance().getPlayer();
         if (me == null || me.getName().equals(response.player.getName())) {
-            Client.getInstance().setPlayer(response.player);
             try {
-                ((GameView) Client.getInstance().getCurrentView()).updatePlayerView();
+                ((GameView) Client.getInstance().getCurrentView()).updatePlayerView(response.player);
             } catch (Exception e) {
                 //Nothing
             }
+            Client.getInstance().setPlayer(response.player);
         }
     }
 

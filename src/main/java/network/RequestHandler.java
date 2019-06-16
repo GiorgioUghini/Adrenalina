@@ -51,7 +51,7 @@ public class RequestHandler implements RequestHandlerInterface {
 
     @Override
     public Response handle(SpawnPlayerRequest request) throws RemoteException {
-        return remoteMethods.spawnPlayer(request.getToken(), request.color);
+        return remoteMethods.spawnPlayer(request.getToken(), request.powerUpCard);
     }
 
     @Override

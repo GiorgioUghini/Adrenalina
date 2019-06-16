@@ -1,5 +1,6 @@
 package network.requests;
 
+import models.card.PowerUpCard;
 import models.map.RoomColor;
 import network.Client;
 import network.Request;
@@ -11,10 +12,10 @@ import java.rmi.RemoteException;
 public class SpawnPlayerRequest implements Request {
 
     public String token;
-    public RoomColor color;
+    public PowerUpCard powerUpCard;
 
-    public SpawnPlayerRequest(RoomColor color){
-        this.color = color;
+    public SpawnPlayerRequest(PowerUpCard powerUpCard){
+        this.powerUpCard = powerUpCard;
     }
 
     @Override

@@ -23,7 +23,7 @@ public class GameController {
     }
 
     public void spawn(PowerUpCard powerUpCard) {
-        Client.getInstance().getConnection().spawnPlayer(powerUpCard.color);
+        Client.getInstance().getConnection().spawnPlayer(powerUpCard);
     }
 
     public void grab(WeaponCard drawn, WeaponCard toRelease) {

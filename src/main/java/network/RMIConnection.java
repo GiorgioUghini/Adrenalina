@@ -92,10 +92,10 @@ public class RMIConnection implements Connection {
     }
 
     @Override
-    public void spawnPlayer(RoomColor color) {
+    public void spawnPlayer(PowerUpCard powerUpCard) {
         try {
             String token = Client.getInstance().getConnection().getToken();
-            Response response = remoteMethods.spawnPlayer(token, color);
+            Response response = remoteMethods.spawnPlayer(token, powerUpCard);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
             e.printStackTrace();

@@ -100,7 +100,8 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public synchronized Response spawnPlayer(String token, RoomColor color) throws RemoteException {
+    public synchronized Response spawnPlayer(String token, PowerUpCard powerUpCard) throws RemoteException {
+        RoomColor color = powerUpCard.color;
         Player player = Server.getInstance().getLobby().getPlayer(token);
         Match match = Server.getInstance().getLobby().getMatch(player);
         GameMap map = match.getMap();
@@ -108,9 +109,11 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         if(!powerUpCards.stream().map(c -> c.color).collect(Collectors.toList()).contains(color)){
             return new ErrorResponse(new CheatException());
         }
+        player.throwPowerUp(powerUpCard);
         SpawnPoint spawnPoint = map.getSpawnPoints().stream().filter(p -> p.getColor() == color).findFirst().orElse(null);
         map.spawnPlayer(player,spawnPoint);
         match.addUpdate(new MapUpdate(match.getMap()));
+        Server.getInstance().getConnection().getConnectionWrapper(token).addUpdate(new PlayerUpdate(player));
         match.turnEvent(TurnEvent.SPAWN);
         return new SpawnPlayerResponse();
     }

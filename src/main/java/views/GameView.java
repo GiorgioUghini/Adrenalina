@@ -1,8 +1,7 @@
 package views;
 
-import models.card.PowerUpCard;
-import models.card.WeaponCard;
 import models.map.GameMap;
+import models.player.Player;
 import models.turn.ActionType;
 
 public interface GameView extends View {
@@ -17,14 +16,11 @@ public interface GameView extends View {
     void setBtnReloadVisibility(boolean isVisible);
     void setBtnUsePowerUpVisibility(boolean isVisible);
 
-    void addPowerUpToHand(PowerUpCard card);
-    void addWeaponToHand(WeaponCard card);
-
     void getValidActions();
     void startTurn(String name);
 
     void updateMapView(GameMap map);
-    void updatePlayerView();
+    void updatePlayerView(Player newPlayer);
 
 
 

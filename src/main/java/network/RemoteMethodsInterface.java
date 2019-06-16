@@ -27,7 +27,7 @@ public interface RemoteMethodsInterface extends Remote {
     Response chooseMap(String token, int map) throws RemoteException;
     Response cardEffects(String token, String cardName) throws RemoteException;
     Response drawPowerUp(String token) throws  RemoteException;
-    Response spawnPlayer(String token, RoomColor color) throws  RemoteException;
+    Response spawnPlayer(String token, PowerUpCard powerUpCard) throws  RemoteException;
     Response playEffect(String token, Effect effect, Ammo ammo, PowerUpCard powerUpCard) throws  RemoteException;
     Response finishCard(String token) throws  RemoteException;
     Response tagElement(String token, Taggable taggable) throws  RemoteException;

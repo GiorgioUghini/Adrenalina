@@ -92,9 +92,9 @@ public class SocketConnection implements Connection {
     }
 
     @Override
-    public void spawnPlayer(RoomColor color) {
+    public void spawnPlayer(PowerUpCard powerUpCard) {
         try {
-            SpawnPlayerRequest request = new SpawnPlayerRequest(color);
+            SpawnPlayerRequest request = new SpawnPlayerRequest(powerUpCard);
             write(request);
         } catch (IOException e) {
             e.printStackTrace();

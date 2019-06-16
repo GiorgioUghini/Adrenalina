@@ -6,6 +6,7 @@ import models.player.Ammo;
 import models.player.Player;
 
 import java.util.List;
+import java.util.Objects;
 
 public class PowerUpCard extends EffectCard {
     public RoomColor color;
@@ -22,6 +23,27 @@ public class PowerUpCard extends EffectCard {
     protected void init(){
         super.init();
         pricePaid = false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        // self check
+        if (this == o)
+            return true;
+        // null check
+        if (o == null)
+            return false;
+        // type check and cast
+        if (getClass() != o.getClass())
+            return false;
+        PowerUpCard powerUpCard = (PowerUpCard) o;
+        // field comparison
+        return (powerUpCard.name.equals(name) && powerUpCard.color.equals(color));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name,color);
     }
 
     public boolean hasPrice(){

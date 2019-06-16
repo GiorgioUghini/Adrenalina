@@ -3,6 +3,7 @@ package views;
 import models.card.PowerUpCard;
 import models.card.WeaponCard;
 import models.map.GameMap;
+import models.player.Player;
 import models.turn.ActionType;
 import network.Client;
 import utils.Console;
@@ -22,16 +23,6 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
-    public void addPowerUpToHand(PowerUpCard card) {
-
-    }
-
-    @Override
-    public void addWeaponToHand(WeaponCard card) {
-
-    }
-
-    @Override
     public void getValidActions() {
 
     }
@@ -47,7 +38,7 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
-    public void updatePlayerView() {
+    public void updatePlayerView(Player newPlayer) {
 
     }
 

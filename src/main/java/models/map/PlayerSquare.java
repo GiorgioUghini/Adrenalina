@@ -36,6 +36,7 @@ public class PlayerSquare implements Serializable {
     public Square getSquare(Player player){
         return hashMap.get(player);
     }
+
     public Set<Player> getPlayers(Square square){
         Set<Player> players = new HashSet<>();
         for(Map.Entry entry : hashMap.entrySet()){

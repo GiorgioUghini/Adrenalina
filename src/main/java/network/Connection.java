@@ -22,7 +22,7 @@ public interface Connection {
     void chooseMap(int map);
     void cardEffects(String cardName);
     void drawPowerUpCard();
-    void spawnPlayer(RoomColor color);
+    void spawnPlayer(PowerUpCard powerUpCard);
     void tagElement(Taggable taggable);
     void powerUpTagElement(Taggable taggable);
     void playEffect(Effect effect, Ammo ammo, PowerUpCard powerUpCard);
