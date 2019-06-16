@@ -445,7 +445,7 @@ public class GameViewGUI implements Initializable, GameView {
     public void updatePlayerView(Player newPlayer) {
         Player oldPlayer = Client.getInstance().getPlayer();
         Platform.runLater(() -> {
-            Ammo myAmmo = oldPlayer.getAmmo();
+            Ammo myAmmo = newPlayer.getAmmo();
             redAmmoText.setText(Integer.toString(myAmmo.red));
             blueAmmoText.setText(Integer.toString(myAmmo.blue));
             yellowAmmoText.setText(Integer.toString(myAmmo.yellow));
