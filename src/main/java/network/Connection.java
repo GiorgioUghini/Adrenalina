@@ -28,7 +28,7 @@ public interface Connection {
     void playEffect(Effect effect, Ammo ammo, PowerUpCard powerUpCard);
     void finishCard();
     void endTurn();
-    void grab();
+    void grab(WeaponCard drawn, WeaponCard toRelease);
     void run(TurnEvent turnEvent, Square square);
     void reload(List<WeaponCard> weapons);
     void action(ActionType actionType);

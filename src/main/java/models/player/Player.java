@@ -31,7 +31,7 @@ public class Player implements Subscriber, Serializable, Taggable {
     private int numberOfSkulls;
     private ActionGroup lifeState = ActionGroup.NORMAL;
     private boolean online;
-    private GameMap gameMap;
+    private transient GameMap gameMap;
     private boolean hasJustStarted;
     private Set<Player> playersDamagedByMeThisTurn;
     private transient Match match;

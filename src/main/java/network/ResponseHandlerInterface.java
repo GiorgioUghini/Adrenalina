@@ -55,4 +55,6 @@ public interface ResponseHandlerInterface {
     void handle(TurnActionResponse response);
 
     void handle(MapUpdate response);
+
+    void handle(PlayerUpdate response);
 }

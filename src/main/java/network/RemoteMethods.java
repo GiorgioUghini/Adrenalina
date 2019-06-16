@@ -6,19 +6,13 @@ import errors.WrongPasswordException;
 import models.Lobby;
 import models.Match;
 import models.card.*;
-import models.map.GameMap;
-import models.map.RoomColor;
-import models.map.SpawnPoint;
-import models.map.Square;
+import models.map.*;
 import models.player.Ammo;
 import models.player.Player;
 import models.turn.TurnEvent;
 import models.turn.TurnType;
 import network.responses.*;
-import network.updates.MapChosenUpdate;
-import network.updates.MapUpdate;
-import network.updates.NewPlayerUpdate;
-import network.updates.StartGameUpdate;
+import network.updates.*;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -102,6 +96,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         Player player = Server.getInstance().getLobby().getPlayer(token);
        Match match = Server.getInstance().getLobby().getMatch(player);
        PowerUpCard card = player.drawPowerUp();
+        match.addUpdate(new PlayerUpdate(player));
        match.turnEvent(TurnEvent.DRAW);
        return new DrawPowerUpResponse(card);
     }
@@ -136,30 +131,36 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         }
         LegitEffects legitEffects = player.getWeaponEffects();
         match.addUpdate(new MapUpdate(match.getMap()));
+        match.addUpdate(new PlayerUpdate(player));
         return legitEffects.getLegitEffects().isEmpty() ? new FinishCardResponse() : new FinishEffectResponse();
     }
 
     @Override
     public synchronized Response cardEffects(String token, String cardName) throws RemoteException {
         Player player = Server.getInstance().getLobby().getPlayer(token);
+        Match match = Server.getInstance().getLobby().getMatch(player);
         WeaponCard card = player.getWeaponList().stream().filter(w -> w.name.equals(cardName)).findFirst().orElse(null);
         if(player.getActiveWeapon()==null){
             player.playWeapon(card);
         }
         LegitEffects legitEffects = player.getWeaponEffects();
+        match.addUpdate(new PlayerUpdate(player));
         return new CardEffectsResponse(legitEffects);
     }
 
     @Override
     public synchronized Response finishCard(String token) throws RemoteException {
         Player player = Server.getInstance().getLobby().getPlayer(token);
+        Match match = Server.getInstance().getLobby().getMatch(player);
         player.resetWeapon();
+        match.addUpdate(new PlayerUpdate(player));
         return new FinishCardResponse();
     }
 
     @Override
     public synchronized Response tagElement(String token, Taggable taggable) throws RemoteException {
         Player player = Server.getInstance().getLobby().getPlayer(token);
+        Match match = Server.getInstance().getLobby().getMatch(player);
         WeaponCard card = player.getActiveWeapon();
         card.select(taggable);
         Action action;
@@ -170,6 +171,8 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             }
         }
         LegitEffects legitEffects = player.getWeaponEffects();
+        match.addUpdate(new MapUpdate(match.getMap()));
+        match.addUpdate(new PlayerUpdate(player));
         return legitEffects.getLegitEffects().isEmpty() ? new FinishCardResponse() : new FinishEffectResponse();
     }
 
@@ -187,12 +190,16 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             }
         }
         match.addUpdate(new MapUpdate(match.getMap()));
+        match.addUpdate(new PlayerUpdate(player));
         return new FinishPowerUpResponse();
     }
 
     @Override
     public synchronized Response endTurn(String token) throws RemoteException {
-        Server.getInstance().getLobby().getMatch(token).nextTurn();
+        Player player = Server.getInstance().getLobby().getPlayer(token);
+        Match match = player.getMatch();
+        match.nextTurn();
+        match.addUpdate(new PlayerUpdate(player));
         return new EndTurnResponse();
     }
 
@@ -206,15 +213,24 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         catch (Exception ex){
             return new ErrorResponse(ex);
         }
+        match.addUpdate(new PlayerUpdate(player));
         return new TurnActionResponse();
     }
 
     @Override
-    public Response grab(String token) throws RemoteException {
+    public Response grab(String token, WeaponCard drawn, WeaponCard toRelease) throws RemoteException {
         Player player = Server.getInstance().getLobby().getPlayer(token);
         Match match = Server.getInstance().getLobby().getMatch(player);
+        GameMap map = match.getMap();
+        Square playerSquare = map.getPlayerPosition(player);
+        if(playerSquare.isSpawnPoint()){
+            player.drawWeaponCard(drawn, toRelease);
+        }else{
+            player.drawAmmoCard();
+        }
         match.addUpdate(new MapUpdate(match.getMap()));
-        return new GrabResponse(); //TODO grabbare
+        match.addUpdate(new PlayerUpdate(player));
+        return new GrabResponse();
     }
 
     @Override
@@ -237,6 +253,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         map.movePlayer(player, targetSquare);
         match.turnEvent(turnEvent);
         match.addUpdate(new MapUpdate(match.getMap()));
+        match.addUpdate(new PlayerUpdate(player));
         return new RunResponse();
     }
 
@@ -259,6 +276,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             }
         }
         match.addUpdate(new MapUpdate(match.getMap()));
+        match.addUpdate(new PlayerUpdate(player));
         return new FinishPowerUpResponse();
     }
 }

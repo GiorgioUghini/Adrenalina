@@ -158,10 +158,10 @@ public class RMIConnection implements Connection {
     }
 
     @Override
-    public void grab() {
+    public void grab(WeaponCard drawn, WeaponCard toRelease) {
         try {
             String token = Client.getInstance().getConnection().getToken();
-            Response response = remoteMethods.grab(token);
+            Response response = remoteMethods.grab(token, drawn, toRelease);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
             e.printStackTrace();

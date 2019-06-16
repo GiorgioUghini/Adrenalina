@@ -152,9 +152,9 @@ public class SocketConnection implements Connection {
     }
 
     @Override
-    public void grab() {
+    public void grab(WeaponCard drawn, WeaponCard toRelease) {
         try {
-            GrabRequest request = new GrabRequest();
+            GrabRequest request = new GrabRequest(drawn,toRelease);
             write(request);
         } catch (IOException e) {
             e.printStackTrace();
