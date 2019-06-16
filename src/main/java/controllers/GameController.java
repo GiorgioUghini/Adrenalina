@@ -1,6 +1,7 @@
 package controllers;
 
 import models.card.PowerUpCard;
+import models.card.WeaponCard;
 import models.map.Square;
 import models.player.Player;
 import models.turn.TurnEvent;
@@ -23,6 +24,10 @@ public class GameController {
 
     public void spawn(PowerUpCard powerUpCard) {
         Client.getInstance().getConnection().spawnPlayer(powerUpCard.color);
+    }
+
+    public void grab(WeaponCard drawn, WeaponCard toRelease) {
+        Client.getInstance().getConnection().grab(drawn, toRelease);
     }
 
     public void endTurn() {
