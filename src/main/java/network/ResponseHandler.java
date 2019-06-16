@@ -246,7 +246,11 @@ public class ResponseHandler implements ResponseHandlerInterface {
         Player me = Client.getInstance().getPlayer();
         if (me == null || me.getName().equals(response.player.getName())) {
             Client.getInstance().setPlayer(response.player);
-            ((GameView) Client.getInstance().getCurrentView()).updatePlayerView();
+            try {
+                ((GameView) Client.getInstance().getCurrentView()).updatePlayerView();
+            } catch (Exception e) {
+                //Nothing
+            }
         }
     }
 
