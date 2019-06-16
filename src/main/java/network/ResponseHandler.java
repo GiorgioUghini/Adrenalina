@@ -152,7 +152,6 @@ public class ResponseHandler implements ResponseHandlerInterface {
         Client.getInstance().setShowActions(true);
         try {
             ((GameView) Client.getInstance().getCurrentView()).startTurn(response.name);
-
         } catch (Exception e) {
             Client.getInstance();
         }
@@ -244,7 +243,13 @@ public class ResponseHandler implements ResponseHandlerInterface {
     @Override
     public void handle(PlayerUpdate response) {
         Client.getInstance().setPlayer(response.player);
-        ((GameView) Client.getInstance().getCurrentView()).updatePlayerView();
+        try{
+            ((GameView) Client.getInstance().getCurrentView()).updatePlayerView();
+        }
+        catch (Exception ex){
+            Client.getInstance();
+        }
+
     }
 
 
