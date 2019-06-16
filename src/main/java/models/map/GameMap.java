@@ -245,6 +245,7 @@ public class GameMap implements Serializable {
      * @throws NegativeException if distance is < 0*/
     Set<Square> getAllSquaresAtDistance(Square from, int distance){
         checkSquareIsInMap(from);
+        Square fromInMap = getSquareById(from.getId());
         if(distance<0)throw new NegativeException();
         Set<Square> out = new HashSet<>();
         Set<Square> visited = new HashSet<>();
@@ -252,8 +253,8 @@ public class GameMap implements Serializable {
         Map<Square, Integer> toBeAdded = new LinkedHashMap<>();
         Square toRemove = null;
 
-        visited.add(from);
-        path.put(from, distance);
+        visited.add(fromInMap);
+        path.put(fromInMap, distance);
 
         while(!path.isEmpty()){
             for(Map.Entry<Square, Integer> p : path.entrySet()) {
@@ -325,12 +326,13 @@ public class GameMap implements Serializable {
      * @return a set with all the visible squares */
     public Set<Square> getAllVisibleSquares(Square from){
         checkSquareIsInMap(from);
+        Square fromInMap = getSquareById(from.getId());
         Set<Square> out = new HashSet<>();
-        out.addAll(getAllSquaresInRoom(from.getColor()));
-        if(from.hasDoors()){
+        out.addAll(getAllSquaresInRoom(fromInMap.getColor()));
+        if(fromInMap.hasDoors()){
             for(CardinalDirection c : CardinalDirection.values()){
-                if(from.hasNext(c) && from.getLink(c).isDoor()){
-                    out.addAll(getAllSquaresInRoom(from.getNextSquare(c).getColor()));
+                if(fromInMap.hasNext(c) && fromInMap.getLink(c).isDoor()){
+                    out.addAll(getAllSquaresInRoom(fromInMap.getNextSquare(c).getColor()));
                 }
             }
         }
@@ -343,7 +345,8 @@ public class GameMap implements Serializable {
      * @return a set of players that can be empty if there are no players on the square */
     public Set<Player> getPlayersOnSquare(Square square){
         checkSquareIsInMap(square);
-        return positions.getPlayers(square);
+        Square squareInMap = getSquareById(square.getId());
+        return positions.getPlayers(squareInMap);
     }
     /** Get the square containing that player or null if the player is not on the map
      * @throws PlayerNotOnMapException if the player is not on the map
@@ -406,7 +409,8 @@ public class GameMap implements Serializable {
         checkSquareIsInMap(from);
         if(direction==null) throw new NullPointerException();
         List<Square> out = new ArrayList<>();
-        Square tmp = from;
+        Square fromSquare = getSquareById(from.getId());
+        Square tmp = fromSquare;
         while(tmp!=null){
             out.add(tmp);
             if(stopOnWalls && !tmp.hasNextWalkable(direction)) break;
@@ -431,7 +435,8 @@ public class GameMap implements Serializable {
      * @throws SquareNotInMapException if "from" square is not in map
      * @throws NullPointerException if one of the params is null */
     public Set<Player> getPlayersInDirection(Square from, CardinalDirection direction){
-        List<Square> squares = getAllSquaresByCardinal(from, direction);
+        Square fromSquare = getSquareById(from.getId());
+        List<Square> squares = getAllSquaresByCardinal(fromSquare, direction);
         Set<Player> out = new HashSet<>();
         for(Square square : squares){
             out.addAll(getPlayersOnSquare(square));
@@ -459,8 +464,10 @@ public class GameMap implements Serializable {
      * @throws NoDirectionException if from=to or from and to are not aligned */
     public CardinalDirection getDirection(Square from, Square to){
         if(from.equals(to)) throw new NoDirectionException("From and to cannot be the same square");
+        Square fromInMap = getSquareById(from.getId());
+        Square toInMap = getSquareById(to.getId());
         for(CardinalDirection direction : CardinalDirection.values()){
-            if(getAllSquaresByCardinal(from, direction).contains(to)){
+            if(getAllSquaresByCardinal(fromInMap, direction).contains(toInMap)){
                 return direction;
             }
         }
@@ -497,9 +504,10 @@ public class GameMap implements Serializable {
 
     public Coordinate getSquareCoordinates(Square square){
         checkSquareIsInMap(square);
+        Square squareInMap = getSquareById(square.getId());
         int x = 0;
         int y = 0;
-        Square tmp = square;
+        Square tmp = squareInMap;
         boolean stuck = false;
         while(!stuck){
             stuck = true;
