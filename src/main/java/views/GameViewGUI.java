@@ -426,6 +426,7 @@ public class GameViewGUI implements Initializable, GameView {
                 } else {
                     AmmoPoint ammoPoint = (AmmoPoint) square;
                     AmmoCard ammoCard = ammoPoint.showCard();
+                    if (ammoCard==null) continue;
                     String imageName = String.format("ammo/%d%d%d%s.png", ammoCard.getRed(), ammoCard.getBlue(), ammoCard.getYellow(), ammoCard.hasPowerup() ? "y" : "n");
                     Image image = new Image(imageName);
                     ImageView imageView = new ImageView(image);
