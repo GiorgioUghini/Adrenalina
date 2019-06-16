@@ -5,6 +5,7 @@ import errors.InvalidInputException;
 import javafx.application.Platform;
 import models.card.Effect;
 import models.card.LegitEffects;
+import models.player.Player;
 import models.turn.ActionType;
 import models.turn.TurnEvent;
 import models.turn.TurnType;
@@ -243,8 +244,11 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(PlayerUpdate response) {
-        Client.getInstance().setPlayer(response.player);
-        ((GameView) Client.getInstance().getCurrentView()).updatePlayerView();
+        Player me = Client.getInstance().getPlayer();
+        if (me == null || me.getName().equals(response.player.getName())) {
+            Client.getInstance().setPlayer(response.player);
+            ((GameView) Client.getInstance().getCurrentView()).updatePlayerView();
+        }
     }
 
 
