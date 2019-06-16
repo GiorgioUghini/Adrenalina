@@ -197,7 +197,9 @@ public class Match {
      * Method that signal the start of the turn of a player. This method SHOULD be called each time a player starts his turn
      */
     public void nextTurn() {
-        refillCards();
+        if(gameMap!=null){
+            refillCards();
+        }
         for(Player player : playerList){
             player.onTurnEnded();
         }
