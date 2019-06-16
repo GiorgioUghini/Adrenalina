@@ -225,13 +225,14 @@ public class GameViewGUI implements Initializable, GameView {
         gameController.getValidActions();
     }
     public void grabAmmo() {
+        setBtnGrabAmmoVisibility(false);
         gameController.grab(null, null);
         GameMap map = Client.getInstance().getMap();
         Player me = Client.getInstance().getPlayer();
         Coordinate coord = map.getPlayerCoordinates(me);
         deleteAmmoImageOnPane(paneList.get(coord.getX()).get(coord.getY()));
-        gameController.getValidActions();
     }
+
     public void shoot() {
 
     }
