@@ -72,6 +72,10 @@ public class MapGenerator implements Serializable {
                 gameMap.connectRooms(5,6,false,null);
                 //white yellow
                 gameMap.connectRooms(11,8,false,0);
+                //purple white
+                gameMap.connectRooms(5, 11, true, 0);
+                //green yellow
+                gameMap.connectRooms(4, 7, true, 0);
                 break;
             case 3:
                 gameMap.createRoom(1,2,RoomColor.RED, new Coordinate(0,1));
@@ -91,6 +95,8 @@ public class MapGenerator implements Serializable {
                 gameMap.connectRooms(5,9,false,0);
                 //white yellow
                 gameMap.connectRooms(8,10, false, 0);
+                //purple white
+                gameMap.connectRooms(4, 7, true, 0);
                 break;
             default:
                 throw new MapNotExistsException();
