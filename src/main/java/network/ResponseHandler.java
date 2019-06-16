@@ -244,6 +244,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
     @Override
     public void handle(PlayerUpdate response) {
         Client.getInstance().setPlayer(response.player);
+        ((GameView) Client.getInstance().getCurrentView()).updatePlayerView();
     }
 
 

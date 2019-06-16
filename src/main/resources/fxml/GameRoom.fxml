@@ -72,12 +72,12 @@
                                                    <children>
                                                       <HBox alignment="CENTER_LEFT" layoutX="374.0" layoutY="81.0" prefHeight="261.0" prefWidth="947.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                          <children>
-                                                            <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="YOUR POWER UPs: ">
+                                                            <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="YOUR &#10;POWER UPs: " textAlignment="CENTER">
                                                                <HBox.margin>
                                                                   <Insets left="20.0" />
                                                                </HBox.margin>
                                                                <font>
-                                                                  <Font size="14.0" />
+                                                                  <Font size="20.0" />
                                                                </font>
                                                             </Text>
                                                             <ImageView fx:id="imgYourPowerUpCard1" fitHeight="258.0" fitWidth="167.0" onMouseClicked="#powerUp1Clicked" pickOnBounds="true" preserveRatio="true">
@@ -108,17 +108,17 @@
                                                    <children>
                                                       <HBox alignment="CENTER_LEFT" layoutX="374.0" layoutY="81.0" prefHeight="261.0" prefWidth="947.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                          <children>
-                                                            <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="YOUR WEAPONs: ">
+                                                            <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="YOUR &#10;WEAPONs: " textAlignment="CENTER">
                                                                <HBox.margin>
                                                                   <Insets left="20.0" />
                                                                </HBox.margin>
                                                                <font>
-                                                                  <Font size="14.0" />
+                                                                  <Font size="20.0" />
                                                                </font>
                                                             </Text>
                                                             <ImageView fx:id="imgYourWeaponCard1" fitHeight="258.0" fitWidth="167.0" pickOnBounds="true" preserveRatio="true">
                                                                <HBox.margin>
-                                                                  <Insets left="17.0" right="17.0" />
+                                                                  <Insets left="32.0" right="17.0" />
                                                                </HBox.margin>
                                                             </ImageView>
                                                             <ImageView fx:id="imgYourWeaponCard2" fitHeight="258.0" fitWidth="167.0" pickOnBounds="true" preserveRatio="true">
@@ -131,11 +131,63 @@
                                                                   <Insets left="17.0" right="17.0" />
                                                                </HBox.margin>
                                                             </ImageView>
-                                                            <ImageView fx:id="imgYourWeaponCard4" fitHeight="258.0" fitWidth="167.0" pickOnBounds="true" preserveRatio="true">
+                                                            <VBox alignment="CENTER" prefHeight="258.0" prefWidth="167.0">
+                                                               <padding>
+                                                                  <Insets bottom="8.0" left="17.0" right="17.0" top="8.0" />
+                                                               </padding>
                                                                <HBox.margin>
-                                                                  <Insets left="17.0" right="17.0" />
+                                                                  <Insets />
                                                                </HBox.margin>
-                                                            </ImageView>
+                                                               <children>
+                                                                  <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="YOUR&#10;AMMOs:" textAlignment="CENTER">
+                                                                     <font>
+                                                                        <Font size="20.0" />
+                                                                     </font>
+                                                                  </Text>
+                                                                  <HBox alignment="CENTER" maxHeight="50.0" maxWidth="155.0" prefHeight="50.0" prefWidth="167.0">
+                                                                     <children>
+                                                                        <Text fill="#790606" strokeType="OUTSIDE" strokeWidth="0.0" text="RED: " underline="true">
+                                                                           <font>
+                                                                              <Font size="20.0" />
+                                                                           </font>
+                                                                        </Text>
+                                                                        <Text fx:id="redAmmoText" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                                                           <font>
+                                                                              <Font size="25.0" />
+                                                                           </font>
+                                                                        </Text>
+                                                                     </children>
+                                                                  </HBox>
+                                                                  <HBox alignment="CENTER" maxHeight="50.0" maxWidth="155.0" prefHeight="50.0" prefWidth="167.0">
+                                                                     <children>
+                                                                        <Text fill="#6106ff" strokeType="OUTSIDE" strokeWidth="0.0" text="BLUE: " underline="true">
+                                                                           <font>
+                                                                              <Font size="20.0" />
+                                                                           </font>
+                                                                        </Text>
+                                                                        <Text fx:id="blueAmmoText" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                                                           <font>
+                                                                              <Font size="25.0" />
+                                                                           </font>
+                                                                        </Text>
+                                                                     </children>
+                                                                  </HBox>
+                                                                  <HBox alignment="CENTER" maxHeight="50.0" maxWidth="155.0" prefHeight="50.0" prefWidth="167.0">
+                                                                     <children>
+                                                                        <Text fill="#e4d100" strokeType="OUTSIDE" strokeWidth="0.0" text="YELLOW: " underline="true">
+                                                                           <font>
+                                                                              <Font size="20.0" />
+                                                                           </font>
+                                                                        </Text>
+                                                                        <Text fx:id="yellowAmmoText" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                                                           <font>
+                                                                              <Font size="25.0" />
+                                                                           </font>
+                                                                        </Text>
+                                                                     </children>
+                                                                  </HBox>
+                                                               </children>
+                                                            </VBox>
                                                          </children>
                                                       </HBox>
                                                    </children>

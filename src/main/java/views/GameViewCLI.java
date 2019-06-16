@@ -18,7 +18,7 @@ public class GameViewCLI implements GameView {
 
     @Override
     public void chooseSpawnPoint() {
-
+        //Forse deve stare vuoto
     }
 
     @Override
@@ -43,6 +43,11 @@ public class GameViewCLI implements GameView {
 
     @Override
     public void updateMapView(GameMap map) {
+
+    }
+
+    @Override
+    public void updatePlayerView() {
 
     }
 
@@ -74,56 +79,56 @@ public class GameViewCLI implements GameView {
     @Override
     public void setBtnDrawPowerUpVisibility(boolean isVisible) {
         if (isVisible) {
-            Console.print("You Can Draw a Power Up");
+            Console.print("1) You Can Draw a Power Up");
         }
     }
 
     @Override
     public void setBtnGrabWeaponVisibility(boolean isVisible) {
         if (isVisible) {
-            Console.print("You Can Grab Weapon");
+            Console.print("2) You Can Grab Weapon");
         }
     }
 
     @Override
     public void setBtnSpawnVisibility(boolean isVisible) {
         if (isVisible) {
-            Console.print("You Can Spawn");
+            Console.print("3) You Can Spawn");
         }
     }
 
     @Override
     public void setBtnRunVisibility(boolean isVisible) {
         if (isVisible) {
-            Console.print("You Can Run");
+            Console.print("4) You Can Run");
         }
     }
 
     @Override
     public void setBtnGrabAmmoVisibility(boolean isVisible) {
         if (isVisible) {
-            Console.print("You Can Grab a Ammo");
+            Console.print("5) You Can Grab a Ammo");
         }
     }
 
     @Override
     public void setBtnShootVisibility(boolean isVisible) {
         if (isVisible) {
-            Console.print("You Can Shoot");
+            Console.print("6) You Can Shoot");
         }
     }
 
     @Override
     public void setBtnReloadVisibility(boolean isVisible) {
         if (isVisible) {
-            Console.print("You Can Reload");
+            Console.print("7) You Can Reload");
         }
     }
 
     @Override
     public void setBtnUsePowerUpVisibility(boolean isVisible) {
         if (isVisible) {
-            Console.print("You Can use a power up");
+            Console.print("8) You Can use a power up");
         }
     }
 

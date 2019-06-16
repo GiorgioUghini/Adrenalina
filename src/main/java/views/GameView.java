@@ -24,6 +24,7 @@ public interface GameView extends View {
     void startTurn(String name);
 
     void updateMapView(GameMap map);
+    void updatePlayerView();
 
 
 

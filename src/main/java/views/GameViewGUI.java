@@ -5,7 +5,6 @@ import controllers.ResourceController;
 import controllers.ScreenController;
 import errors.PlayerNotOnMapException;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -14,10 +13,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import models.card.AmmoCard;
 import models.card.PowerUpCard;
@@ -26,14 +23,12 @@ import models.map.AmmoPoint;
 import models.map.Coordinate;
 import models.map.GameMap;
 import models.map.Square;
+import models.player.Ammo;
 import models.player.Player;
-import models.turn.ActionGroup;
 import models.turn.ActionType;
 import models.turn.TurnEvent;
 import network.Client;
-import utils.Console;
 
-import java.io.File;
 import java.net.URL;
 import java.util.*;
 
@@ -41,8 +36,6 @@ public class GameViewGUI implements Initializable, GameView {
 
     @FXML
     private GridPane mainGridPane;
-    @FXML
-    private Text waitMapLabel;
     @FXML
     private ListView<String> gameStatusListView;
 
@@ -106,8 +99,6 @@ public class GameViewGUI implements Initializable, GameView {
     @FXML
     private ImageView imgYourWeaponCard3;
     @FXML
-    private ImageView imgYourWeaponCard4;
-    @FXML
     private ImageView imgYourPowerUpCard1;
     @FXML
     private ImageView imgYourPowerUpCard2;
@@ -115,6 +106,13 @@ public class GameViewGUI implements Initializable, GameView {
     private ImageView imgYourPowerUpCard3;
     @FXML
     private ImageView imgYourPowerUpCard4;
+
+    @FXML
+    private Text redAmmoText;
+    @FXML
+    private Text blueAmmoText;
+    @FXML
+    private Text yellowAmmoText;
 
     private ArrayList<ImageView> powerUpSpaces = new ArrayList<>();
     private ArrayList<ImageView> weaponSpaces = new ArrayList<>();
@@ -143,7 +141,6 @@ public class GameViewGUI implements Initializable, GameView {
         weaponSpaces.add(imgYourWeaponCard1);
         weaponSpaces.add(imgYourWeaponCard2);
         weaponSpaces.add(imgYourWeaponCard3);
-        weaponSpaces.add(imgYourWeaponCard4);
         ArrayList<GridPane> x0 = new ArrayList<GridPane>();
         x0.add(grid00);
         x0.add(grid01);
@@ -228,7 +225,8 @@ public class GameViewGUI implements Initializable, GameView {
         gameController.getValidActions();
     }
     public void grabAmmo() {
-
+        Client.getInstance().getConnection().grab(null, null);
+        gameController.getValidActions();
     }
     public void shoot() {
 
@@ -359,7 +357,7 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
-    private void deleteAmmoImage(GridPane pane, String imageName) {
+    private void deleteAmmoImageIfMatch(GridPane pane, String imageName) { //To be used when updating map
         Image imgActual = new Image(imageName);
         for (int num = 0; pane.getChildren().size() > num; num++) {
             Node n = pane.getChildren().get(num);
@@ -370,6 +368,17 @@ public class GameViewGUI implements Initializable, GameView {
             }
         }
     }
+
+    private void deleteAmmoImageOnPane(GridPane pane) { //To be used when updating player
+        for (int num = 0; pane.getChildren().size() > num; num++) {
+            Node n = pane.getChildren().get(num);
+            if (n.getClass().equals(ImageView.class)) {
+                removeFromPane(pane, n);
+            }
+        }
+    }
+
+
 
     @Override
     public void updateMapView(GameMap map) {
@@ -407,12 +416,24 @@ public class GameViewGUI implements Initializable, GameView {
                     imageView.setFitWidth(45);
                     imageView.setFitHeight(45);
                     GridPane panetoadd = paneList.get(x).get(y);
-                    deleteAmmoImage(panetoadd, imageName);
+                    deleteAmmoImageIfMatch(panetoadd, imageName);
                     addOnPane(panetoadd, imageView);
                 }
             }
         }
 
+    }
+
+    @Override
+    public void updatePlayerView() {
+        Player me = Client.getInstance().getPlayer();
+        GameMap map = Client.getInstance().getMap();
+        Ammo myAmmo = me.getAmmo();
+        Platform.runLater( () -> {
+            redAmmoText.setText(Integer.toString(myAmmo.red));
+            blueAmmoText.setText(Integer.toString(myAmmo.blue));
+            yellowAmmoText.setText(Integer.toString(myAmmo.yellow));
+        });
     }
 
     @Override
