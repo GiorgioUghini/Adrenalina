@@ -153,7 +153,6 @@ public class ResponseHandler implements ResponseHandlerInterface {
         Client.getInstance().setShowActions(true);
         try {
             ((GameView) Client.getInstance().getCurrentView()).startTurn(response.name);
-
         } catch (Exception e) {
             Client.getInstance();
         }
