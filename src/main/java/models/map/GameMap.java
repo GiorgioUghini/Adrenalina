@@ -204,7 +204,8 @@ public class GameMap implements Serializable {
         player.hasSpawnFirstTime();
         checkSquareIsInMap(spawnPoint);
         if(positions.hasPlayer(player)) throw new PlayerAlreadyOnMapException();
-        positions.addPlayer(player, spawnPoint);
+        Square spawnSquare = getSquareById(spawnPoint.getId());
+        positions.addPlayer(player, spawnSquare);
         player.setGameMap(this);
     }
     /** Move player to a square in the map
@@ -217,7 +218,8 @@ public class GameMap implements Serializable {
     public void movePlayer(Player player, Square square){
         checkPlayerInMap(player);
         checkSquareIsInMap(square);
-        positions.movePlayer(player, square);
+        Square newSquare = getSquareById(square.getId());
+        positions.movePlayer(player, newSquare);
     }
     /** Removes player from map
      * @param player
