@@ -109,6 +109,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         if(!powerUpCards.stream().map(c -> c.color).collect(Collectors.toList()).contains(color)){
             return new ErrorResponse(new CheatException());
         }
+        powerUpCard = player.getPowerUpByName(powerUpCard.name, powerUpCard.color);
         player.throwPowerUp(powerUpCard);
         SpawnPoint spawnPoint = map.getSpawnPoints().stream().filter(p -> p.getColor() == color).findFirst().orElse(null);
         map.spawnPlayer(player,spawnPoint);
