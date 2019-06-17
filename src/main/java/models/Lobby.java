@@ -40,7 +40,7 @@ public class Lobby {
         Player p = new Player(username, password);
         waitingPlayers.add(p);
         tokenPlayerMap.add(token, p);
-        if (waitingPlayers.size() == 2) {
+        if (waitingPlayers.size() == 5) {
             if (activeCountdown != null) {
                 activeCountdown.cancel(true);
                 activeCountdown = null;
