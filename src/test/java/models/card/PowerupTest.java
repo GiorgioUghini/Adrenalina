@@ -26,7 +26,7 @@ public class PowerupTest {
         Match match = new Match(players);
         match.createMap(0);
         GameMap gameMap = match.getMap();
-        PowerUpCard teletrasporto = getPowerupByName("Teletrasporto");
+        PowerUpCard teletrasporto = getPowerUpByName("Teletrasporto");
         List<PowerUpCard> myPowerups = new ArrayList<>();
         myPowerups.add(teletrasporto);
         me.setPowerUpList(myPowerups);
@@ -52,7 +52,53 @@ public class PowerupTest {
         assertEquals(destSquare, gameMap.getPlayerPosition(me));
     }
 
-    private PowerUpCard getPowerupByName(String name){
+    @Test
+    public void testThrowbackGrenade(){
+        //init
+        PowerUpCard granataVenom = getPowerUpByName("Granata Venom");
+        assertNotNull(granataVenom);
+        List<PowerUpCard> powerUpCardList = new ArrayList<>();
+        powerUpCardList.add(granataVenom);
+        List<Player> players = createTestPlayers(3);
+        Match match = new Match(players);
+        match.createMap(3);
+        match.chooseMapAndStartMatch();
+        Player me = players.get(0);
+        me.setPowerUpList(powerUpCardList);
+        Player offender = players.get(1);
+        GameMap gameMap = match.getMap();
+
+        //spawn players and set up turns
+        for(Player p : players){
+            spawnPlayer(p, gameMap, RoomColor.YELLOW);
+        }
+        while(!match.getCurrentPlayer().equals(offender)){
+            match.nextTurn();
+        }
+
+        //play the powerup
+        me.getDamage(2, offender);
+        Player tmp = me.getLastDamager();
+        me.playPowerUp(granataVenom, null, null);
+        me.playNextPowerUpAction(); //select
+        Selectable selectable = granataVenom.getSelectable();
+        assertEquals(1, selectable.get().size());
+        assertTrue(selectable.get().contains(offender));
+        granataVenom.select(offender);
+        me.playNextPowerUpAction();
+        assertEquals(1, offender.getMarksFromPlayer(me));
+    }
+
+    private List<Player> createTestPlayers(int number){
+        List<Player> out = new ArrayList<>();
+        out.add(new Player("me", "password"));
+        for(int i = 1; i<number; i++){
+            out.add(new Player("p"+i, "password"));
+        }
+        return out;
+    }
+
+    private PowerUpCard getPowerUpByName(String name){
         PowerUpDeck powerUpDeck = new CardController().getPowerUpDeck();
         int deckSize = powerUpDeck.size();
         for(int i=0; i<deckSize; i++){
@@ -60,5 +106,14 @@ public class PowerupTest {
             if(card.name.equals(name)) return card;
         }
         return null;
+    }
+
+    private void spawnPlayer(Player player, GameMap gameMap, RoomColor spawnPointColor){
+        Set<SpawnPoint> spawnPoints = gameMap.getSpawnPoints();
+        for(SpawnPoint s : spawnPoints){
+            if(s.getColor().equals(spawnPointColor)){
+                gameMap.spawnPlayer(player, s);
+            }
+        }
     }
 }
