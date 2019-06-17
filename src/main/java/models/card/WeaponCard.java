@@ -62,6 +62,10 @@ public class WeaponCard extends EffectCard {
         return hasEnoughAmmo(ammo, powerUpCards, drawPrice);
     }
 
+    public boolean canDraw(Ammo ammo, PowerUpCard powerUpCard){
+        return hasEnoughAmmo(ammo, powerUpCard, drawPrice);
+    }
+
     /** If the card is loaded, activate it and unload it
      * @param me the player who is going to use the card
      * @throws WeaponCardException if the weapon is already active
@@ -98,6 +102,10 @@ public class WeaponCard extends EffectCard {
             out = out.logicalAnd(getByOrderId(getLastOrderId()));
             return out;
         }
+    }
+
+    public Effect getEffectByName(String name){
+        return effects.stream().filter(e -> e.name.equals(name)).findFirst().orElse(null);
     }
 
     /** Activates the chosen effect, paying it with the ammos given as param

@@ -146,7 +146,7 @@ public class GameMap implements Serializable {
      * @param id
      * @return the square with the given id. It is unique and never null
      * @throws SquareNotInMapException if there is not a square in this map with the given Id */
-    Square getSquareById(int id){
+    public Square getSquareById(int id){
         Iterator<Square> iterator = getAllSquares().iterator();
         while (iterator.hasNext()){
             Square s = iterator.next();

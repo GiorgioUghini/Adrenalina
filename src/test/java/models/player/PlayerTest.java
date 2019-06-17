@@ -76,7 +76,7 @@ public class PlayerTest {
         me.setAmmo(new Ammo(3,3,3));
         assertFalse(yellow.showCards().isEmpty());
         WeaponCard toDraw = (WeaponCard) yellow.showCards().toArray()[0];
-        me.drawWeaponCard(toDraw, null);
+        me.drawWeaponCard(toDraw, null, null);
         assertEquals(1, me.getWeaponList().size());
     }
 
