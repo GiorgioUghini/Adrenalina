@@ -163,7 +163,7 @@ public class WeaponCard extends EffectCard {
         for(PowerUpCard card : powerUpCards){
             tot.add(new Ammo(card));
         }
-        return ammo.isGreaterThanOrEqual(price);
+        return tot.isGreaterThanOrEqual(price);
     }
     private boolean hasEnoughAmmo(Ammo ammo, PowerUpCard powerUpCard, Ammo price){
         List<PowerUpCard> powerUpCards = new ArrayList<>();

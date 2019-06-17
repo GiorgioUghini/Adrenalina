@@ -103,7 +103,9 @@ public class Player implements Subscriber, Serializable, Taggable {
     }
 
     public void throwPowerUp(PowerUpCard powerUpCard){
-        match.throwPowerUp(powerUpCard);
+        if(match!=null){
+            match.throwPowerUp(powerUpCard);
+        }
         this.powerUpList.remove(powerUpCard);
     }
 
@@ -233,7 +235,7 @@ public class Player implements Subscriber, Serializable, Taggable {
      * @param fromWho the player witch is giveing marks */
     public void giveMark(int numberOfMarks, Player fromWho) { this.marks.addMark(fromWho, numberOfMarks); }
 
-    int getMarksFromPlayer(Player fromWho) { return this.marks.getMarksFromPlayer(fromWho); }
+    public int getMarksFromPlayer(Player fromWho) { return this.marks.getMarksFromPlayer(fromWho); }
 
     void removeAllMarkFromPlayer(Player fromWho) { this.marks.removeAllMarkFromPlayer(fromWho); }
 
