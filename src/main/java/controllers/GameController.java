@@ -26,8 +26,8 @@ public class GameController {
         Client.getInstance().getConnection().spawnPlayer(powerUpCard);
     }
 
-    public void grab(WeaponCard drawn, WeaponCard toRelease) {
-        Client.getInstance().getConnection().grab(drawn, toRelease);
+    public void grab(WeaponCard drawn, WeaponCard toRelease, PowerUpCard powerUpCard) {
+        Client.getInstance().getConnection().grab(drawn, toRelease, powerUpCard);
     }
 
     public void endTurn() {

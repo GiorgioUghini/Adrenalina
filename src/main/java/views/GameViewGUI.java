@@ -221,7 +221,7 @@ public class GameViewGUI implements Initializable, GameView {
     }
     public void grabAmmo() {
         setBtnGrabAmmoVisibility(false);
-        gameController.grab(null, null);
+        gameController.grab(null, null, null);
         GameMap map = Client.getInstance().getMap();
         Player me = Client.getInstance().getPlayer();
         Coordinate coord = map.getPlayerCoordinates(me);

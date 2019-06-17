@@ -1,9 +1,6 @@
 package network;
 
-import models.card.Effect;
-import models.card.PowerUpCard;
-import models.card.Taggable;
-import models.card.WeaponCard;
+import models.card.*;
 import models.map.RoomColor;
 import models.map.Square;
 import models.player.Ammo;
@@ -34,7 +31,7 @@ public interface RemoteMethodsInterface extends Remote {
     Response powerUpTagElement(String token, Taggable taggable) throws  RemoteException;
     Response endTurn(String token) throws  RemoteException;
     Response action(String token, ActionType actionType) throws RemoteException;
-    Response grab(String token, WeaponCard drawn, WeaponCard toRelease) throws  RemoteException;
+    Response grab(String token, WeaponCard drawn, WeaponCard toRelease, PowerUpCard powerUpCard) throws  RemoteException;
     Response run(String token, TurnEvent turnEvent, Square square) throws  RemoteException;
     Response reload(String token, List<WeaponCard> weapons) throws  RemoteException;
     Response playPowerUp(String token, String powerUpName, Ammo ammo, PowerUpCard powerUpAmmo) throws  RemoteException;

@@ -217,7 +217,8 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public Response grab(String token, WeaponCard drawn, WeaponCard toRelease) throws RemoteException {
+    public Response grab(String token, WeaponCard drawn, WeaponCard toRelease,PowerUpCard powerUpCard) throws RemoteException {
+        //TODO pagare con powerUpCard
         Player player = Server.getInstance().getLobby().getPlayer(token);
         Match match = Server.getInstance().getLobby().getMatch(player);
         GameMap map = match.getMap();
