@@ -43,4 +43,11 @@ public class SpawnPoint extends Square implements Serializable {
         cards.remove(card);
         return card;
     }
+
+    /**
+     * @return the weapon card with the given name or null if there is not that card on this square */
+    public Card getByName(String cardName){
+        Card out = cards.stream().filter(c -> c.name.equals(cardName)).findFirst().orElse(null);
+        return out;
+    }
 }

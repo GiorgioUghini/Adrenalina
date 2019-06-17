@@ -62,6 +62,10 @@ public class WeaponCard extends EffectCard {
         return hasEnoughAmmo(ammo, powerUpCards, drawPrice);
     }
 
+    public boolean canDraw(Ammo ammo, PowerUpCard powerUpCard){
+        return hasEnoughAmmo(ammo, powerUpCard, drawPrice);
+    }
+
     /** If the card is loaded, activate it and unload it
      * @param me the player who is going to use the card
      * @throws WeaponCardException if the weapon is already active
