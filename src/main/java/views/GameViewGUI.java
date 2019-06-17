@@ -216,7 +216,7 @@ public class GameViewGUI implements Initializable, GameView {
         while (weaponOnSpawnPointMap.get(color).get(i).getImage() != null) {
             i++;
         }
-        if (i>3) return;
+        if (i>2) return;
         weaponOnSpawnPointMap.get(color).get(i).setImage(img);
     }
 
@@ -230,7 +230,7 @@ public class GameViewGUI implements Initializable, GameView {
             return;
         }
 
-        for(;i<3;i++) {
+        for(;i<2;i++) {
             weaponOnSpawnPointMap.get(color).get(i).setImage(weaponOnSpawnPointMap.get(color).get(i+1).getImage());
         }
         weaponOnSpawnPointMap.get(color).get(2).setImage(null);
