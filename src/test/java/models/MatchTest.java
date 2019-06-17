@@ -25,6 +25,7 @@ public class MatchTest {
         assertTrue(possibleActions == null || possibleActions.isEmpty());
 
         m.chooseMapAndStartMatch();
+        m.nextTurn();
         possibleActions = m.getPossibleAction(pl2);
         assertFalse(possibleActions.isEmpty());
 

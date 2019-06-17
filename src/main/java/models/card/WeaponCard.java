@@ -58,6 +58,10 @@ public class WeaponCard extends EffectCard {
         return hasEnoughAmmo(ammo, powerUpCards, reloadPrice);
     }
 
+    public boolean canReload(Ammo ammo, PowerUpCard powerUpCard){
+        return hasEnoughAmmo(ammo, powerUpCard, reloadPrice);
+    }
+
     public boolean canDraw(Ammo ammo, List<PowerUpCard> powerUpCards){
         return hasEnoughAmmo(ammo, powerUpCards, drawPrice);
     }
@@ -206,5 +210,26 @@ public class WeaponCard extends EffectCard {
             me.throwPowerUp(powerUpCard);
         }
         ammo.remove(newPrice);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        // self check
+        if (this == o)
+            return true;
+        // null check
+        if (o == null)
+            return false;
+        // type check and cast
+        if (getClass() != o.getClass())
+            return false;
+        WeaponCard weaponCard = (WeaponCard) o;
+        // field comparison
+        return name.equals(weaponCard.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

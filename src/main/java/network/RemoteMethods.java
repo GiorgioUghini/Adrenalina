@@ -272,6 +272,17 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
 
     @Override
     public Response reload(String token, Map<WeaponCard, PowerUpCard> weaponsMap) throws RemoteException {
+        Player player = Server.getInstance().getLobby().getPlayer(token);
+        for(WeaponCard weaponCard : player.getWeaponList()){
+            if(weaponsMap.keySet().contains(weaponCard)){
+                PowerUpCard reloadPowerUpCard = weaponsMap.get(weaponCard);
+                if(player.canReloadWeapon(weaponCard, reloadPowerUpCard)){
+                    player.reloadWeapon(weaponCard, reloadPowerUpCard);
+                }else{
+                    //TODO: What if the weapon cannot be loaded?
+                }
+            }
+        }
         return new ReloadResponse();
     }
 

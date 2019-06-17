@@ -346,6 +346,10 @@ public class Player implements Subscriber, Serializable, Taggable {
         return weaponCard.canReload(ammo, powerUpList);
     }
 
+    public boolean canReloadWeapon(WeaponCard weaponCard, PowerUpCard whichPowerUpCard){
+        return weaponCard.canReload(ammo, whichPowerUpCard);
+    }
+
     /**
      * @param weaponCard the card you want to reload
      * @throws WeaponCardException if you do not have that weapon
