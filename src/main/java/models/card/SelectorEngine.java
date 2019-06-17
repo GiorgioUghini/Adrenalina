@@ -120,7 +120,7 @@ class SelectorEngine {
                         out.retainAll(gameMap.getAllSquaresByCardinal(ref, direction, !radix.throughWalls));
                     }
                     break;
-                case "other_room":
+                case "other_rooms":
                     RoomColor myColor = ref.getColor();
                     out.removeAll(gameMap.getAllSquaresInRoom(myColor));
                     break;

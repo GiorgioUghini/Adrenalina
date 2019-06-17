@@ -837,6 +837,7 @@
           {
             "type": "select",
             "select": {
+              "type": "player",
               "id": "enemy",
               "radix": [
                 {
@@ -849,6 +850,7 @@
           {
             "type": "damage",
             "damage": {
+              "type": "player",
               "target": "enemy",
               "value": 3
             }

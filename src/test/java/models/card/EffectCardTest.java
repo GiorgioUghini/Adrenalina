@@ -215,6 +215,7 @@ public class EffectCardTest {
         assertEquals(2, p1.getTotalDamage());
     }
 
+    @Test
     public void testVulcanizzatore(){
         GameMap gameMap = MapGenerator.generate(1);
         List<Player> players = createTestPlayers(4);
@@ -222,6 +223,7 @@ public class EffectCardTest {
         List<WeaponCard> myCards = new ArrayList<>();
         myCards.add(vulcanizzatore);
         Player me = players.get(0);
+        me.setWeaponList(myCards);
         SpawnPoint yellow = getSpawnPoint(gameMap, RoomColor.YELLOW);
         SpawnPoint red = getSpawnPoint(gameMap, RoomColor.RED);
         gameMap.spawnPlayer(me, yellow);
@@ -229,6 +231,10 @@ public class EffectCardTest {
         gameMap.spawnPlayer(players.get(2), red);
         gameMap.spawnPlayer(players.get(3), red);
         gameMap.movePlayer(me, yellow.getNextSquare(CardinalDirection.TOP).getNextSquare(CardinalDirection.LEFT));
+        gameMap.movePlayer(players.get(2), red.getNextSquare(CardinalDirection.TOP));
+        gameMap.movePlayer(players.get(3), red.getNextSquare(CardinalDirection.TOP));
+        assertEquals(RoomColor.BLUE, gameMap.getPlayerPosition(players.get(2)).getColor());
+        assertEquals(RoomColor.BLUE, gameMap.getPlayerPosition(players.get(3)).getColor());
         assertTrue(gameMap.getPlayerPosition(me).hasDoors());
         me.setAmmo(new Ammo(3,3,3));
         me.playWeapon(vulcanizzatore);
@@ -241,15 +247,16 @@ public class EffectCardTest {
         }
         vulcanizzatore.playNextAction(); //select room
         Selectable selectableRooms = vulcanizzatore.getSelectable();
-        assertEquals(2, selectableRooms.get().size());
-        assertTrue(selectableRooms.get().contains(RoomColor.RED));
-        vulcanizzatore.select(RoomColor.RED);
-        vulcanizzatore.playNextAction(); //damage
+        assertEquals(1, selectableRooms.get().size());
+        assertTrue(selectableRooms.get().contains(RoomColor.BLUE));
+        vulcanizzatore.select(RoomColor.BLUE);
+        me.playNextWeaponAction(); //damage
         assertEquals(0, players.get(1).getTotalDamage());
         assertEquals(1, players.get(2).getTotalDamage());
         assertEquals(1, players.get(3).getTotalDamage());
     }
 
+    @Test
     public void testNoSelection(){
         WeaponCard razzoTermico = getCard("Razzo termico");
         List<WeaponCard> myWeapons = new ArrayList<>();
@@ -263,16 +270,14 @@ public class EffectCardTest {
         gameMap.spawnPlayer(me, yellow);
         gameMap.spawnPlayer(players.get(1), yellow);
         gameMap.spawnPlayer(players.get(2), red);
-        gameMap.spawnPlayer(players.get(3), red);
         me.setAmmo(new Ammo(3,3,3));
         me.playWeapon(razzoTermico);
         Effect effect = me.getWeaponEffects().getLegitEffects().get(0);
         me.playWeaponEffect(effect, null);
         me.playNextWeaponAction();
         Selectable selectable = razzoTermico.getSelectable();
-        assertEquals(2, selectable.get().size());
+        assertEquals(1, selectable.get().size());
         assertTrue(selectable.get().contains(players.get(2)));
-        assertTrue(selectable.get().contains(players.get(3)));
         me.playNextWeaponAction();
         for (Player p : players){
             assertEquals(0, p.getTotalDamage());
