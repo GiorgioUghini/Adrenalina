@@ -123,6 +123,8 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     public Response playEffect(String token, Effect effect, Ammo ammo, PowerUpCard powerUpCard) throws RemoteException {
         Player player = Server.getInstance().getLobby().getPlayer(token);
         Match match = Server.getInstance().getLobby().getMatch(player);
+        effect = player.getActiveWeapon().getEffectByName(effect.name);
+        powerUpCard = player.getPowerUpByName(powerUpCard.name, powerUpCard.color);
         player.playWeaponEffect(effect, powerUpCard);
         Action action;
         while ((action = player.playNextWeaponAction()) != null){
@@ -259,6 +261,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         Square playerSquare = map.getPlayerPosition(player);
         if(!map.getAllSquaresAtDistanceLessThanOrEquals(playerSquare, max).contains(targetSquare))
             throw new CheatException();
+        targetSquare = map.getSquareById(targetSquare.getId());
         map.movePlayer(player, targetSquare);
         match.turnEvent(turnEvent);
         match.addUpdate(new MapUpdate(match.getMap()));
@@ -275,6 +278,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     public Response playPowerUp(String token, String powerUpName, Ammo ammo, PowerUpCard powerUpAmmo) throws RemoteException {
         Player player = Server.getInstance().getLobby().getPlayer(token);
         Match match = Server.getInstance().getLobby().getMatch(player);
+        if(powerUpAmmo!=null) powerUpAmmo = player.getPowerUpByName(powerUpAmmo.name, powerUpAmmo.color);
         PowerUpCard powerUpCard = player.getPowerUpList().stream().filter(c -> c.name.equals(powerUpName)).findFirst().orElse(null);
         player.playPowerUp(powerUpCard, ammo, powerUpAmmo);
         Action action;

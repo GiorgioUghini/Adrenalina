@@ -54,10 +54,16 @@ public abstract class EffectCard extends Card {
         checkActiveAction(ActionType.SELECT);
         switch (activeAction.select.type) {
             case PLAYER:
-                selectedPlayers.put(activeAction.select.id, (Player) taggable);
+                Player taggedPlayer = (Player) taggable;
+                if(me.getMatch()!=null){
+                    taggedPlayer = me.getMatch().getPlayerByUsername(taggedPlayer.getName());
+                }
+                selectedPlayers.put(activeAction.select.id, taggedPlayer);
                 break;
             case SQUARE:
-                selectedSquares.put(activeAction.select.id, (Square) taggable);
+                Square taggedSquare = (Square) taggable;
+                taggedSquare = me.getGameMap().getSquareById(taggedSquare.getId());
+                selectedSquares.put(activeAction.select.id, taggedSquare);
                 break;
             case ROOM:
                 selectedRooms.put(activeAction.select.id, (RoomColor) taggable);

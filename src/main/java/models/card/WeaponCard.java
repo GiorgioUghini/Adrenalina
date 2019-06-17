@@ -104,6 +104,10 @@ public class WeaponCard extends EffectCard {
         }
     }
 
+    public Effect getEffectByName(String name){
+        return effects.stream().filter(e -> e.name.equals(name)).findFirst().orElse(null);
+    }
+
     /** Activates the chosen effect, paying it with the ammos given as param
      * @param effect the effect to play
      * @param ammo ATTENTION: this param will be modified if the effect activation was successfull. The effect price will be deducted from it
