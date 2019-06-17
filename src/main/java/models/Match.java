@@ -183,7 +183,6 @@ public class Match {
         actualPlayerIndex = -1;
         ChooseMapUpdate update = new ChooseMapUpdate(playerList.get(0).getName());
         addUpdate(update);
-        nextTurn();
     }
 
     public void addUpdate(Response update) {
