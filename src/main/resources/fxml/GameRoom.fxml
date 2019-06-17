@@ -23,7 +23,7 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <SplitPane dividerPositions="0.5" layoutX="339.0" layoutY="413.0" orientation="VERTICAL" prefHeight="1078.0" prefWidth="955.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane dividerPositions="0.55" layoutX="339.0" layoutY="413.0" orientation="VERTICAL" prefHeight="1078.0" prefWidth="955.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
@@ -60,7 +60,94 @@
                                                 </Tab>
                                                 <Tab text="Weapons on SpawnPoints">
                                                   <content>
-                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                         <children>
+                                                            <VBox layoutX="425.0" layoutY="174.0" prefHeight="499.0" prefWidth="949.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                               <children>
+                                                                  <HBox alignment="CENTER_LEFT" maxHeight="184.0" prefHeight="184.0" prefWidth="947.0">
+                                                                     <children>
+                                                                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="BLUE SPAWN&#10;POINT: " textAlignment="CENTER">
+                                                                           <HBox.margin>
+                                                                              <Insets left="20.0" />
+                                                                           </HBox.margin>
+                                                                           <font>
+                                                                              <Font size="20.0" />
+                                                                           </font>
+                                                                        </Text>
+                                                                        <ImageView fx:id="weaponSPBlue1" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp1Clicked" pickOnBounds="true" preserveRatio="true">
+                                                                           <HBox.margin>
+                                                                              <Insets left="17.0" right="17.0" />
+                                                                           </HBox.margin>
+                                                                        </ImageView>
+                                                                        <ImageView fx:id="weaponSPBlue2" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp2Clicked" pickOnBounds="true" preserveRatio="true">
+                                                                           <HBox.margin>
+                                                                              <Insets left="17.0" right="17.0" />
+                                                                           </HBox.margin>
+                                                                        </ImageView>
+                                                                        <ImageView fx:id="weaponSPBlue3" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp3Clicked" pickOnBounds="true" preserveRatio="true">
+                                                                           <HBox.margin>
+                                                                              <Insets left="17.0" right="17.0" />
+                                                                           </HBox.margin>
+                                                                        </ImageView>
+                                                                     </children>
+                                                                  </HBox>
+                                                                  <HBox alignment="CENTER_LEFT" maxHeight="184.0" prefHeight="184.0" prefWidth="947.0">
+                                                                     <children>
+                                                                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="RED SPAWN&#10;POINT: " textAlignment="CENTER">
+                                                                           <HBox.margin>
+                                                                              <Insets left="20.0" />
+                                                                           </HBox.margin>
+                                                                           <font>
+                                                                              <Font size="20.0" />
+                                                                           </font>
+                                                                        </Text>
+                                                                        <ImageView fx:id="weaponSPRed1" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp1Clicked" pickOnBounds="true" preserveRatio="true">
+                                                                           <HBox.margin>
+                                                                              <Insets left="17.0" right="17.0" />
+                                                                           </HBox.margin>
+                                                                        </ImageView>
+                                                                        <ImageView fx:id="weaponSPRed2" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp2Clicked" pickOnBounds="true" preserveRatio="true">
+                                                                           <HBox.margin>
+                                                                              <Insets left="17.0" right="17.0" />
+                                                                           </HBox.margin>
+                                                                        </ImageView>
+                                                                        <ImageView fx:id="weaponSPRed3" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp3Clicked" pickOnBounds="true" preserveRatio="true">
+                                                                           <HBox.margin>
+                                                                              <Insets left="17.0" right="17.0" />
+                                                                           </HBox.margin>
+                                                                        </ImageView>
+                                                                     </children>
+                                                                  </HBox>
+                                                                  <HBox alignment="CENTER_LEFT" maxHeight="184.0" prefHeight="184.0" prefWidth="947.0">
+                                                                     <children>
+                                                                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="YELLOW&#10;SPAWN&#10;POINT: " textAlignment="CENTER">
+                                                                           <HBox.margin>
+                                                                              <Insets left="20.0" />
+                                                                           </HBox.margin>
+                                                                           <font>
+                                                                              <Font size="20.0" />
+                                                                           </font>
+                                                                        </Text>
+                                                                        <ImageView fx:id="weaponSPYellow1" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp1Clicked" pickOnBounds="true" preserveRatio="true">
+                                                                           <HBox.margin>
+                                                                              <Insets left="17.0" right="17.0" />
+                                                                           </HBox.margin>
+                                                                        </ImageView>
+                                                                        <ImageView fx:id="weaponSPYellow2" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp2Clicked" pickOnBounds="true" preserveRatio="true">
+                                                                           <HBox.margin>
+                                                                              <Insets left="17.0" right="17.0" />
+                                                                           </HBox.margin>
+                                                                        </ImageView>
+                                                                        <ImageView fx:id="weaponSPYellow3" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp3Clicked" pickOnBounds="true" preserveRatio="true">
+                                                                           <HBox.margin>
+                                                                              <Insets left="17.0" right="17.0" />
+                                                                           </HBox.margin>
+                                                                        </ImageView>
+                                                                     </children>
+                                                                  </HBox>
+                                                               </children>
+                                                            </VBox>
+                                                         </children></AnchorPane>
                                                   </content>
                                                 </Tab>
                                                 <Tab text="Game Status">
@@ -113,32 +200,32 @@
                                             <items>
                                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                                    <children>
-                                                      <HBox alignment="CENTER_LEFT" layoutX="374.0" layoutY="81.0" prefHeight="261.0" prefWidth="947.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                      <HBox alignment="CENTER_LEFT" layoutX="374.0" layoutY="81.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                          <children>
                                                             <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="YOUR &#10;POWER UPs: " textAlignment="CENTER">
                                                                <HBox.margin>
                                                                   <Insets left="20.0" />
                                                                </HBox.margin>
                                                                <font>
-                                                                  <Font size="20.0" />
+                                                                  <Font size="25.0" />
                                                                </font>
                                                             </Text>
-                                                            <ImageView fx:id="imgYourPowerUpCard1" fitHeight="258.0" fitWidth="167.0" onMouseClicked="#powerUp1Clicked" pickOnBounds="true" preserveRatio="true">
+                                                            <ImageView fx:id="imgYourPowerUpCard1" fitHeight="233.0" fitWidth="151.0" onMouseClicked="#powerUp1Clicked" pickOnBounds="true" preserveRatio="true">
                                                                <HBox.margin>
                                                                   <Insets left="17.0" right="17.0" />
                                                                </HBox.margin>
                                                             </ImageView>
-                                                            <ImageView fx:id="imgYourPowerUpCard2" fitHeight="258.0" fitWidth="167.0" onMouseClicked="#powerUp2Clicked" pickOnBounds="true" preserveRatio="true">
+                                                            <ImageView fx:id="imgYourPowerUpCard2" fitHeight="233.0" fitWidth="151.0" onMouseClicked="#powerUp2Clicked" pickOnBounds="true" preserveRatio="true">
                                                                <HBox.margin>
                                                                   <Insets left="17.0" right="17.0" />
                                                                </HBox.margin>
                                                             </ImageView>
-                                                            <ImageView fx:id="imgYourPowerUpCard3" fitHeight="258.0" fitWidth="167.0" onMouseClicked="#powerUp3Clicked" pickOnBounds="true" preserveRatio="true">
+                                                            <ImageView fx:id="imgYourPowerUpCard3" fitHeight="233.0" fitWidth="151.0" onMouseClicked="#powerUp3Clicked" pickOnBounds="true" preserveRatio="true">
                                                                <HBox.margin>
                                                                   <Insets left="17.0" right="17.0" />
                                                                </HBox.margin>
                                                             </ImageView>
-                                                            <ImageView fx:id="imgYourPowerUpCard4" fitHeight="258.0" fitWidth="167.0" onMouseClicked="#powerUp4Clicked" pickOnBounds="true" preserveRatio="true">
+                                                            <ImageView fx:id="imgYourPowerUpCard4" fitHeight="233.0" fitWidth="151.0" onMouseClicked="#powerUp4Clicked" pickOnBounds="true" preserveRatio="true">
                                                                <HBox.margin>
                                                                   <Insets left="17.0" right="17.0" />
                                                                </HBox.margin>
@@ -149,27 +236,27 @@
                                                 </AnchorPane>
                                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                                    <children>
-                                                      <HBox alignment="CENTER_LEFT" layoutX="374.0" layoutY="81.0" prefHeight="261.0" prefWidth="947.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                      <HBox alignment="CENTER_LEFT" layoutX="374.0" layoutY="81.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                          <children>
                                                             <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="YOUR &#10;WEAPONs: " textAlignment="CENTER">
                                                                <HBox.margin>
                                                                   <Insets left="20.0" />
                                                                </HBox.margin>
                                                                <font>
-                                                                  <Font size="20.0" />
+                                                                  <Font size="25.0" />
                                                                </font>
                                                             </Text>
-                                                            <ImageView fx:id="imgYourWeaponCard1" fitHeight="258.0" fitWidth="167.0" pickOnBounds="true" preserveRatio="true">
+                                                            <ImageView fx:id="imgYourWeaponCard1" fitHeight="233.0" fitWidth="151.0" pickOnBounds="true" preserveRatio="true">
                                                                <HBox.margin>
                                                                   <Insets left="32.0" right="17.0" />
                                                                </HBox.margin>
                                                             </ImageView>
-                                                            <ImageView fx:id="imgYourWeaponCard2" fitHeight="258.0" fitWidth="167.0" pickOnBounds="true" preserveRatio="true">
+                                                            <ImageView fx:id="imgYourWeaponCard2" fitHeight="233.0" fitWidth="151.0" pickOnBounds="true" preserveRatio="true">
                                                                <HBox.margin>
                                                                   <Insets left="17.0" right="17.0" />
                                                                </HBox.margin>
                                                             </ImageView>
-                                                            <ImageView fx:id="imgYourWeaponCard3" fitHeight="258.0" fitWidth="167.0" pickOnBounds="true" preserveRatio="true">
+                                                            <ImageView fx:id="imgYourWeaponCard3" fitHeight="233.0" fitWidth="151.0" pickOnBounds="true" preserveRatio="true">
                                                                <HBox.margin>
                                                                   <Insets left="17.0" right="17.0" />
                                                                </HBox.margin>

@@ -103,6 +103,24 @@ public class GameViewGUI implements Initializable, GameView {
     private ImageView imgYourPowerUpCard3;
     @FXML
     private ImageView imgYourPowerUpCard4;
+    @FXML
+    private ImageView weaponSPBlue1;
+    @FXML
+    private ImageView weaponSPBlue2;
+    @FXML
+    private ImageView weaponSPBlue3;
+    @FXML
+    private ImageView weaponSPRed1;
+    @FXML
+    private ImageView weaponSPRed2;
+    @FXML
+    private ImageView weaponSPRed3;
+    @FXML
+    private ImageView weaponSPYellow1;
+    @FXML
+    private ImageView weaponSPYellow2;
+    @FXML
+    private ImageView weaponSPYellow3;
 
     @FXML
     private Text redAmmoText;
@@ -113,8 +131,7 @@ public class GameViewGUI implements Initializable, GameView {
 
     private ArrayList<ImageView> powerUpSpaces = new ArrayList<>();
     private ArrayList<ImageView> weaponSpaces = new ArrayList<>();
-    private ArrayList<PowerUpCard> myPowerUpsCardOrdered = new ArrayList<>();
-    private ArrayList<PowerUpCard> myWeaponsCardOrdered = new ArrayList<>();
+    private HashMap<RoomColor, List<ImageView>> weaponOnSpawnPointMap = new HashMap<>();
 
     private HashMap<Integer, ActionType> buttonActionTypeMap = new HashMap<>();
 
@@ -138,19 +155,20 @@ public class GameViewGUI implements Initializable, GameView {
         weaponSpaces.add(imgYourWeaponCard1);
         weaponSpaces.add(imgYourWeaponCard2);
         weaponSpaces.add(imgYourWeaponCard3);
-        ArrayList<GridPane> x0 = new ArrayList<GridPane>();
+
+        ArrayList<GridPane> x0 = new ArrayList<>();
         x0.add(grid00);
         x0.add(grid01);
         x0.add(grid02);
-        ArrayList<GridPane> x1 = new ArrayList<GridPane>();
+        ArrayList<GridPane> x1 = new ArrayList<>();
         x1.add(grid10);
         x1.add(grid11);
         x1.add(grid12);
-        ArrayList<GridPane> x2 = new ArrayList<GridPane>();
+        ArrayList<GridPane> x2 = new ArrayList<>();
         x2.add(grid20);
         x2.add(grid21);
         x2.add(grid22);
-        ArrayList<GridPane> x3 = new ArrayList<GridPane>();
+        ArrayList<GridPane> x3 = new ArrayList<>();
         x3.add(grid30);
         x3.add(grid31);
         x3.add(grid32);
@@ -158,6 +176,32 @@ public class GameViewGUI implements Initializable, GameView {
         paneList.add(x1);
         paneList.add(x2);
         paneList.add(x3);
+
+        ArrayList<ImageView> redSPImages = new ArrayList<ImageView>() {
+            {
+                add(weaponSPRed1);
+                add(weaponSPRed2);
+                add(weaponSPRed3);
+            }
+        };
+        ArrayList<ImageView> blueSPImages = new ArrayList<ImageView>() {
+            {
+                add(weaponSPBlue1);
+                add(weaponSPBlue2);
+                add(weaponSPBlue3);
+            }
+        };
+        ArrayList<ImageView> yellowSPImages = new ArrayList<ImageView>() {
+            {
+                add(weaponSPYellow1);
+                add(weaponSPYellow2);
+                add(weaponSPYellow3);
+            }
+        };
+        weaponOnSpawnPointMap.put(RoomColor.RED, redSPImages);
+        weaponOnSpawnPointMap.put(RoomColor.BLUE, blueSPImages);
+        weaponOnSpawnPointMap.put(RoomColor.YELLOW, yellowSPImages);
+
         Platform.runLater(this::getValidActions);
     }
 
@@ -166,28 +210,56 @@ public class GameViewGUI implements Initializable, GameView {
         gameController.getValidActions();
     }
 
+    private void addWeaponOnMapSpawnPoint(WeaponCard card, RoomColor color) {
+        int i = 0;
+        Image img = new Image(ResourceController.getResource("weaponcards/" + card.image).toURI().toString());
+        while (weaponOnSpawnPointMap.get(color).get(i).getImage() != null) {
+            i++;
+        }
+        if (i>3) return;
+        weaponOnSpawnPointMap.get(color).get(i).setImage(img);
+    }
 
+    private void removeWeaponOnMapSpawnPoint(WeaponCard card, RoomColor color) {
+        int i = 0;
+        try {
+            while (! weaponOnSpawnPointMap.get(color).get(i).getImage().getUrl().contains(card.image)) {
+                i++;
+            }
+        } catch (NullPointerException e) {
+            return;
+        }
+
+        for(;i<3;i++) {
+            weaponOnSpawnPointMap.get(color).get(i).setImage(weaponOnSpawnPointMap.get(color).get(i+1).getImage());
+        }
+        weaponOnSpawnPointMap.get(color).get(2).setImage(null);
+    }
 
     private void addPowerUpToHand(PowerUpCard card) {
+        Platform.runLater( () -> {
             int i = 0;
             Image img = new Image(ResourceController.getResource("powerupcards/" + card.image).toURI().toString());
             while (powerUpSpaces.get(i).getImage() != null) {
                 i++;
             }
-            if (i>3) return;
+            if (i > 3) return;
             powerUpSpaces.get(i).setImage(img);
+        });
     }
 
-    public void removePowerUpToHand(PowerUpCard card) {
+    private void removePowerUpToHand(PowerUpCard card) {
+        Platform.runLater( () -> {
             int i = 0;
-            while (! powerUpSpaces.get(i).getImage().getUrl().contains(card.image)) {
+            while (!powerUpSpaces.get(i).getImage().getUrl().contains(card.image)) {
                 i++;
             }
 
-            for(;i<3;i++) {
-                powerUpSpaces.get(i).setImage(powerUpSpaces.get(i+1).getImage());
+            for (; i < 3; i++) {
+                powerUpSpaces.get(i).setImage(powerUpSpaces.get(i + 1).getImage());
             }
             powerUpSpaces.get(3).setImage(null);
+        });
     }
 
     public void addWeaponToHand(WeaponCard card) {
@@ -240,7 +312,6 @@ public class GameViewGUI implements Initializable, GameView {
 
     public void endTurn() {
         gameController.endTurn();
-        setEnabledBtnEndTurn(false);
     }
 
     @Override
@@ -337,8 +408,6 @@ public class GameViewGUI implements Initializable, GameView {
         });
     }
 
-    //TODO MAP 3 IN INCORRECT FIX ASAPPPPP!!!!!!
-
     private Color getColor(int i) {
         switch (i) {
             case 1:
@@ -416,14 +485,17 @@ public class GameViewGUI implements Initializable, GameView {
             }
         }
 
-        //UPDATE AMMO'S
+        //UPDATE AMMO'S AND WEAPONS ON MAP
         for (int x = 0; x<4; x++) {
             for (int y=0; y<3; y++) {
                 Square square = map.getSquareByCoordinate(x, y);
                 if (square == null) continue;
                 if (square.isSpawnPoint()) {
                     SpawnPoint spawnPoint = (SpawnPoint) square;
-                    //TODO: Spawn point handling
+                    for (WeaponCard card : spawnPoint.showCards()) {
+                        removeWeaponOnMapSpawnPoint(card, spawnPoint.getColor());
+                        addWeaponOnMapSpawnPoint(card, spawnPoint.getColor());
+                    }
                 } else {
                     AmmoPoint ammoPoint = (AmmoPoint) square;
                     AmmoCard ammoCard = ammoPoint.showCard();
@@ -584,7 +656,6 @@ public class GameViewGUI implements Initializable, GameView {
         });
     }
 
-    @Override
     public void setEnabledBtnEndTurn(boolean enable) {
         btnEndTurn.setDisable(!enable);
     }

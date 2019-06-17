@@ -158,7 +158,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
     public void handle(NextTurnUpdate response) {
         Client client = Client.getInstance();
         client.setShowActions(true);
-        client.setMyTurn(client.getPlayer().getName().equals(response.name));
+        client.setMyTurn(response.name.equals(client.getPlayer().getName()));
         try {
             ((GameView)client.getCurrentView()).startTurn(response.name);
         } catch (Exception e) {
