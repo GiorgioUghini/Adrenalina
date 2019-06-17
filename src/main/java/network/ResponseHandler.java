@@ -36,6 +36,12 @@ public class ResponseHandler implements ResponseHandlerInterface {
         if (response.newActions) {
             Client.getInstance().setCurrentActionType(null);
         }
+        if(Client.getInstance().isMyTurn() && response.actions.isEmpty()){
+            ((GameView) Client.getInstance().getCurrentView()).setEnabledBtnEndTurn(true);
+        }
+        else{
+            ((GameView) Client.getInstance().getCurrentView()).setEnabledBtnEndTurn(false);
+        }
         Client.getInstance().setActions(response.actions);
         if (response.actions.keySet().size() == 1 && Client.getInstance().getCurrentActionType() == null) { // auto-action
             ActionType actionType = response.actions.keySet().stream().findFirst().orElse(null);
@@ -150,9 +156,11 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(NextTurnUpdate response) {
-        Client.getInstance().setShowActions(true);
+        Client client = Client.getInstance();
+        client.setShowActions(true);
+        client.setMyTurn(client.getPlayer().getName().equals(response.name));
         try {
-            ((GameView) Client.getInstance().getCurrentView()).startTurn(response.name);
+            ((GameView)client.getCurrentView()).startTurn(response.name);
         } catch (Exception e) {
             Client.getInstance();
         }

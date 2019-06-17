@@ -240,6 +240,7 @@ public class GameViewGUI implements Initializable, GameView {
 
     public void endTurn() {
         gameController.endTurn();
+        setEnabledBtnEndTurn(false);
     }
 
     @Override
@@ -583,6 +584,7 @@ public class GameViewGUI implements Initializable, GameView {
         });
     }
 
+    @Override
     public void setEnabledBtnEndTurn(boolean enable) {
         btnEndTurn.setDisable(!enable);
     }

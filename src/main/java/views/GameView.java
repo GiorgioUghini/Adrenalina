@@ -23,7 +23,7 @@ public interface GameView extends View {
     void updatePlayerView(Player newPlayer);
 
 
-
+    void setEnabledBtnEndTurn(boolean enable);
     void setTextAndEnableBtnActionGroup(ActionType actionType, int btnNum);
 
 }

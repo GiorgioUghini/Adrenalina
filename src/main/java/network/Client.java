@@ -25,6 +25,7 @@ public class Client {
     private GameView gameView;
     private View currentView;
     private Player me;
+    private boolean isMyTurn;
     private Map<ActionType, List<TurnEvent>> actions;
     private TurnType currentTurnType;
     private ActionType currentActionType;
@@ -159,5 +160,13 @@ public class Client {
 
     public void setPlayers(List<Player> players) {
         this.players = players;
+    }
+
+    public boolean isMyTurn() {
+        return isMyTurn;
+    }
+
+    public void setMyTurn(boolean myTurn) {
+        isMyTurn = myTurn;
     }
 }
