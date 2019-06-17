@@ -260,7 +260,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public Response reload(String token, List<WeaponCard> weapons) throws RemoteException {
+    public Response reload(String token, Map<WeaponCard, PowerUpCard> weaponsMap) throws RemoteException {
         return new ReloadResponse();
     }
 

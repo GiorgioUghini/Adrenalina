@@ -1,5 +1,6 @@
 package network.requests;
 
+import models.card.PowerUpCard;
 import models.card.WeaponCard;
 import network.Request;
 import network.RequestHandlerInterface;
@@ -7,14 +8,15 @@ import network.Response;
 
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.Map;
 
 public class ReloadRequest implements Request {
 
     private String token;
-    public List<WeaponCard> weapons;
+    public Map<WeaponCard, PowerUpCard> weaponsMap;
 
-    public ReloadRequest(List<WeaponCard> weapons){
-        this.weapons = weapons;
+    public ReloadRequest(Map<WeaponCard, PowerUpCard> weaponsMap){
+        this.weaponsMap = weaponsMap;
     }
 
     @Override

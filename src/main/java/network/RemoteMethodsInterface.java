@@ -14,6 +14,7 @@ import network.responses.WaitingPlayerResponse;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.Map;
 
 public interface RemoteMethodsInterface extends Remote {
     List<Response> longPolling(String token) throws RemoteException;
@@ -33,6 +34,6 @@ public interface RemoteMethodsInterface extends Remote {
     Response action(String token, ActionType actionType) throws RemoteException;
     Response grab(String token, WeaponCard drawn, WeaponCard toRelease, PowerUpCard powerUpCard) throws  RemoteException;
     Response run(String token, TurnEvent turnEvent, Square square) throws  RemoteException;
-    Response reload(String token, List<WeaponCard> weapons) throws  RemoteException;
+    Response reload(String token, Map<WeaponCard, PowerUpCard> weaponsMap) throws  RemoteException;
     Response playPowerUp(String token, String powerUpName, Ammo ammo, PowerUpCard powerUpAmmo) throws  RemoteException;
 }

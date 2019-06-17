@@ -11,6 +11,7 @@ import models.turn.ActionType;
 import models.turn.TurnEvent;
 
 import java.util.List;
+import java.util.Map;
 
 public interface Connection {
     void init();
@@ -30,7 +31,7 @@ public interface Connection {
     void endTurn();
     void grab(WeaponCard drawn, WeaponCard toRelease, PowerUpCard powerUpCard);
     void run(TurnEvent turnEvent, Square square);
-    void reload(List<WeaponCard> weapons);
+    void reload(Map<WeaponCard, PowerUpCard> weaponsMap);
     void action(ActionType actionType);
     void playPowerUp(String powerUpName, Ammo ammo, PowerUpCard powerUpAmmo);
     void receiveResponse(Response response);

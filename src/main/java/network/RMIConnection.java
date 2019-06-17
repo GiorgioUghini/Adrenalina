@@ -15,6 +15,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -180,10 +181,10 @@ public class RMIConnection implements Connection {
     }
 
     @Override
-    public void reload(List<WeaponCard> weapons) {
+    public void reload(Map<WeaponCard, PowerUpCard> weaponsMap) {
         try {
             String token = Client.getInstance().getConnection().getToken();
-            Response response = remoteMethods.reload(token, weapons);
+            Response response = remoteMethods.reload(token, weaponsMap);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
             e.printStackTrace();

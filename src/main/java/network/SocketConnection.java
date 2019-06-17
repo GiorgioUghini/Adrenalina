@@ -21,6 +21,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
+import java.util.Map;
 
 
 public class SocketConnection implements Connection {
@@ -172,9 +173,9 @@ public class SocketConnection implements Connection {
     }
 
     @Override
-    public void reload(List<WeaponCard> weapons) {
+    public void reload(Map<WeaponCard, PowerUpCard> weaponsMap) {
         try {
-            ReloadRequest request = new ReloadRequest(weapons);
+            ReloadRequest request = new ReloadRequest(weaponsMap);
             write(request);
         } catch (IOException e) {
             e.printStackTrace();
