@@ -63,7 +63,7 @@ public class EffectCardTest {
         }else{
             gameMap.movePlayer(player2, spawnPoint.getNextSquare(CardinalDirection.LEFT));
         }
-        WeaponCard lanciarazzi = getCard("Lanciarazzi");
+        WeaponCard lanciarazzi = getWeaponCard("Lanciarazzi");
         lanciarazzi.activate(player1);
         Ammo ammo = new Ammo(3, 3, 3);
         List<Effect> effects = lanciarazzi.getEffects(ammo, new ArrayList<>()).getLegitEffects();
@@ -108,7 +108,7 @@ public class EffectCardTest {
 
     @Test
     public void testAreaVisibile(){
-        WeaponCard distruttore = getCard("Distruttore");
+        WeaponCard distruttore = getWeaponCard("Distruttore");
         List<WeaponCard> weaponCards = new ArrayList<>();
         weaponCards.add(distruttore);
         Player me = new Player("a", "password");
@@ -172,7 +172,7 @@ public class EffectCardTest {
         Player p1 = new Player("p1", "password");
         Player p2 = new Player("p2", "password");
         Player p3 = new Player("p3", "password");
-        WeaponCard cannoneVortex = getCard("Cannone vortex");
+        WeaponCard cannoneVortex = getWeaponCard("Cannone vortex");
         Set<SpawnPoint> spawnPoints = gameMap.getSpawnPoints();
         SpawnPoint yellow = null;
         SpawnPoint red = null;
@@ -219,7 +219,7 @@ public class EffectCardTest {
     public void testVulcanizzatore(){
         GameMap gameMap = MapGenerator.generate(1);
         List<Player> players = createTestPlayers(4);
-        WeaponCard vulcanizzatore = getCard("Vulcanizzatore");
+        WeaponCard vulcanizzatore = getWeaponCard("Vulcanizzatore");
         List<WeaponCard> myCards = new ArrayList<>();
         myCards.add(vulcanizzatore);
         Player me = players.get(0);
@@ -258,7 +258,7 @@ public class EffectCardTest {
 
     @Test
     public void testNoSelection(){
-        WeaponCard razzoTermico = getCard("Razzo termico");
+        WeaponCard razzoTermico = getWeaponCard("Razzo termico");
         List<WeaponCard> myWeapons = new ArrayList<>();
         myWeapons.add(razzoTermico);
         List<Player> players = createTestPlayers(3);
@@ -284,6 +284,62 @@ public class EffectCardTest {
         }
     }
 
+    @Test
+    public void testPayWithPowerups(){
+        //init vars
+        List<Player> players = createTestPlayers(3);
+        GameMap gameMap = MapGenerator.generate(1);
+        SpawnPoint yellow = getSpawnPoint(gameMap, RoomColor.YELLOW);
+        SpawnPoint blue = getSpawnPoint(gameMap, RoomColor.BLUE);
+        WeaponCard lanciafiamme = getWeaponCard("Lanciafiamme");
+        List<WeaponCard> weaponCardList = new ArrayList<>();
+        weaponCardList.add(lanciafiamme);
+        PowerUpCard powerUpCard = getPowerupCard("Teletrasporto", RoomColor.YELLOW);
+        List<PowerUpCard> powerUpCardList = new ArrayList<>();
+        powerUpCardList.add(powerUpCard);
+        Player me = players.get(0);
+        me.setWeaponList(weaponCardList);
+        me.setPowerUpList(powerUpCardList);
+        me.setAmmo(new Ammo(0, 0, 1));
+
+        //position players
+        gameMap.spawnPlayer(me, yellow);
+        gameMap.spawnPlayer(players.get(1), blue);
+        gameMap.spawnPlayer(players.get(2), blue);
+        gameMap.movePlayer(me, yellow.getNextSquare(CardinalDirection.LEFT));
+        gameMap.movePlayer(players.get(1), blue.getNextSquare(CardinalDirection.BOTTOM));
+
+        //play the card
+        me.playWeapon(lanciafiamme);
+
+        //chose the effect
+        LegitEffects effects = me.getWeaponEffects();
+        assertEquals(2, effects.getLegitEffects().size());
+        for(Effect e : effects.getLegitEffects()){
+            if(e.name.equals("Modalità barbecue")){
+                me.playWeaponEffect(e, powerUpCard);
+            }
+        }
+
+        assertEquals(new Ammo(), me.getAmmo());
+        assertTrue(me.getPowerUpList().isEmpty());
+
+        //play the effect
+        me.playNextWeaponAction(); //select
+        Selectable selectable = lanciafiamme.getSelectable();
+        assertEquals(3, selectable.get().size());
+        Square squareToSelect = gameMap.getPlayerPosition(me).getNextSquare(CardinalDirection.TOP);
+        lanciafiamme.select(squareToSelect);
+        me.playNextWeaponAction(); //select
+        selectable = lanciafiamme.getSelectable();
+        assertEquals(1, selectable.get().size());
+        lanciafiamme.select((Taggable) selectable.get().toArray()[0]);
+        me.playNextWeaponAction(); //damage square 1
+        me.playNextWeaponAction(); //damage square 2
+        assertEquals(2, players.get(1).getTotalDamage());
+        assertEquals(1, players.get(2).getTotalDamage());
+    }
+
     private SpawnPoint getSpawnPoint(GameMap gameMap, RoomColor color){
         for(SpawnPoint s : gameMap.getSpawnPoints()){
             if(s.getColor().equals(color)){
@@ -302,7 +358,7 @@ public class EffectCardTest {
         return out;
     }
 
-    private WeaponCard getCard(String cardName){
+    private WeaponCard getWeaponCard(String cardName){
         weaponDeck = new CardController().getWeaponDeck();
         int deckSize = weaponDeck.size();
         WeaponCard weaponCard;
@@ -312,6 +368,18 @@ public class EffectCardTest {
                 return weaponCard;
             }
 
+        }
+        return null;
+    }
+
+    private PowerUpCard getPowerupCard(String cardName, RoomColor color){
+        PowerUpDeck powerUpDeck = new CardController().getPowerUpDeck();
+        int deckSize = powerUpDeck.size();
+        for(int i=0; i<deckSize; i++){
+            PowerUpCard powerUpCard = (PowerUpCard) powerUpDeck.draw();
+            if(powerUpCard.name.equals(cardName) && powerUpCard.color == color){
+                return powerUpCard;
+            }
         }
         return null;
     }

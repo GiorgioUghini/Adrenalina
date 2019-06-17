@@ -103,7 +103,9 @@ public class Player implements Subscriber, Serializable, Taggable {
     }
 
     public void throwPowerUp(PowerUpCard powerUpCard){
-        match.throwPowerUp(powerUpCard);
+        if(match!=null){
+            match.throwPowerUp(powerUpCard);
+        }
         this.powerUpList.remove(powerUpCard);
     }
 
