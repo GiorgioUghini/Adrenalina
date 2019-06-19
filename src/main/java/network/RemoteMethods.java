@@ -202,6 +202,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         Player player = Server.getInstance().getLobby().getPlayer(token);
         Match match = player.getMatch();
         match.nextTurn();
+        match.addUpdate(new MapUpdate(match.getMap()));
         Server.getInstance().getConnection().getConnectionWrapper(token).addUpdate(new PlayerUpdate(player));
         return new EndTurnResponse();
     }
