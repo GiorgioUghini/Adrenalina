@@ -297,7 +297,7 @@ public class GameViewGUI implements Initializable, GameView {
         GameMap map = Client.getInstance().getMap();
         Player me = Client.getInstance().getPlayer();
         Coordinate coord = map.getPlayerCoordinates(me);
-        deleteAmmoImageOnPane(paneList.get(coord.getX()).get(coord.getY()));
+        deleteAllAmmoOnPane(paneList.get(coord.getX()).get(coord.getY()));
     }
 
     public void shoot() {
@@ -442,19 +442,7 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
-    private void deleteAmmoImageIfMatch(GridPane pane, String imageName) { //To be used when updating map
-        Image imgActual = new Image(imageName);
-        for (int num = 0; pane.getChildren().size() > num; num++) {
-            Node n = pane.getChildren().get(num);
-            if (n.getClass().equals(ImageView.class)) {
-                if (((ImageView) n).getImage().getUrl().equals(imgActual.getUrl())) {
-                    removeFromPane(pane, n);
-                }
-            }
-        }
-    }
-
-    private void deleteAmmoImageOnPane(GridPane pane) { //To be used when updating player
+    private void deleteAllAmmoOnPane(GridPane pane) { //To be used when updating map
         for (int num = 0; pane.getChildren().size() > num; num++) {
             Node n = pane.getChildren().get(num);
             if (n.getClass().equals(ImageView.class)) {
@@ -462,7 +450,6 @@ public class GameViewGUI implements Initializable, GameView {
             }
         }
     }
-
 
 
     @Override
@@ -484,7 +471,23 @@ public class GameViewGUI implements Initializable, GameView {
                 //Nothing to do, just don't draw it.
             }
         }
-
+        //REMOVE OLD WEAPONS
+        for (SpawnPoint sp : Client.getInstance().getMap().getSpawnPoints()) {
+            for (WeaponCard cardOld : sp.showCards()) {
+                removeWeaponOnMapSpawnPoint(cardOld, sp.getColor());
+            }
+        }
+        //REMOVE OLD AMMO
+        for (int x = 0; x<4; x++) {
+            for (int y = 0; y < 3; y++) {
+                Square square = map.getSquareByCoordinate(x, y);
+                if (square == null) continue;
+                if (square.isSpawnPoint()) continue;
+                AmmoPoint ap = (AmmoPoint) square;
+                GridPane panetoremove = paneList.get(x).get(y);
+                deleteAllAmmoOnPane(panetoremove);
+            }
+        }
         //UPDATE AMMO'S AND WEAPONS ON MAP
         for (int x = 0; x<4; x++) {
             for (int y=0; y<3; y++) {
@@ -492,8 +495,8 @@ public class GameViewGUI implements Initializable, GameView {
                 if (square == null) continue;
                 if (square.isSpawnPoint()) {
                     SpawnPoint spawnPoint = (SpawnPoint) square;
+                    //ADD NEW WEAPONS
                     for (WeaponCard card : spawnPoint.showCards()) {
-                        removeWeaponOnMapSpawnPoint(card, spawnPoint.getColor());
                         addWeaponOnMapSpawnPoint(card, spawnPoint.getColor());
                     }
                 } else {
@@ -506,7 +509,6 @@ public class GameViewGUI implements Initializable, GameView {
                     imageView.setFitWidth(45);
                     imageView.setFitHeight(45);
                     GridPane panetoadd = paneList.get(x).get(y);
-                    deleteAmmoImageIfMatch(panetoadd, imageName);
                     addOnPane(panetoadd, imageView);
                 }
             }
