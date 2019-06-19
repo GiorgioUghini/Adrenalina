@@ -40,6 +40,7 @@ public class PowerupTest {
             }
         }
         match.chooseMapAndStartMatch();
+        match.nextTurn();
         while (!match.getCurrentPlayer().equals(me)){
             match.nextTurn();
         }
@@ -72,6 +73,7 @@ public class PowerupTest {
         for(Player p : players){
             spawnPlayer(p, gameMap, RoomColor.YELLOW);
         }
+        match.nextTurn();
         while(!match.getCurrentPlayer().equals(offender)){
             match.nextTurn();
         }

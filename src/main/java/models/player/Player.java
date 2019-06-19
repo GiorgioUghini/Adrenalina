@@ -6,10 +6,7 @@ import errors.TooManyCardsException;
 import errors.WeaponCardException;
 import models.Match;
 import models.card.*;
-import models.map.AmmoPoint;
-import models.map.GameMap;
-import models.map.SpawnPoint;
-import models.map.Square;
+import models.map.*;
 import models.turn.ActionGroup;
 import network.Server;
 
@@ -114,8 +111,9 @@ public class Player implements Subscriber, Serializable, Taggable {
      * @param toRelease the card to release to grab the new one. Can be null unless you already have 3 weapons
      * @throws TooManyCardsException if you have 3 cards in your hand and toRelease is null
      * @throws CheatException if you do not have the card toRelease */
-    public void drawWeaponCard(WeaponCard drawn, WeaponCard toRelease) {
-        if(!drawn.canDraw(ammo, powerUpList)) throw new NotEnoughAmmoException();
+    public void drawWeaponCard(WeaponCard drawn, PowerUpCard powerUpToPay, WeaponCard toRelease) {
+        if(powerUpToPay!=null && !powerUpList.contains(powerUpToPay)) throw new WeaponCardException("You do not have this powerup: " + powerUpToPay.name);
+        if(!drawn.canDraw(ammo, powerUpToPay)) throw new NotEnoughAmmoException();
         SpawnPoint myPosition = (SpawnPoint) gameMap.getPlayerPosition(this);
         if(weaponList.size()==3){
             if(toRelease==null) throw new TooManyCardsException("You already have 3 weapons, select one to leave");
@@ -126,7 +124,12 @@ public class Player implements Subscriber, Serializable, Taggable {
         }else{
             myPosition.drawCard(drawn);
         }
-        ammo.remove(drawn.getDrawPrice());
+        Ammo price = drawn.getDrawPrice().getCopy();
+        if(powerUpToPay!=null){
+            price.remove(new Ammo(powerUpToPay));
+            match.throwPowerUp(powerUpToPay);
+        }
+        ammo.remove(price);
         weaponList.add(drawn);
     }
 
@@ -164,6 +167,19 @@ public class Player implements Subscriber, Serializable, Taggable {
 
     public List<WeaponCard> getWeaponList() {
         return weaponList;
+    }
+
+    public WeaponCard getWeaponByName(String name){
+        return weaponList.stream().filter(w -> w.name.equals(name)).findFirst().orElse(null);
+    }
+
+    public PowerUpCard getPowerUpByName(String name, RoomColor color){
+        for(PowerUpCard card : powerUpList){
+            if(card.name.equals(name) && card.color.equals(color)){
+                return card;
+            }
+        }
+        throw new WeaponCardException("User does not have this powerUp: " + name + " color: " + color);
     }
 
     public void setPowerUpList(List<PowerUpCard> powerUpList) {
@@ -330,12 +346,16 @@ public class Player implements Subscriber, Serializable, Taggable {
         return weaponCard.canReload(ammo, powerUpList);
     }
 
+    public boolean canReloadWeapon(WeaponCard weaponCard, PowerUpCard whichPowerUpCard){
+        return weaponCard.canReload(ammo, whichPowerUpCard);
+    }
+
     /**
      * @param weaponCard the card you want to reload
      * @throws WeaponCardException if you do not have that weapon
      * @throws WeaponCardException if the weapon is already loaded
      * @throws WeaponCardException if you do not have enough ammo to reload */
-    public void loadWeapon(WeaponCard weaponCard, PowerUpCard powerUpCard){
+    public void reloadWeapon(WeaponCard weaponCard, PowerUpCard powerUpCard){
         checkHasWeapon(weaponCard);
         if(weaponCard.isLoaded()) throw new WeaponCardException("The weapon is already loaded");
         weaponCard.load(ammo, powerUpCard);

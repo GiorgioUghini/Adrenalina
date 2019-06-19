@@ -40,7 +40,8 @@ public class Lobby {
         Player p = new Player(username, password);
         waitingPlayers.add(p);
         tokenPlayerMap.add(token, p);
-        if (waitingPlayers.size() == 2) {
+        int maxClients = Server.getInstance().getMaxClients();
+        if (waitingPlayers.size() == maxClients) {
             if (activeCountdown != null) {
                 activeCountdown.cancel(true);
                 activeCountdown = null;

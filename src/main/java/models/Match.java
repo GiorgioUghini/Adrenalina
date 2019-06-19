@@ -38,6 +38,9 @@ public class Match {
         thrownPowerUps = new ArrayList<>();
         weaponDeck = cardController.getWeaponDeck();
         ammoDeck = cardController.getAmmoDeck();
+        powerUpDeck.shuffle();
+        weaponDeck.shuffle();
+        ammoDeck.shuffle();
         for(Player p : players){
             p.setMatch(this);
         }

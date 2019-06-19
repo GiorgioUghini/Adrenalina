@@ -312,6 +312,7 @@ public class GameViewGUI implements Initializable, GameView {
 
     public void endTurn() {
         gameController.endTurn();
+        setEnabledBtnEndTurn(false);
     }
 
     @Override

@@ -17,8 +17,11 @@ public class Server {
     private static Server instance = null;
     private ServerConnection connection;
     private Lobby lobby;
+    private int maxClients;
 
-    private Server() {}
+    private Server() {
+        maxClients = 5;
+    }
 
     /**
      * Method that creates or directly return the singleton instance
@@ -49,5 +52,13 @@ public class Server {
 
     public Lobby getLobby(){
         return lobby;
+    }
+
+    public void setMaxClients(int maxClients){
+        this.maxClients = maxClients;
+    }
+
+    public int getMaxClients(){
+        return maxClients;
     }
 }

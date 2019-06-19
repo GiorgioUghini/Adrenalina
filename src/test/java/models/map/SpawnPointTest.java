@@ -1,10 +1,12 @@
 package models.map;
+import controllers.CardController;
 import errors.CardAlreadyExistsException;
 import models.card.AmmoCard;
 import models.card.WeaponCard;
+import models.card.WeaponDeck;
 import org.junit.Test;
 
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -22,10 +24,12 @@ public class SpawnPointTest {
             assert false;
         }catch(ClassCastException e){ assert true; }
 
-        WeaponCard card1 = new WeaponCard();
-        WeaponCard card2 = new WeaponCard();
-        WeaponCard card3 = new WeaponCard();
-        WeaponCard card4 = new WeaponCard();
+        List<WeaponCard> cards = getWeaponCards(4);
+
+        WeaponCard card1 = cards.get(0);
+        WeaponCard card2 = cards.get(1);
+        WeaponCard card3 = cards.get(2);
+        WeaponCard card4 = cards.get(3);
         spawnPoint.addCard(card1);
         assertEquals(card1, spawnPoint.showCards().toArray()[0]);
         spawnPoint.addCard(card2);
@@ -39,8 +43,9 @@ public class SpawnPointTest {
     @Test
     public void testDrawCard(){
         SpawnPoint spawnPoint = new SpawnPoint(RoomColor.YELLOW, 1, UUID.randomUUID());
-        WeaponCard card1 = new WeaponCard();
-        WeaponCard card2 = new WeaponCard();
+        List<WeaponCard> cards = getWeaponCards(2);
+        WeaponCard card1 = cards.get(0);
+        WeaponCard card2 = cards.get(1);
         spawnPoint.addCard(card1);
         spawnPoint.addCard(card2);
         assertEquals(2, spawnPoint.showCards().size());
@@ -55,5 +60,14 @@ public class SpawnPointTest {
             spawnPoint.drawCard(card1);
             assert false;
         }catch(NullPointerException e){ assert true; }
+    }
+
+    private List<WeaponCard> getWeaponCards(int howMany){
+        WeaponDeck deck = new CardController().getWeaponDeck();
+        List<WeaponCard> out = new ArrayList<>();
+        for(int i=0; i<howMany; i++){
+            out.add((WeaponCard) deck.draw());
+        }
+        return out;
     }
 }
