@@ -66,7 +66,7 @@
                                                                <children>
                                                                   <HBox alignment="CENTER_LEFT" maxHeight="184.0" prefHeight="184.0" prefWidth="947.0">
                                                                      <children>
-                                                                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="BLUE SPAWN&#10;POINT: " textAlignment="CENTER">
+                                                                        <Text fill="#2202a1" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="BLUE SPAWN&#10;POINT: " textAlignment="CENTER">
                                                                            <HBox.margin>
                                                                               <Insets left="20.0" />
                                                                            </HBox.margin>
@@ -76,7 +76,7 @@
                                                                         </Text>
                                                                         <ImageView fx:id="weaponSPBlue1" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp1Clicked" pickOnBounds="true" preserveRatio="true">
                                                                            <HBox.margin>
-                                                                              <Insets left="17.0" right="17.0" />
+                                                                              <Insets left="25.0" right="17.0" />
                                                                            </HBox.margin>
                                                                         </ImageView>
                                                                         <ImageView fx:id="weaponSPBlue2" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp2Clicked" pickOnBounds="true" preserveRatio="true">
@@ -93,7 +93,7 @@
                                                                   </HBox>
                                                                   <HBox alignment="CENTER_LEFT" maxHeight="184.0" prefHeight="184.0" prefWidth="947.0">
                                                                      <children>
-                                                                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="RED SPAWN&#10;POINT: " textAlignment="CENTER">
+                                                                        <Text fill="#c60303" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="RED SPAWN&#10;POINT: " textAlignment="CENTER">
                                                                            <HBox.margin>
                                                                               <Insets left="20.0" />
                                                                            </HBox.margin>
@@ -103,7 +103,7 @@
                                                                         </Text>
                                                                         <ImageView fx:id="weaponSPRed1" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp1Clicked" pickOnBounds="true" preserveRatio="true">
                                                                            <HBox.margin>
-                                                                              <Insets left="17.0" right="17.0" />
+                                                                              <Insets left="32.0" right="17.0" />
                                                                            </HBox.margin>
                                                                         </ImageView>
                                                                         <ImageView fx:id="weaponSPRed2" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp2Clicked" pickOnBounds="true" preserveRatio="true">
@@ -120,7 +120,7 @@
                                                                   </HBox>
                                                                   <HBox alignment="CENTER_LEFT" maxHeight="184.0" prefHeight="184.0" prefWidth="947.0">
                                                                      <children>
-                                                                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="YELLOW&#10;SPAWN&#10;POINT: " textAlignment="CENTER">
+                                                                        <Text fill="#b2a903" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="YELLOW&#10;SPAWN&#10;POINT: " textAlignment="CENTER">
                                                                            <HBox.margin>
                                                                               <Insets left="20.0" />
                                                                            </HBox.margin>
@@ -130,7 +130,7 @@
                                                                         </Text>
                                                                         <ImageView fx:id="weaponSPYellow1" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp1Clicked" pickOnBounds="true" preserveRatio="true">
                                                                            <HBox.margin>
-                                                                              <Insets left="17.0" right="17.0" />
+                                                                              <Insets left="70.0" right="17.0" />
                                                                            </HBox.margin>
                                                                         </ImageView>
                                                                         <ImageView fx:id="weaponSPYellow2" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp2Clicked" pickOnBounds="true" preserveRatio="true">
