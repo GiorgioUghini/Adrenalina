@@ -294,7 +294,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         PowerUpCard powerUpCard = player.getPowerUpList().stream().filter(c -> c.name.equals(powerUpName)).findFirst().orElse(null);
         player.playPowerUp(powerUpCard, ammo, powerUpAmmo);
         Action action;
-        while ((action = player.playNextWeaponAction()) != null){
+        while ((action = player.playNextPowerUpAction()) != null){
             if(action.type == ActionType.SELECT && !action.select.auto){
                 Selectable selectable = powerUpCard.getSelectable();
                 return new SelectResponse(selectable);
