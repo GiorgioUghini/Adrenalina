@@ -19,6 +19,7 @@ public class Client {
 
     private static Client instance = null;
 
+    private boolean debug;
     private Connection connection;
     private ViewType viewType;
     private MenuView menuView;
@@ -168,5 +169,13 @@ public class Client {
 
     public void setMyTurn(boolean myTurn) {
         isMyTurn = myTurn;
+    }
+
+    public boolean isDebug() {
+        return debug;
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
     }
 }
