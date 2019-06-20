@@ -12,6 +12,7 @@ import network.Server;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Player implements Subscriber, Serializable, Taggable {
 
@@ -187,7 +188,7 @@ public class Player implements Subscriber, Serializable, Taggable {
     }
 
     public List<PowerUpCard> getPowerUpList() {
-        return powerUpList;
+        return powerUpList.stream().sorted(Comparator.comparing(c -> c.name)).collect(Collectors.toList());
     }
 
     public int getPoints() { return points; }

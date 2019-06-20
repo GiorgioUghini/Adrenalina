@@ -8,7 +8,9 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -25,9 +27,14 @@ import models.player.Player;
 import models.turn.ActionType;
 import models.turn.TurnEvent;
 import network.Client;
+import utils.Console;
 
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
 
 public class GameViewGUI implements Initializable, GameView {
 
@@ -135,7 +142,11 @@ public class GameViewGUI implements Initializable, GameView {
 
     private HashMap<Integer, ActionType> buttonActionTypeMap = new HashMap<>();
 
+    private WeaponCard toDiscard = null;
+
     private boolean canClickOnPowerUps = false;
+    private boolean canDiscardHisOwnWeapons = false;
+    private boolean canChooseSpawnPointWeapon = false;
 
     private GameController gameController;
 
@@ -302,11 +313,21 @@ public class GameViewGUI implements Initializable, GameView {
     }
     public void grabAmmo() {
         setBtnGrabAmmoVisibility(false);
-        gameController.grab(null, null, null);
         GameMap map = Client.getInstance().getMap();
         Player me = Client.getInstance().getPlayer();
-        Coordinate coord = map.getPlayerCoordinates(me);
-        deleteAllAmmoOnPane(paneList.get(coord.getX()).get(coord.getY()));
+        if (map.getPlayerPosition(me).isSpawnPoint()) {
+            //Spawn Point
+            if (me.getWeaponList().size() > 2) {
+                showMessage("YOU'VE 3 WEAPONS! Please select a weapon to discard first.");
+                canDiscardHisOwnWeapons = true;
+            } else {
+                showMessage("Please select which weapon you want to draw.");
+                canChooseSpawnPointWeapon = true;
+            }
+        } else {
+            //Ammo point
+            gameController.grab(null, null, null);
+        }
     }
 
     public void shoot() {
@@ -558,28 +579,24 @@ public class GameViewGUI implements Initializable, GameView {
         if (canClickOnPowerUps && (!Client.getInstance().getPlayer().getPowerUpList().isEmpty())) {
             canClickOnPowerUps = false;
             gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(0));
-            //removePowerUpToHand(Client.getInstance().getPlayer().getPowerUpList().get(0));
         }
     }
     public void powerUp2Clicked() {
         if (canClickOnPowerUps && (Client.getInstance().getPlayer().getPowerUpList().size() > 1)) {
             canClickOnPowerUps = false;
             gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(1));
-            //removePowerUpToHand(Client.getInstance().getPlayer().getPowerUpList().get(1));
         }
     }
     public void powerUp3Clicked() {
         if (canClickOnPowerUps && (Client.getInstance().getPlayer().getPowerUpList().size() > 2)) {
             canClickOnPowerUps = false;
             gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(2));
-            //removePowerUpToHand(Client.getInstance().getPlayer().getPowerUpList().get(2));
         }
     }
     public void powerUp4Clicked() {
         if (canClickOnPowerUps && (Client.getInstance().getPlayer().getPowerUpList().size() > 3)) {
             canClickOnPowerUps = false;
             gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(3));
-            //removePowerUpToHand(Client.getInstance().getPlayer().getPowerUpList().get(3));
         }
     }
 
@@ -620,6 +637,110 @@ public class GameViewGUI implements Initializable, GameView {
         run(Client.getInstance().getMap().getSquareByCoordinate(3, 2));
     }
 
+    public void weaponClicked(RoomColor color, int position) {
+        SpawnPoint spawnPoint = (SpawnPoint) Client.getInstance().getMap().getAllSquaresInRoom(color).stream().filter(Square::isSpawnPoint).findFirst().orElse(null);
+        Iterator<WeaponCard> it = spawnPoint.showCards().iterator();
+        WeaponCard wc = null;
+        while (position!=0) {
+            wc = it.next();
+            position--;
+        }
+        if (canChooseSpawnPointWeapon) {
+            Ammo myAmmo = Client.getInstance().getPlayer().getAmmo();
+            List<PowerUpCard> powerUpCards = Client.getInstance().getPlayer().getPowerUpList();
+
+            //START CHOOSE POWER UP DIALOG
+            Optional<PowerUpCard> discardedPowerup = powerUpChoosingDialog();
+            //END CHOOSE POWER UP DIALOG
+
+            if (discardedPowerup.isPresent()) {
+                gameController.grab(wc, toDiscard, discardedPowerup.get());
+            } else {
+                gameController.grab(wc, toDiscard, null);
+            }
+
+        }
+    }
+
+    private static Optional<PowerUpCard> choosenPowerup = null;
+    private Optional<PowerUpCard> powerUpChoosingDialog() {
+
+        //TRY TO ARCHIVE THIS GOAL.... ACTUALLY IT DON'T WORK
+
+        final FutureTask<Optional<PowerUpCard>> query = new FutureTask<>(new Callable() {
+            @Override
+            public Object call() throws Exception {
+                int i = 0;
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Just a question...");
+                alert.setHeaderText("Do you want to use a power up to pay for this action?");
+                alert.setContentText("If yes, select one of yours, if not, please click no.");
+
+                List<ButtonType> btlist = new ArrayList<>();
+                btlist.add(new ButtonType("No, I don't."));
+                Player me = Client.getInstance().getPlayer();
+                List<PowerUpCard> powerUpCards = me.getPowerUpList();
+
+                for (PowerUpCard powerUpCard : powerUpCards) {
+                    btlist.add(new ButtonType(powerUpCard.name));
+                }
+
+                alert.getButtonTypes().setAll(btlist);
+                Optional<ButtonType> result = alert.showAndWait();
+                if (!result.isPresent()) {
+                    return Optional.empty();
+                } else {
+                    if (result.get() == btlist.get(0)) {
+                        return Optional.empty();
+                    } else {
+                        int index = btlist.indexOf(result.get());
+                        return Optional.of(powerUpCards.get(index));
+                    }
+                }
+            }
+        });
+        Platform.runLater(query);
+
+        Optional<PowerUpCard> toreturn = null;
+        try {
+            toreturn = query.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return toreturn;
+
+    }
+
+    public void blueWeaponClicked1() {
+        weaponClicked(RoomColor.BLUE, 1);
+    }
+    public void blueWeaponClicked2() {
+        weaponClicked(RoomColor.BLUE, 2);
+    }
+    public void blueWeaponClicked3() {
+        weaponClicked(RoomColor.BLUE, 3);
+    }
+    public void redWeaponClicked1() {
+        weaponClicked(RoomColor.RED, 1);
+    }
+    public void redWeaponClicked2() {
+        weaponClicked(RoomColor.RED, 2);
+    }
+    public void redWeaponClicked3() {
+        weaponClicked(RoomColor.RED, 3);
+    }
+    public void yellowWeaponClicked1() {
+        weaponClicked(RoomColor.YELLOW, 1);
+    }
+    public void yellowWeaponClicked2() {
+        weaponClicked(RoomColor.YELLOW, 2);
+    }
+    public void yellowWeaponClicked3() {
+        weaponClicked(RoomColor.YELLOW, 3);
+    }
 
     public void btnActionGroup1Clicked() {
         Platform.runLater( () -> {
