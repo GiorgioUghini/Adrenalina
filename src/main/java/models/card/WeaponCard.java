@@ -29,6 +29,10 @@ public class WeaponCard extends EffectCard {
         activeEffect = null;
     }
 
+    public String getName(){
+        return name;
+    }
+
     /** @return the price to reload the ammo, as indicated in the top-left corner of the card */
     public Ammo getReloadPrice(){
         return this.reloadPrice;

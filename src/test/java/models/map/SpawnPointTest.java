@@ -31,7 +31,7 @@ public class SpawnPointTest {
         WeaponCard card3 = cards.get(2);
         WeaponCard card4 = cards.get(3);
         spawnPoint.addCard(card1);
-        assertEquals(card1, spawnPoint.showCards().toArray()[0]);
+        assertEquals(card1, spawnPoint.showCards().get(0));
         spawnPoint.addCard(card2);
         spawnPoint.addCard(card3);
         try{

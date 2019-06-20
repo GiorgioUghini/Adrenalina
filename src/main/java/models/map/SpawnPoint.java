@@ -5,9 +5,8 @@ import models.card.Card;
 import models.card.WeaponCard;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class SpawnPoint extends Square implements Serializable {
     private Set<WeaponCard> cards;
@@ -31,8 +30,8 @@ public class SpawnPoint extends Square implements Serializable {
     /** Get the weapon cards on this spawn point
      * @return a set containing all the cards on this square. Could be an empty set if there are none
      * */
-    public Set<WeaponCard> showCards(){
-        return cards;
+    public List<WeaponCard> showCards(){
+        return cards.stream().sorted(Comparator.comparing(WeaponCard::getName)).collect(Collectors.toList());
     }
 
     /** Draws a card and removes it from the list
