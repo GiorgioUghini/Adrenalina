@@ -14,6 +14,10 @@ public class GameController {
         Client.getInstance().getConnection().validActions();
     }
 
+    public void reconnect(){
+        Client.getInstance().getConnection().reconnect();
+    }
+
     public void drawPowerUp() {
         Client.getInstance().getConnection().drawPowerUpCard();
     }

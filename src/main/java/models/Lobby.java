@@ -71,6 +71,11 @@ public class Lobby {
         }
     }
 
+    public synchronized void reconnectPlayer(String token, Player player) {
+        tokenPlayerMap.removeByValue(player);
+        tokenPlayerMap.add(token, player);
+    }
+
     public synchronized void chooseMapAndStartMatch() {
         Match match = new Match(waitingPlayers);
         for(Player waitingPlayer : waitingPlayers){

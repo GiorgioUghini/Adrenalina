@@ -20,6 +20,7 @@ public interface RemoteMethodsInterface extends Remote {
     List<Response> longPolling(String token) throws RemoteException;
     String handshake() throws RemoteException;
     Response registerPlayer(String username, String password, String token) throws RemoteException;
+    Response reconnect(String token) throws RemoteException;
     Response validActions(String token) throws RemoteException;
     Response waitingPlayer() throws RemoteException;
     Response chooseMap(String token, int map) throws RemoteException;

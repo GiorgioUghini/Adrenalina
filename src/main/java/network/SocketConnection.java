@@ -203,6 +203,16 @@ public class SocketConnection implements Connection {
     }
 
     @Override
+    public void reconnect() {
+        try {
+            ReconnectRequest request = new ReconnectRequest();
+            write(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void receiveResponse(Response response) {
         response.handle(responseHandler);
     }

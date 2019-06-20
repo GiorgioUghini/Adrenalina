@@ -59,13 +59,28 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                 return new ErrorResponse(new WrongPasswordException());
 
             player.reconnect();
-            return new ReconnectPlayerResponse(player);
+            Match match = player.getMatch();
+            GameMap map = match.getMap();
+            Server.getInstance().getLobby().reconnectPlayer(token, player);
+            return new ReconnectPlayerResponse(player, map, match.getPlayers());
         } else {
             player = lobby.registerPlayer(username, password, token);
             Server.getInstance().getConnection().addUpdateUnregisteredPlayers(new NewPlayerUpdate(player.getName()));
             lobby.addUpdateWaitingPlayers(new NewPlayerUpdate(player.getName()));
             return new RegisterPlayerResponse(player);
         }
+    }
+
+    @Override
+    public Response reconnect(String token) throws RemoteException {
+        Lobby lobby = Server.getInstance().getLobby();
+        Player currentPlayer = lobby.getPlayer(token);
+        Match currentMatch = lobby.getMatch(currentPlayer);
+        ConnectionWrapper connectionWrapper = Server.getInstance().getConnection().getConnectionWrapper(token);
+        connectionWrapper.addUpdate(new PlayersUpdate(currentMatch.getPlayers()));
+        connectionWrapper.addUpdate(new PlayerUpdate(currentPlayer));
+        connectionWrapper.addUpdate(new MapUpdate(currentMatch.getMap()));
+        return new ReconnectResponse();
     }
 
     @Override

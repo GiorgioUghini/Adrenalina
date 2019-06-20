@@ -214,6 +214,17 @@ public class RMIConnection implements Connection {
     }
 
     @Override
+    public void reconnect() {
+        try {
+            String token = Client.getInstance().getConnection().getToken();
+            Response response = remoteMethods.reconnect(token);
+            Client.getInstance().getConnection().receiveResponse(response);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void receiveResponse(Response response) {
         response.handle(responseHandler);
     }
@@ -228,7 +239,7 @@ public class RMIConnection implements Connection {
             token = remoteMethods.handshake();
             LongPollingTask longPollingTask = new LongPollingTask(remoteMethods, queue);
             Timer timer = new Timer();
-            timer.schedule(longPollingTask, 0, 50);
+            timer.schedule(longPollingTask, 0, 300);
             PollingQueueListener pollingQueueListener = new PollingQueueListener(queue);
             (new Thread(pollingQueueListener)).start();
         } catch (RemoteException e) {

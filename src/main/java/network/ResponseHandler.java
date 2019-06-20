@@ -25,10 +25,11 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(ReconnectPlayerResponse response) {
-        Client clientInstance = Client.getInstance();
-        clientInstance.getCurrentView().showMessage("Ricollegato!");
-        clientInstance.setPlayer(response.getMe());
-        //TODO Set game state!!!
+        Client.getInstance().setReconnecting(true);
+        Client.getInstance().setPlayers(response.players);
+        Client.getInstance().setMap(response.map);
+        Client.getInstance().setPlayer(response.player);
+        ScreenController.getInstance().activate("GameRoom.fxml");
     }
 
     @Override
@@ -262,5 +263,13 @@ public class ResponseHandler implements ResponseHandlerInterface {
         }
     }
 
+    @Override
+    public void handle(ReconnectResponse response) {
 
+    }
+
+    @Override
+    public void handle(PlayersUpdate response) {
+        Client.getInstance().setPlayers(response.players);
+    }
 }

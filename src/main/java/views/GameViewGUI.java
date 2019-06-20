@@ -202,7 +202,16 @@ public class GameViewGUI implements Initializable, GameView {
         weaponOnSpawnPointMap.put(RoomColor.BLUE, blueSPImages);
         weaponOnSpawnPointMap.put(RoomColor.YELLOW, yellowSPImages);
 
+        if(Client.getInstance().isReconnecting()){
+            Client.getInstance().setReconnecting(false);
+            Platform.runLater(this::reconnect);
+        }
         Platform.runLater(this::getValidActions);
+    }
+
+    @Override
+    public void reconnect() {
+        gameController.reconnect();
     }
 
     @Override
@@ -525,9 +534,10 @@ public class GameViewGUI implements Initializable, GameView {
             redAmmoText.setText(Integer.toString(myAmmo.red));
             blueAmmoText.setText(Integer.toString(myAmmo.blue));
             yellowAmmoText.setText(Integer.toString(myAmmo.yellow));
-            for (PowerUpCard powerUpCard : oldPlayer.getPowerUpList()) {
-                removePowerUpToHand(powerUpCard);
-            }
+            if(oldPlayer != null)
+                for (PowerUpCard powerUpCard : oldPlayer.getPowerUpList()) {
+                    removePowerUpToHand(powerUpCard);
+                }
             for (PowerUpCard powerUpCard : newPlayer.getPowerUpList()) {
                 addPowerUpToHand(powerUpCard);
             }

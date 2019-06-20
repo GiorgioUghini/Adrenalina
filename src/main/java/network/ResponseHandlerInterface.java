@@ -57,4 +57,8 @@ public interface ResponseHandlerInterface {
     void handle(MapUpdate response);
 
     void handle(PlayerUpdate response);
+
+    void handle(ReconnectResponse response);
+
+    void handle(PlayersUpdate response);
 }

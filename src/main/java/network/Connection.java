@@ -34,5 +34,6 @@ public interface Connection {
     void reload(Map<WeaponCard, PowerUpCard> weaponsMap);
     void action(ActionType actionType);
     void playPowerUp(String powerUpName, Ammo ammo, PowerUpCard powerUpAmmo);
+    void reconnect();
     void receiveResponse(Response response);
 }

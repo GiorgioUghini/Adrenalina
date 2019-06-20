@@ -26,6 +26,7 @@ public class Client {
     private GameView gameView;
     private View currentView;
     private Player me;
+    private boolean reconnecting;
     private boolean isMyTurn;
     private Map<ActionType, List<TurnEvent>> actions;
     private TurnType currentTurnType;
@@ -177,5 +178,13 @@ public class Client {
 
     public void setDebug(boolean debug) {
         this.debug = debug;
+    }
+
+    public boolean isReconnecting() {
+        return reconnecting;
+    }
+
+    public void setReconnecting(boolean reconnecting) {
+        this.reconnecting = reconnecting;
     }
 }

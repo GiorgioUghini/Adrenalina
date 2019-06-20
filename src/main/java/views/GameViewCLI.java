@@ -28,6 +28,11 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
+    public void reconnect() {
+
+    }
+
+    @Override
     public void startTurn(String name) {
 
     }

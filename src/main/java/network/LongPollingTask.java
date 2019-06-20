@@ -1,5 +1,7 @@
 package network;
 
+import controllers.ScreenController;
+
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.TimerTask;
@@ -27,6 +29,7 @@ public class LongPollingTask extends TimerTask {
         } catch (RemoteException e) {
             Logger logger = Logger.getAnonymousLogger();
             logger.log(Level.SEVERE, "an exception was thrown", e);
+            ScreenController.getInstance().activate("WaitingRoom.fxml");
         }
     }
 }

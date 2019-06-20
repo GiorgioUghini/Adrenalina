@@ -1,5 +1,7 @@
 package network;
 
+import controllers.ScreenController;
+
 import java.io.ObjectInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,6 +27,7 @@ public class ServerListener implements Runnable{
         } catch (Exception e) {
             Logger logger = Logger.getAnonymousLogger();
             logger.log(Level.SEVERE, "an exception was thrown", e);
+            ScreenController.getInstance().activate("WaitingRoom.fxml");
         }
     }
 

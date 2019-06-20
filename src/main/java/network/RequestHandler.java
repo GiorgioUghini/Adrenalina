@@ -104,4 +104,9 @@ public class RequestHandler implements RequestHandlerInterface {
         return remoteMethods.playPowerUp(request.getToken(), request.powerUpName, request.ammo, request.powerUpAmmo);
     }
 
+    @Override
+    public Response handle(ReconnectRequest request) throws RemoteException {
+        return remoteMethods.reconnect(request.getToken());
+    }
+
 }

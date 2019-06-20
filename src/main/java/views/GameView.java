@@ -17,6 +17,7 @@ public interface GameView extends View {
     void setBtnUsePowerUpVisibility(boolean isVisible);
 
     void getValidActions();
+    void reconnect();
     void startTurn(String name);
 
     void updateMapView(GameMap map);

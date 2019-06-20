@@ -22,4 +22,5 @@ public interface RequestHandlerInterface {
     Response handle(ReloadRequest request) throws RemoteException;
     Response handle(TurnActionRequest request) throws RemoteException;
     Response handle(PlayPowerUpRequest request) throws RemoteException;
+    Response handle(ReconnectRequest request) throws RemoteException;
 }
