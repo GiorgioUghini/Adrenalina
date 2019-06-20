@@ -667,6 +667,7 @@ public class GameViewGUI implements Initializable, GameView {
 
         //TRY TO ARCHIVE THIS GOAL.... ACTUALLY IT DON'T WORK
 
+        //TODO VILA
         final FutureTask<Optional<PowerUpCard>> query = new FutureTask<>(new Callable() {
             @Override
             public Object call() throws Exception {
