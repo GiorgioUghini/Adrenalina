@@ -16,10 +16,15 @@ import network.updates.*;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsInterface {
+    private Logger logger;
+
     RemoteMethods() throws RemoteException {
+        logger = Logger.getAnonymousLogger();
     }
 
     @Override
@@ -261,8 +266,10 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         else if(turnEvent == TurnEvent.RUN_4)
             max = 4;
         Square playerSquare = map.getPlayerPosition(player);
-        if(!map.getAllSquaresAtDistanceLessThanOrEquals(playerSquare, max).contains(targetSquare))
+        if(!map.getAllSquaresAtDistanceLessThanOrEquals(playerSquare, max).contains(targetSquare)){
+            logger.severe(String.format("Player square id: %d\nTarget square id: %d\nMax: %d", playerSquare.getId(), targetSquare.getId(), max));
             throw new CheatException();
+        }
         targetSquare = map.getSquareById(targetSquare.getId());
         map.movePlayer(player, targetSquare);
         match.turnEvent(turnEvent);
