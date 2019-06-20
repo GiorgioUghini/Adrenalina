@@ -5,6 +5,7 @@ import errors.InvalidAmmoException;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -38,5 +39,28 @@ public class AmmoCardTest {
             assertTrue(card.getBlue()>-1 && card.getBlue()<4);
         }
         assertTrue(atLeastOnePowerup);
+    }
+
+    @Test
+    public void testCardNames(){
+        CardController controller = new CardController();
+        AmmoDeck deck = controller.getAmmoDeck();
+        int deckSize = deck.size();
+        Set<String> legalCardNames = new HashSet<>();
+        String[] arr = {"002y", "011y", "012n", "020y", "021n", "101y", "102n", "110y", "120n", "200y", "201n", "210n"};
+        for(int i=0; i<arr.length;i++){
+            legalCardNames.add(arr[i]);
+        }
+
+        boolean assertBoolean = true;
+        for(int i=0;i<deckSize;i++){
+            AmmoCard card = (AmmoCard) deck.draw();
+            String cardName = String.format("%d%d%d%s", card.getRed(), card.getBlue(), card.getYellow(), card.hasPowerup() ? "y" : "n");
+            if(!legalCardNames.contains(cardName)){
+                System.out.println(cardName + " Not Found. Index: " + i + "/" + deckSize);
+                assertBoolean = false;
+            }
+        }
+        assert assertBoolean;
     }
 }

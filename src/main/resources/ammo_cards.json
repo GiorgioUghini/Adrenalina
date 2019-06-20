@@ -138,12 +138,6 @@
     "powerup": true
   },
   {
-    "red": 0,
-    "yellow": 0,
-    "blue": 0,
-    "powerup": false
-  },
-  {
     "red": 1,
     "yellow": 0,
     "blue": 1,
