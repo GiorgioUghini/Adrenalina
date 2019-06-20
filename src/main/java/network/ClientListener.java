@@ -48,6 +48,9 @@ public class ClientListener implements Runnable{
                 else{
                     player.disconnect();
                     Match match = Server.getInstance().getLobby().getMatch(player);
+                    if(match.getCurrentPlayer().getName().equals(player.getName())){
+                        match.nextTurn();
+                    }
                     match.addUpdate(new PlayerDisconnectUpdate(player.getName()));
                 }
             }

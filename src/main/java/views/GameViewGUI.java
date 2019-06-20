@@ -232,7 +232,7 @@ public class GameViewGUI implements Initializable, GameView {
     private void removeWeaponOnMapSpawnPoint(WeaponCard card, RoomColor color) {
         int i = 0;
         try {
-            while (! weaponOnSpawnPointMap.get(color).get(i).getImage().getUrl().contains(card.image)) {
+            while (weaponOnSpawnPointMap.get(color).get(i).getImage() != null && !weaponOnSpawnPointMap.get(color).get(i).getImage().getUrl().contains(card.image)) {
                 i++;
             }
         } catch (NullPointerException e) {
@@ -260,7 +260,7 @@ public class GameViewGUI implements Initializable, GameView {
     private void removePowerUpToHand(PowerUpCard card) {
         Platform.runLater( () -> {
             int i = 0;
-            while (!powerUpSpaces.get(i).getImage().getUrl().contains(card.image)) {
+            while (powerUpSpaces.get(i).getImage() != null && !powerUpSpaces.get(i).getImage().getUrl().contains(card.image)) {
                 i++;
             }
 
