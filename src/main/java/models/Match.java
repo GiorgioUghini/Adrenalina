@@ -190,7 +190,7 @@ public class Match {
 
     public void addUpdate(Response update) {
         for (Player player : playerList) {
-            if (Server.getInstance().getConnection() != null) // IF SOLO PER I TEST!!
+            if (Server.getInstance().getConnection() != null && player.isOnline())
                 Server.getInstance().getConnection().getConnectionWrapper(Server.getInstance().getLobby().getToken(player)).addUpdate(update);
         }
     }
@@ -206,6 +206,9 @@ public class Match {
             player.onTurnEnded();
         }
         actualPlayerIndex = (actualPlayerIndex == playerList.size() - 1) ? 0 : actualPlayerIndex + 1;
+        while (!playerList.get(actualPlayerIndex).isOnline()){
+            actualPlayerIndex = (actualPlayerIndex == playerList.size() - 1) ? 0 : actualPlayerIndex + 1;
+        }
         if ((frenzy != null) && (actualPlayerIndex == 0)) { //actualPlayerIndex == firstPlayerIndex
             frenzy = ActionGroup.FRENZY_TYPE_2;
         }
