@@ -1,11 +1,12 @@
 package models.card;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class LegitEffects {
+public class LegitEffects implements Serializable {
     private Map<Effect, Boolean> effects;
 
     public LegitEffects(){

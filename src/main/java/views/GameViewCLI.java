@@ -1,5 +1,6 @@
 package views;
 
+import models.card.LegitEffects;
 import models.card.PowerUpCard;
 import models.card.WeaponCard;
 import models.map.GameMap;
@@ -48,6 +49,11 @@ public class GameViewCLI implements GameView {
 
     @Override
     public void updatePlayerView(Player newPlayer) {
+
+    }
+
+    @Override
+    public void effectChoosingDialog(LegitEffects legitEffects) {
 
     }
 

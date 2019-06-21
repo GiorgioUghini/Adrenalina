@@ -10,7 +10,9 @@ import models.turn.ActionType;
 import models.turn.TurnType;
 import network.responses.*;
 import network.updates.*;
+import utils.Console;
 import views.GameView;
+import views.GameViewGUI;
 import views.MenuView;
 
 public class ResponseHandler implements ResponseHandlerInterface {
@@ -82,11 +84,9 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(CardEffectsResponse response) {
-        // TODO: Questo è solo un placeholder!!!! Bisogna far scegliere all'utente tra gli effect.name
         LegitEffects legitEffects = response.legitEffects;
-        for (Effect effect : legitEffects.getLegitEffects()) {
-            Client.getInstance().getCurrentView().showMessage(effect.name);
-        }
+        ((GameView) Client.getInstance().getCurrentView()).effectChoosingDialog(legitEffects);
+        Client.getInstance().getCurrentView().showMessage("You started using weapon card.");
     }
 
     @Override
@@ -142,6 +142,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(SelectResponse response) {
+        Console.print("OK");
         // response.selectable per ottenere type e oggetti da selezionare
     }
 
@@ -152,11 +153,13 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(FinishCardResponse response) {
+        Console.print("OK");
         // TODO andare avanti col turno sul client, è finito uno SHOOT
     }
 
     @Override
     public void handle(FinishEffectResponse response) {
+        Console.print("OK");
         // TODO è finito un effetto, chiedere all'utente se vuole attivarne un altro o terminare lo SHOOT. Per terminare deve inviare una FinishCardRequest
     }
 

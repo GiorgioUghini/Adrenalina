@@ -1,11 +1,11 @@
 package controllers;
 
+import models.card.Effect;
 import models.card.PowerUpCard;
 import models.card.WeaponCard;
 import models.map.Square;
-import models.player.Player;
+import models.player.Ammo;
 import models.turn.TurnEvent;
-import models.turn.TurnType;
 import network.Client;
 
 public class GameController {
@@ -32,6 +32,18 @@ public class GameController {
 
     public void grab(WeaponCard drawn, WeaponCard toRelease, PowerUpCard powerUpCard) {
         Client.getInstance().getConnection().grab(drawn, toRelease, powerUpCard);
+    }
+
+    public void getEffects(WeaponCard weaponCard) {
+        Client.getInstance().getConnection().cardEffects(weaponCard.name);
+    }
+
+    public void playEffect(Effect effect, PowerUpCard powerUpCard) {
+        Client.getInstance().getConnection().playEffect(effect, Client.getInstance().getPlayer().getAmmo(), powerUpCard);
+    }
+
+    public void finishCard() {
+        Client.getInstance().getConnection().finishCard();
     }
 
     public void endTurn() {

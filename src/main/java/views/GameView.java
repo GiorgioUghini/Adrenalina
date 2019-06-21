@@ -1,5 +1,6 @@
 package views;
 
+import models.card.LegitEffects;
 import models.map.GameMap;
 import models.player.Player;
 import models.turn.ActionType;
@@ -18,6 +19,8 @@ public interface GameView extends View {
     void updateMapView(GameMap map);
     void updatePlayerView(Player newPlayer);
     void updateActions(Map<ActionType, List<TurnEvent>> actions);
+
+    void effectChoosingDialog(LegitEffects legitEffects);
 
     void setTextAndEnableBtnActionGroup(ActionType actionType, int btnNum);
 

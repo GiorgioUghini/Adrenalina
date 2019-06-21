@@ -202,7 +202,9 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             Player player = Server.getInstance().getLobby().getPlayer(token);
             Match match = Server.getInstance().getLobby().getMatch(player);
             effect = player.getActiveWeapon().getEffectByName(effect.name);
-            powerUpCard = player.getPowerUpByName(powerUpCard.name, powerUpCard.color);
+            if(powerUpCard!=null){
+                powerUpCard = player.getPowerUpByName(powerUpCard.name, powerUpCard.color);
+            }
             player.playWeaponEffect(effect, powerUpCard);
             Action action;
             while ((action = player.playNextWeaponAction()) != null){
