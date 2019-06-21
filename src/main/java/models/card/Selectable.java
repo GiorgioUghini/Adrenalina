@@ -1,8 +1,9 @@
 package models.card;
 
+import java.io.Serializable;
 import java.util.Set;
 
-public class Selectable {
+public class Selectable implements Serializable {
     private Set<Taggable> taggables;
     private boolean optional;
     private TargetType type;
