@@ -515,7 +515,6 @@ public class GameViewGUI implements Initializable, GameView {
 
     @Override
     public void updateMapView(GameMap map) {
-        this.gameMap = map;
         //UPDATE PLAYERS POSITIONS
         for (Player p : Client.getInstance().getPlayers()) {
             try {
@@ -579,7 +578,6 @@ public class GameViewGUI implements Initializable, GameView {
 
     @Override
     public void updatePlayerView(Player newPlayer) {
-        this.me = newPlayer;
         Player oldPlayer = Client.getInstance().getPlayer();
         Platform.runLater(() -> {
             //UPDATE AMMO
