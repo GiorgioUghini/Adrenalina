@@ -57,13 +57,6 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
-    public void setEnabledBtnEndTurn(boolean enable) {
-        if (enable) {
-            Console.print("End this turn");
-        }
-    }
-
-    @Override
     public void setTextAndEnableBtnActionGroup(ActionType actionType, int btnNum) {
 
     }

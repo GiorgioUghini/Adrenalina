@@ -161,7 +161,7 @@ public class GameViewGUI implements Initializable, GameView {
         weaponSpaces.add(imgYourWeaponCard2);
         weaponSpaces.add(imgYourWeaponCard3);
 
-        this.turnEventButtons = new ArrayList<>(Arrays.asList(btnDrawPowerUp, btnGrabWeapon, btnSpawn, btnRun, btnGrabAmmo, btnShoot, btnReload, btnUsePowerUp, btnEndTurn));
+        this.turnEventButtons = new ArrayList<>(Arrays.asList(btnDrawPowerUp, btnGrabWeapon, btnSpawn, btnRun, btnGrabAmmo, btnShoot, btnReload, btnUsePowerUp));
 
         ArrayList<GridPane> x0 = new ArrayList<>();
         x0.add(grid00);
@@ -325,7 +325,7 @@ public class GameViewGUI implements Initializable, GameView {
 
     public void endTurn() {
         gameController.endTurn();
-        setEnabledBtnEndTurn(false);
+        setBtnEnabled(btnEndTurn, false);
     }
 
     @Override
@@ -357,6 +357,9 @@ public class GameViewGUI implements Initializable, GameView {
     public void updateActions(Map<ActionType, List<TurnEvent>> actions){
         Client client = Client.getInstance();
         ActionType currentActionType = client.getCurrentActionType();
+
+        setBtnEnabled(btnEndTurn, (actions.isEmpty() && client.isMyTurn()));
+
         if(currentActionType==null){
             disableTurnEventButtons();
             setActionGroupButtons(actions.keySet());
@@ -366,16 +369,11 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     private void setActionGroupButtons(Set<ActionType> groupActions){
-        setBtnEnabled(btnEndTurn, groupActions.isEmpty());
         setBtnEnabled(btnActionGroup1, false);
         setBtnEnabled(btnActionGroup2, false);
         setBtnEnabled(btnActionGroup3, false);
-        if(groupActions.isEmpty()){
-            if(Client.getInstance().isMyTurn()){
-                setBtnEnabled(btnEndTurn, true);
-            }
-        }
-        else if(groupActions.size() > 1 && Client.getInstance().getCurrentActionType()==null){
+
+        if(groupActions.size() > 1 && Client.getInstance().getCurrentActionType()==null){
             int i = 0;
             for(ActionType groupAction : groupActions){
                 setTextAndEnableBtnActionGroup(groupAction, ++i);
@@ -719,10 +717,6 @@ public class GameViewGUI implements Initializable, GameView {
                     break;
             }
         });
-    }
-
-    public void setEnabledBtnEndTurn(boolean enable) {
-        btnEndTurn.setDisable(!enable);
     }
 
 

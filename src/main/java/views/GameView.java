@@ -18,9 +18,7 @@ public interface GameView extends View {
     void updateMapView(GameMap map);
     void updatePlayerView(Player newPlayer);
     void updateActions(Map<ActionType, List<TurnEvent>> actions);
-
-
-    void setEnabledBtnEndTurn(boolean enable);
+    
     void setTextAndEnableBtnActionGroup(ActionType actionType, int btnNum);
 
 }
