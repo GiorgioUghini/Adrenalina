@@ -300,7 +300,7 @@ public class GameViewGUI implements Initializable, GameView {
         gameController.getValidActions();
     }
     public void grab() {
-        setBtnEnabled(btnGrab, false);
+        disableTurnEventButtons();
         gameController.grab(null, null, null);
         GameMap map = Client.getInstance().getMap();
         Player me = Client.getInstance().getPlayer();
