@@ -517,17 +517,18 @@ public class GameViewGUI implements Initializable, GameView {
 
     @Override
     public void updateMapView(GameMap map) {
+        Client client = Client.getInstance();
         //UPDATE PLAYERS POSITIONS
-        for (Player p : Client.getInstance().getPlayers()) {
+        for (Player p : client.getPlayers()) {
             try {
                 Coordinate c = map.getPlayerCoordinates(p);
-                Coordinate oldCoord = Client.getInstance().getPlayerCoordinateMap().get(p);
+                Coordinate oldCoord = client.getPlayerCoordinateMap().get(p);
                 if (!c.equals(oldCoord)) {
                     if (oldCoord != null) {
-                        deletePlayerToken(paneList.get(oldCoord.getX()).get(oldCoord.getY()), Client.getInstance().getPlayers().indexOf(p));
+                        deletePlayerToken(paneList.get(oldCoord.getX()).get(oldCoord.getY()), client.getPlayers().indexOf(p));
                     }
-                    drawPlayerToken(paneList.get(c.getX()).get(c.getY()), Client.getInstance().getPlayers().indexOf(p));
-                    Client.getInstance().getPlayerCoordinateMap().put(p, c);
+                    drawPlayerToken(paneList.get(c.getX()).get(c.getY()), client.getPlayers().indexOf(p));
+                    client.getPlayerCoordinateMap().put(p, c);
                 }
             }
             catch (PlayerNotOnMapException e) {
@@ -535,7 +536,7 @@ public class GameViewGUI implements Initializable, GameView {
             }
         }
         //REMOVE OLD WEAPONS
-        for (SpawnPoint sp : Client.getInstance().getMap().getSpawnPoints()) {
+        for (SpawnPoint sp : client.getMap().getSpawnPoints()) {
             for (WeaponCard cardOld : sp.showCards()) {
                 removeWeaponOnMapSpawnPoint(cardOld, sp.getColor());
             }
