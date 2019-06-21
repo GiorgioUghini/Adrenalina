@@ -650,69 +650,42 @@ public class GameViewGUI implements Initializable, GameView {
             List<PowerUpCard> powerUpCards = Client.getInstance().getPlayer().getPowerUpList();
 
             //START CHOOSE POWER UP DIALOG
-            Optional<PowerUpCard> discardedPowerup = powerUpChoosingDialog();
+            powerUpChoosingDialog(wc);
             //END CHOOSE POWER UP DIALOG
-
-            if (discardedPowerup.isPresent()) {
-                gameController.grab(wc, toDiscard, discardedPowerup.get());
-            } else {
-                gameController.grab(wc, toDiscard, null);
-            }
 
         }
     }
 
-    private static Optional<PowerUpCard> choosenPowerup = null;
-    private Optional<PowerUpCard> powerUpChoosingDialog() {
 
-        //TRY TO ARCHIVE THIS GOAL.... ACTUALLY IT DON'T WORK
+    private void powerUpChoosingDialog(WeaponCard wc) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Just a question...");
+            alert.setHeaderText("Do you want to use a power up to pay for this action?");
+            alert.setContentText("If yes, select one of yours, if not, please click no.");
 
-        //TODO VILA
-        final FutureTask<Optional<PowerUpCard>> query = new FutureTask<>(new Callable() {
-            @Override
-            public Object call() throws Exception {
-                int i = 0;
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Just a question...");
-                alert.setHeaderText("Do you want to use a power up to pay for this action?");
-                alert.setContentText("If yes, select one of yours, if not, please click no.");
+            List<ButtonType> btlist = new ArrayList<>();
+            btlist.add(new ButtonType("No, I don't."));
+            Player me = Client.getInstance().getPlayer();
+            List<PowerUpCard> powerUpCards = me.getPowerUpList();
 
-                List<ButtonType> btlist = new ArrayList<>();
-                btlist.add(new ButtonType("No, I don't."));
-                Player me = Client.getInstance().getPlayer();
-                List<PowerUpCard> powerUpCards = me.getPowerUpList();
+            for (PowerUpCard powerUpCard : powerUpCards) {
+                btlist.add(new ButtonType(powerUpCard.name));
+            }
 
-                for (PowerUpCard powerUpCard : powerUpCards) {
-                    btlist.add(new ButtonType(powerUpCard.name));
-                }
-
-                alert.getButtonTypes().setAll(btlist);
-                Optional<ButtonType> result = alert.showAndWait();
-                if (!result.isPresent()) {
-                    return Optional.empty();
+            alert.getButtonTypes().setAll(btlist);
+            Optional<ButtonType> result = alert.showAndWait();
+            if (!result.isPresent()) {
+                gameController.grab(wc, toDiscard, null);
+            } else {
+                if (result.get() == btlist.get(0)) {
+                    gameController.grab(wc, toDiscard, null);
                 } else {
-                    if (result.get() == btlist.get(0)) {
-                        return Optional.empty();
-                    } else {
-                        int index = btlist.indexOf(result.get());
-                        return Optional.of(powerUpCards.get(index));
-                    }
+                    int index = btlist.indexOf(result.get());
+                    gameController.grab(wc, toDiscard, powerUpCards.get(index-1));
                 }
             }
         });
-        Platform.runLater(query);
-
-        Optional<PowerUpCard> toreturn = null;
-        try {
-            toreturn = query.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        return toreturn;
-
     }
 
     public void blueWeaponClicked1() {
