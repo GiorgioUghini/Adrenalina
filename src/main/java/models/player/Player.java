@@ -129,6 +129,7 @@ public class Player implements Subscriber, Serializable, Taggable {
         if(powerUpToPay!=null){
             price.remove(new Ammo(powerUpToPay));
             match.throwPowerUp(powerUpToPay);
+            powerUpList.remove(powerUpToPay);
         }
         ammo.remove(price);
         weaponList.add(drawn);

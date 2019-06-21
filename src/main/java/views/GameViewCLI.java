@@ -87,13 +87,6 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
-    public void setBtnGrabWeaponVisibility(boolean isVisible) {
-        if (isVisible) {
-            Console.print("2) You Can Grab Weapon");
-        }
-    }
-
-    @Override
     public void setBtnSpawnVisibility(boolean isVisible) {
         if (isVisible) {
             Console.print("3) You Can Spawn");
@@ -110,7 +103,7 @@ public class GameViewCLI implements GameView {
     @Override
     public void setBtnGrabAmmoVisibility(boolean isVisible) {
         if (isVisible) {
-            Console.print("5) You Can Grab a Ammo");
+            Console.print("5) You Can Grab something");
         }
     }
 

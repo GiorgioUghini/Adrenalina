@@ -8,7 +8,6 @@ public interface GameView extends View {
     void chooseSpawnPoint();
 
     void setBtnDrawPowerUpVisibility(boolean isVisible);
-    void setBtnGrabWeaponVisibility(boolean isVisible);
     void setBtnSpawnVisibility(boolean isVisible);
     void setBtnRunVisibility(boolean isVisible);
     void setBtnGrabAmmoVisibility(boolean isVisible);

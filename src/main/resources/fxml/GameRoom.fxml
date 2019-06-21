@@ -334,11 +334,6 @@
                                                       <Font size="20.0" />
                                                    </font>
                                                 </Button>
-                                                <Button fx:id="btnGrabWeapon" disable="true" mnemonicParsing="false" onAction="#grabWeapon" prefHeight="66.5" prefWidth="234.0" text="GRAB WEAPON">
-                                                   <font>
-                                                      <Font size="20.0" />
-                                                   </font>
-                                                </Button>
                                                 <Button fx:id="btnSpawn" disable="true" mnemonicParsing="false" onAction="#spawn" prefHeight="66.5" prefWidth="234.0" text="SPAWN">
                                                    <font>
                                                       <Font size="20.0" />
@@ -349,7 +344,7 @@
                                                       <Font size="20.0" />
                                                    </font>
                                                 </Button>
-                                                <Button fx:id="btnGrabAmmo" disable="true" mnemonicParsing="false" onAction="#grabAmmo" prefHeight="66.5" prefWidth="734.0" text="GRAB AMMO">
+                                                <Button fx:id="btnGrab" disable="true" mnemonicParsing="false" onAction="#grab" prefHeight="66.5" prefWidth="734.0" text="GRAB">
                                                    <font>
                                                       <Font size="20.0" />
                                                    </font>
@@ -365,6 +360,11 @@
                                                    </font>
                                                 </Button>
                                                 <Button fx:id="btnUsePowerUp" disable="true" mnemonicParsing="false" onAction="#usePowerUp" prefHeight="66.5" prefWidth="234.0" text="USE POWERUP">
+                                                   <font>
+                                                      <Font size="20.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button mnemonicParsing="false" prefHeight="66.5" prefWidth="234.0" text="IDLE BTN" visible="false">
                                                    <font>
                                                       <Font size="20.0" />
                                                    </font>

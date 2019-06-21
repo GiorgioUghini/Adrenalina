@@ -18,23 +18,16 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import models.card.AmmoCard;
-import models.card.PowerUpCard;
-import models.card.WeaponCard;
+import models.card.*;
 import models.map.*;
 import models.player.Ammo;
 import models.player.Player;
 import models.turn.ActionType;
 import models.turn.TurnEvent;
 import network.Client;
-import utils.Console;
 
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.TimeUnit;
 
 public class GameViewGUI implements Initializable, GameView {
 
@@ -46,13 +39,11 @@ public class GameViewGUI implements Initializable, GameView {
     @FXML
     private Button btnDrawPowerUp;
     @FXML
-    private Button btnGrabWeapon;
-    @FXML
     private Button btnSpawn;
     @FXML
     private Button btnRun;
     @FXML
-    private Button btnGrabAmmo;
+    private Button btnGrab;
     @FXML
     private Button btnShoot;
     @FXML
@@ -256,34 +247,30 @@ public class GameViewGUI implements Initializable, GameView {
         weaponOnSpawnPointMap.get(color).get(2).setImage(null);
     }
 
-    private void addPowerUpToHand(PowerUpCard card) {
+    public void addCardToHand(EffectCard card, List<ImageView> where) {
         Platform.runLater( () -> {
             int i = 0;
-            Image img = new Image(ResourceController.getResource("powerupcards/" + card.image).toURI().toString());
-            while (powerUpSpaces.get(i).getImage() != null) {
+            Image img = new Image(ResourceController.getResource((card.getClass().equals(WeaponCard.class) ? "weaponcards/" : "powerupcards/")  + card.image).toURI().toString());
+            while (where.get(i).getImage() != null) {
                 i++;
             }
             if (i > 3) return;
-            powerUpSpaces.get(i).setImage(img);
+            where.get(i).setImage(img);
         });
     }
 
-    private void removePowerUpToHand(PowerUpCard card) {
+    public void removeCardToHand(EffectCard card, List<ImageView> where) {
         Platform.runLater( () -> {
             int i = 0;
-            while (powerUpSpaces.get(i).getImage() != null && !powerUpSpaces.get(i).getImage().getUrl().contains(card.image)) {
+            while (where.get(i).getImage() != null && !where.get(i).getImage().getUrl().contains(card.image)) {
                 i++;
             }
 
-            for (; i < 3; i++) {
-                powerUpSpaces.get(i).setImage(powerUpSpaces.get(i + 1).getImage());
+            for (; i < (card.getClass().equals(WeaponCard.class) ? 2 : 3); i++) {
+                where.get(i).setImage(where.get(i + 1).getImage());
             }
-            powerUpSpaces.get(3).setImage(null);
+            where.get((card.getClass().equals(WeaponCard.class) ? 2 : 3)).setImage(null);
         });
-    }
-
-    public void addWeaponToHand(WeaponCard card) {
-        //TODO: Set image in imageview, on the first space free
     }
 
     public void drawPowerUp() {
@@ -311,7 +298,7 @@ public class GameViewGUI implements Initializable, GameView {
         Client.getInstance().getConnection().run(te, square);
         gameController.getValidActions();
     }
-    public void grabAmmo() {
+    public void grab() {
         setBtnGrabAmmoVisibility(false);
         GameMap map = Client.getInstance().getMap();
         Player me = Client.getInstance().getPlayer();
@@ -374,10 +361,7 @@ public class GameViewGUI implements Initializable, GameView {
     public void setBtnDrawPowerUpVisibility(boolean isVisible) {
         Platform.runLater( () -> { btnDrawPowerUp.setDisable(!isVisible); });
     }
-    @Override
-    public void setBtnGrabWeaponVisibility(boolean isVisible) {
-        Platform.runLater( () -> { btnGrabWeapon.setDisable(!isVisible); });
-    }
+
     @Override
     public void setBtnSpawnVisibility(boolean isVisible) {
         Platform.runLater( () -> { btnSpawn.setDisable(!isVisible); });
@@ -388,7 +372,7 @@ public class GameViewGUI implements Initializable, GameView {
     }
     @Override
     public void setBtnGrabAmmoVisibility(boolean isVisible) {
-        Platform.runLater( () -> { btnGrabAmmo.setDisable(!isVisible); });
+        Platform.runLater( () -> { btnGrab.setDisable(!isVisible); });
     }
     @Override
     public void setBtnShootVisibility(boolean isVisible) {
@@ -551,16 +535,28 @@ public class GameViewGUI implements Initializable, GameView {
     public void updatePlayerView(Player newPlayer) {
         Player oldPlayer = Client.getInstance().getPlayer();
         Platform.runLater(() -> {
+            //UPDATE AMMO
             Ammo myAmmo = newPlayer.getAmmo();
             redAmmoText.setText(Integer.toString(myAmmo.red));
             blueAmmoText.setText(Integer.toString(myAmmo.blue));
             yellowAmmoText.setText(Integer.toString(myAmmo.yellow));
+            //REMOVE OLD POWERUP IF ANY
             if(oldPlayer != null)
                 for (PowerUpCard powerUpCard : oldPlayer.getPowerUpList()) {
-                    removePowerUpToHand(powerUpCard);
+                    removeCardToHand(powerUpCard, powerUpSpaces);
                 }
+            //ADD NEW POWERUP
             for (PowerUpCard powerUpCard : newPlayer.getPowerUpList()) {
-                addPowerUpToHand(powerUpCard);
+                addCardToHand(powerUpCard, powerUpSpaces);
+            }
+            //REMOVE OLD WEAPONS IF ANY
+            if(oldPlayer != null)
+                for (WeaponCard weaponCard : oldPlayer.getWeaponList()) {
+                    removeCardToHand(weaponCard, weaponSpaces);
+                }
+            //ADD NEW WEAPONS
+            for (WeaponCard weaponCard : newPlayer.getWeaponList()) {
+                addCardToHand(weaponCard, weaponSpaces);
             }
         });
     }
@@ -646,8 +642,6 @@ public class GameViewGUI implements Initializable, GameView {
             position--;
         }
         if (canChooseSpawnPointWeapon) {
-            Ammo myAmmo = Client.getInstance().getPlayer().getAmmo();
-            List<PowerUpCard> powerUpCards = Client.getInstance().getPlayer().getPowerUpList();
 
             //START CHOOSE POWER UP DIALOG
             powerUpChoosingDialog(wc);
@@ -655,7 +649,6 @@ public class GameViewGUI implements Initializable, GameView {
 
         }
     }
-
 
     private void powerUpChoosingDialog(WeaponCard wc) {
         Platform.runLater(() -> {
@@ -676,14 +669,50 @@ public class GameViewGUI implements Initializable, GameView {
             alert.getButtonTypes().setAll(btlist);
             Optional<ButtonType> result = alert.showAndWait();
             if (!result.isPresent()) {
-                gameController.grab(wc, toDiscard, null);
+                if (me.getWeaponList().size() == 3)
+                    discardWeaponChoosingDialog(wc, null);
+                else
+                    gameController.grab(wc, toDiscard, null);
             } else {
                 if (result.get() == btlist.get(0)) {
-                    gameController.grab(wc, toDiscard, null);
+                    if (me.getWeaponList().size() == 3)
+                        discardWeaponChoosingDialog(wc, null);
+                    else
+                        gameController.grab(wc, toDiscard, null);
                 } else {
                     int index = btlist.indexOf(result.get());
-                    gameController.grab(wc, toDiscard, powerUpCards.get(index-1));
+                    if (me.getWeaponList().size() == 3)
+                        discardWeaponChoosingDialog(wc, powerUpCards.get(index - 1));
+                    else
+                        gameController.grab(wc, toDiscard, powerUpCards.get(index - 1));
                 }
+            }
+        });
+    }
+
+    private void discardWeaponChoosingDialog(WeaponCard wc, PowerUpCard payWith) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("AAAALT!!!");
+            alert.setHeaderText("You need to discard a weapon in order to draw this one.");
+            alert.setContentText("Select one weapon to discard from yours.");
+
+            List<ButtonType> btlist = new ArrayList<>();
+            Player me = Client.getInstance().getPlayer();
+            List<WeaponCard> weaponCards = me.getWeaponList();
+
+            for (WeaponCard weaponCard : weaponCards) {
+                btlist.add(new ButtonType(weaponCard.name));
+            }
+
+            alert.getButtonTypes().setAll(btlist);
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (!result.isPresent()) {
+                gameController.grab(wc, weaponCards.get(0), null);
+            } else {
+                int index = btlist.indexOf(result.get());
+                gameController.grab(wc, weaponCards.get(index), payWith);
             }
         });
     }
