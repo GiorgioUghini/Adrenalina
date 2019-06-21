@@ -33,7 +33,7 @@ public class Client {
     private ActionType currentActionType;
     private GameMap map;
     private List<Player> players;
-    private boolean showActions, showEvents = false;
+    private boolean showEvents = false;
 
     private HashMap<Player, Coordinate> playerCoordinateMap = new HashMap<>();
 
@@ -130,14 +130,6 @@ public class Client {
 
     public void setCurrentView(View currentView) {
         this.currentView = currentView;
-    }
-
-    public boolean getShowActions() {
-        return showActions;
-    }
-
-    public void setShowActions(boolean showActions) {
-        this.showActions = showActions;
     }
 
     public boolean getShowEvents() {
