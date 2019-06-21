@@ -246,17 +246,17 @@
                                                                   <Font size="25.0" />
                                                                </font>
                                                             </Text>
-                                                            <ImageView fx:id="imgYourWeaponCard1" fitHeight="233.0" fitWidth="151.0" pickOnBounds="true" preserveRatio="true">
+                                                            <ImageView fx:id="imgYourWeaponCard1" fitHeight="233.0" fitWidth="151.0" onMouseClicked="#weaponClicked1" pickOnBounds="true" preserveRatio="true">
                                                                <HBox.margin>
                                                                   <Insets left="32.0" right="17.0" />
                                                                </HBox.margin>
                                                             </ImageView>
-                                                            <ImageView fx:id="imgYourWeaponCard2" fitHeight="233.0" fitWidth="151.0" pickOnBounds="true" preserveRatio="true">
+                                                            <ImageView fx:id="imgYourWeaponCard2" fitHeight="233.0" fitWidth="151.0" onMouseClicked="#weaponClicked2" pickOnBounds="true" preserveRatio="true">
                                                                <HBox.margin>
                                                                   <Insets left="17.0" right="17.0" />
                                                                </HBox.margin>
                                                             </ImageView>
-                                                            <ImageView fx:id="imgYourWeaponCard3" fitHeight="233.0" fitWidth="151.0" pickOnBounds="true" preserveRatio="true">
+                                                            <ImageView fx:id="imgYourWeaponCard3" fitHeight="233.0" fitWidth="151.0" onMouseClicked="#weaponClicked3" pickOnBounds="true" preserveRatio="true">
                                                                <HBox.margin>
                                                                   <Insets left="17.0" right="17.0" />
                                                                </HBox.margin>

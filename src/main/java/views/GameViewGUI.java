@@ -138,6 +138,7 @@ public class GameViewGUI implements Initializable, GameView {
     private boolean canClickOnPowerUps = false;
     private boolean canDiscardHisOwnWeapons = false;
     private boolean canChooseSpawnPointWeapon = false;
+    private boolean canShoot = false;
 
     private GameController gameController;
 
@@ -318,7 +319,8 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     public void shoot() {
-
+        showMessage("Select which weapon you'd like to use.");
+        canShoot = true;
     }
     public void reload() {
 
@@ -596,6 +598,31 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    public void weaponClicked1() {
+        if (Client.getInstance().getPlayer().getWeaponList().isEmpty()) {
+            showMessage("You cannot shoot.");
+        } else if (canShoot) {
+            canShoot = false;
+            gameController.getEffects(Client.getInstance().getPlayer().getWeaponList().get(0));
+        }
+    }
+    public void weaponClicked2() {
+        if (Client.getInstance().getPlayer().getWeaponList().isEmpty()) {
+            showMessage("You can't shoot.");
+        } else if (canShoot && Client.getInstance().getPlayer().getWeaponList().size() > 1) {
+            canShoot = false;
+            gameController.getEffects(Client.getInstance().getPlayer().getWeaponList().get(1));
+        }
+    }
+    public void weaponClicked3() {
+        if (Client.getInstance().getPlayer().getWeaponList().isEmpty()) {
+            showMessage("No, you can't shoot.");
+        } else if (canShoot && Client.getInstance().getPlayer().getWeaponList().size() > 2) {
+            canShoot = false;
+            gameController.getEffects(Client.getInstance().getPlayer().getWeaponList().get(2));
+        }
+    }
+
     public void pane00Clicked() {
         run(Client.getInstance().getMap().getSquareByCoordinate(0, 0));
     }
@@ -633,7 +660,7 @@ public class GameViewGUI implements Initializable, GameView {
         run(Client.getInstance().getMap().getSquareByCoordinate(3, 2));
     }
 
-    public void weaponClicked(RoomColor color, int position) {
+    public void weaponOnSpawnPointClicked(RoomColor color, int position) {
         SpawnPoint spawnPoint = (SpawnPoint) Client.getInstance().getMap().getAllSquaresInRoom(color).stream().filter(Square::isSpawnPoint).findFirst().orElse(null);
         Iterator<WeaponCard> it = spawnPoint.showCards().iterator();
         WeaponCard wc = null;
@@ -718,31 +745,31 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     public void blueWeaponClicked1() {
-        weaponClicked(RoomColor.BLUE, 1);
+        weaponOnSpawnPointClicked(RoomColor.BLUE, 1);
     }
     public void blueWeaponClicked2() {
-        weaponClicked(RoomColor.BLUE, 2);
+        weaponOnSpawnPointClicked(RoomColor.BLUE, 2);
     }
     public void blueWeaponClicked3() {
-        weaponClicked(RoomColor.BLUE, 3);
+        weaponOnSpawnPointClicked(RoomColor.BLUE, 3);
     }
     public void redWeaponClicked1() {
-        weaponClicked(RoomColor.RED, 1);
+        weaponOnSpawnPointClicked(RoomColor.RED, 1);
     }
     public void redWeaponClicked2() {
-        weaponClicked(RoomColor.RED, 2);
+        weaponOnSpawnPointClicked(RoomColor.RED, 2);
     }
     public void redWeaponClicked3() {
-        weaponClicked(RoomColor.RED, 3);
+        weaponOnSpawnPointClicked(RoomColor.RED, 3);
     }
     public void yellowWeaponClicked1() {
-        weaponClicked(RoomColor.YELLOW, 1);
+        weaponOnSpawnPointClicked(RoomColor.YELLOW, 1);
     }
     public void yellowWeaponClicked2() {
-        weaponClicked(RoomColor.YELLOW, 2);
+        weaponOnSpawnPointClicked(RoomColor.YELLOW, 2);
     }
     public void yellowWeaponClicked3() {
-        weaponClicked(RoomColor.YELLOW, 3);
+        weaponOnSpawnPointClicked(RoomColor.YELLOW, 3);
     }
 
     public void btnActionGroup1Clicked() {
@@ -797,5 +824,34 @@ public class GameViewGUI implements Initializable, GameView {
         btnEndTurn.setDisable(!enable);
     }
 
+    @Override
+    public void effectChoosingDialog(LegitEffects legitEffects) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Ok, let's start...");
+            alert.setHeaderText("Now I need to know how to start.");
+            alert.setContentText("Which effect do you want to use now?");
+
+            List<ButtonType> btlist = new ArrayList<>();
+
+            for (Effect effect : legitEffects.getLegitEffects()) {
+                btlist.add(new ButtonType(effect.name));
+            }
+
+            alert.getButtonTypes().setAll(btlist);
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (!result.isPresent()) {
+                gameController.finishCard();
+            } else {
+                int index = btlist.indexOf(result.get());
+                if (Client.getInstance().getPlayer().getPowerUpList().isEmpty()) {
+                    //Would you like to pay with power up?
+                } else {
+                    gameController.playEffect(legitEffects.getLegitEffects().get(index), null);
+                }
+            }
+        });
+    }
 
 }
