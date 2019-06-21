@@ -185,7 +185,6 @@ public class MenuViewGUI implements Initializable, MenuView {
     @Override
     public void chooseMap(String username) {
         if (username.equals(this.username)) {
-            boolean done = false;
             Platform.runLater(() -> {
                 int i = 0;
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

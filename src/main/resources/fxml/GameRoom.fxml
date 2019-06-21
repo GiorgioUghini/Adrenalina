@@ -74,17 +74,17 @@
                                                                               <Font size="20.0" />
                                                                            </font>
                                                                         </Text>
-                                                                        <ImageView fx:id="weaponSPBlue1" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp1Clicked" pickOnBounds="true" preserveRatio="true">
+                                                                        <ImageView fx:id="weaponSPBlue1" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#blueWeaponClicked1" pickOnBounds="true" preserveRatio="true">
                                                                            <HBox.margin>
                                                                               <Insets left="25.0" right="17.0" />
                                                                            </HBox.margin>
                                                                         </ImageView>
-                                                                        <ImageView fx:id="weaponSPBlue2" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp2Clicked" pickOnBounds="true" preserveRatio="true">
+                                                                        <ImageView fx:id="weaponSPBlue2" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#blueWeaponClicked2" pickOnBounds="true" preserveRatio="true">
                                                                            <HBox.margin>
                                                                               <Insets left="17.0" right="17.0" />
                                                                            </HBox.margin>
                                                                         </ImageView>
-                                                                        <ImageView fx:id="weaponSPBlue3" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp3Clicked" pickOnBounds="true" preserveRatio="true">
+                                                                        <ImageView fx:id="weaponSPBlue3" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#blueWeaponClicked3" pickOnBounds="true" preserveRatio="true">
                                                                            <HBox.margin>
                                                                               <Insets left="17.0" right="17.0" />
                                                                            </HBox.margin>
@@ -101,17 +101,17 @@
                                                                               <Font size="20.0" />
                                                                            </font>
                                                                         </Text>
-                                                                        <ImageView fx:id="weaponSPRed1" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp1Clicked" pickOnBounds="true" preserveRatio="true">
+                                                                        <ImageView fx:id="weaponSPRed1" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#redWeaponClicked1" pickOnBounds="true" preserveRatio="true">
                                                                            <HBox.margin>
                                                                               <Insets left="32.0" right="17.0" />
                                                                            </HBox.margin>
                                                                         </ImageView>
-                                                                        <ImageView fx:id="weaponSPRed2" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp2Clicked" pickOnBounds="true" preserveRatio="true">
+                                                                        <ImageView fx:id="weaponSPRed2" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#redWeaponClicked2" pickOnBounds="true" preserveRatio="true">
                                                                            <HBox.margin>
                                                                               <Insets left="17.0" right="17.0" />
                                                                            </HBox.margin>
                                                                         </ImageView>
-                                                                        <ImageView fx:id="weaponSPRed3" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp3Clicked" pickOnBounds="true" preserveRatio="true">
+                                                                        <ImageView fx:id="weaponSPRed3" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#redWeaponClicked3" pickOnBounds="true" preserveRatio="true">
                                                                            <HBox.margin>
                                                                               <Insets left="17.0" right="17.0" />
                                                                            </HBox.margin>
@@ -128,17 +128,17 @@
                                                                               <Font size="20.0" />
                                                                            </font>
                                                                         </Text>
-                                                                        <ImageView fx:id="weaponSPYellow1" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp1Clicked" pickOnBounds="true" preserveRatio="true">
+                                                                        <ImageView fx:id="weaponSPYellow1" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#yellowWeaponClicked1" pickOnBounds="true" preserveRatio="true">
                                                                            <HBox.margin>
                                                                               <Insets left="70.0" right="17.0" />
                                                                            </HBox.margin>
                                                                         </ImageView>
-                                                                        <ImageView fx:id="weaponSPYellow2" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp2Clicked" pickOnBounds="true" preserveRatio="true">
+                                                                        <ImageView fx:id="weaponSPYellow2" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#yellowWeaponClicked2" pickOnBounds="true" preserveRatio="true">
                                                                            <HBox.margin>
                                                                               <Insets left="17.0" right="17.0" />
                                                                            </HBox.margin>
                                                                         </ImageView>
-                                                                        <ImageView fx:id="weaponSPYellow3" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#powerUp3Clicked" pickOnBounds="true" preserveRatio="true">
+                                                                        <ImageView fx:id="weaponSPYellow3" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#yellowWeaponClicked3" pickOnBounds="true" preserveRatio="true">
                                                                            <HBox.margin>
                                                                               <Insets left="17.0" right="17.0" />
                                                                            </HBox.margin>
