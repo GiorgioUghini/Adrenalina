@@ -436,28 +436,26 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     private void addOnPane(GridPane pane, Node node) {
-        Platform.runLater( () -> {
-            switch (pane.getChildren().size()) {
-                case 0:
-                    pane.add(node, 1, 2);
-                    break;
-                case 1:
-                    pane.add(node, 2, 2);
-                    break;
-                case 2:
-                    pane.add(node, 1, 3);
-                    break;
-                case 3:
-                    pane.add(node, 2, 3);
-                    break;
-                case 4:
-                    pane.add(node, 1, 1);
-                    break;
-                default:
-                    pane.add(node, 2, 1);
-                    break;
-            }
-        });
+        switch (pane.getChildren().size()) {
+            case 0:
+                pane.add(node, 1, 2);
+                break;
+            case 1:
+                pane.add(node, 2, 2);
+                break;
+            case 2:
+                pane.add(node, 1, 3);
+                break;
+            case 3:
+                pane.add(node, 2, 3);
+                break;
+            case 4:
+                pane.add(node, 1, 1);
+                break;
+            default:
+                pane.add(node, 2, 1);
+                break;
+        }
     }
 
     private void removeFromPane(GridPane pane, Node node) {
@@ -489,7 +487,9 @@ public class GameViewGUI implements Initializable, GameView {
     private void drawPlayerToken(GridPane pane, int i) {
         Circle circle = new Circle(0.0d,0.0d,17.0d);
         circle.setFill(getColor(i));
-        addOnPane(pane, circle);
+        Platform.runLater(() -> {
+            addOnPane(pane, circle);
+        });
     }
 
     private void deletePlayerToken(GridPane pane, int i) {
@@ -572,7 +572,9 @@ public class GameViewGUI implements Initializable, GameView {
                     imageView.setFitWidth(45);
                     imageView.setFitHeight(45);
                     GridPane panetoadd = paneList.get(x).get(y);
-                    addOnPane(panetoadd, imageView);
+                    Platform.runLater(() -> {
+                        addOnPane(panetoadd, imageView);
+                    });
                 }
             }
         }
