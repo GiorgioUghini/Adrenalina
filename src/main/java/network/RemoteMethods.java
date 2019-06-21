@@ -37,6 +37,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             return updates;
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return new ArrayList<>();
         }
     }
@@ -53,6 +54,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             return token;
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return "";
         }
 
@@ -83,6 +85,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             }
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return new ErrorResponse(ex);
         }
     }
@@ -100,6 +103,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             return new ReconnectResponse();
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return new ErrorResponse(ex);
         }
 
@@ -116,6 +120,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             return new ValidActionsResponse(actions, isNewActions);
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return new ErrorResponse(ex);
         }
     }
@@ -127,6 +132,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             return new WaitingPlayerResponse(waitingPlayers);
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return new ErrorResponse(ex);
         }
     }
@@ -143,6 +149,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             return new ChooseMapResponse();
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return new ErrorResponse(ex);
         }
     }
@@ -158,6 +165,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             return new DrawPowerUpResponse(card);
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return new ErrorResponse(ex);
         }
     }
@@ -183,6 +191,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             return new SpawnPlayerResponse();
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return new ErrorResponse(ex);
         }
     }
@@ -208,6 +217,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             return legitEffects.getLegitEffects().isEmpty() ? new FinishCardResponse() : new FinishEffectResponse();
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return new ErrorResponse(ex);
         }
     }
@@ -225,6 +235,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             return new CardEffectsResponse(legitEffects);
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return new ErrorResponse(ex);
         }
     }
@@ -238,6 +249,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             return new FinishCardResponse();
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return new ErrorResponse(ex);
         }
     }
@@ -262,6 +274,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             return legitEffects.getLegitEffects().isEmpty() ? new FinishCardResponse() : new FinishEffectResponse();
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return new ErrorResponse(ex);
         }
     }
@@ -285,6 +298,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             return new FinishPowerUpResponse();
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return new ErrorResponse(ex);
         }
     }
@@ -300,6 +314,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             return new EndTurnResponse();
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return new ErrorResponse(ex);
         }
     }
@@ -319,6 +334,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             return new TurnActionResponse();
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return new ErrorResponse(ex);
         }
     }
@@ -349,6 +365,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             return new GrabResponse();
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return new ErrorResponse(ex);
         }
     }
@@ -381,6 +398,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             return new RunResponse();
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return new ErrorResponse(ex);
         }
     }
@@ -402,6 +420,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             return new ReloadResponse();
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return new ErrorResponse(ex);
         }
     }
@@ -426,6 +445,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             return new FinishPowerUpResponse();
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return new ErrorResponse(ex);
         }
     }
