@@ -274,6 +274,8 @@ public class Player implements Subscriber, Serializable, Taggable {
 
     public void disconnect() {
         online = false;
+        resetWeapon();
+        resetPowerUp();
     }
 
     public boolean isOnline(){
