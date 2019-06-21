@@ -5,8 +5,12 @@ import models.card.WeaponCard;
 import models.map.GameMap;
 import models.player.Player;
 import models.turn.ActionType;
+import models.turn.TurnEvent;
 import network.Client;
 import utils.Console;
+
+import java.util.List;
+import java.util.Map;
 
 import static utils.Console.*;
 import static utils.Console.println;
@@ -48,10 +52,8 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
-    public void setEnabledBtnEndTurn(boolean enable) {
-        if (enable) {
-            Console.print("End this turn");
-        }
+    public void updateActions(Map<ActionType, List<TurnEvent>> actions) {
+
     }
 
     @Override
@@ -77,55 +79,6 @@ public class GameViewCLI implements GameView {
     @Override
     public void onPlayerDisconnected(String name) {
 
-    }
-
-    @Override
-    public void setBtnDrawPowerUpVisibility(boolean isVisible) {
-        if (isVisible) {
-            Console.print("1) You Can Draw a Power Up");
-        }
-    }
-
-    @Override
-    public void setBtnSpawnVisibility(boolean isVisible) {
-        if (isVisible) {
-            Console.print("3) You Can Spawn");
-        }
-    }
-
-    @Override
-    public void setBtnRunVisibility(boolean isVisible) {
-        if (isVisible) {
-            Console.print("4) You Can Run");
-        }
-    }
-
-    @Override
-    public void setBtnGrabAmmoVisibility(boolean isVisible) {
-        if (isVisible) {
-            Console.print("5) You Can Grab something");
-        }
-    }
-
-    @Override
-    public void setBtnShootVisibility(boolean isVisible) {
-        if (isVisible) {
-            Console.print("6) You Can Shoot");
-        }
-    }
-
-    @Override
-    public void setBtnReloadVisibility(boolean isVisible) {
-        if (isVisible) {
-            Console.print("7) You Can Reload");
-        }
-    }
-
-    @Override
-    public void setBtnUsePowerUpVisibility(boolean isVisible) {
-        if (isVisible) {
-            Console.print("8) You Can use a power up");
-        }
     }
 
     private void printMapNum(int num) {

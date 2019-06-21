@@ -7,7 +7,6 @@ import models.card.Effect;
 import models.card.LegitEffects;
 import models.player.Player;
 import models.turn.ActionType;
-import models.turn.TurnEvent;
 import models.turn.TurnType;
 import network.responses.*;
 import network.updates.*;
@@ -37,62 +36,15 @@ public class ResponseHandler implements ResponseHandlerInterface {
         if (response.newActions) {
             Client.getInstance().setCurrentActionType(null);
         }
-        if(Client.getInstance().isMyTurn() && response.actions.isEmpty()){
-            ((GameView) Client.getInstance().getCurrentView()).setEnabledBtnEndTurn(true);
-        }
-        else{
-            ((GameView) Client.getInstance().getCurrentView()).setEnabledBtnEndTurn(false);
-        }
+
+        GameView gameView = (GameView) Client.getInstance().getCurrentView();
+        gameView.updateActions(response.actions);
+
         Client.getInstance().setActions(response.actions);
         if (response.actions.keySet().size() == 1 && Client.getInstance().getCurrentActionType() == null) { // auto-action
             ActionType actionType = response.actions.keySet().stream().findFirst().orElse(null);
             Client.getInstance().setCurrentActionType(actionType);
             Client.getInstance().getConnection().action(actionType);
-        }
-        if (Client.getInstance().getCurrentActionType() != null)
-            for (TurnEvent turnEvent : Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType())) {
-                switch (turnEvent) {
-                    case DRAW:
-                        ((GameView) Client.getInstance().getCurrentView()).setBtnDrawPowerUpVisibility(true);
-                        break;
-                    case RUN_1:
-                    case RUN_2:
-                    case RUN_3:
-                    case RUN_4:
-                        ((GameView) Client.getInstance().getCurrentView()).setBtnRunVisibility(true);
-                        break;
-                    case SHOOT:
-                        ((GameView) Client.getInstance().getCurrentView()).setBtnShootVisibility(true);
-                        break;
-                    case RELOAD:
-                        ((GameView) Client.getInstance().getCurrentView()).setBtnReloadVisibility(true);
-                        break;
-                    case SPAWN:
-                        if (Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType()).size() == 1 && Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType()).get(0) == TurnEvent.SPAWN)
-                            ((GameView) Client.getInstance().getCurrentView()).setBtnSpawnVisibility(true);
-                        break;
-                    case GRAB:
-                        ((GameView) Client.getInstance().getCurrentView()).setBtnGrabAmmoVisibility(true);
-                        break;
-                    //NE MANCANO ALCUNI! TIPO I VARI USEPOWERUP
-                }
-            }
-        if (Client.getInstance().getShowActions() && Client.getInstance().getActions().keySet().size() > 1) {
-            int i = 0;
-            for (ActionType action : Client.getInstance().getActions().keySet()) {
-                ((GameView) Client.getInstance().getCurrentView()).setTextAndEnableBtnActionGroup(action, ++i);
-                Client.getInstance().getCurrentView().showMessage("Action group: " + action.name());
-            }
-            Client.getInstance().setShowActions(false);
-        }
-        if (Client.getInstance().getShowEvents()) {
-            if(Client.getInstance().getCurrentActionType() != null){
-                for (TurnEvent event : Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType())) {
-                    Client.getInstance().getCurrentView().showMessage("Event: " + event.name());
-                }
-            }
-
-            Client.getInstance().setShowEvents(false);
         }
     }
 
@@ -158,7 +110,6 @@ public class ResponseHandler implements ResponseHandlerInterface {
     @Override
     public void handle(NextTurnUpdate response) {
         Client client = Client.getInstance();
-        client.setShowActions(true);
         client.setMyTurn(response.name.equals(client.getPlayer().getName()));
         try {
             ((GameView)client.getCurrentView()).startTurn(response.name);
@@ -221,14 +172,12 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(GrabResponse response) {
-        Client.getInstance().setShowActions(true);
         Client.getInstance().setShowEvents(true);
         Client.getInstance().getConnection().validActions();
     }
 
     @Override
     public void handle(RunResponse response) {
-        Client.getInstance().setShowActions(true);
         Client.getInstance().setShowEvents(true);
         Client.getInstance().getConnection().validActions();
     }
