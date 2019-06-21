@@ -143,9 +143,6 @@ public class GameViewGUI implements Initializable, GameView {
 
     private GameController gameController;
 
-    private GameMap gameMap;
-    private Player me;
-
     public GameViewGUI() {
         this.gameController = new GameController();
     }
@@ -299,7 +296,6 @@ public class GameViewGUI implements Initializable, GameView {
     public void run(Square square) {
         TurnEvent te = Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType()).get(0);
         Client.getInstance().getConnection().run(te, square);
-        gameMap.movePlayer(me, square);
         gameController.getValidActions();
     }
     public void grab() {
