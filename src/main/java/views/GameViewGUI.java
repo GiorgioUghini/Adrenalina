@@ -501,7 +501,7 @@ public class GameViewGUI implements Initializable, GameView {
             case 3:
                 s = "PINK";
                 break;
-            default:
+            case 4:
                 s = "RED";
                 break;
 
