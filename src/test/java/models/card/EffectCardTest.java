@@ -1,6 +1,7 @@
 package models.card;
 
 import controllers.CardController;
+import controllers.GameController;
 import models.map.*;
 import models.player.Ammo;
 import models.player.Player;
@@ -47,6 +48,37 @@ public class EffectCardTest {
             assertEquals(ammo.red, 3 - effectPrice.red);
             assertEquals(ammo.yellow, 3 - effectPrice.yellow);
             ammo = new Ammo(3,3,3);
+        }
+    }
+
+    @Test
+    public void testMandatoryFields(){
+        WeaponDeck deck = new CardController().getWeaponDeck();
+        int deckSize = deck.size();
+        for(int i = 0; i<deckSize; i++){
+            WeaponCard card = (WeaponCard) deck.draw();
+            System.out.println(card.name);
+            for(Effect effect : card.effects){
+                for(Action action : effect.actions){
+                    switch (action.type){
+                        case SELECT:
+                            assertNotNull(action.select.id);
+                            assertNotNull(action.select.type);
+                            break;
+                        case DAMAGE:
+                            assertNotNull(action.damage.target);
+                            assertNotEquals("me", action.damage.target);
+                            break;
+                        case MOVE:
+                            assertNotNull(action.move.target);
+                            break;
+                        case MARK:
+                            assertNotNull(action.mark.target);
+                            assertNotEquals("me", action.mark.target);
+                            break;
+                    }
+                }
+            }
         }
     }
 

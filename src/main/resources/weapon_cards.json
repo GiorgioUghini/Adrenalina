@@ -489,10 +489,24 @@
         "name": "Modalità base",
         "actions": [
           {
+            "type": "select",
+            "select": {
+              "auto": true,
+              "type": "square",
+              "id": "my_square",
+              "radix": [
+                {
+                  "ref": "me",
+                  "max": 1
+                }
+              ]
+            }
+          },
+          {
             "type": "damage",
             "damage": {
               "type": "square",
-              "target": "me",
+              "target": "my_square",
               "value": 1
             }
           }
@@ -506,10 +520,24 @@
         },
         "actions": [
           {
+            "type": "select",
+            "select": {
+              "auto": true,
+              "type": "square",
+              "id": "my_square",
+              "radix": [
+                {
+                  "ref": "me",
+                  "max": 1
+                }
+              ]
+            }
+          },
+          {
             "type": "damage",
             "damage": {
               "type": "square",
-              "target": "me",
+              "target": "my_square",
               "value": 2
             }
           }
@@ -1575,7 +1603,7 @@
           },
           {
             "type": "mark",
-            "damage": {
+            "mark": {
               "type": "player",
               "target": "enemy_1",
               "value": 1
@@ -1583,7 +1611,7 @@
           },
           {
             "type": "mark",
-            "damage": {
+            "mark": {
               "type": "player",
               "target": "enemy_2",
               "value": 1
@@ -1591,7 +1619,7 @@
           },
           {
             "type": "mark",
-            "damage": {
+            "mark": {
               "type": "player",
               "target": "enemy_3",
               "value": 1
@@ -1638,6 +1666,7 @@
           {
             "type": "select",
             "select": {
+              "type": "square",
               "id": "destination",
               "radix": [
                 {
@@ -1881,6 +1910,7 @@
             "type": "select",
             "select": {
               "auto": true,
+              "type": "square",
               "id": "first_square",
               "radix": [
                 {
@@ -1914,6 +1944,7 @@
             "type": "select",
             "select": {
               "auto": true,
+              "type": "square",
               "id": "second_square",
               "radix": [
                 {
