@@ -334,7 +334,7 @@
                                                       <Font size="20.0" />
                                                    </font>
                                                 </Button>
-                                                <Button fx:id="btnSpawn" disable="true" mnemonicParsing="false" onAction="#spawn" prefHeight="66.5" prefWidth="234.0" text="SPAWN">
+                                                <Button fx:id="btnSpawn" disable="true" maxHeight="66.5" maxWidth="234.0" mnemonicParsing="false" onAction="#spawn" prefHeight="66.5" prefWidth="234.0" text="SPAWN">
                                                    <font>
                                                       <Font size="20.0" />
                                                    </font>
@@ -360,6 +360,11 @@
                                                    </font>
                                                 </Button>
                                                 <Button fx:id="btnUsePowerUp" disable="true" mnemonicParsing="false" onAction="#usePowerUp" prefHeight="66.5" prefWidth="234.0" text="USE POWERUP">
+                                                   <font>
+                                                      <Font size="20.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button fx:id="btnEndSelect" disable="true" mnemonicParsing="false" onAction="#endSelectTag" prefHeight="66.5" prefWidth="234.0" text="END SELECT TAG">
                                                    <font>
                                                       <Font size="20.0" />
                                                    </font>

@@ -121,6 +121,8 @@ public class GameViewGUI implements Initializable, GameView {
     private ImageView weaponSPYellow3;
     @FXML
     private TabPane tabPane;
+    @FXML
+    private Button btnEndSelect;
 
     @FXML
     private Text redAmmoText;
@@ -530,19 +532,19 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     private void highlightCircle(Circle c) {
-        c.setStrokeWidth(7d);
+        Platform.runLater( () -> c.setStrokeWidth(7d));
     }
 
     private void undoHighlightCircle(Circle c) {
-        c.setStrokeWidth(0d);
+        Platform.runLater( () -> c.setStrokeWidth(0d));
     }
 
     private void highlightGridPane(GridPane gp) {
-        gp.setStyle("-fx-background-color: green; -fx-opacity: 0.5;");
+        Platform.runLater( () -> gp.setStyle("-fx-background-color: green; -fx-opacity: 0.5;"));
     }
 
     private void undoHighlightGridPane(GridPane gp) {
-        gp.setStyle("");
+        Platform.runLater( () -> gp.setStyle(""));
     }
 
     private void playerClicked(Player p) {
@@ -1091,6 +1093,11 @@ public class GameViewGUI implements Initializable, GameView {
                 canDoActionMap.put(ViewAction.SELECTSQUARE, true);
                 break;
         }
+    }
+
+    public void endSelectTag() {
+        //TODO: ?????? Si fa così???
+        Client.getInstance().getConnection().tagElement(null);
     }
 
 
