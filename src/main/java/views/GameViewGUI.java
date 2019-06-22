@@ -507,9 +507,11 @@ public class GameViewGUI implements Initializable, GameView {
 
         }
         final String t = s;
-        Platform.runLater(() -> {
-                tabPane.getTabs().get(i).setText("YOU: PLAYER " + t);
-        });
+        if (Client.getInstance().getPlayers().indexOf(Client.getInstance().getPlayer()) == i) {
+            Platform.runLater(() -> {
+                tabPane.getTabs().get(i).setText("## YOU: Player " + t);
+            });
+        }
         circle.setOnMouseClicked( e -> {
             playerClicked(i);
             e.consume();
