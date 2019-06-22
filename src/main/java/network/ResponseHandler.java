@@ -143,6 +143,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
     @Override
     public void handle(SelectResponse response) {
         Console.print("OK");
+        ((GameView) Client.getInstance().getCurrentView()).selectTag(response.selectable);
         // response.selectable per ottenere type e oggetti da selezionare
     }
 
@@ -153,13 +154,13 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(FinishCardResponse response) {
-        Console.print("OK");
+        Console.print("NON IMPLEMENTATO");
         // TODO andare avanti col turno sul client, è finito uno SHOOT
     }
 
     @Override
     public void handle(FinishEffectResponse response) {
-        Console.print("OK");
+        Console.print("NON IMPLEMENTATO");
         // TODO è finito un effetto, chiedere all'utente se vuole attivarne un altro o terminare lo SHOOT. Per terminare deve inviare una FinishCardRequest
     }
 

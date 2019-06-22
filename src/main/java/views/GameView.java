@@ -1,6 +1,7 @@
 package views;
 
 import models.card.LegitEffects;
+import models.card.Selectable;
 import models.map.GameMap;
 import models.player.Player;
 import models.turn.ActionType;
@@ -23,5 +24,7 @@ public interface GameView extends View {
     void effectChoosingDialog(LegitEffects legitEffects);
 
     void setTextAndEnableBtnActionGroup(ActionType actionType, int btnNum);
+
+    void selectTag(Selectable selectable);
 
 }

@@ -137,10 +137,7 @@ public class GameViewGUI implements Initializable, GameView {
 
     private WeaponCard toDiscard = null;
 
-    private boolean canClickOnPowerUps = false;
-    private boolean canDiscardHisOwnWeapons = false;
-    private boolean canChooseSpawnPointWeapon = false;
-    private boolean canShoot = false;
+    private HashMap<ViewAction, Boolean> canDoActionMap = new HashMap<>();
 
     private GameController gameController;
 
@@ -160,6 +157,14 @@ public class GameViewGUI implements Initializable, GameView {
         weaponSpaces.add(imgYourWeaponCard1);
         weaponSpaces.add(imgYourWeaponCard2);
         weaponSpaces.add(imgYourWeaponCard3);
+
+        canDoActionMap.put(ViewAction.CLICKPOWERUP, false);
+        canDoActionMap.put(ViewAction.CHOOSESPAWNPOINTWEAPON, false);
+        canDoActionMap.put(ViewAction.SHOOT, false);
+        canDoActionMap.put(ViewAction.SELECTPLAYER, false);
+        canDoActionMap.put(ViewAction.SELECTROOM, false);
+        canDoActionMap.put(ViewAction.SELECTSQUARE, false);
+        canDoActionMap.put(ViewAction.RUN, false);
 
         this.turnEventButtons = new ArrayList<>(Arrays.asList(btnDrawPowerUp, btnGrab, btnSpawn, btnRun, btnShoot, btnReload, btnUsePowerUp));
 
@@ -288,10 +293,11 @@ public class GameViewGUI implements Initializable, GameView {
     public void spawn() {
         showMessage("Please click on the power up card you wish to DISCARD and spawn accordingly.");
         setBtnEnabled(btnSpawn, false);
-        canClickOnPowerUps = true;
+        canDoActionMap.put(ViewAction.CLICKPOWERUP, true);
     }
     public void runBtnClicked() {
         setBtnEnabled(btnRun, false);
+        canDoActionMap.put(ViewAction.RUN, true);
         showMessage("Please click on the map where you want to go.");
     }
     public void run(Square square) {
@@ -301,17 +307,15 @@ public class GameViewGUI implements Initializable, GameView {
     }
     public void grab() {
         disableTurnEventButtons();
-        gameController.grab(null, null, null);
         GameMap map = Client.getInstance().getMap();
         Player me = Client.getInstance().getPlayer();
         if (map.getPlayerPosition(me).isSpawnPoint()) {
             //Spawn Point
             if (me.getWeaponList().size() > 2) {
                 showMessage("YOU'VE 3 WEAPONS! Please select a weapon to discard first.");
-                canDiscardHisOwnWeapons = true;
             } else {
                 showMessage("Please select which weapon you want to draw.");
-                canChooseSpawnPointWeapon = true;
+                canDoActionMap.put(ViewAction.CHOOSESPAWNPOINTWEAPON, true);
             }
         } else {
             //Ammo point
@@ -321,7 +325,7 @@ public class GameViewGUI implements Initializable, GameView {
 
     public void shoot() {
         showMessage("Select which weapon you'd like to use.");
-        canShoot = true;
+        canDoActionMap.put(ViewAction.SHOOT, true);
     }
     public void reload() {
 
@@ -487,9 +491,26 @@ public class GameViewGUI implements Initializable, GameView {
     private void drawPlayerToken(GridPane pane, int i) {
         Circle circle = new Circle(0.0d,0.0d,17.0d);
         circle.setFill(getColor(i));
+        circle.setOnMouseClicked( e -> {
+            playerClicked(i);
+            e.consume();
+        });
         Platform.runLater(() -> {
             addOnPane(pane, circle);
         });
+    }
+
+    private void playerClicked(int i) {
+        Player p = Client.getInstance().getPlayers().get(i);
+        if (canDoActionMap.get(ViewAction.SELECTPLAYER)) {
+            Client.getInstance().getConnection().tagElement(p);
+        } else if (canDoActionMap.get(ViewAction.SELECTSQUARE)) {
+            Square s = Client.getInstance().getMap().getPlayerPosition(p);
+            Client.getInstance().getConnection().tagElement(s);
+        } else {
+            RoomColor rc = Client.getInstance().getMap().getPlayerPosition(p).getColor();
+            Client.getInstance().getConnection().tagElement(rc);
+        }
     }
 
     private void deletePlayerToken(GridPane pane, int i) {
@@ -622,26 +643,26 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     public void powerUp1Clicked() {
-        if (canClickOnPowerUps && (!Client.getInstance().getPlayer().getPowerUpList().isEmpty())) {
-            canClickOnPowerUps = false;
+        if (canDoActionMap.get(ViewAction.CLICKPOWERUP) && (!Client.getInstance().getPlayer().getPowerUpList().isEmpty())) {
+            canDoActionMap.put(ViewAction.CLICKPOWERUP, false);
             gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(0));
         }
     }
     public void powerUp2Clicked() {
-        if (canClickOnPowerUps && (Client.getInstance().getPlayer().getPowerUpList().size() > 1)) {
-            canClickOnPowerUps = false;
+        if (canDoActionMap.get(ViewAction.CLICKPOWERUP) && (Client.getInstance().getPlayer().getPowerUpList().size() > 1)) {
+            canDoActionMap.put(ViewAction.CLICKPOWERUP, false);
             gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(1));
         }
     }
     public void powerUp3Clicked() {
-        if (canClickOnPowerUps && (Client.getInstance().getPlayer().getPowerUpList().size() > 2)) {
-            canClickOnPowerUps = false;
+        if (canDoActionMap.get(ViewAction.CLICKPOWERUP) && (Client.getInstance().getPlayer().getPowerUpList().size() > 2)) {
+            canDoActionMap.put(ViewAction.CLICKPOWERUP, false);
             gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(2));
         }
     }
     public void powerUp4Clicked() {
-        if (canClickOnPowerUps && (Client.getInstance().getPlayer().getPowerUpList().size() > 3)) {
-            canClickOnPowerUps = false;
+        if (canDoActionMap.get(ViewAction.CLICKPOWERUP) && (Client.getInstance().getPlayer().getPowerUpList().size() > 3)) {
+            canDoActionMap.put(ViewAction.CLICKPOWERUP, false);
             gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(3));
         }
     }
@@ -649,63 +670,97 @@ public class GameViewGUI implements Initializable, GameView {
     public void weaponClicked1() {
         if (Client.getInstance().getPlayer().getWeaponList().isEmpty()) {
             showMessage("You cannot shoot.");
-        } else if (canShoot) {
-            canShoot = false;
+        } else if (canDoActionMap.get(ViewAction.SHOOT)) {
+            canDoActionMap.put(ViewAction.SHOOT, false);
             gameController.getEffects(Client.getInstance().getPlayer().getWeaponList().get(0));
         }
     }
     public void weaponClicked2() {
         if (Client.getInstance().getPlayer().getWeaponList().isEmpty()) {
             showMessage("You can't shoot.");
-        } else if (canShoot && Client.getInstance().getPlayer().getWeaponList().size() > 1) {
-            canShoot = false;
+        } else if (canDoActionMap.get(ViewAction.SHOOT) && Client.getInstance().getPlayer().getWeaponList().size() > 1) {
+            canDoActionMap.put(ViewAction.SHOOT, false);
             gameController.getEffects(Client.getInstance().getPlayer().getWeaponList().get(1));
         }
     }
     public void weaponClicked3() {
         if (Client.getInstance().getPlayer().getWeaponList().isEmpty()) {
             showMessage("No, you can't shoot.");
-        } else if (canShoot && Client.getInstance().getPlayer().getWeaponList().size() > 2) {
-            canShoot = false;
+        } else if (canDoActionMap.get(ViewAction.SHOOT) && Client.getInstance().getPlayer().getWeaponList().size() > 2) {
+            canDoActionMap.put(ViewAction.SHOOT, false);
             gameController.getEffects(Client.getInstance().getPlayer().getWeaponList().get(2));
         }
     }
 
+    private void switchActionPane(Square s) {
+        if (canDoActionMap.get(ViewAction.RUN)) {
+            run(s);
+        } else if (canDoActionMap.get(ViewAction.SELECTSQUARE)) {
+            Client.getInstance().getConnection().tagElement(s);
+        } else if (canDoActionMap.get(ViewAction.SELECTROOM)) {
+            RoomColor rc = s.getColor();
+            Client.getInstance().getConnection().tagElement(rc);
+        }
+    }
+
     public void pane00Clicked() {
-        run(Client.getInstance().getMap().getSquareByCoordinate(0, 0));
+        Square s = Client.getInstance().getMap().getSquareByCoordinate(0, 0);
+        switchActionPane(s);
     }
+
     public void pane01Clicked() {
-        run(Client.getInstance().getMap().getSquareByCoordinate(0, 1));
+        Square s = Client.getInstance().getMap().getSquareByCoordinate(0, 1);
+        switchActionPane(s);
     }
+
     public void pane02Clicked() {
-        run(Client.getInstance().getMap().getSquareByCoordinate(0, 2));
+        Square s = Client.getInstance().getMap().getSquareByCoordinate(0, 2);
+        switchActionPane(s);
     }
+
     public void pane10Clicked() {
-        run(Client.getInstance().getMap().getSquareByCoordinate(1, 0));
+        Square s = Client.getInstance().getMap().getSquareByCoordinate(1, 0);
+        switchActionPane(s);
     }
+
     public void pane11Clicked() {
-        run(Client.getInstance().getMap().getSquareByCoordinate(1, 1));
+        Square s = Client.getInstance().getMap().getSquareByCoordinate(1, 1);
+        switchActionPane(s);
     }
+
     public void pane12Clicked() {
-        run(Client.getInstance().getMap().getSquareByCoordinate(1, 2));
+        Square s = Client.getInstance().getMap().getSquareByCoordinate(1, 2);
+        switchActionPane(s);
     }
+
     public void pane20Clicked() {
-        run(Client.getInstance().getMap().getSquareByCoordinate(2, 0));
+        Square s = Client.getInstance().getMap().getSquareByCoordinate(2, 0);
+        switchActionPane(s);
     }
+
     public void pane21Clicked() {
-        run(Client.getInstance().getMap().getSquareByCoordinate(2, 1));
+        Square s = Client.getInstance().getMap().getSquareByCoordinate(2, 1);
+        switchActionPane(s);
     }
+
     public void pane22Clicked() {
-        run(Client.getInstance().getMap().getSquareByCoordinate(2, 2));
+        Square s = Client.getInstance().getMap().getSquareByCoordinate(2, 2);
+        switchActionPane(s);
     }
+
     public void pane30Clicked() {
-        run(Client.getInstance().getMap().getSquareByCoordinate(3, 0));
+        Square s = Client.getInstance().getMap().getSquareByCoordinate(3, 0);
+        switchActionPane(s);
     }
+
     public void pane31Clicked() {
-        run(Client.getInstance().getMap().getSquareByCoordinate(3, 1));
+        Square s = Client.getInstance().getMap().getSquareByCoordinate(3, 1);
+        switchActionPane(s);
     }
+
     public void pane32Clicked() {
-        run(Client.getInstance().getMap().getSquareByCoordinate(3, 2));
+        Square s = Client.getInstance().getMap().getSquareByCoordinate(3, 2);
+        switchActionPane(s);
     }
 
     public void weaponOnSpawnPointClicked(RoomColor color, int position) {
@@ -716,7 +771,7 @@ public class GameViewGUI implements Initializable, GameView {
             wc = it.next();
             position--;
         }
-        if (canChooseSpawnPointWeapon) {
+        if (canDoActionMap.get(ViewAction.CHOOSESPAWNPOINTWEAPON)) {
 
             //START CHOOSE POWER UP DIALOG
             powerUpChoosingDialog(wc);
@@ -894,11 +949,56 @@ public class GameViewGUI implements Initializable, GameView {
                 int index = btlist.indexOf(result.get());
                 if (Client.getInstance().getPlayer().getPowerUpList().isEmpty()) {
                     //Would you like to pay with power up?
+                    Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert2.setTitle("Just a question...");
+                    alert2.setHeaderText("Do you want to use a power up to pay for this action?");
+                    alert2.setContentText("If yes, select one of yours, if not, please click no.");
+
+                    List<ButtonType> btlist2 = new ArrayList<>();
+                    btlist2.add(new ButtonType("No, I don't."));
+                    Player me = Client.getInstance().getPlayer();
+                    List<PowerUpCard> powerUpCards = me.getPowerUpList();
+
+                    for (PowerUpCard powerUpCard : powerUpCards) {
+                        btlist.add(new ButtonType(powerUpCard.name));
+                    }
+
+                    alert2.getButtonTypes().setAll(btlist2);
+                    Optional<ButtonType> result2 = alert2.showAndWait();
+                    if (!result2.isPresent()) {
+                        gameController.playEffect(legitEffects.getLegitEffects().get(index), null);
+                    } else {
+                        if (result2.get() == btlist2.get(0)) {
+                            gameController.playEffect(legitEffects.getLegitEffects().get(index), null);
+                        } else {
+                            int index2 = btlist2.indexOf(result2.get());
+                            gameController.playEffect(legitEffects.getLegitEffects().get(index), powerUpCards.get(index2 - 1));
+                        }
+                    }
                 } else {
                     gameController.playEffect(legitEffects.getLegitEffects().get(index), null);
                 }
             }
         });
     }
+
+    @Override
+    public void selectTag(Selectable selectable) {
+        switch (selectable.getType()) {
+            case ROOM:
+                showMessage("Please click on a ROOM.");
+                canDoActionMap.put(ViewAction.SELECTROOM, true);
+                break;
+            case PLAYER:
+                showMessage("Please click on a PLAYER.");
+                canDoActionMap.put(ViewAction.SELECTPLAYER, true);
+                break;
+            case SQUARE:
+                showMessage("Please click on a SQUARE.");
+                canDoActionMap.put(ViewAction.SELECTSQUARE, true);
+                break;
+        }
+    }
+
 
 }

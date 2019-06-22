@@ -2,6 +2,7 @@ package views;
 
 import models.card.LegitEffects;
 import models.card.PowerUpCard;
+import models.card.Selectable;
 import models.card.WeaponCard;
 import models.map.GameMap;
 import models.player.Player;
@@ -64,6 +65,11 @@ public class GameViewCLI implements GameView {
 
     @Override
     public void setTextAndEnableBtnActionGroup(ActionType actionType, int btnNum) {
+
+    }
+
+    @Override
+    public void selectTag(Selectable selectable) {
 
     }
 

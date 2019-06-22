@@ -4,6 +4,7 @@ import errors.CheatException;
 import errors.NotEnoughAmmoException;
 import errors.TooManyCardsException;
 import errors.WeaponCardException;
+import javafx.scene.paint.Color;
 import models.Match;
 import models.card.*;
 import models.map.*;
@@ -33,7 +34,15 @@ public class Player implements Subscriber, Serializable, Taggable {
     private boolean hasJustStarted;
     private Set<Player> playersDamagedByMeThisTurn;
     private transient Match match;
+    private Color playerColor;
 
+    public Color getPlayerColor() {
+        return playerColor;
+    }
+
+    public void setPlayerColor(Color playerColor) {
+        this.playerColor = playerColor;
+    }
 
     /** Creates a new player object
      * @param name The name identifier for the player
