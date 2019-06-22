@@ -720,7 +720,9 @@ public class GameViewGUI implements Initializable, GameView {
             showMessage("You cannot shoot.");
         } else if (canDoActionMap.get(ViewAction.SHOOT)) {
             canDoActionMap.put(ViewAction.SHOOT, false);
-            gameController.getEffects(Client.getInstance().getPlayer().getWeaponList().get(0));
+            WeaponCard we = Client.getInstance().getPlayer().getWeaponList().get(0);
+            setActualWC(we);
+            gameController.getEffects(we);
         }
     }
     public void weaponClicked2() {
@@ -728,7 +730,9 @@ public class GameViewGUI implements Initializable, GameView {
             showMessage("You can't shoot.");
         } else if (canDoActionMap.get(ViewAction.SHOOT) && Client.getInstance().getPlayer().getWeaponList().size() > 1) {
             canDoActionMap.put(ViewAction.SHOOT, false);
-            gameController.getEffects(Client.getInstance().getPlayer().getWeaponList().get(1));
+            WeaponCard we = Client.getInstance().getPlayer().getWeaponList().get(1);
+            setActualWC(we);
+            gameController.getEffects(we);
         }
     }
     public void weaponClicked3() {
@@ -736,7 +740,9 @@ public class GameViewGUI implements Initializable, GameView {
             showMessage("No, you can't shoot.");
         } else if (canDoActionMap.get(ViewAction.SHOOT) && Client.getInstance().getPlayer().getWeaponList().size() > 2) {
             canDoActionMap.put(ViewAction.SHOOT, false);
-            gameController.getEffects(Client.getInstance().getPlayer().getWeaponList().get(2));
+            WeaponCard we = Client.getInstance().getPlayer().getWeaponList().get(2);
+            setActualWC(we);
+            gameController.getEffects(we);
         }
     }
 
@@ -996,6 +1002,7 @@ public class GameViewGUI implements Initializable, GameView {
             for (Effect effect : legitEffects.getLegitEffects()) {
                 btlist.add(new ButtonType(effect.name));
             }
+            btlist.add(new ButtonType("I don't want to use any effect."));
 
             alert.getButtonTypes().setAll(btlist);
             Optional<ButtonType> result = alert.showAndWait();
@@ -1004,7 +1011,9 @@ public class GameViewGUI implements Initializable, GameView {
                 gameController.finishCard();
             } else {
                 int index = btlist.indexOf(result.get());
-                if (Client.getInstance().getPlayer().getPowerUpList().isEmpty()) {
+                if (index == btlist.size()-1) {
+                    gameController.finishCard();
+                } else if (!Client.getInstance().getPlayer().getPowerUpList().isEmpty()) {
                     //Would you like to pay with power up?
                     Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
                     alert2.setTitle("Just a question...");
@@ -1037,6 +1046,20 @@ public class GameViewGUI implements Initializable, GameView {
                 }
             }
         });
+    }
+
+    private WeaponCard actualWC = null;
+    public void setActualWC(WeaponCard wc) {
+        this.actualWC = wc;
+    }
+    public WeaponCard getActualWC() {
+        return this.actualWC;
+    }
+    @Override
+    public void continueWeapon() {
+        if (actualWC!=null) {
+            gameController.getEffects(actualWC);
+        }
     }
 
     @Override

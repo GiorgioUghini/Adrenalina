@@ -86,7 +86,6 @@ public class ResponseHandler implements ResponseHandlerInterface {
     public void handle(CardEffectsResponse response) {
         LegitEffects legitEffects = response.legitEffects;
         ((GameView) Client.getInstance().getCurrentView()).effectChoosingDialog(legitEffects);
-        Client.getInstance().getCurrentView().showMessage("You started using weapon card.");
     }
 
     @Override
@@ -142,7 +141,6 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(SelectResponse response) {
-        Console.print("OK");
         ((GameView) Client.getInstance().getCurrentView()).selectTag(response.selectable);
         // response.selectable per ottenere type e oggetti da selezionare
     }
@@ -154,14 +152,13 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(FinishCardResponse response) {
-        Console.print("NON IMPLEMENTATO");
-        // TODO andare avanti col turno sul client, è finito uno SHOOT
+        Client.getInstance().setShowEvents(true);
+        Client.getInstance().getConnection().validActions();
     }
 
     @Override
     public void handle(FinishEffectResponse response) {
-        Console.print("NON IMPLEMENTATO");
-        // TODO è finito un effetto, chiedere all'utente se vuole attivarne un altro o terminare lo SHOOT. Per terminare deve inviare una FinishCardRequest
+        ((GameView) Client.getInstance().getCurrentView()).continueWeapon();
     }
 
     @Override

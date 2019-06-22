@@ -2,6 +2,7 @@ package views;
 
 import models.card.LegitEffects;
 import models.card.Selectable;
+import models.card.WeaponCard;
 import models.map.GameMap;
 import models.player.Player;
 import models.turn.ActionType;
@@ -26,5 +27,7 @@ public interface GameView extends View {
     void setTextAndEnableBtnActionGroup(ActionType actionType, int btnNum);
 
     void selectTag(Selectable selectable);
+
+    void continueWeapon();
 
 }
