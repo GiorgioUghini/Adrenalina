@@ -746,13 +746,17 @@ public class GameViewGUI implements Initializable, GameView {
             run(s);
         } else if (canDoActionMap.get(ViewAction.SELECTSQUARE)) {
             Client.getInstance().getConnection().tagElement(s);
+            for (Square sq : Client.getInstance().getMap().getAllSquares()) {
+                Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(sq);
+                undoHighlightGridPane(paneList.get(coord.getX()).get(coord.getY()));
+            }
         } else if (canDoActionMap.get(ViewAction.SELECTROOM)) {
             RoomColor rc = s.getColor();
             Client.getInstance().getConnection().tagElement(rc);
-        }
-        for (Square sq : Client.getInstance().getMap().getAllSquares()) {
-            Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(sq);
-            undoHighlightGridPane(paneList.get(coord.getX()).get(coord.getY()));
+            for (Square sq : Client.getInstance().getMap().getAllSquares()) {
+                Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(sq);
+                undoHighlightGridPane(paneList.get(coord.getX()).get(coord.getY()));
+            }
         }
     }
 
@@ -1040,6 +1044,12 @@ public class GameViewGUI implements Initializable, GameView {
         switch (selectable.getType()) {
             case ROOM:
                 showMessage("Please click on a ROOM.");
+                for (Taggable t : selectable.get()) {
+                    for (Square sq : Client.getInstance().getMap().getAllSquaresInRoom((RoomColor) t)) {
+                        Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(sq);
+                        highlightGridPane(paneList.get(coord.getX()).get(coord.getY()));
+                    }
+                }
                 canDoActionMap.put(ViewAction.SELECTROOM, true);
                 break;
             case PLAYER:
