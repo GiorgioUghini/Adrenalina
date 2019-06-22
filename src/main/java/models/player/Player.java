@@ -34,7 +34,7 @@ public class Player implements Subscriber, Serializable, Taggable {
     private boolean hasJustStarted;
     private Set<Player> playersDamagedByMeThisTurn;
     private transient Match match;
-    private Color playerColor;
+    private transient Color playerColor = null;
 
     public Color getPlayerColor() {
         return playerColor;
@@ -42,6 +42,25 @@ public class Player implements Subscriber, Serializable, Taggable {
 
     public void setPlayerColor(Color playerColor) {
         this.playerColor = playerColor;
+    }
+
+    private boolean isSameColor(Color a, Color b) {
+        return ((a.getBlue() == b.getBlue()) && (a.getRed() == b.getRed()) && (a.getGreen() == b.getGreen()));
+    }
+
+    public String getStringColor() {
+        if (isSameColor(playerColor, Color.rgb(153, 255, 153))) {
+            return "GREEN";
+        } else if (isSameColor(playerColor, Color.rgb(0, 204, 255))) {
+            return "BLUE";
+        } else if (isSameColor(playerColor, Color.rgb(102, 0, 204))) {
+            return "VIOLET";
+        } else if (isSameColor(playerColor, Color.rgb(255, 153, 204))) {
+            return "PINK";
+        } else if (isSameColor(playerColor, Color.rgb(204, 51, 0))) {
+            return "RED";
+        }
+        return null;
     }
 
     /** Creates a new player object

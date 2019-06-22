@@ -22,6 +22,7 @@ import models.player.Player;
 import models.turn.ActionType;
 import models.turn.TurnEvent;
 import network.Client;
+import utils.BiMap;
 
 import java.net.URL;
 import java.util.*;
@@ -139,6 +140,8 @@ public class GameViewGUI implements Initializable, GameView {
     private HashMap<ViewAction, Boolean> canDoActionMap = new HashMap<>();
 
     private GameController gameController;
+
+    private BiMap<Circle, Player> circlePlayerMap = new BiMap<>();
 
     public GameViewGUI() {
         this.gameController = new GameController();
@@ -487,48 +490,64 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
-    private void drawPlayerToken(GridPane pane, int i) {
+    private void drawPlayerToken(GridPane pane, Player p) {
         Circle circle = new Circle(0.0d,0.0d,17.0d);
-        circle.setFill(getColor(i));
+        boolean noColorNow = p.getPlayerColor() == null;
+        int i = Client.getInstance().getPlayers().indexOf(p);
+        circle.setFill((noColorNow) ? getColor(i) : p.getPlayerColor());
         String s = "GREEN";
-        switch (i) {
-            case 1:
-                s = "BLUE";
-                break;
-            case 2:
-                s = "VIOLET";
-                break;
-            case 3:
-                s = "PINK";
-                break;
-            case 4:
-                s = "RED";
-                break;
-
+        if (noColorNow) {
+            switch (i) {
+                case 1:
+                    s = "BLUE";
+                    break;
+                case 2:
+                    s = "VIOLET";
+                    break;
+                case 3:
+                    s = "PINK";
+                    break;
+                case 4:
+                    s = "RED";
+                    break;
+            }
+            p.setPlayerColor(getColor(i));
+        } else {
+            s = p.getStringColor();
         }
         final String t = s;
         if (Client.getInstance().getPlayers().indexOf(Client.getInstance().getPlayer()) == i) {
-            Platform.runLater(() -> {
-                tabPane.getTabs().get(i).setText("## YOU: Player " + t);
-            });
+            Platform.runLater(() -> tabPane.getTabs().get(i).setText("## YOU: Player " + t));
         }
+        circlePlayerMap.add(circle, p);
         circle.setOnMouseClicked( e -> {
-            playerClicked(i);
+            playerClicked(p);
             e.consume();
         });
-        Platform.runLater(() -> {
-            addOnPane(pane, circle);
-        });
+        circle.setStrokeWidth(0d);
+        circle.setStroke(Color.BLACK);
+        Platform.runLater(() -> addOnPane(pane, circle));
     }
 
-    private void playerClicked(int i) {
-        Player p = Client.getInstance().getPlayers().get(i);
+    private void highlightCircle(Circle c) {
+        c.setStrokeWidth(7d);
+    }
+
+    private void undoHighlightCircle(Circle c) {
+        c.setStrokeWidth(0d);
+    }
+
+    private void playerClicked(Player p) {
+        undoHighlightCircle(circlePlayerMap.getSingleKey(p));
         if (canDoActionMap.get(ViewAction.SELECTPLAYER)) {
+            canDoActionMap.put(ViewAction.SELECTPLAYER, false);
             Client.getInstance().getConnection().tagElement(p);
         } else if (canDoActionMap.get(ViewAction.SELECTSQUARE)) {
+            canDoActionMap.put(ViewAction.SELECTSQUARE, false);
             Square s = Client.getInstance().getMap().getPlayerPosition(p);
             Client.getInstance().getConnection().tagElement(s);
         } else {
+            canDoActionMap.put(ViewAction.SELECTROOM, false);
             RoomColor rc = Client.getInstance().getMap().getPlayerPosition(p).getColor();
             Client.getInstance().getConnection().tagElement(rc);
         }
@@ -569,7 +588,7 @@ public class GameViewGUI implements Initializable, GameView {
                     if (oldCoord != null) {
                         deletePlayerToken(paneList.get(oldCoord.getX()).get(oldCoord.getY()), client.getPlayers().indexOf(p));
                     }
-                    drawPlayerToken(paneList.get(c.getX()).get(c.getY()), client.getPlayers().indexOf(p));
+                    drawPlayerToken(paneList.get(c.getX()).get(c.getY()), p);
                     client.getPlayerCoordinateMap().put(p, c);
                 }
             }
@@ -715,6 +734,7 @@ public class GameViewGUI implements Initializable, GameView {
 
     private void switchActionPane(Square s) {
         if (canDoActionMap.get(ViewAction.RUN)) {
+            canDoActionMap.put(ViewAction.RUN, false);
             run(s);
         } else if (canDoActionMap.get(ViewAction.SELECTSQUARE)) {
             Client.getInstance().getConnection().tagElement(s);
@@ -1012,6 +1032,9 @@ public class GameViewGUI implements Initializable, GameView {
                 break;
             case PLAYER:
                 showMessage("Please click on a PLAYER.");
+                for (Taggable t : selectable.get()) {
+                    highlightCircle(circlePlayerMap.getSingleKey((Player) t));
+                }
                 canDoActionMap.put(ViewAction.SELECTPLAYER, true);
                 break;
             case SQUARE:
