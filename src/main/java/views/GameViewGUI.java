@@ -537,6 +537,14 @@ public class GameViewGUI implements Initializable, GameView {
         c.setStrokeWidth(0d);
     }
 
+    private void highlightGridPane(GridPane gp) {
+        gp.setStyle("-fx-background-color: green; -fx-opacity: 0.5;");
+    }
+
+    private void undoHighlightGridPane(GridPane gp) {
+        gp.setStyle("");
+    }
+
     private void playerClicked(Player p) {
         undoHighlightCircle(circlePlayerMap.getSingleKey(p));
         if (canDoActionMap.get(ViewAction.SELECTPLAYER)) {
@@ -741,6 +749,10 @@ public class GameViewGUI implements Initializable, GameView {
         } else if (canDoActionMap.get(ViewAction.SELECTROOM)) {
             RoomColor rc = s.getColor();
             Client.getInstance().getConnection().tagElement(rc);
+        }
+        for (Square sq : Client.getInstance().getMap().getAllSquares()) {
+            Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(sq);
+            undoHighlightGridPane(paneList.get(coord.getX()).get(coord.getY()));
         }
     }
 
@@ -1039,6 +1051,10 @@ public class GameViewGUI implements Initializable, GameView {
                 break;
             case SQUARE:
                 showMessage("Please click on a SQUARE.");
+                for (Taggable t : selectable.get()) {
+                    Coordinate coord = Client.getInstance().getMap().getSquareCoordinates((Square) t);
+                    highlightGridPane(paneList.get(coord.getX()).get(coord.getY()));
+                }
                 canDoActionMap.put(ViewAction.SELECTSQUARE, true);
                 break;
         }
