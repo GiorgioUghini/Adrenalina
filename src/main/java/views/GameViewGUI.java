@@ -8,10 +8,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -121,6 +118,8 @@ public class GameViewGUI implements Initializable, GameView {
     private ImageView weaponSPYellow2;
     @FXML
     private ImageView weaponSPYellow3;
+    @FXML
+    private TabPane tabPane;
 
     @FXML
     private Text redAmmoText;
@@ -475,13 +474,13 @@ public class GameViewGUI implements Initializable, GameView {
 
     private Color getColor(int i) {
         switch (i) {
-            case 1:
+            case 0:
                 return Color.rgb(153, 255, 153); //LIGHT GREEN
-            case 2:
+            case 1:
                 return Color.rgb(0, 204, 255); //LIGHT BLUE
-            case 3:
+            case 2:
                 return Color.rgb(102, 0, 204); //DARK VIOLET
-            case 4:
+            case 3:
                 return Color.rgb(255, 153, 204); //PINK
             default:
                 return Color.rgb(204, 51, 0); //DARK RED
@@ -491,6 +490,26 @@ public class GameViewGUI implements Initializable, GameView {
     private void drawPlayerToken(GridPane pane, int i) {
         Circle circle = new Circle(0.0d,0.0d,17.0d);
         circle.setFill(getColor(i));
+        String s = "GREEN";
+        switch (i) {
+            case 1:
+                s = "BLUE";
+                break;
+            case 2:
+                s = "VIOLET";
+                break;
+            case 3:
+                s = "PINK";
+                break;
+            default:
+                s = "RED";
+                break;
+
+        }
+        final String t = s;
+        Platform.runLater(() -> {
+                tabPane.getTabs().get(i).setText("YOU: PLAYER " + t);
+        });
         circle.setOnMouseClicked( e -> {
             playerClicked(i);
             e.consume();
