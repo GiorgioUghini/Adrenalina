@@ -526,13 +526,13 @@ public class GameViewGUI implements Initializable, GameView {
         if (Client.getInstance().getPlayers().indexOf(Client.getInstance().getPlayer()) == i) {
             Platform.runLater(() -> tabPane.getTabs().get(i).setText("## YOU: Player " + t));
         }
-        circlePlayerMap.add(circle, p);
         circle.setOnMouseClicked( e -> {
             playerClicked(p);
             e.consume();
         });
         circle.setStrokeWidth(0d);
         circle.setStroke(Color.BLACK);
+        circlePlayerMap.add(circle, p);
         Platform.runLater(() -> addOnPane(pane, circle));
     }
 
@@ -576,6 +576,7 @@ public class GameViewGUI implements Initializable, GameView {
             Node n = pane.getChildren().get(num);
             if (n.getClass() == circle1.getClass()) {
                 if (((Circle) n).getFill().equals(circle1.getFill())) {
+                    circlePlayerMap.removeByKey((Circle) n);
                     removeFromPane(pane, n);
                 }
             }
@@ -1051,9 +1052,6 @@ public class GameViewGUI implements Initializable, GameView {
     public void setActualWC(WeaponCard wc) {
         this.actualWC = wc;
     }
-    public WeaponCard getActualWC() {
-        return this.actualWC;
-    }
     @Override
     public void continueWeapon() {
         if (actualWC!=null) {
@@ -1065,7 +1063,7 @@ public class GameViewGUI implements Initializable, GameView {
     public void selectTag(Selectable selectable) {
         switch (selectable.getType()) {
             case ROOM:
-                showMessage("Please click on a ROOM.");
+                showMessage("Please click on a ROOM highlighted in green.");
                 for (Taggable t : selectable.get()) {
                     for (Square sq : Client.getInstance().getMap().getAllSquaresInRoom((RoomColor) t)) {
                         Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(sq);
@@ -1075,14 +1073,14 @@ public class GameViewGUI implements Initializable, GameView {
                 canDoActionMap.put(ViewAction.SELECTROOM, true);
                 break;
             case PLAYER:
-                showMessage("Please click on a PLAYER.");
+                showMessage("Please click on a PLAYER stroked in black.");
                 for (Taggable t : selectable.get()) {
                     highlightCircle(circlePlayerMap.getSingleKey((Player) t));
                 }
                 canDoActionMap.put(ViewAction.SELECTPLAYER, true);
                 break;
             case SQUARE:
-                showMessage("Please click on a SQUARE.");
+                showMessage("Please click on a SQUARE highlighted in green.");
                 for (Taggable t : selectable.get()) {
                     Coordinate coord = Client.getInstance().getMap().getSquareCoordinates((Square) t);
                     highlightGridPane(paneList.get(coord.getX()).get(coord.getY()));
