@@ -561,6 +561,12 @@ public class GameViewGUI implements Initializable, GameView {
         }
         final String t = s;
         tabPane.getTabs().get(i).setDisable(false);
+        String imageName = String.format("tabs/tab%d.png", i);
+        Image image = new Image(imageName);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(949);
+        imageView.setFitHeight(234);
+        Platform.runLater( () -> stackPanePlayers.get(i).getChildren().add(imageView));
         if (Client.getInstance().getPlayers().indexOf(Client.getInstance().getPlayer()) == i) {
             Platform.runLater(() -> {
                 Tab tab = tabPane.getTabs().get(i);
@@ -690,9 +696,7 @@ public class GameViewGUI implements Initializable, GameView {
                     imageView.setFitWidth(45);
                     imageView.setFitHeight(45);
                     GridPane panetoadd = paneList.get(x).get(y);
-                    Platform.runLater(() -> {
-                        addOnPane(panetoadd, imageView);
-                    });
+                    Platform.runLater(() -> addOnPane(panetoadd, imageView));
                 }
             }
         }
@@ -726,15 +730,18 @@ public class GameViewGUI implements Initializable, GameView {
             for (WeaponCard weaponCard : newPlayer.getWeaponList()) {
                 addCardToHand(weaponCard, weaponSpaces);
             }
+            /*
             //REMOVE DAMAGE
             if(oldPlayer != null)
                 for (Player p : oldPlayer.getDamagedBy()) {
                     removeAllDamageOnPlayer(oldPlayer);
                 }
+                //TODO: Debug this two fucking methods
             //ADD DAMAGE
             for (Player p : newPlayer.getDamagedBy()) {
-                    drawDamageOnPlayer(p, newPlayer.getDamagedBy().indexOf(p));
+                drawDamageOnPlayer(p, newPlayer.getDamagedBy().indexOf(p));
             }
+            */
         });
     }
 
