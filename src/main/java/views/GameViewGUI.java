@@ -380,15 +380,13 @@ public class GameViewGUI implements Initializable, GameView {
             disableTurnEventButtons();
             setActionGroupButtons(actions.keySet());
         }else {
+            disableActionGroupButtons();
             setTurnEventButtons(actions.get(currentActionType));
         }
     }
 
     private void setActionGroupButtons(Set<ActionType> groupActions){
-        setBtnEnabled(btnActionGroup1, false);
-        setBtnEnabled(btnActionGroup2, false);
-        setBtnEnabled(btnActionGroup3, false);
-
+        disableActionGroupButtons();
         if(groupActions.size() > 1 && Client.getInstance().getCurrentActionType()==null){
             int i = 0;
             for(ActionType groupAction : groupActions){
@@ -396,6 +394,12 @@ public class GameViewGUI implements Initializable, GameView {
                 showMessage("Action group: " + groupAction.name());
             }
         }
+    }
+
+    private void disableActionGroupButtons(){
+        setBtnEnabled(btnActionGroup1, false);
+        setBtnEnabled(btnActionGroup2, false);
+        setBtnEnabled(btnActionGroup3, false);
     }
 
     private void setTurnEventButtons(List<TurnEvent> turnEvents){
@@ -943,25 +947,16 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     public void btnActionGroup1Clicked() {
-        Platform.runLater( () -> {
-            btnActionGroup1.setVisible(false);
-        });
         ActionType tipo = buttonActionTypeMap.get(1);
         Client.getInstance().setCurrentActionType(tipo);
         Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
     }
     public void btnActionGroup2Clicked() {
-        Platform.runLater( () -> {
-            btnActionGroup2.setVisible(false);
-        });
         ActionType tipo = buttonActionTypeMap.get(2);
         Client.getInstance().setCurrentActionType(tipo);
         Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
     }
     public void btnActionGroup3Clicked() {
-        Platform.runLater( () -> {
-            btnActionGroup3.setVisible(false);
-        });
         ActionType tipo = buttonActionTypeMap.get(3);
         Client.getInstance().setCurrentActionType(tipo);
         Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
