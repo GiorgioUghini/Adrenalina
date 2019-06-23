@@ -29,5 +29,6 @@ public interface GameView extends View {
     void selectTag(Selectable selectable);
 
     void continueWeapon();
+    void onEndWeapon();
 
 }

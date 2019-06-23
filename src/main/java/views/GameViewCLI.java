@@ -79,6 +79,11 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
+    public void onEndWeapon() {
+
+    }
+
+    @Override
     public void printError(String error) {
 
     }

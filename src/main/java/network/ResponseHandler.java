@@ -152,8 +152,10 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(FinishCardResponse response) {
-        Client.getInstance().setShowEvents(true);
-        Client.getInstance().getConnection().validActions();
+        Client client = Client.getInstance();
+        client.setShowEvents(true);
+        client.setCurrentActionType(null);
+        client.getConnection().validActions();
     }
 
     @Override

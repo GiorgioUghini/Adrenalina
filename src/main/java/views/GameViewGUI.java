@@ -607,7 +607,6 @@ public class GameViewGUI implements Initializable, GameView {
             RoomColor rc = Client.getInstance().getMap().getPlayerPosition(p).getColor();
             onSelectDone(rc);
         }
-        setBtnEnabled(btnEndSelect, false);
     }
 
     private void deletePlayerToken(GridPane pane, int i) {
@@ -1124,6 +1123,11 @@ public class GameViewGUI implements Initializable, GameView {
         if (actualWC!=null) {
             gameController.getEffects(actualWC);
         }
+    }
+
+    @Override
+    public void onEndWeapon() {
+        this.setActualWC(null);
     }
 
     @Override
