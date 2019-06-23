@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -33,29 +34,44 @@
                                        <children>
                                           <TabPane fx:id="tabPane" layoutX="375.0" layoutY="115.0" prefHeight="532.0" prefWidth="949.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <tabs>
-                                              <Tab text="Player GREEN">
+                                              <Tab disable="true" text="Player GREEN">
                                                 <content>
-                                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                         <children>
+                                                            <StackPane layoutY="43.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.bottomAnchor="269.0" AnchorPane.topAnchor="50.0" />
+                                                         </children></AnchorPane>
                                                 </content>
                                               </Tab>
-                                              <Tab text="Player BLUE">
+                                              <Tab disable="true" text="Player BLUE">
                                                 <content>
-                                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                         <children>
+                                                            <StackPane prefHeight="234.0" prefWidth="949.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
+                                                         </children></AnchorPane>
                                                 </content>
                                               </Tab>
-                                                <Tab text="Player VIOLET">
+                                                <Tab disable="true" text="Player PURPLE">
                                                   <content>
-                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                         <children>
+                                                            <StackPane prefHeight="234.0" prefWidth="949.0" AnchorPane.topAnchor="50.0" />
+                                                         </children></AnchorPane>
                                                   </content>
                                                 </Tab>
-                                                <Tab text="Player PINK">
+                                                <Tab disable="true" text="Player WHITE">
                                                   <content>
-                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                         <children>
+                                                            <StackPane prefHeight="234.0" prefWidth="949.0" AnchorPane.topAnchor="50.0" />
+                                                         </children></AnchorPane>
                                                   </content>
                                                 </Tab>
-                                                <Tab text="Player RED">
+                                                <Tab disable="true" text="Player YELLOW">
                                                   <content>
-                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                         <children>
+                                                            <StackPane prefHeight="234.0" prefWidth="949.0" AnchorPane.topAnchor="50.0" />
+                                                         </children></AnchorPane>
                                                   </content>
                                                 </Tab>
                                                 <Tab text="Weapons on SpawnPoints">

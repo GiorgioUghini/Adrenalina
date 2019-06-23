@@ -485,15 +485,15 @@ public class GameViewGUI implements Initializable, GameView {
     private Color getColor(int i) {
         switch (i) {
             case 0:
-                return Color.rgb(153, 255, 153); //LIGHT GREEN
+                return Color.rgb(50, 190, 55); //LIGHT GREEN
             case 1:
-                return Color.rgb(0, 204, 255); //LIGHT BLUE
+                return Color.rgb(25, 135, 235); //LIGHT BLUE
             case 2:
-                return Color.rgb(102, 0, 204); //DARK VIOLET
+                return Color.rgb(180, 25, 225); //DARK PURPLE
             case 3:
-                return Color.rgb(255, 153, 204); //PINK
+                return Color.rgb(255, 242, 246); //WHITE
             default:
-                return Color.rgb(204, 51, 0); //DARK RED
+                return Color.rgb(200, 180, 30); //YELLOW
         }
     }
 
@@ -509,13 +509,13 @@ public class GameViewGUI implements Initializable, GameView {
                     s = "BLUE";
                     break;
                 case 2:
-                    s = "VIOLET";
+                    s = "PURPLE";
                     break;
                 case 3:
-                    s = "PINK";
+                    s = "WHITE";
                     break;
                 case 4:
-                    s = "RED";
+                    s = "YELLOW";
                     break;
             }
             p.setPlayerColor(getColor(i));
@@ -524,7 +524,11 @@ public class GameViewGUI implements Initializable, GameView {
         }
         final String t = s;
         if (Client.getInstance().getPlayers().indexOf(Client.getInstance().getPlayer()) == i) {
-            Platform.runLater(() -> tabPane.getTabs().get(i).setText("## YOU: Player " + t));
+            Platform.runLater(() -> {
+                Tab tab = tabPane.getTabs().get(i);
+                tab.setText("## YOU: Player " + t);
+                tab.setDisable(false);
+            });
         }
         circle.setOnMouseClicked( e -> {
             playerClicked(p);
