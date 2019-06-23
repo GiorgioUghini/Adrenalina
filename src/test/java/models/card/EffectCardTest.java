@@ -67,6 +67,7 @@ public class EffectCardTest {
                             break;
                         case DAMAGE:
                             assertNotNull(action.damage.target);
+                            assertNotNull(action.damage.type);
                             assertNotEquals("me", action.damage.target);
                             break;
                         case MOVE:
@@ -75,6 +76,7 @@ public class EffectCardTest {
                             break;
                         case MARK:
                             assertNotNull(action.mark.target);
+                            assertNotNull(action.mark.type);
                             assertNotEquals("me", action.mark.target);
                             break;
                     }
