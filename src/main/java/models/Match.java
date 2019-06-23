@@ -242,7 +242,7 @@ public class Match {
 
     public void turnEvent(TurnEvent turnEvent) {
         if(!currentActions.get(currentActionType).contains(turnEvent))
-            throw new CheatException();
+            throw new CheatException("Current action type: " + currentActionType + "; turn event: " + turnEvent);
         currentActions.get(currentActionType).subList(0, currentActions.get(currentActionType).indexOf(turnEvent) + 1).clear();
         if(currentActions.get(currentActionType).isEmpty()){
             currentActionType = null;
