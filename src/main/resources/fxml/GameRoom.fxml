@@ -7,12 +7,14 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -33,29 +35,84 @@
                                        <children>
                                           <TabPane fx:id="tabPane" layoutX="375.0" layoutY="115.0" prefHeight="532.0" prefWidth="949.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <tabs>
-                                              <Tab text="Player GREEN">
+                                              <Tab disable="true" text="Player GREEN">
                                                 <content>
-                                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                         <children>
+                                                            <StackPane fx:id="stackPanePlayer0" layoutY="43.0" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.bottomAnchor="269.0" AnchorPane.topAnchor="50.0">
+                                                               <children>
+                                                                  <ImageView fitHeight="234.0" fitWidth="949.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="@tabs/tab0.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </children>
+                                                            </StackPane>
+                                                         </children></AnchorPane>
                                                 </content>
                                               </Tab>
-                                              <Tab text="Player BLUE">
+                                              <Tab disable="true" text="Player BLUE">
                                                 <content>
-                                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                         <children>
+                                                            <StackPane fx:id="stackPanePlayer1" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+                                                               <children>
+                                                                  <ImageView fitHeight="234.0" fitWidth="949.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="@tabs/tab1.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </children>
+                                                            </StackPane>
+                                                         </children></AnchorPane>
                                                 </content>
                                               </Tab>
-                                                <Tab text="Player VIOLET">
+                                                <Tab disable="true" text="Player PURPLE">
                                                   <content>
-                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                         <children>
+                                                            <StackPane fx:id="stackPanePlayer2" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.topAnchor="50.0">
+                                                               <children>
+                                                                  <ImageView fitHeight="234.0" fitWidth="949.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="@tabs/tab2.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </children>
+                                                            </StackPane>
+                                                         </children></AnchorPane>
                                                   </content>
                                                 </Tab>
-                                                <Tab text="Player PINK">
+                                                <Tab disable="true" text="Player WHITE">
                                                   <content>
-                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                         <children>
+                                                            <StackPane fx:id="stackPanePlayer3" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.topAnchor="50.0">
+                                                               <children>
+                                                                  <ImageView fitHeight="234.0" fitWidth="949.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="@tabs/tab3.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </children>
+                                                            </StackPane>
+                                                         </children></AnchorPane>
                                                   </content>
                                                 </Tab>
-                                                <Tab text="Player RED">
+                                                <Tab disable="true" text="Player YELLOW">
                                                   <content>
-                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                         <children>
+                                                            <StackPane fx:id="stackPanePlayer4" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.topAnchor="50.0">
+                                                               <children>
+                                                                  <ImageView fitHeight="234.0" fitWidth="949.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="@tabs/tab4.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </children>
+                                                            </StackPane>
+                                                         </children></AnchorPane>
                                                   </content>
                                                 </Tab>
                                                 <Tab text="Weapons on SpawnPoints">

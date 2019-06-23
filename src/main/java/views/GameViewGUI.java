@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -125,6 +126,17 @@ public class GameViewGUI implements Initializable, GameView {
     private Button btnEndSelect;
 
     @FXML
+    private StackPane stackPanePlayer0;
+    @FXML
+    private StackPane stackPanePlayer1;
+    @FXML
+    private StackPane stackPanePlayer2;
+    @FXML
+    private StackPane stackPanePlayer3;
+    @FXML
+    private StackPane stackPanePlayer4;
+
+    @FXML
     private Text redAmmoText;
     @FXML
     private Text blueAmmoText;
@@ -133,6 +145,7 @@ public class GameViewGUI implements Initializable, GameView {
 
     private ArrayList<ImageView> powerUpSpaces = new ArrayList<>();
     private ArrayList<ImageView> weaponSpaces = new ArrayList<>();
+    private ArrayList<StackPane> stackPanePlayers = new ArrayList<>();
     private HashMap<RoomColor, List<ImageView>> weaponOnSpawnPointMap = new HashMap<>();
 
     private HashMap<Integer, ActionType> buttonActionTypeMap = new HashMap<>();
@@ -161,6 +174,11 @@ public class GameViewGUI implements Initializable, GameView {
         weaponSpaces.add(imgYourWeaponCard1);
         weaponSpaces.add(imgYourWeaponCard2);
         weaponSpaces.add(imgYourWeaponCard3);
+        stackPanePlayers.add(stackPanePlayer0);
+        stackPanePlayers.add(stackPanePlayer1);
+        stackPanePlayers.add(stackPanePlayer2);
+        stackPanePlayers.add(stackPanePlayer3);
+        stackPanePlayers.add(stackPanePlayer4);
 
         canDoActionMap.put(ViewAction.CLICKPOWERUP, false);
         canDoActionMap.put(ViewAction.CHOOSESPAWNPOINTWEAPON, false);
@@ -485,16 +503,35 @@ public class GameViewGUI implements Initializable, GameView {
     private Color getColor(int i) {
         switch (i) {
             case 0:
-                return Color.rgb(153, 255, 153); //LIGHT GREEN
+                return Color.rgb(50, 190, 55); //LIGHT GREEN
             case 1:
-                return Color.rgb(0, 204, 255); //LIGHT BLUE
+                return Color.rgb(25, 135, 235); //LIGHT BLUE
             case 2:
-                return Color.rgb(102, 0, 204); //DARK VIOLET
+                return Color.rgb(180, 25, 225); //DARK PURPLE
             case 3:
-                return Color.rgb(255, 153, 204); //PINK
+                return Color.rgb(255, 242, 246); //WHITE
             default:
-                return Color.rgb(204, 51, 0); //DARK RED
+                return Color.rgb(200, 180, 30); //YELLOW
         }
+    }
+
+    private boolean isSameColor(Color a, Color b) {
+        return ((a.getBlue() == b.getBlue()) && (a.getRed() == b.getRed()) && (a.getGreen() == b.getGreen()));
+    }
+
+    private int getIndex(Color c) {
+        if (isSameColor(c, Color.rgb(50, 190, 55))) {
+            return 0;
+        } else if (isSameColor(c, Color.rgb(25, 135, 235))) {
+            return 1;
+        } else if (isSameColor(c, Color.rgb(180, 25, 225))) {
+            return 2;
+        } else if (isSameColor(c, Color.rgb(255, 242, 246))) {
+            return 3;
+        } else if (isSameColor(c, Color.rgb(200, 180, 30))) {
+            return 4;
+        }
+        return -1;
     }
 
     private void drawPlayerToken(GridPane pane, Player p) {
@@ -509,13 +546,13 @@ public class GameViewGUI implements Initializable, GameView {
                     s = "BLUE";
                     break;
                 case 2:
-                    s = "VIOLET";
+                    s = "PURPLE";
                     break;
                 case 3:
-                    s = "PINK";
+                    s = "WHITE";
                     break;
                 case 4:
-                    s = "RED";
+                    s = "YELLOW";
                     break;
             }
             p.setPlayerColor(getColor(i));
@@ -523,16 +560,20 @@ public class GameViewGUI implements Initializable, GameView {
             s = p.getStringColor();
         }
         final String t = s;
+        tabPane.getTabs().get(i).setDisable(false);
         if (Client.getInstance().getPlayers().indexOf(Client.getInstance().getPlayer()) == i) {
-            Platform.runLater(() -> tabPane.getTabs().get(i).setText("## YOU: Player " + t));
+            Platform.runLater(() -> {
+                Tab tab = tabPane.getTabs().get(i);
+                tab.setText("## YOU: Player " + t);
+            });
         }
-        circlePlayerMap.add(circle, p);
         circle.setOnMouseClicked( e -> {
             playerClicked(p);
             e.consume();
         });
         circle.setStrokeWidth(0d);
         circle.setStroke(Color.BLACK);
+        circlePlayerMap.add(circle, p);
         Platform.runLater(() -> addOnPane(pane, circle));
     }
 
@@ -576,6 +617,7 @@ public class GameViewGUI implements Initializable, GameView {
             Node n = pane.getChildren().get(num);
             if (n.getClass() == circle1.getClass()) {
                 if (((Circle) n).getFill().equals(circle1.getFill())) {
+                    circlePlayerMap.removeByKey((Circle) n);
                     removeFromPane(pane, n);
                 }
             }
@@ -685,7 +727,33 @@ public class GameViewGUI implements Initializable, GameView {
             for (WeaponCard weaponCard : newPlayer.getWeaponList()) {
                 addCardToHand(weaponCard, weaponSpaces);
             }
+            //REMOVE DAMAGE
+            if(oldPlayer != null)
+                for (Player p : oldPlayer.getDamagedBy()) {
+                    removeAllDamageOnPlayer(oldPlayer);
+                }
+            //ADD DAMAGE
+            for (Player p : newPlayer.getDamagedBy()) {
+                    drawDamageOnPlayer(p, newPlayer.getDamagedBy().indexOf(p));
+            }
         });
+    }
+
+    void removeAllDamageOnPlayer(Player p) {
+        int index = getIndex(p.getPlayerColor());
+        StackPane stackPane = stackPanePlayers.get(index);
+        for (Node n : stackPane.getChildren()) {
+            if (n.getClass().equals(Circle.class)) {
+                Platform.runLater( () -> stackPane.getChildren().remove(n));
+            }
+        }
+    }
+
+    void drawDamageOnPlayer(Player fromWho, int position) {
+        Circle c = new Circle(130d + position*1, 138d, 17d);
+        int index = getIndex(fromWho.getPlayerColor());
+        StackPane stackPane = stackPanePlayers.get(index);
+        stackPane.getChildren().add(c);
     }
 
     @Override
@@ -1051,9 +1119,6 @@ public class GameViewGUI implements Initializable, GameView {
     public void setActualWC(WeaponCard wc) {
         this.actualWC = wc;
     }
-    public WeaponCard getActualWC() {
-        return this.actualWC;
-    }
     @Override
     public void continueWeapon() {
         if (actualWC!=null) {
@@ -1065,7 +1130,7 @@ public class GameViewGUI implements Initializable, GameView {
     public void selectTag(Selectable selectable) {
         switch (selectable.getType()) {
             case ROOM:
-                showMessage("Please click on a ROOM.");
+                showMessage("Please click on a ROOM highlighted in green.");
                 for (Taggable t : selectable.get()) {
                     for (Square sq : Client.getInstance().getMap().getAllSquaresInRoom((RoomColor) t)) {
                         Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(sq);
@@ -1075,14 +1140,14 @@ public class GameViewGUI implements Initializable, GameView {
                 canDoActionMap.put(ViewAction.SELECTROOM, true);
                 break;
             case PLAYER:
-                showMessage("Please click on a PLAYER.");
+                showMessage("Please click on a PLAYER stroked in black.");
                 for (Taggable t : selectable.get()) {
                     highlightCircle(circlePlayerMap.getSingleKey((Player) t));
                 }
                 canDoActionMap.put(ViewAction.SELECTPLAYER, true);
                 break;
             case SQUARE:
-                showMessage("Please click on a SQUARE.");
+                showMessage("Please click on a SQUARE highlighted in green.");
                 for (Taggable t : selectable.get()) {
                     Coordinate coord = Client.getInstance().getMap().getSquareCoordinates((Square) t);
                     highlightGridPane(paneList.get(coord.getX()).get(coord.getY()));

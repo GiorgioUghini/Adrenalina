@@ -49,18 +49,22 @@ public class Player implements Subscriber, Serializable, Taggable {
     }
 
     public String getStringColor() {
-        if (isSameColor(playerColor, Color.rgb(153, 255, 153))) {
+        if (isSameColor(playerColor, Color.rgb(50, 190, 55))) {
             return "GREEN";
-        } else if (isSameColor(playerColor, Color.rgb(0, 204, 255))) {
+        } else if (isSameColor(playerColor, Color.rgb(25, 135, 235))) {
             return "BLUE";
-        } else if (isSameColor(playerColor, Color.rgb(102, 0, 204))) {
-            return "VIOLET";
-        } else if (isSameColor(playerColor, Color.rgb(255, 153, 204))) {
-            return "PINK";
-        } else if (isSameColor(playerColor, Color.rgb(204, 51, 0))) {
-            return "RED";
+        } else if (isSameColor(playerColor, Color.rgb(180, 25, 225))) {
+            return "PURPLE";
+        } else if (isSameColor(playerColor, Color.rgb(255, 242, 246))) {
+            return "WHITE";
+        } else if (isSameColor(playerColor, Color.rgb(200, 180, 30))) {
+            return "YELLOW";
         }
         return null;
+    }
+
+    public List<Player> getDamagedBy() {
+        return this.life.getDamagedBy();
     }
 
     /** Creates a new player object
