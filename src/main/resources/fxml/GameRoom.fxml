@@ -7,7 +7,6 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -39,15 +38,7 @@
                                                 <content>
                                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                          <children>
-                                                            <StackPane fx:id="stackPanePlayer0" layoutY="43.0" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.bottomAnchor="269.0" AnchorPane.topAnchor="50.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="234.0" fitWidth="949.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@tabs/tab0.png" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                               </children>
-                                                            </StackPane>
+                                                            <StackPane fx:id="stackPanePlayer0" layoutY="43.0" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.bottomAnchor="269.0" AnchorPane.topAnchor="50.0" />
                                                          </children></AnchorPane>
                                                 </content>
                                               </Tab>
@@ -55,15 +46,7 @@
                                                 <content>
                                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                          <children>
-                                                            <StackPane fx:id="stackPanePlayer1" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="234.0" fitWidth="949.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@tabs/tab1.png" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                               </children>
-                                                            </StackPane>
+                                                            <StackPane fx:id="stackPanePlayer1" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
                                                          </children></AnchorPane>
                                                 </content>
                                               </Tab>
@@ -71,15 +54,7 @@
                                                   <content>
                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                          <children>
-                                                            <StackPane fx:id="stackPanePlayer2" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.topAnchor="50.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="234.0" fitWidth="949.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@tabs/tab2.png" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                               </children>
-                                                            </StackPane>
+                                                            <StackPane fx:id="stackPanePlayer2" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.topAnchor="50.0" />
                                                          </children></AnchorPane>
                                                   </content>
                                                 </Tab>
@@ -87,15 +62,7 @@
                                                   <content>
                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                          <children>
-                                                            <StackPane fx:id="stackPanePlayer3" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.topAnchor="50.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="234.0" fitWidth="949.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@tabs/tab3.png" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                               </children>
-                                                            </StackPane>
+                                                            <StackPane fx:id="stackPanePlayer3" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.topAnchor="50.0" />
                                                          </children></AnchorPane>
                                                   </content>
                                                 </Tab>
@@ -103,15 +70,7 @@
                                                   <content>
                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                          <children>
-                                                            <StackPane fx:id="stackPanePlayer4" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.topAnchor="50.0">
-                                                               <children>
-                                                                  <ImageView fitHeight="234.0" fitWidth="949.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@tabs/tab4.png" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                               </children>
-                                                            </StackPane>
+                                                            <StackPane fx:id="stackPanePlayer4" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.topAnchor="50.0" />
                                                          </children></AnchorPane>
                                                   </content>
                                                 </Tab>
