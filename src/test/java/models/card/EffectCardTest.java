@@ -71,6 +71,7 @@ public class EffectCardTest {
                             break;
                         case MOVE:
                             assertNotNull(action.move.target);
+                            assertNotNull(action.move.dest);
                             break;
                         case MARK:
                             assertNotNull(action.mark.target);
