@@ -11,6 +11,7 @@ class Life implements Serializable {
     private static final int[] assignablePoints = {8, 6, 4, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
     private Map<Player, Integer> myDamages;
+    private List<Player> damagedBy;
     private List<Player> observingPlayers;
     private Player me;
     private Player hurtMeLast;
@@ -19,6 +20,7 @@ class Life implements Serializable {
         this.me = me;
         myDamages = new LinkedHashMap<>();
         observingPlayers = new ArrayList<>();
+        damagedBy = new ArrayList<>();
     }
 
     Map<Player, Integer> getMyDamages() {
@@ -38,6 +40,10 @@ class Life implements Serializable {
         return (totalDamage > 10);
     }
 
+    List<Player> getDamagedBy() {
+        return damagedBy;
+    }
+
     int getTotalDamage() {
         return myDamages.values().stream().mapToInt(Integer::intValue).sum();
     }
@@ -55,7 +61,9 @@ class Life implements Serializable {
         if (totalDamage+damage > MAX_LIFEPOINTS) {
             damage = MAX_LIFEPOINTS - totalDamage;
         }
-
+        for (int i = 0; i<damage; i++) {
+            damagedBy.add(attacker);
+        }
         Optional<Integer> oldDamage = Optional.ofNullable(myDamages.get(attacker));
         myDamages.put(attacker, damage + oldDamage.orElse(0));
         totalDamage = damage + oldDamage.orElse(0);
@@ -120,6 +128,7 @@ class Life implements Serializable {
 
     void clearDamages() {
         myDamages.clear();
+        damagedBy.clear();
         hurtMeLast = null;
     }
 

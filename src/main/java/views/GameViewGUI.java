@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -125,6 +126,17 @@ public class GameViewGUI implements Initializable, GameView {
     private Button btnEndSelect;
 
     @FXML
+    private StackPane stackPanePlayer0;
+    @FXML
+    private StackPane stackPanePlayer1;
+    @FXML
+    private StackPane stackPanePlayer2;
+    @FXML
+    private StackPane stackPanePlayer3;
+    @FXML
+    private StackPane stackPanePlayer4;
+
+    @FXML
     private Text redAmmoText;
     @FXML
     private Text blueAmmoText;
@@ -133,6 +145,7 @@ public class GameViewGUI implements Initializable, GameView {
 
     private ArrayList<ImageView> powerUpSpaces = new ArrayList<>();
     private ArrayList<ImageView> weaponSpaces = new ArrayList<>();
+    private ArrayList<StackPane> stackPanePlayers = new ArrayList<>();
     private HashMap<RoomColor, List<ImageView>> weaponOnSpawnPointMap = new HashMap<>();
 
     private HashMap<Integer, ActionType> buttonActionTypeMap = new HashMap<>();
@@ -161,6 +174,11 @@ public class GameViewGUI implements Initializable, GameView {
         weaponSpaces.add(imgYourWeaponCard1);
         weaponSpaces.add(imgYourWeaponCard2);
         weaponSpaces.add(imgYourWeaponCard3);
+        stackPanePlayers.add(stackPanePlayer0);
+        stackPanePlayers.add(stackPanePlayer1);
+        stackPanePlayers.add(stackPanePlayer2);
+        stackPanePlayers.add(stackPanePlayer3);
+        stackPanePlayers.add(stackPanePlayer4);
 
         canDoActionMap.put(ViewAction.CLICKPOWERUP, false);
         canDoActionMap.put(ViewAction.CHOOSESPAWNPOINTWEAPON, false);
@@ -497,6 +515,25 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    private boolean isSameColor(Color a, Color b) {
+        return ((a.getBlue() == b.getBlue()) && (a.getRed() == b.getRed()) && (a.getGreen() == b.getGreen()));
+    }
+
+    private int getIndex(Color c) {
+        if (isSameColor(c, Color.rgb(50, 190, 55))) {
+            return 0;
+        } else if (isSameColor(c, Color.rgb(25, 135, 235))) {
+            return 1;
+        } else if (isSameColor(c, Color.rgb(180, 25, 225))) {
+            return 2;
+        } else if (isSameColor(c, Color.rgb(255, 242, 246))) {
+            return 3;
+        } else if (isSameColor(c, Color.rgb(200, 180, 30))) {
+            return 4;
+        }
+        return -1;
+    }
+
     private void drawPlayerToken(GridPane pane, Player p) {
         Circle circle = new Circle(0.0d,0.0d,17.0d);
         boolean noColorNow = p.getPlayerColor() == null;
@@ -523,11 +560,11 @@ public class GameViewGUI implements Initializable, GameView {
             s = p.getStringColor();
         }
         final String t = s;
+        tabPane.getTabs().get(i).setDisable(false);
         if (Client.getInstance().getPlayers().indexOf(Client.getInstance().getPlayer()) == i) {
             Platform.runLater(() -> {
                 Tab tab = tabPane.getTabs().get(i);
                 tab.setText("## YOU: Player " + t);
-                tab.setDisable(false);
             });
         }
         circle.setOnMouseClicked( e -> {
@@ -690,7 +727,33 @@ public class GameViewGUI implements Initializable, GameView {
             for (WeaponCard weaponCard : newPlayer.getWeaponList()) {
                 addCardToHand(weaponCard, weaponSpaces);
             }
+            //REMOVE DAMAGE
+            if(oldPlayer != null)
+                for (Player p : oldPlayer.getDamagedBy()) {
+                    removeAllDamageOnPlayer(oldPlayer);
+                }
+            //ADD DAMAGE
+            for (Player p : newPlayer.getDamagedBy()) {
+                    drawDamageOnPlayer(p, newPlayer.getDamagedBy().indexOf(p));
+            }
         });
+    }
+
+    void removeAllDamageOnPlayer(Player p) {
+        int index = getIndex(p.getPlayerColor());
+        StackPane stackPane = stackPanePlayers.get(index);
+        for (Node n : stackPane.getChildren()) {
+            if (n.getClass().equals(Circle.class)) {
+                Platform.runLater( () -> stackPane.getChildren().remove(n));
+            }
+        }
+    }
+
+    void drawDamageOnPlayer(Player fromWho, int position) {
+        Circle c = new Circle(130d + position*1, 138d, 17d);
+        int index = getIndex(fromWho.getPlayerColor());
+        StackPane stackPane = stackPanePlayers.get(index);
+        stackPane.getChildren().add(c);
     }
 
     @Override

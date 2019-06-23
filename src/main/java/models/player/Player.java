@@ -63,6 +63,10 @@ public class Player implements Subscriber, Serializable, Taggable {
         return null;
     }
 
+    public List<Player> getDamagedBy() {
+        return this.life.getDamagedBy();
+    }
+
     /** Creates a new player object
      * @param name The name identifier for the player
      * */
