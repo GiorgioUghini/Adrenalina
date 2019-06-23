@@ -52,6 +52,7 @@ public abstract class EffectCard extends Card {
      */
     public void select(Taggable taggable) {
         checkActiveAction(ActionType.SELECT);
+        if(taggable == null) return;
         switch (activeAction.select.type) {
             case PLAYER:
                 Player taggedPlayer = (Player) taggable;
