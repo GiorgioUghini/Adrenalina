@@ -96,6 +96,7 @@ class SelectorEngine {
 
     private Set<Square> getAllSquaresInRadix(Radix[] radixArray){
         Set<Square> radix = gameMap.getAllSquares();
+        if(radixArray==null) return radix;
         for(int i=0; i<radixArray.length; i++){
             radix.retainAll(getAllSquaresInRadix(select.radix[i]));
             if(radix.isEmpty()) return radix;

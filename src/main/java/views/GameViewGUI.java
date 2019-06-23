@@ -328,6 +328,7 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     public void shoot() {
+        setBtnEnabled(btnShoot, false);
         showMessage("Select which weapon you'd like to use.");
         canDoActionMap.put(ViewAction.SHOOT, true);
     }
@@ -551,16 +552,17 @@ public class GameViewGUI implements Initializable, GameView {
         undoHighlightCircle(circlePlayerMap.getSingleKey(p));
         if (canDoActionMap.get(ViewAction.SELECTPLAYER)) {
             canDoActionMap.put(ViewAction.SELECTPLAYER, false);
-            Client.getInstance().getConnection().tagElement(p);
+            onSelectDone(p);
         } else if (canDoActionMap.get(ViewAction.SELECTSQUARE)) {
             canDoActionMap.put(ViewAction.SELECTSQUARE, false);
             Square s = Client.getInstance().getMap().getPlayerPosition(p);
-            Client.getInstance().getConnection().tagElement(s);
+            onSelectDone(s);
         } else {
             canDoActionMap.put(ViewAction.SELECTROOM, false);
             RoomColor rc = Client.getInstance().getMap().getPlayerPosition(p).getColor();
-            Client.getInstance().getConnection().tagElement(rc);
+            onSelectDone(rc);
         }
+        setBtnEnabled(btnEndSelect, false);
     }
 
     private void deletePlayerToken(GridPane pane, int i) {
@@ -753,14 +755,14 @@ public class GameViewGUI implements Initializable, GameView {
             canDoActionMap.put(ViewAction.RUN, false);
             run(s);
         } else if (canDoActionMap.get(ViewAction.SELECTSQUARE)) {
-            Client.getInstance().getConnection().tagElement(s);
+            onSelectDone(s);
             for (Square sq : Client.getInstance().getMap().getAllSquares()) {
                 Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(sq);
                 undoHighlightGridPane(paneList.get(coord.getX()).get(coord.getY()));
             }
         } else if (canDoActionMap.get(ViewAction.SELECTROOM)) {
             RoomColor rc = s.getColor();
-            Client.getInstance().getConnection().tagElement(rc);
+            onSelectDone(rc);
             for (Square sq : Client.getInstance().getMap().getAllSquares()) {
                 Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(sq);
                 undoHighlightGridPane(paneList.get(coord.getX()).get(coord.getY()));
@@ -1093,11 +1095,19 @@ public class GameViewGUI implements Initializable, GameView {
                 canDoActionMap.put(ViewAction.SELECTSQUARE, true);
                 break;
         }
+
+        if(selectable.isOptional()){
+            setBtnEnabled(btnEndSelect, true);
+        }
     }
 
     public void endSelectTag() {
-        //TODO: ?????? Si fa così???
-        Client.getInstance().getConnection().tagElement(null);
+        onSelectDone(null);
+    }
+
+    private void onSelectDone(Taggable selected){
+        setBtnEnabled(btnEndSelect, false);
+        Client.getInstance().getConnection().tagElement(selected);
     }
 
 
