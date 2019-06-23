@@ -752,6 +752,7 @@
           {
             "type": "damage",
             "damage": {
+              "type": "player",
               "target": "secondary_enemy",
               "value": 1
             }
@@ -759,6 +760,7 @@
           {
             "type": "damage",
             "damage": {
+              "type": "player",
               "target": "tertiary_enemy",
               "value": 1
             }
@@ -1022,6 +1024,7 @@
             "type": "damage",
             "damage": {
               "target": "primary_enemy",
+              "type": "player",
               "value": 1
             }
           },
@@ -1029,6 +1032,7 @@
             "type": "damage",
             "damage": {
               "target": "secondary_enemy",
+              "type": "player",
               "value": 1
             }
           }
@@ -1443,6 +1447,7 @@
             "type": "damage",
             "damage": {
               "target": "primary_enemy",
+              "type": "player",
               "value": 2
             }
           }
@@ -1660,6 +1665,7 @@
             "type": "damage",
             "damage": {
               "target": "enemy",
+              "type": "player",
               "value": 3
             }
           },
@@ -1706,6 +1712,7 @@
             "type": "damage",
             "damage": {
               "target": "enemy",
+              "type": "player",
               "value": 2
             }
           }
@@ -1978,6 +1985,7 @@
             "type": "damage",
             "damage": {
               "target": "first_enemy",
+              "type": "player",
               "value": 1
             }
           },
@@ -1985,6 +1993,7 @@
             "type": "damage",
             "damage": {
               "target": "second_enemy",
+              "type": "player",
               "value": 1
             }
           },
@@ -1992,6 +2001,7 @@
             "type": "damage",
             "damage": {
               "target": "third_enemy",
+              "type": "player",
               "value": 1
             }
           }
@@ -2137,6 +2147,7 @@
             "type": "damage",
             "damage": {
               "target": "enemy",
+              "type": "player",
               "value": 2
             }
           }
@@ -2165,6 +2176,7 @@
             "type": "damage",
             "damage": {
               "target": "enemy",
+              "type": "player",
               "value": 3
             }
           },
