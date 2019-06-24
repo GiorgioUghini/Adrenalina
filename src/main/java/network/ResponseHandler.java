@@ -2,6 +2,7 @@ package network;
 
 import controllers.ScreenController;
 import errors.InvalidInputException;
+import errors.WeaponCardException;
 import javafx.application.Platform;
 import models.card.LegitEffects;
 import models.player.Player;
@@ -59,6 +60,8 @@ public class ResponseHandler implements ResponseHandlerInterface {
         } catch (InvalidInputException inputEx) {
             String error = inputEx.getMessage();
             Client.getInstance().getCurrentView().printError(error);
+        } catch (WeaponCardException ex){
+            Client.getInstance().getConnection().finishCard();
         } catch (Exception ex) {
             String error = ex.getMessage();
             Client.getInstance().getCurrentView().printError(error);
