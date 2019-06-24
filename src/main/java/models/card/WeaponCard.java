@@ -175,11 +175,13 @@ public class WeaponCard extends EffectCard {
 
     /** Check if you have enough ammo to activate this card */
     private boolean hasEnoughAmmo(Ammo ammo, List<PowerUpCard> powerUpCards, Ammo price){
-        Ammo tot = ammo.getCopy();
+        if(powerUpCards.isEmpty()) return ammo.isGreaterThanOrEqual(price);
         for(PowerUpCard card : powerUpCards){
+            Ammo tot = ammo.getCopy();
             tot.add(new Ammo(card));
+            if(tot.isGreaterThanOrEqual(price)) return true;
         }
-        return tot.isGreaterThanOrEqual(price);
+        return false;
     }
     private boolean hasEnoughAmmo(Ammo ammo, PowerUpCard powerUpCard, Ammo price){
         List<PowerUpCard> powerUpCards = new ArrayList<>();
