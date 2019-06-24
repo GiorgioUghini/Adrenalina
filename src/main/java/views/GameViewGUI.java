@@ -1055,7 +1055,7 @@ public class GameViewGUI implements Initializable, GameView {
                     List<PowerUpCard> powerUpCards = me.getPowerUpList();
 
                     for (PowerUpCard powerUpCard : powerUpCards) {
-                        btlist.add(new ButtonType(powerUpCard.name));
+                        btlist2.add(new ButtonType(powerUpCard.name));
                     }
 
                     alert2.getButtonTypes().setAll(btlist2);
