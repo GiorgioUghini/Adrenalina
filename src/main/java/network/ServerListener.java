@@ -23,15 +23,19 @@ public class ServerListener implements Runnable{
         while(!stop){
             try {
                 response = (Response) in.readObject();
-                Client.getInstance().getConnection().receiveResponse(response);
-            } catch (SocketException socketEx) {
-                Logger logger = Logger.getAnonymousLogger();
-                logger.log(Level.SEVERE, "a socket exception was thrown", socketEx);
-                stop();
-                ScreenController.getInstance().activate("WaitingRoom.fxml");
             } catch (Exception ex) {
                 Logger logger = Logger.getAnonymousLogger();
-                logger.log(Level.SEVERE, "an unknown exception was thrown", ex);
+                logger.log(Level.SEVERE, "an exception was thrown while in.readObject(). The connection has been killed", ex);
+                stop();
+                ScreenController.getInstance().activate("WaitingRoom.fxml");
+            }
+            try{
+                if(response != null)
+                    Client.getInstance().getConnection().receiveResponse(response);
+            }
+            catch (Exception ex){
+                Logger logger = Logger.getAnonymousLogger();
+                logger.log(Level.SEVERE, "an exception was thrown while receiveResponse(response). The connection has not been killed", ex);
             }
         }
     }

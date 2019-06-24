@@ -51,6 +51,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
     @Override
     public void handle(ErrorResponse response) {
         Client.getInstance().getCurrentView().printError("Errore gestito dal server"); //DEBUG
+        response.exception.printStackTrace();
         try {
             throw response.exception;
         } catch (InvalidInputException inputEx) {
