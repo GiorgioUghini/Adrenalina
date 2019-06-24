@@ -34,14 +34,26 @@ public class Player implements Subscriber, Serializable, Taggable {
     private boolean hasJustStarted;
     private Set<Player> playersDamagedByMeThisTurn;
     private transient Match match;
-    private transient Color playerColor = null;
+    private String circleColor = null;
 
     public Color getPlayerColor() {
-        return playerColor;
+        switch (circleColor){
+            case "GREEN":
+                return Color.rgb(50, 190, 55);
+            case "BLUE":
+                return Color.rgb(25, 135, 235);
+            case "PURPLE":
+                return Color.rgb(180, 25, 225);
+            case "WHITE":
+                return Color.rgb(255, 242, 246);
+            case "YELLOW":
+                return Color.rgb(200, 180, 30);
+        }
+        return null;
     }
 
-    public void setPlayerColor(Color playerColor) {
-        this.playerColor = playerColor;
+    public void setPlayerColor(String playerColor) {
+        this.circleColor = playerColor;
     }
 
     private boolean isSameColor(Color a, Color b) {
@@ -49,18 +61,7 @@ public class Player implements Subscriber, Serializable, Taggable {
     }
 
     public String getStringColor() {
-        if (isSameColor(playerColor, Color.rgb(50, 190, 55))) {
-            return "GREEN";
-        } else if (isSameColor(playerColor, Color.rgb(25, 135, 235))) {
-            return "BLUE";
-        } else if (isSameColor(playerColor, Color.rgb(180, 25, 225))) {
-            return "PURPLE";
-        } else if (isSameColor(playerColor, Color.rgb(255, 242, 246))) {
-            return "WHITE";
-        } else if (isSameColor(playerColor, Color.rgb(200, 180, 30))) {
-            return "YELLOW";
-        }
-        return null;
+        return circleColor;
     }
 
     public List<Player> getDamagedBy() {

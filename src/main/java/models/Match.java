@@ -43,8 +43,21 @@ public class Match {
         powerUpDeck.shuffle();
         weaponDeck.shuffle();
         ammoDeck.shuffle();
+        int i = 0;
         for(Player p : players){
             p.setMatch(this);
+            p.setPlayerColor(getColor(i++));
+        }
+    }
+
+    private String getColor(int index){
+        switch (index){
+            case 0: return "GREEN";
+            case 1: return "BLUE";
+            case 2: return "PURPLE";
+            case 3: return "WHITE";
+            case 4: return "YELLOW";
+            default: throw new NullPointerException("This color does not exist");
         }
     }
 

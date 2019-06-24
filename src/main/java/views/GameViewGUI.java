@@ -27,6 +27,7 @@ import utils.BiMap;
 
 import java.net.URL;
 import java.util.*;
+import java.util.logging.Logger;
 
 public class GameViewGUI implements Initializable, GameView {
 
@@ -500,66 +501,22 @@ public class GameViewGUI implements Initializable, GameView {
         });
     }
 
-    private Color getColor(int i) {
-        switch (i) {
-            case 0:
-                return Color.rgb(50, 190, 55); //LIGHT GREEN
-            case 1:
-                return Color.rgb(25, 135, 235); //LIGHT BLUE
-            case 2:
-                return Color.rgb(180, 25, 225); //DARK PURPLE
-            case 3:
-                return Color.rgb(255, 242, 246); //WHITE
-            default:
-                return Color.rgb(200, 180, 30); //YELLOW
-        }
-    }
-
-    private boolean isSameColor(Color a, Color b) {
-        return ((a.getBlue() == b.getBlue()) && (a.getRed() == b.getRed()) && (a.getGreen() == b.getGreen()));
-    }
-
-    private int getIndex(Color c) {
-        if (isSameColor(c, Color.rgb(50, 190, 55))) {
-            return 0;
-        } else if (isSameColor(c, Color.rgb(25, 135, 235))) {
-            return 1;
-        } else if (isSameColor(c, Color.rgb(180, 25, 225))) {
-            return 2;
-        } else if (isSameColor(c, Color.rgb(255, 242, 246))) {
-            return 3;
-        } else if (isSameColor(c, Color.rgb(200, 180, 30))) {
-            return 4;
+    private int getIndex(String color) {
+        switch (color){
+            case "GREEN": return 0;
+            case "BLUE": return 1;
+            case "PURPLE": return 2;
+            case "WHITE": return 3;
+            case "YELLOW": return 4;
         }
         return -1;
     }
 
     private void drawPlayerToken(GridPane pane, Player p) {
         Circle circle = new Circle(0.0d,0.0d,17.0d);
-        boolean noColorNow = p.getPlayerColor() == null;
         int i = Client.getInstance().getPlayers().indexOf(p);
-        circle.setFill((noColorNow) ? getColor(i) : p.getPlayerColor());
-        String s = "GREEN";
-        if (noColorNow) {
-            switch (i) {
-                case 1:
-                    s = "BLUE";
-                    break;
-                case 2:
-                    s = "PURPLE";
-                    break;
-                case 3:
-                    s = "WHITE";
-                    break;
-                case 4:
-                    s = "YELLOW";
-                    break;
-            }
-            p.setPlayerColor(getColor(i));
-        } else {
-            s = p.getStringColor();
-        }
-        final String t = s;
+        circle.setFill(p.getPlayerColor());
+        final String t = p.getStringColor();
         tabPane.getTabs().get(i).setDisable(false);
         String imageName = String.format("tabs/tab%d.png", i);
         Image image = new Image(imageName);
@@ -615,9 +572,9 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
-    private void deletePlayerToken(GridPane pane, int i) {
+    private void deletePlayerToken(GridPane pane, Player player) {
         Circle circle1 = new Circle(0.0d,0.0d,17.0d);
-        circle1.setFill(getColor(i));
+        circle1.setFill(player.getPlayerColor());
         for (int num = 0; pane.getChildren().size() > num; num++) {
             Node n = pane.getChildren().get(num);
             if (n.getClass() == circle1.getClass()) {
@@ -649,7 +606,7 @@ public class GameViewGUI implements Initializable, GameView {
                 Coordinate oldCoord = client.getPlayerCoordinateMap().get(p);
                 if (!c.equals(oldCoord)) {
                     if (oldCoord != null) {
-                        deletePlayerToken(paneList.get(oldCoord.getX()).get(oldCoord.getY()), client.getPlayers().indexOf(p));
+                        deletePlayerToken(paneList.get(oldCoord.getX()).get(oldCoord.getY()), p);
                     }
                     drawPlayerToken(paneList.get(c.getX()).get(c.getY()), p);
                     client.getPlayerCoordinateMap().put(p, c);
@@ -747,7 +704,7 @@ public class GameViewGUI implements Initializable, GameView {
 
     void removeAllDamageOnPlayer(Player p) {
         if (p.getPlayerColor() != null) {
-            int index = getIndex(p.getPlayerColor());
+            int index = getIndex(p.getStringColor());
             StackPane stackPane = stackPanePlayers.get(index);
             for (Node n : stackPane.getChildren()) {
                 if (n.getClass().equals(Circle.class)) {
@@ -761,7 +718,7 @@ public class GameViewGUI implements Initializable, GameView {
         //When drawing a circle, first arg is X, second is Y, third is radius. 138px is the height of where the circle must be placed
         //Then, for every new damage, the circle must be on same height but trasled on X.
         Circle c = new Circle((double) (130 + position * 130), 138d, 17d);
-        int index = getIndex(fromWho.getPlayerColor());
+        int index = getIndex(fromWho.getStringColor());
         StackPane stackPane = stackPanePlayers.get(index);
         Platform.runLater( () -> stackPane.getChildren().add(c));
     }
