@@ -122,7 +122,6 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             Lobby lobby = Server.getInstance().getLobby();
             Player currentPlayer = lobby.getPlayer(token);
             Match currentMatch = lobby.getMatch(currentPlayer);
-            logger.fine("Current action type: " + currentMatch.getCurrentActionType());
             boolean isNewActions = currentMatch.getCurrentActionType() == null;
             Map<models.turn.ActionType,  List<TurnEvent>>  actions = currentMatch.getPossibleAction(currentPlayer);
             return new ValidActionsResponse(actions, isNewActions);
@@ -209,7 +208,9 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         try{
             Player player = Server.getInstance().getLobby().getPlayer(token);
             Match match = Server.getInstance().getLobby().getMatch(player);
+            logger.fine("Active weapon: " + player.getActiveWeapon().getName());
             effect = player.getActiveWeapon().getEffectByName(effect.name);
+            logger.fine("Chosen effect: " + effect.name);
             if(powerUpCard!=null){
                 powerUpCard = player.getPowerUpByName(powerUpCard.name, powerUpCard.color);
             }
@@ -239,14 +240,17 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             Server.getInstance().getConnection().getConnectionWrapper(token).addUpdate(new PlayerUpdate(player));
             if(legitEffects.getLegitEffects().isEmpty()){
                 match.turnEvent(TurnEvent.SHOOT);
+                logger.fine("Returning a finish card response");
                 return new FinishCardResponse();
             }
             else{
+                logger.fine("Returning a finish effect response");
                 return new FinishEffectResponse();
             }
         }
         catch (Exception ex){
             ex.printStackTrace();
+            logger.fine("Returning an error response");
             return new ErrorResponse(ex);
         }
     }

@@ -102,6 +102,7 @@ public class Player implements Subscriber, Serializable, Taggable {
             return false;
         Player player = (Player) o;
         // field comparison
+        if(name==null) return false;
         return name.equals(player.name);
     }
 

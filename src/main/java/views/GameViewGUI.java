@@ -157,9 +157,11 @@ public class GameViewGUI implements Initializable, GameView {
     private GameController gameController;
 
     private BiMap<Circle, Player> circlePlayerMap = new BiMap<>();
+    private Set<Object> clickableObjects;
 
     public GameViewGUI() {
         this.gameController = new GameController();
+        clickableObjects = new HashSet<>();
     }
 
     @Override
@@ -309,9 +311,7 @@ public class GameViewGUI implements Initializable, GameView {
         gameController.drawPowerUp();
         gameController.getValidActions();
     }
-    public void grabWeapon() {
 
-    }
     public void spawn() {
         showMessage("Please click on the power up card you wish to DISCARD and spawn accordingly.");
         setBtnEnabled(btnSpawn, false);
@@ -552,15 +552,30 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     private void playerClicked(Player p) {
-        undoHighlightCircle(circlePlayerMap.getSingleKey(p));
+        Circle clicked = circlePlayerMap.getSingleKey(p);
         if (canDoActionMap.get(ViewAction.SELECTPLAYER)) {
+            if(!clickableObjects.contains(clicked)){
+                showMessage("You cannot click this player");
+                return;
+            }
+            undoHighlightCircle(clicked);
             canDoActionMap.put(ViewAction.SELECTPLAYER, false);
             onSelectDone(p);
         } else if (canDoActionMap.get(ViewAction.SELECTSQUARE)) {
+            GridPane gridPane = (GridPane) clicked.getParent();
+            if(!clickableObjects.contains(gridPane)){
+                showMessage("You cannot click on this pane");
+                return;
+            }
             canDoActionMap.put(ViewAction.SELECTSQUARE, false);
             Square s = Client.getInstance().getMap().getPlayerPosition(p);
             onSelectDone(s);
         } else {
+            GridPane gridPane = (GridPane) clicked.getParent();
+            if(!clickableObjects.contains(gridPane)){
+                showMessage("You cannot click on this pane");
+                return;
+            }
             canDoActionMap.put(ViewAction.SELECTROOM, false);
             RoomColor rc = Client.getInstance().getMap().getPlayerPosition(p).getColor();
             onSelectDone(rc);
@@ -790,18 +805,28 @@ public class GameViewGUI implements Initializable, GameView {
         if (canDoActionMap.get(ViewAction.RUN)) {
             canDoActionMap.put(ViewAction.RUN, false);
             run(s);
-        } else if (canDoActionMap.get(ViewAction.SELECTSQUARE)) {
-            onSelectDone(s);
-            for (Square sq : Client.getInstance().getMap().getAllSquares()) {
-                Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(sq);
-                undoHighlightGridPane(paneList.get(coord.getX()).get(coord.getY()));
+        } else{
+            //check that it was clickable
+            Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(s);
+            GridPane gridPane = paneList.get(coord.getX()).get(coord.getY());
+            if(!clickableObjects.contains(gridPane)){
+                showMessage("You cannot click on this pane");
+                return;
             }
-        } else if (canDoActionMap.get(ViewAction.SELECTROOM)) {
-            RoomColor rc = s.getColor();
-            onSelectDone(rc);
-            for (Square sq : Client.getInstance().getMap().getAllSquares()) {
-                Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(sq);
-                undoHighlightGridPane(paneList.get(coord.getX()).get(coord.getY()));
+            //-
+            if (canDoActionMap.get(ViewAction.SELECTSQUARE)) {
+                onSelectDone(s);
+                for (Square sq : Client.getInstance().getMap().getAllSquares()) {
+                    coord = Client.getInstance().getMap().getSquareCoordinates(sq);
+                    undoHighlightGridPane(paneList.get(coord.getX()).get(coord.getY()));
+                }
+            } else if (canDoActionMap.get(ViewAction.SELECTROOM)) {
+                RoomColor rc = s.getColor();
+                onSelectDone(rc);
+                for (Square sq : Client.getInstance().getMap().getAllSquares()) {
+                    coord = Client.getInstance().getMap().getSquareCoordinates(sq);
+                    undoHighlightGridPane(paneList.get(coord.getX()).get(coord.getY()));
+                }
             }
         }
     }
@@ -1103,7 +1128,9 @@ public class GameViewGUI implements Initializable, GameView {
                 for (Taggable t : selectable.get()) {
                     for (Square sq : Client.getInstance().getMap().getAllSquaresInRoom((RoomColor) t)) {
                         Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(sq);
-                        highlightGridPane(paneList.get(coord.getX()).get(coord.getY()));
+                        GridPane clickable = paneList.get(coord.getX()).get(coord.getY());
+                        clickableObjects.add(clickable);
+                        highlightGridPane(clickable);
                     }
                 }
                 canDoActionMap.put(ViewAction.SELECTROOM, true);
@@ -1111,7 +1138,9 @@ public class GameViewGUI implements Initializable, GameView {
             case PLAYER:
                 showMessage("Please click on a PLAYER stroked in black.");
                 for (Taggable t : selectable.get()) {
-                    highlightCircle(circlePlayerMap.getSingleKey((Player) t));
+                    Circle clickable = circlePlayerMap.getSingleKey((Player) t);
+                    clickableObjects.add(clickable);
+                    highlightCircle(clickable);
                 }
                 canDoActionMap.put(ViewAction.SELECTPLAYER, true);
                 break;
@@ -1119,7 +1148,9 @@ public class GameViewGUI implements Initializable, GameView {
                 showMessage("Please click on a SQUARE highlighted in green.");
                 for (Taggable t : selectable.get()) {
                     Coordinate coord = Client.getInstance().getMap().getSquareCoordinates((Square) t);
-                    highlightGridPane(paneList.get(coord.getX()).get(coord.getY()));
+                    GridPane clickable = paneList.get(coord.getX()).get(coord.getY());
+                    clickableObjects.add(clickable);
+                    highlightGridPane(clickable);
                 }
                 canDoActionMap.put(ViewAction.SELECTSQUARE, true);
                 break;
@@ -1135,6 +1166,7 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     private void onSelectDone(Taggable selected){
+        clickableObjects.clear();
         setBtnEnabled(btnEndSelect, false);
         Client.getInstance().getConnection().tagElement(selected);
     }

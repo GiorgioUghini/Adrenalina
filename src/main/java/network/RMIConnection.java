@@ -130,6 +130,7 @@ public class RMIConnection implements Connection {
         try {
             String token = Client.getInstance().getConnection().getToken();
             Response response = remoteMethods.playEffect(token, effect, ammo, powerUpCard);
+            System.out.println(response.getClass().toString());
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
             e.printStackTrace();
