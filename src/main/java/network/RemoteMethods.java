@@ -219,6 +219,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             while ((action = player.playNextWeaponAction()) != null){
                 if(action.type == ActionType.SELECT && !action.select.auto){
                     Selectable selectable = player.getActiveWeapon().getSelectable();
+                    if(selectable.get().isEmpty()) continue;
                     return new SelectResponse(selectable);
                 }
                 else if(action.type == ActionType.DAMAGE){
@@ -306,6 +307,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                 if(action.type == ActionType.SELECT && !action.select.auto){
                     Selectable selectable = card.getSelectable();
                     logger.fine("Selectable size: " + selectable.get().size());
+                    if(selectable.get().isEmpty()) continue;
                     return new SelectResponse(selectable);
                 }
                 else if(action.type == ActionType.DAMAGE){
@@ -352,6 +354,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             while ((action = player.playNextWeaponAction()) != null){
                 if(action.type == ActionType.SELECT && !action.select.auto){
                     Selectable selectable = player.getActivePowerUp().getSelectable();
+                    if(selectable.get().isEmpty()) continue;
                     return new SelectResponse(selectable);
                 }
                 else if(action.type == ActionType.DAMAGE){
@@ -512,6 +515,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             while ((action = player.playNextPowerUpAction()) != null){
                 if(action.type == ActionType.SELECT && !action.select.auto){
                     Selectable selectable = powerUpCard.getSelectable();
+                    if(selectable.get().isEmpty()) continue;
                     return new SelectResponse(selectable);
                 }
                 else if(action.type == ActionType.DAMAGE){
