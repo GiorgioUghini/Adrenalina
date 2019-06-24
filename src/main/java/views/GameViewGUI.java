@@ -746,11 +746,13 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     void removeAllDamageOnPlayer(Player p) {
-        int index = getIndex(p.getPlayerColor());
-        StackPane stackPane = stackPanePlayers.get(index);
-        for (Node n : stackPane.getChildren()) {
-            if (n.getClass().equals(Circle.class)) {
-                Platform.runLater( () -> stackPane.getChildren().remove(n));
+        if (p.getPlayerColor() != null) {
+            int index = getIndex(p.getPlayerColor());
+            StackPane stackPane = stackPanePlayers.get(index);
+            for (Node n : stackPane.getChildren()) {
+                if (n.getClass().equals(Circle.class)) {
+                    Platform.runLater(() -> stackPane.getChildren().remove(n));
+                }
             }
         }
     }
