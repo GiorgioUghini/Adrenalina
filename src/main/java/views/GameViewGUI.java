@@ -759,7 +759,7 @@ public class GameViewGUI implements Initializable, GameView {
         Circle c = new Circle(130d + position*1, 138d, 17d);
         int index = getIndex(fromWho.getPlayerColor());
         StackPane stackPane = stackPanePlayers.get(index);
-        stackPane.getChildren().add(c);
+        Platform.runLater( () -> stackPane.getChildren().add(c));
     }
 
     @Override
