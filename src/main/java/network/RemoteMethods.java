@@ -234,7 +234,13 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             LegitEffects legitEffects = player.getWeaponEffects();
             match.addUpdate(new MapUpdate(match.getMap()));
             Server.getInstance().getConnection().getConnectionWrapper(token).addUpdate(new PlayerUpdate(player));
-            return legitEffects.getLegitEffects().isEmpty() ? new FinishCardResponse() : new FinishEffectResponse();
+            if(legitEffects.getLegitEffects().isEmpty()){
+                match.turnEvent(TurnEvent.SHOOT);
+                return new FinishCardResponse();
+            }
+            else{
+                return new FinishEffectResponse();
+            }
         }
         catch (Exception ex){
             ex.printStackTrace();
@@ -268,6 +274,8 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             player.resetWeapon();
             logger.fine("Weapon succesfully reset");
             Server.getInstance().getConnection().getConnectionWrapper(token).addUpdate(new PlayerUpdate(player));
+            Match match = player.getMatch();
+            match.turnEvent(TurnEvent.SHOOT);
             return new FinishCardResponse();
         }
         catch (Exception ex){
@@ -299,7 +307,13 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             logger.fine("legitEffects size: " + legitEffects.getLegitEffects().size());
             match.addUpdate(new MapUpdate(match.getMap()));
             Server.getInstance().getConnection().getConnectionWrapper(token).addUpdate(new PlayerUpdate(player));
-            return legitEffects.getLegitEffects().isEmpty() ? new FinishCardResponse() : new FinishEffectResponse();
+            if(legitEffects.getLegitEffects().isEmpty()){
+                match.turnEvent(TurnEvent.SHOOT);
+                return new FinishCardResponse();
+            }
+            else{
+                return new FinishEffectResponse();
+            }
         }
         catch (Exception ex){
             ex.printStackTrace();
