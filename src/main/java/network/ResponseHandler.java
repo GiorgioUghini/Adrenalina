@@ -224,4 +224,14 @@ public class ResponseHandler implements ResponseHandlerInterface {
     public void handle(PlayersUpdate response) {
         Client.getInstance().setPlayers(response.players);
     }
+
+    @Override
+    public void handle(DamageUpdate response) {
+
+    }
+
+    @Override
+    public void handle(MarkUpdate response) {
+
+    }
 }
