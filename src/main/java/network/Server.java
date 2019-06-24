@@ -3,13 +3,6 @@ package network;
 import models.Lobby;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,9 +11,11 @@ public class Server {
     private ServerConnection connection;
     private Lobby lobby;
     private int maxClients;
+    private boolean debug;
 
     private Server() {
         maxClients = 5;
+        debug = false;
     }
 
     /**
@@ -60,5 +55,13 @@ public class Server {
 
     public int getMaxClients(){
         return maxClients;
+    }
+
+    public void setDebug(boolean isDebug){
+        this.debug = isDebug;
+    }
+
+    public boolean isDebug(){
+        return debug;
     }
 }

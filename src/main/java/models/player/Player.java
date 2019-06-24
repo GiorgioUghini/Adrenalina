@@ -146,6 +146,7 @@ public class Player implements Subscriber, Serializable, Taggable {
      * @throws CheatException if you do not have the card toRelease */
     public void drawWeaponCard(WeaponCard drawn, PowerUpCard powerUpToPay, WeaponCard toRelease) {
         if(powerUpToPay!=null && !powerUpList.contains(powerUpToPay)) throw new WeaponCardException("You do not have this powerup: " + powerUpToPay.name);
+        if(drawn==null) throw new NullPointerException("Drawn weapon cannot be null");
         if(!drawn.canDraw(ammo, powerUpToPay)) throw new NotEnoughAmmoException();
         SpawnPoint myPosition = (SpawnPoint) gameMap.getPlayerPosition(this);
         if(weaponList.size()==3){
@@ -461,10 +462,11 @@ public class Player implements Subscriber, Serializable, Taggable {
                 }
                 break;
             case SELECT:
-                if(!action.select.auto)break;
                 Selectable selectable = activeCard.getSelectable();
                 Set<Taggable> selectableSet = selectable.get();
                 if(selectableSet.isEmpty()) break;
+                if(!action.select.auto)break;
+                //auto select
                 activeCard.select((Taggable) selectableSet.toArray()[0]);
         }
         return action;

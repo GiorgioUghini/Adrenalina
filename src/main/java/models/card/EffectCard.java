@@ -27,6 +27,7 @@ public abstract class EffectCard extends Card {
         selectedPlayers = new HashMap<>();
         selectedSquares = new HashMap<>();
         selectedRooms = new HashMap<>();
+        activated = false;
     }
 
     public abstract void activate(Player me);

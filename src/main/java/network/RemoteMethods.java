@@ -16,15 +16,22 @@ import network.updates.*;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsInterface {
-    private Logger logger;
+    private transient Logger logger;
 
     RemoteMethods() throws RemoteException {
         logger = Logger.getAnonymousLogger();
+        if(Server.getInstance().isDebug()){
+            logger.setLevel(Level.ALL);
+            ConsoleHandler handler = new ConsoleHandler();
+            handler.setLevel(Level.ALL);
+            logger.addHandler(handler);
+        }
     }
 
     @Override
@@ -244,9 +251,11 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
 
     @Override
     public synchronized Response finishCard(String token) {
+        logger.fine("Received finishCard request");
         try{
             Player player = Server.getInstance().getLobby().getPlayer(token);
             player.resetWeapon();
+            logger.fine("Weapon succesfully reset");
             Server.getInstance().getConnection().getConnectionWrapper(token).addUpdate(new PlayerUpdate(player));
             return new FinishCardResponse();
         }
@@ -262,15 +271,21 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             Player player = Server.getInstance().getLobby().getPlayer(token);
             Match match = Server.getInstance().getLobby().getMatch(player);
             WeaponCard card = player.getActiveWeapon();
+            logger.fine("Tagging: " + taggable);
             card.select(taggable);
+            logger.fine("Tag successful");
             Action action;
             while ((action = player.playNextWeaponAction()) != null){
+                logger.fine("Playing action " + action.type);
                 if(action.type == ActionType.SELECT && !action.select.auto){
                     Selectable selectable = card.getSelectable();
+                    logger.fine("Selectable size: " + selectable.get().size());
                     return new SelectResponse(selectable);
                 }
             }
+            logger.fine("Actions ended");
             LegitEffects legitEffects = player.getWeaponEffects();
+            logger.fine("legitEffects size: " + legitEffects.getLegitEffects().size());
             match.addUpdate(new MapUpdate(match.getMap()));
             Server.getInstance().getConnection().getConnectionWrapper(token).addUpdate(new PlayerUpdate(player));
             return legitEffects.getLegitEffects().isEmpty() ? new FinishCardResponse() : new FinishEffectResponse();
