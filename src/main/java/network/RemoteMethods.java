@@ -98,7 +98,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public Response reconnect(String token) {
+    public synchronized Response reconnect(String token) {
         try{
             Lobby lobby = Server.getInstance().getLobby();
             Player currentPlayer = lobby.getPlayer(token);
@@ -204,7 +204,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public Response playEffect(String token, Effect effect, Ammo ammo, PowerUpCard powerUpCard) {
+    public synchronized Response playEffect(String token, Effect effect, Ammo ammo, PowerUpCard powerUpCard) {
         try{
             Player player = Server.getInstance().getLobby().getPlayer(token);
             Match match = Server.getInstance().getLobby().getMatch(player);
@@ -344,7 +344,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public Response powerUpTagElement(String token, Taggable taggable) {
+    public synchronized Response powerUpTagElement(String token, Taggable taggable) {
         try{
             Player player = Server.getInstance().getLobby().getPlayer(token);
             Match match = player.getMatch();
@@ -398,7 +398,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public Response action(String token, models.turn.ActionType actionType) {
+    public synchronized Response action(String token, models.turn.ActionType actionType) {
         try{
             Player player = Server.getInstance().getLobby().getPlayer(token);
             Match match = Server.getInstance().getLobby().getMatch(player);
@@ -418,7 +418,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public Response grab(String token, WeaponCard drawn, WeaponCard toRelease,PowerUpCard powerUpCard) {
+    public synchronized Response grab(String token, WeaponCard drawn, WeaponCard toRelease,PowerUpCard powerUpCard) {
         try{
             Player player = Server.getInstance().getLobby().getPlayer(token);
             Match match = Server.getInstance().getLobby().getMatch(player);
@@ -449,7 +449,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public Response run(String token, TurnEvent turnEvent, Square targetSquare) {
+    public synchronized Response run(String token, TurnEvent turnEvent, Square targetSquare) {
         try{
             Player player = Server.getInstance().getLobby().getPlayer(token);
             Match match = Server.getInstance().getLobby().getMatch(player);
@@ -482,7 +482,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public Response reload(String token, Map<WeaponCard, PowerUpCard> weaponsMap) {
+    public synchronized Response reload(String token, Map<WeaponCard, PowerUpCard> weaponsMap) {
         try{
             Player player = Server.getInstance().getLobby().getPlayer(token);
             for(WeaponCard weaponCard : player.getWeaponList()){
@@ -504,7 +504,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
     }
 
     @Override
-    public Response playPowerUp(String token, String powerUpName, Ammo ammo, PowerUpCard powerUpAmmo) {
+    public synchronized Response playPowerUp(String token, String powerUpName, Ammo ammo, PowerUpCard powerUpAmmo) {
         try{
             Player player = Server.getInstance().getLobby().getPlayer(token);
             Match match = Server.getInstance().getLobby().getMatch(player);
