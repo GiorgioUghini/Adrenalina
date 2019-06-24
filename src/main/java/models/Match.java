@@ -12,7 +12,6 @@ import network.Server;
 import network.updates.ChooseMapUpdate;
 import network.updates.NextTurnUpdate;
 
-import java.io.Serializable;
 import java.util.*;
 
 public class Match {
@@ -186,6 +185,16 @@ public class Match {
         actualPlayerIndex = -1;
         ChooseMapUpdate update = new ChooseMapUpdate(playerList.get(0).getName());
         addUpdate(update);
+
+        if(Server.getInstance().isDebug()){
+            for(Player player : playerList){
+                List<WeaponCard> playerCards = new ArrayList<>();
+                for(int i=0;i<3;i++){
+                    playerCards.add((WeaponCard) weaponDeck.draw());
+                }
+                player.setWeaponList(playerCards);
+            }
+        }
     }
 
     public void addUpdate(Response update) {

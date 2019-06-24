@@ -122,6 +122,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             Lobby lobby = Server.getInstance().getLobby();
             Player currentPlayer = lobby.getPlayer(token);
             Match currentMatch = lobby.getMatch(currentPlayer);
+            logger.fine("Current action type: " + currentMatch.getCurrentActionType());
             boolean isNewActions = currentMatch.getCurrentActionType() == null;
             Map<models.turn.ActionType,  List<TurnEvent>>  actions = currentMatch.getPossibleAction(currentPlayer);
             return new ValidActionsResponse(actions, isNewActions);

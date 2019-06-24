@@ -3,16 +3,13 @@ package network;
 import controllers.ScreenController;
 import errors.InvalidInputException;
 import javafx.application.Platform;
-import models.card.Effect;
 import models.card.LegitEffects;
 import models.player.Player;
 import models.turn.ActionType;
 import models.turn.TurnType;
 import network.responses.*;
 import network.updates.*;
-import utils.Console;
 import views.GameView;
-import views.GameViewGUI;
 import views.MenuView;
 
 public class ResponseHandler implements ResponseHandlerInterface {
