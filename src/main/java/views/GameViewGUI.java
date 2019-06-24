@@ -682,19 +682,20 @@ public class GameViewGUI implements Initializable, GameView {
             for (WeaponCard weaponCard : newPlayer.getWeaponList()) {
                 addCardToHand(weaponCard, weaponSpaces);
             }
-
-            //REMOVE DAMAGE
-            if(oldPlayer != null)
-                for (Player p : oldPlayer.getDamagedBy()) {
-                    removeAllDamageOnPlayer(oldPlayer);
-                }
-                //TODO: Debug this two fucking methods
-            //ADD DAMAGE
-            for (Player p : newPlayer.getDamagedBy()) {
-                drawDamageOnPlayer(p, newPlayer.getDamagedBy().indexOf(p));
-            }
-
         });
+    }
+
+    @Override
+    public void updateDamagedPlayer(Player newPlayer) {
+        List<Player> players = Client.getInstance().getPlayers();
+        Player oldPlayer = players.get(players.indexOf(newPlayer));
+        //REMOVE DAMAGE
+        if(oldPlayer != null)
+            removeAllDamageOnPlayer(oldPlayer);
+        //ADD DAMAGE
+        for (Player p : newPlayer.getDamagedBy()) {
+            drawDamageOnPlayer(p, newPlayer.getDamagedBy().indexOf(p));
+        }
     }
 
     void removeAllDamageOnPlayer(Player p) {
@@ -713,6 +714,7 @@ public class GameViewGUI implements Initializable, GameView {
         //When drawing a circle, first arg is X, second is Y, third is radius. 138px is the height of where the circle must be placed
         //Then, for every new damage, the circle must be on same height but trasled on X.
         Circle c = new Circle((double) (130 + position * 130), 138d, 17d);
+        c.setFill(fromWho.getPlayerColor());
         int index = getIndex(fromWho.getStringColor());
         StackPane stackPane = stackPanePlayers.get(index);
         Platform.runLater( () -> stackPane.getChildren().add(c));

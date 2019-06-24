@@ -54,6 +54,11 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
+    public void updateDamagedPlayer(Player newPlayer) {
+
+    }
+
+    @Override
     public void effectChoosingDialog(LegitEffects legitEffects) {
 
     }

@@ -12,6 +12,8 @@ import network.updates.*;
 import views.GameView;
 import views.MenuView;
 
+import java.util.List;
+
 public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
@@ -225,7 +227,9 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(DamageUpdate response) {
-
+        ((GameView) Client.getInstance().getCurrentView()).updateDamagedPlayer(response.player);
+        List<Player> players = Client.getInstance().getPlayers();
+        players.set(players.indexOf(response.player), response.player);
     }
 
     @Override
