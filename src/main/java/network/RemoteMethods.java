@@ -304,6 +304,19 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                     logger.fine("Selectable size: " + selectable.get().size());
                     return new SelectResponse(selectable);
                 }
+                else if(action.type == ActionType.DAMAGE){
+                    for(Player damagedPlayer : player.getActiveWeapon().getPlayersToDamage().keySet()){
+                        match.addUpdate(new DamageUpdate(damagedPlayer));
+                        if(damagedPlayer.getTotalDamage() > 10){
+                            match.addPartialPointsCount(damagedPlayer.countPoints());
+                        }
+                    }
+                }
+                else if(action.type == ActionType.MARK){
+                    for(Player markedPlayer : player.getActiveWeapon().getPlayersToMark().keySet()){
+                        match.addUpdate(new MarkUpdate(markedPlayer));
+                    }
+                }
             }
             logger.fine("Actions ended");
             LegitEffects legitEffects = player.getWeaponEffects();
@@ -336,6 +349,19 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                 if(action.type == ActionType.SELECT && !action.select.auto){
                     Selectable selectable = player.getActivePowerUp().getSelectable();
                     return new SelectResponse(selectable);
+                }
+                else if(action.type == ActionType.DAMAGE){
+                    for(Player damagedPlayer : player.getActiveWeapon().getPlayersToDamage().keySet()){
+                        match.addUpdate(new DamageUpdate(damagedPlayer));
+                        if(damagedPlayer.getTotalDamage() > 10){
+                            match.addPartialPointsCount(damagedPlayer.countPoints());
+                        }
+                    }
+                }
+                else if(action.type == ActionType.MARK){
+                    for(Player markedPlayer : player.getActiveWeapon().getPlayersToMark().keySet()){
+                        match.addUpdate(new MarkUpdate(markedPlayer));
+                    }
                 }
             }
             match.addUpdate(new MapUpdate(match.getMap()));
