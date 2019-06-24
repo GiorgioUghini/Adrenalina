@@ -15,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import models.card.*;
 import models.map.*;
@@ -719,6 +720,17 @@ public class GameViewGUI implements Initializable, GameView {
             drawDamageOnPlayer(newPlayer, from, i);
             i++;
         }
+        //REMOVE MARKS
+        if(oldPlayer != null)
+            removeAllMarksOnPlayer(oldPlayer);
+        //ADD MARKS
+        int j = 0;
+        for (Player from : Client.getInstance().getPlayers()) {
+            for (int k = 0; k < newPlayer.getMarksFromPlayer(from); k++) {
+                drawDamageOnPlayer(newPlayer, from, j);
+                j++;
+            }
+        }
     }
 
     void removeAllDamageOnPlayer(Player p) {
@@ -741,6 +753,41 @@ public class GameViewGUI implements Initializable, GameView {
         int index = getIndex(to.getStringColor());
         AnchorPane anchorPane = anchorPanePlayers.get(index);
         Platform.runLater( () -> anchorPane.getChildren().add(c));
+    }
+
+    void removeAllMarksOnPlayer(Player p) {
+        if (p.getPlayerColor() != null) {
+            int index = getIndex(p.getStringColor());
+            AnchorPane anchorPane = anchorPanePlayers.get(index);
+            for (Node n : anchorPane.getChildren()) {
+                if (n.getClass().equals(Rectangle.class)) {
+                    Platform.runLater(() -> anchorPane.getChildren().remove(n));
+                }
+            }
+        }
+    }
+
+
+
+
+
+    //TODO IN DAMAGE UPDATE I DON'T RECEIVE ANY MARKS!!!
+    //TODO PLEASE CHECK
+    //TODO VILA
+
+
+
+    
+
+
+    void drawMarkOnPlayer(Player to, Player from, int position) {
+        //When drawing a circle, first arg is X, second is Y, third is radius. 138px is the height of where the circle must be placed
+        //Then, for every new damage, the circle must be on same height but trasled on X.
+        Rectangle rectangle = new Rectangle((470d+ position * 42),14d,27d,27d); //X,Y,L,H
+        rectangle.setFill(from.getPlayerColor());
+        int index = getIndex(to.getStringColor());
+        AnchorPane anchorPane = anchorPanePlayers.get(index);
+        Platform.runLater( () -> anchorPane.getChildren().add(rectangle));
     }
 
     @Override
