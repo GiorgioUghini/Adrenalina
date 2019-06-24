@@ -212,6 +212,16 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                     Selectable selectable = player.getActiveWeapon().getSelectable();
                     return new SelectResponse(selectable);
                 }
+                else if(action.type == ActionType.DAMAGE){
+                    for(Player damagedPlayer : player.getActiveWeapon().getPlayersToDamage().keySet()){
+                        match.addUpdate(new DamageUpdate(damagedPlayer));
+                    }
+                }
+                else if(action.type == ActionType.MARK){
+                    for(Player markedPlayer : player.getActiveWeapon().getPlayersToMark().keySet()){
+                        match.addUpdate(new MarkUpdate(markedPlayer));
+                    }
+                }
             }
             LegitEffects legitEffects = player.getWeaponEffects();
             match.addUpdate(new MapUpdate(match.getMap()));
@@ -440,6 +450,16 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                 if(action.type == ActionType.SELECT && !action.select.auto){
                     Selectable selectable = powerUpCard.getSelectable();
                     return new SelectResponse(selectable);
+                }
+                else if(action.type == ActionType.DAMAGE){
+                    for(Player damagedPlayer : player.getActiveWeapon().getPlayersToDamage().keySet()){
+                        match.addUpdate(new DamageUpdate(damagedPlayer));
+                    }
+                }
+                else if(action.type == ActionType.MARK){
+                    for(Player markedPlayer : player.getActiveWeapon().getPlayersToMark().keySet()){
+                        match.addUpdate(new MarkUpdate(markedPlayer));
+                    }
                 }
             }
             match.addUpdate(new MapUpdate(match.getMap()));
