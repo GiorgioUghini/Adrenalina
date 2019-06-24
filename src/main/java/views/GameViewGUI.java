@@ -11,8 +11,8 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -126,15 +126,15 @@ public class GameViewGUI implements Initializable, GameView {
     private Button btnEndSelect;
 
     @FXML
-    private StackPane stackPanePlayer0;
+    private AnchorPane anchorPanePlayer0;
     @FXML
-    private StackPane stackPanePlayer1;
+    private AnchorPane anchorPanePlayer1;
     @FXML
-    private StackPane stackPanePlayer2;
+    private AnchorPane anchorPanePlayer2;
     @FXML
-    private StackPane stackPanePlayer3;
+    private AnchorPane anchorPanePlayer3;
     @FXML
-    private StackPane stackPanePlayer4;
+    private AnchorPane anchorPanePlayer4;
 
     @FXML
     private Text redAmmoText;
@@ -145,7 +145,7 @@ public class GameViewGUI implements Initializable, GameView {
 
     private ArrayList<ImageView> powerUpSpaces = new ArrayList<>();
     private ArrayList<ImageView> weaponSpaces = new ArrayList<>();
-    private ArrayList<StackPane> stackPanePlayers = new ArrayList<>();
+    private ArrayList<AnchorPane> anchorPanePlayers = new ArrayList<>();
     private HashMap<RoomColor, List<ImageView>> weaponOnSpawnPointMap = new HashMap<>();
 
     private HashMap<Integer, ActionType> buttonActionTypeMap = new HashMap<>();
@@ -176,11 +176,21 @@ public class GameViewGUI implements Initializable, GameView {
         weaponSpaces.add(imgYourWeaponCard1);
         weaponSpaces.add(imgYourWeaponCard2);
         weaponSpaces.add(imgYourWeaponCard3);
-        stackPanePlayers.add(stackPanePlayer0);
-        stackPanePlayers.add(stackPanePlayer1);
-        stackPanePlayers.add(stackPanePlayer2);
-        stackPanePlayers.add(stackPanePlayer3);
-        stackPanePlayers.add(stackPanePlayer4);
+        anchorPanePlayers.add(anchorPanePlayer0);
+        anchorPanePlayers.add(anchorPanePlayer1);
+        anchorPanePlayers.add(anchorPanePlayer2);
+        anchorPanePlayers.add(anchorPanePlayer3);
+        anchorPanePlayers.add(anchorPanePlayer4);
+
+        for (int i=0; i<5; i++) {
+            String imageName = String.format("tabs/tab%d.png", i);
+            Image image = new Image(imageName);
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(949);
+            imageView.setFitHeight(234);
+            AnchorPane anchorPane = anchorPanePlayers.get(i);
+            Platform.runLater( () -> anchorPane.getChildren().add(imageView));
+        }
 
         canDoActionMap.put(ViewAction.CLICKPOWERUP, false);
         canDoActionMap.put(ViewAction.CHOOSESPAWNPOINTWEAPON, false);
@@ -507,18 +517,13 @@ public class GameViewGUI implements Initializable, GameView {
         return -1;
     }
 
+
     private void drawPlayerToken(GridPane pane, Player p) {
         Circle circle = new Circle(0.0d,0.0d,17.0d);
         int i = Client.getInstance().getPlayers().indexOf(p);
         circle.setFill(p.getPlayerColor());
         final String t = p.getStringColor();
         tabPane.getTabs().get(i).setDisable(false);
-        String imageName = String.format("tabs/tab%d.png", i);
-        Image image = new Image(imageName);
-        ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(949);
-        imageView.setFitHeight(234);
-        Platform.runLater( () -> stackPanePlayers.get(i).getChildren().add(imageView));
         if (Client.getInstance().getPlayers().indexOf(Client.getInstance().getPlayer()) == i) {
             Platform.runLater(() -> {
                 Tab tab = tabPane.getTabs().get(i);
@@ -543,6 +548,7 @@ public class GameViewGUI implements Initializable, GameView {
         Platform.runLater( () -> c.setStrokeWidth(0d));
     }
 
+    //TODO: It don't work in room highlighing!
     private void highlightGridPane(GridPane gp) {
         Platform.runLater( () -> gp.setStyle("-fx-background-color: green; -fx-opacity: 0.5;"));
     }
@@ -708,31 +714,33 @@ public class GameViewGUI implements Initializable, GameView {
         if(oldPlayer != null)
             removeAllDamageOnPlayer(oldPlayer);
         //ADD DAMAGE
-        for (Player p : newPlayer.getDamagedBy()) {
-            drawDamageOnPlayer(p, newPlayer.getDamagedBy().indexOf(p));
+        int i = 0;
+        for (Player from : newPlayer.getDamagedBy()) {
+            drawDamageOnPlayer(newPlayer, from, i);
+            i++;
         }
     }
 
     void removeAllDamageOnPlayer(Player p) {
         if (p.getPlayerColor() != null) {
             int index = getIndex(p.getStringColor());
-            StackPane stackPane = stackPanePlayers.get(index);
-            for (Node n : stackPane.getChildren()) {
+            AnchorPane anchorPane = anchorPanePlayers.get(index);
+            for (Node n : anchorPane.getChildren()) {
                 if (n.getClass().equals(Circle.class)) {
-                    Platform.runLater(() -> stackPane.getChildren().remove(n));
+                    Platform.runLater(() -> anchorPane.getChildren().remove(n));
                 }
             }
         }
     }
 
-    void drawDamageOnPlayer(Player fromWho, int position) {
+    void drawDamageOnPlayer(Player to, Player from, int position) {
         //When drawing a circle, first arg is X, second is Y, third is radius. 138px is the height of where the circle must be placed
         //Then, for every new damage, the circle must be on same height but trasled on X.
-        Circle c = new Circle((double) (130 + position * 130), 138d, 17d);
-        c.setFill(fromWho.getPlayerColor());
-        int index = getIndex(fromWho.getStringColor());
-        StackPane stackPane = stackPanePlayers.get(index);
-        Platform.runLater( () -> stackPane.getChildren().add(c));
+        Circle c = new Circle((double) (107 + position * 54), 120d, 17d);
+        c.setFill(from.getPlayerColor());
+        int index = getIndex(to.getStringColor());
+        AnchorPane anchorPane = anchorPanePlayers.get(index);
+        Platform.runLater( () -> anchorPane.getChildren().add(c));
     }
 
     @Override
