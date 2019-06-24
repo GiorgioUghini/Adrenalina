@@ -334,12 +334,8 @@ public class GameViewGUI implements Initializable, GameView {
         Player me = Client.getInstance().getPlayer();
         if (map.getPlayerPosition(me).isSpawnPoint()) {
             //Spawn Point
-            if (me.getWeaponList().size() > 2) {
-                showMessage("YOU'VE 3 WEAPONS! Please select a weapon to discard first.");
-            } else {
-                showMessage("Please select which weapon you want to draw.");
-                canDoActionMap.put(ViewAction.CHOOSESPAWNPOINTWEAPON, true);
-            }
+            showMessage("Please select which weapon you want to draw.");
+            canDoActionMap.put(ViewAction.CHOOSESPAWNPOINTWEAPON, true);
         } else {
             //Ammo point
             gameController.grab(null, null, null);
@@ -942,6 +938,7 @@ public class GameViewGUI implements Initializable, GameView {
             }
 
             alert.getButtonTypes().setAll(btlist);
+            Logger.getAnonymousLogger().info(btlist.toString());
             Optional<ButtonType> result = alert.showAndWait();
 
             if (!result.isPresent()) {
