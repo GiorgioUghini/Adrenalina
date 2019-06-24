@@ -27,7 +27,6 @@ import utils.BiMap;
 
 import java.net.URL;
 import java.util.*;
-import java.util.logging.Logger;
 
 public class GameViewGUI implements Initializable, GameView {
 
@@ -938,7 +937,6 @@ public class GameViewGUI implements Initializable, GameView {
             }
 
             alert.getButtonTypes().setAll(btlist);
-            Logger.getAnonymousLogger().info(btlist.toString());
             Optional<ButtonType> result = alert.showAndWait();
 
             if (!result.isPresent()) {
