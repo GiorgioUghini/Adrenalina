@@ -85,6 +85,7 @@ class Life implements Serializable {
 
         //Check if the player's dead
         if (totalDamage > 10) {
+
             //OBSERVER PATTERN
             for (Player subscriber : this.observingPlayers) {
                 subscriber.update(me);

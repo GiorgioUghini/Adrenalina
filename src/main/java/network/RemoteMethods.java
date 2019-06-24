@@ -223,6 +223,9 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                 else if(action.type == ActionType.DAMAGE){
                     for(Player damagedPlayer : player.getActiveWeapon().getPlayersToDamage().keySet()){
                         match.addUpdate(new DamageUpdate(damagedPlayer));
+                        if(damagedPlayer.getTotalDamage() > 10){
+                            match.addPartialPointsCount(damagedPlayer.countPoints());
+                        }
                     }
                 }
                 else if(action.type == ActionType.MARK){
@@ -483,6 +486,9 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                 }
                 else if(action.type == ActionType.DAMAGE){
                     for(Player damagedPlayer : player.getActiveWeapon().getPlayersToDamage().keySet()){
+                        if(damagedPlayer.getTotalDamage() > 10){
+                            match.addPartialPointsCount(damagedPlayer.countPoints());
+                        }
                         match.addUpdate(new DamageUpdate(damagedPlayer));
                     }
                 }

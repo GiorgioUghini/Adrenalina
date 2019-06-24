@@ -4,6 +4,7 @@ import controllers.CardController;
 import errors.CheatException;
 import models.card.*;
 import models.map.*;
+import models.player.DeathManager;
 import models.player.Player;
 import models.turn.*;
 import models.turn.ActionType;
@@ -22,6 +23,7 @@ public class Match {
     private WeaponDeck weaponDeck;
     private AmmoDeck ammoDeck;
     private GameMap gameMap;
+    private DeathManager deathManager;
     private  Map<ActionType,  List<TurnEvent>> currentActions;
     private ActionType currentActionType;
     //private Turn actualTurn;
@@ -31,6 +33,7 @@ public class Match {
     //null -> noFrenzy, Type1, Type2
 
     public Match(List<Player> players) {
+        deathManager = new DeathManager();
         playerList = new LinkedList<>(players);
         cardController = new CardController();
         powerUpDeck = cardController.getPowerUpDeck();
@@ -331,6 +334,10 @@ public class Match {
                 ammoPoint.addCard(ammoCard);
             }
         }
+    }
+
+    public void addPartialPointsCount(Map<Player, Integer> pointsCount){
+
     }
 
 }
