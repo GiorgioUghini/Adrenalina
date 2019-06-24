@@ -730,7 +730,7 @@ public class GameViewGUI implements Initializable, GameView {
             for (WeaponCard weaponCard : newPlayer.getWeaponList()) {
                 addCardToHand(weaponCard, weaponSpaces);
             }
-            /*
+
             //REMOVE DAMAGE
             if(oldPlayer != null)
                 for (Player p : oldPlayer.getDamagedBy()) {
@@ -741,7 +741,7 @@ public class GameViewGUI implements Initializable, GameView {
             for (Player p : newPlayer.getDamagedBy()) {
                 drawDamageOnPlayer(p, newPlayer.getDamagedBy().indexOf(p));
             }
-            */
+
         });
     }
 
@@ -756,7 +756,9 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     void drawDamageOnPlayer(Player fromWho, int position) {
-        Circle c = new Circle(130d + position*1, 138d, 17d);
+        //When drawing a circle, first arg is X, second is Y, third is radius. 138px is the height of where the circle must be placed
+        //Then, for every new damage, the circle must be on same height but trasled on X.
+        Circle c = new Circle((double) (130 + position * 130), 138d, 17d);
         int index = getIndex(fromWho.getPlayerColor());
         StackPane stackPane = stackPanePlayers.get(index);
         Platform.runLater( () -> stackPane.getChildren().add(c));
