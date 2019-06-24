@@ -63,4 +63,6 @@ public interface ResponseHandlerInterface {
     void handle(PlayersUpdate response);
 
     void handle(DamageUpdate response);
+
+    void handle(MarkUpdate response);
 }

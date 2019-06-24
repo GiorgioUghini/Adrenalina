@@ -229,4 +229,9 @@ public class ResponseHandler implements ResponseHandlerInterface {
     public void handle(DamageUpdate response) {
 
     }
+
+    @Override
+    public void handle(MarkUpdate response) {
+
+    }
 }
