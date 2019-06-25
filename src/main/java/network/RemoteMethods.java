@@ -188,6 +188,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             Player player = Server.getInstance().getLobby().getPlayer(token);
             Match match = Server.getInstance().getLobby().getMatch(player);
             GameMap map = match.getMap();
+            player.clearDamages();
             List<PowerUpCard> powerUpCards = player.getPowerUpList();
             if(!powerUpCards.stream().map(c -> c.color).collect(Collectors.toList()).contains(color)){
                 return new ErrorResponse(new CheatException());
