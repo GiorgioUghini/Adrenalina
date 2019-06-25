@@ -565,7 +565,9 @@ public class GameViewGUI implements Initializable, GameView {
                 showMessage("You cannot click this player");
                 return;
             }
-            undoHighlightCircle(clicked);
+            for(Circle circle : circlePlayerMap.getKeys()){
+                undoHighlightCircle(circle);
+            }
             canDoActionMap.put(ViewAction.SELECTPLAYER, false);
             onSelectDone(p);
         } else if (canDoActionMap.get(ViewAction.SELECTSQUARE)) {
