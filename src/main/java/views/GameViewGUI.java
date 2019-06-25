@@ -122,6 +122,17 @@ public class GameViewGUI implements Initializable, GameView {
     @FXML
     private ImageView weaponSPYellow3;
     @FXML
+    private ImageView firstPlayer0;
+    @FXML
+    private ImageView firstPlayer1;
+    @FXML
+    private ImageView firstPlayer2;
+    @FXML
+    private ImageView firstPlayer3;
+    @FXML
+    private ImageView firstPlayer4;
+
+    @FXML
     private TabPane tabPane;
     @FXML
     private Button btnEndSelect;
@@ -144,9 +155,10 @@ public class GameViewGUI implements Initializable, GameView {
     @FXML
     private Text yellowAmmoText;
 
-    private ArrayList<ImageView> powerUpSpaces = new ArrayList<>();
-    private ArrayList<ImageView> weaponSpaces = new ArrayList<>();
-    private ArrayList<AnchorPane> anchorPanePlayers = new ArrayList<>();
+    private List<ImageView> powerUpSpaces = new ArrayList<>();
+    private List<ImageView> weaponSpaces = new ArrayList<>();
+    private List<ImageView> firstPlayerList = new ArrayList<>();
+    private List<AnchorPane> anchorPanePlayers = new ArrayList<>();
     private HashMap<RoomColor, List<ImageView>> weaponOnSpawnPointMap = new HashMap<>();
 
     private HashMap<Integer, ActionType> buttonActionTypeMap = new HashMap<>();
@@ -182,6 +194,11 @@ public class GameViewGUI implements Initializable, GameView {
         anchorPanePlayers.add(anchorPanePlayer2);
         anchorPanePlayers.add(anchorPanePlayer3);
         anchorPanePlayers.add(anchorPanePlayer4);
+        firstPlayerList.add(firstPlayer0);
+        firstPlayerList.add(firstPlayer1);
+        firstPlayerList.add(firstPlayer2);
+        firstPlayerList.add(firstPlayer3);
+        firstPlayerList.add(firstPlayer4);
 
         for (int i=0; i<5; i++) {
             String imageName = String.format("tabs/tab%d.png", i);
@@ -525,6 +542,12 @@ public class GameViewGUI implements Initializable, GameView {
         circle.setFill(p.getPlayerColor());
         final String t = p.getStringColor();
         tabPane.getTabs().get(i).setDisable(false);
+        if (i == 0) {
+            if (firstPlayerList.get(i).getImage() != null) {
+                Image image = new Image("firstplayer.png");
+                Platform.runLater(() -> firstPlayerList.get(i).setImage(image));
+            }
+        }
         if (Client.getInstance().getPlayers().indexOf(Client.getInstance().getPlayer()) == i) {
             Platform.runLater(() -> {
                 Tab tab = tabPane.getTabs().get(i);
@@ -683,6 +706,7 @@ public class GameViewGUI implements Initializable, GameView {
     public void updatePlayerView(Player newPlayer) {
         Player oldPlayer = Client.getInstance().getPlayer();
         Platform.runLater(() -> {
+
             //UPDATE AMMO
             Ammo myAmmo = newPlayer.getAmmo();
             redAmmoText.setText(Integer.toString(myAmmo.red));
