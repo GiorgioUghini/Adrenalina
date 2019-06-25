@@ -6,27 +6,40 @@ import java.util.List;
 import java.util.Map;
 
 public class DeathManager {
-    private List<Map<Player, Integer>> mapList;
+    private List<Map<Player, Integer>> pointsMapList;
+    private Map<Player, Integer> deathMap;
 
-    public DeathManager(){
-        mapList = new ArrayList<>();
+
+    public DeathManager() {
+        pointsMapList = new ArrayList<>();
+        deathMap = new HashMap<>();
     }
 
-    void addPartialPointsCount(Map<Player, Integer> pointsCount){
-        mapList.add(pointsCount);
+    public void addPartialPointsCount(Player player, Map<Player, Integer> pointsCount) {
+        pointsMapList.add(pointsCount);
+        Integer deathCount = deathMap.get(player);
+        if (deathCount != null) {
+            deathMap.put(player, deathCount + 1);
+        } else {
+            deathMap.put(player, 1);
+        }
     }
 
-    int getTotalPoints(Player player){
+    public int getTotalPoints(Player player) {
         int points = 0;
-        for(Map<Player, Integer> map : mapList){
+        for (Map<Player, Integer> map : pointsMapList) {
             points = points + map.get(player);
         }
         return points;
     }
 
-    Map<Player, Integer> getTotalPoints(List<Player> players){
+    public int getDeathCount(Player player){
+        return deathMap.get(player);
+    }
+
+    public Map<Player, Integer> getTotalPoints(List<Player> players) {
         Map<Player, Integer> points = new HashMap<>();
-        for(Player player : players){
+        for (Player player : players) {
             points.put(player, getTotalPoints(player));
         }
         return points;
