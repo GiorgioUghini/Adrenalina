@@ -18,6 +18,7 @@ import java.util.*;
 public class Match {
     private List<Player> playerList;
     private int actualPlayerIndex = 0;
+    private int tmpActualPlayerIndex = -1;
     private PowerUpDeck powerUpDeck;
     private List<Card> thrownPowerUps;
     private WeaponDeck weaponDeck;
@@ -230,10 +231,25 @@ public class Match {
         for(Player player : playerList){
             player.onTurnEnded();
         }
-        actualPlayerIndex = (actualPlayerIndex == playerList.size() - 1) ? 0 : actualPlayerIndex + 1;
-        while (!playerList.get(actualPlayerIndex).isOnline()){
-            actualPlayerIndex = (actualPlayerIndex == playerList.size() - 1) ? 0 : actualPlayerIndex + 1;
+
+        Player firstDeadPlayer = playerList.stream().filter(Player::isDead).findFirst().orElse(null);
+
+        if(tmpActualPlayerIndex >= 0){
+            actualPlayerIndex = tmpActualPlayerIndex;
+            tmpActualPlayerIndex = -1;
         }
+
+        if(firstDeadPlayer != null){
+            tmpActualPlayerIndex = actualPlayerIndex;
+            actualPlayerIndex = playerList.indexOf(firstDeadPlayer);
+        }
+        else{
+            actualPlayerIndex = (actualPlayerIndex == playerList.size() - 1) ? 0 : actualPlayerIndex + 1;
+            while (!playerList.get(actualPlayerIndex).isOnline()){
+                actualPlayerIndex = (actualPlayerIndex == playerList.size() - 1) ? 0 : actualPlayerIndex + 1;
+            }
+        }
+
         if ((frenzy != null) && (actualPlayerIndex == 0)) { //actualPlayerIndex == firstPlayerIndex
             frenzy = ActionGroup.FRENZY_TYPE_2;
         }
