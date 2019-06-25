@@ -509,8 +509,8 @@ public class Player implements Subscriber, Serializable, Taggable {
         return this.life.getHurtMeLast();
     }
 
-    public void addPartialPointsCount(Map<Player, Integer> pointsCount){
-        match.addPartialPointsCount(this, pointsCount);
+    public void addPartialPointsCount(){
+        match.addPartialPointsCount(this);
     }
 
     public int getDeathCount(){

@@ -349,8 +349,8 @@ public class Match {
         }
     }
 
-    public void addPartialPointsCount(Player player, Map<Player, Integer> pointsCount){
-        deathManager.addPartialPointsCount(player, pointsCount);
+    public void addPartialPointsCount(Player player){
+        deathManager.addPartialPointsCount(player, player.countPoints());
     }
 
     public int getDeathCount(Player player){

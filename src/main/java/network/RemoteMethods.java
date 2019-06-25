@@ -229,9 +229,6 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                 else if(action.type == ActionType.DAMAGE){
                     for(Player damagedPlayer : player.getActiveWeapon().getPlayersToDamage().keySet()){
                         match.addUpdate(new DamageUpdate(damagedPlayer));
-                        if(damagedPlayer.getTotalDamage() > 10){
-                            damagedPlayer.addPartialPointsCount(damagedPlayer.countPoints());
-                        }
                     }
                 }
                 else if(action.type == ActionType.MARK){
@@ -317,9 +314,6 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                 else if(action.type == ActionType.DAMAGE){
                     for(Player damagedPlayer : player.getActiveWeapon().getPlayersToDamage().keySet()){
                         match.addUpdate(new DamageUpdate(damagedPlayer));
-                        if(damagedPlayer.getTotalDamage() > 10){
-                            damagedPlayer.addPartialPointsCount(damagedPlayer.countPoints());
-                        }
                     }
                 }
                 else if(action.type == ActionType.MARK){
@@ -364,9 +358,6 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                 else if(action.type == ActionType.DAMAGE){
                     for(Player damagedPlayer : player.getActiveWeapon().getPlayersToDamage().keySet()){
                         match.addUpdate(new DamageUpdate(damagedPlayer));
-                        if(damagedPlayer.getTotalDamage() > 10){
-                            damagedPlayer.addPartialPointsCount(damagedPlayer.countPoints());
-                        }
                     }
                 }
                 else if(action.type == ActionType.MARK){
@@ -390,6 +381,11 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         try{
             Player player = Server.getInstance().getLobby().getPlayer(token);
             Match match = player.getMatch();
+            for(Player p : match.getPlayers()){
+                if(p.isDead()){
+                    p.addPartialPointsCount();
+                }
+            }
             match.nextTurn();
             match.addUpdate(new MapUpdate(match.getMap()));
             Server.getInstance().getConnection().getConnectionWrapper(token).addUpdate(new PlayerUpdate(player));
@@ -524,9 +520,6 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                 }
                 else if(action.type == ActionType.DAMAGE){
                     for(Player damagedPlayer : player.getActiveWeapon().getPlayersToDamage().keySet()){
-                        if(damagedPlayer.getTotalDamage() > 10){
-                            damagedPlayer.addPartialPointsCount(damagedPlayer.countPoints());
-                        }
                         match.addUpdate(new DamageUpdate(damagedPlayer));
                     }
                 }
