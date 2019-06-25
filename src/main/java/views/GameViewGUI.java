@@ -729,7 +729,7 @@ public class GameViewGUI implements Initializable, GameView {
         int j = 0;
         for (Player from : Client.getInstance().getPlayers()) {
             for (int k = 0; k < newPlayer.getMarksFromPlayer(from); k++) {
-                drawDamageOnPlayer(newPlayer, from, j);
+                drawMarkOnPlayer(newPlayer, from, j);
                 j++;
             }
         }
@@ -739,7 +739,8 @@ public class GameViewGUI implements Initializable, GameView {
         if (p.getPlayerColor() != null) {
             int index = getIndex(p.getStringColor());
             AnchorPane anchorPane = anchorPanePlayers.get(index);
-            for (Node n : anchorPane.getChildren()) {
+            for (int i = 0; i<anchorPane.getChildren().size(); i++) {
+                Node n = anchorPane.getChildren().get(i);
                 if (n.getClass().equals(Circle.class)) {
                     Platform.runLater(() -> anchorPane.getChildren().remove(n));
                 }
@@ -761,7 +762,8 @@ public class GameViewGUI implements Initializable, GameView {
         if (p.getPlayerColor() != null) {
             int index = getIndex(p.getStringColor());
             AnchorPane anchorPane = anchorPanePlayers.get(index);
-            for (Node n : anchorPane.getChildren()) {
+            for (int i = 0; i<anchorPane.getChildren().size(); i++) {
+                Node n = anchorPane.getChildren().get(i);
                 if (n.getClass().equals(Rectangle.class)) {
                     Platform.runLater(() -> anchorPane.getChildren().remove(n));
                 }
