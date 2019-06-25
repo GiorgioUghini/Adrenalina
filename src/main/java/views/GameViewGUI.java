@@ -970,51 +970,20 @@ public class GameViewGUI implements Initializable, GameView {
             position--;
         }
         if (canDoActionMap.get(ViewAction.CHOOSESPAWNPOINTWEAPON)) {
-
             //START CHOOSE POWER UP DIALOG
             powerUpChoosingDialog(wc);
             //END CHOOSE POWER UP DIALOG
-
         }
     }
 
     private void powerUpChoosingDialog(WeaponCard wc) {
         Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Just a question...");
-            alert.setHeaderText("Do you want to use a power up to pay for this action?");
-            alert.setContentText("If yes, select one of yours, if not, please click no.");
-
-            List<ButtonType> btlist = new ArrayList<>();
-            btlist.add(new ButtonType("No, I don't."));
             Player me = Client.getInstance().getPlayer();
-            List<PowerUpCard> powerUpCards = me.getPowerUpList();
-
-            for (PowerUpCard powerUpCard : powerUpCards) {
-                btlist.add(new ButtonType(powerUpCard.name + "(" + powerUpCard.color.toString().charAt(0) + ")"));
-            }
-
-            alert.getButtonTypes().setAll(btlist);
-            Optional<ButtonType> result = alert.showAndWait();
-            if (!result.isPresent()) {
-                if (me.getWeaponList().size() == 3)
-                    discardWeaponChoosingDialog(wc, null);
-                else
-                    gameController.grab(wc, toDiscard, null);
-            } else {
-                if (result.get() == btlist.get(0)) {
-                    if (me.getWeaponList().size() == 3)
-                        discardWeaponChoosingDialog(wc, null);
-                    else
-                        gameController.grab(wc, toDiscard, null);
-                } else {
-                    int index = btlist.indexOf(result.get());
-                    if (me.getWeaponList().size() == 3)
-                        discardWeaponChoosingDialog(wc, powerUpCards.get(index - 1));
-                    else
-                        gameController.grab(wc, toDiscard, powerUpCards.get(index - 1));
-                }
-            }
+            PowerUpCard toPay = choosePowerUpDialog();
+            if (me.getWeaponList().size() == 3)
+                discardWeaponChoosingDialog(wc, toPay);
+            else
+                gameController.grab(wc, toDiscard, toPay);
         });
     }
 
@@ -1139,39 +1108,37 @@ public class GameViewGUI implements Initializable, GameView {
                 int index = btlist.indexOf(result.get());
                 if (index == btlist.size()-1) {
                     gameController.finishCard();
-                } else if (!Client.getInstance().getPlayer().getPowerUpList().isEmpty()) {
+                } else  {
                     //Would you like to pay with power up?
-                    Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert2.setTitle("Just a question...");
-                    alert2.setHeaderText("Do you want to use a power up to pay for this action?");
-                    alert2.setContentText("If yes, select one of yours, if not, please click no.");
-
-                    List<ButtonType> btlist2 = new ArrayList<>();
-                    btlist2.add(new ButtonType("No, I don't."));
-                    Player me = Client.getInstance().getPlayer();
-                    List<PowerUpCard> powerUpCards = me.getPowerUpList();
-
-                    for (PowerUpCard powerUpCard : powerUpCards) {
-                        btlist2.add(new ButtonType(powerUpCard.name));
-                    }
-
-                    alert2.getButtonTypes().setAll(btlist2);
-                    Optional<ButtonType> result2 = alert2.showAndWait();
-                    if (!result2.isPresent()) {
-                        gameController.playEffect(legitEffects.getLegitEffects().get(index), null);
-                    } else {
-                        if (result2.get() == btlist2.get(0)) {
-                            gameController.playEffect(legitEffects.getLegitEffects().get(index), null);
-                        } else {
-                            int index2 = btlist2.indexOf(result2.get());
-                            gameController.playEffect(legitEffects.getLegitEffects().get(index), powerUpCards.get(index2 - 1));
-                        }
-                    }
-                } else {
-                    gameController.playEffect(legitEffects.getLegitEffects().get(index), null);
+                    PowerUpCard toPay = choosePowerUpDialog();
+                    gameController.playEffect(legitEffects.getLegitEffects().get(index), toPay);
                 }
             }
         });
+    }
+
+    private PowerUpCard choosePowerUpDialog(){
+        if(Client.getInstance().getPlayer().getPowerUpList().isEmpty()) return null;
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Just a question...");
+        alert.setHeaderText("Do you want to use a power up to pay for this action?");
+        alert.setContentText("If yes, select one of yours, if not, please click no.");
+
+        List<ButtonType> btlist = new ArrayList<>();
+        btlist.add(new ButtonType("No, I don't."));
+        Player me = Client.getInstance().getPlayer();
+        List<PowerUpCard> powerUpCards = me.getPowerUpList();
+
+        for (PowerUpCard powerUpCard : powerUpCards) {
+            btlist.add(new ButtonType(powerUpCard.name + "(" + powerUpCard.color.toString().charAt(0) + ")"));
+        }
+
+        alert.getButtonTypes().setAll(btlist);
+        Optional<ButtonType> result = alert.showAndWait();
+        if(!result.isPresent() || result.get() == btlist.get(0)) return null;
+
+        int index = btlist.indexOf(result.get());
+        return powerUpCards.get(index - 1);
     }
 
     private WeaponCard actualWC = null;
