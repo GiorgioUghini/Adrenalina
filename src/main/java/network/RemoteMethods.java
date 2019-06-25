@@ -107,6 +107,10 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             connectionWrapper.addUpdate(new PlayersUpdate(currentMatch.getPlayers()));
             connectionWrapper.addUpdate(new PlayerUpdate(currentPlayer));
             connectionWrapper.addUpdate(new MapUpdate(currentMatch.getMap()));
+            for(Player p : currentMatch.getPlayers()){
+                connectionWrapper.addUpdate(new DamageUpdate(p));
+                connectionWrapper.addUpdate(new MarkUpdate(p));
+            }
             return new ReconnectResponse();
         }
         catch (Exception ex){
