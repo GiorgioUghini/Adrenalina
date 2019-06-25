@@ -20,7 +20,7 @@ public interface GameView extends View {
 
     void updateMapView(GameMap map);
     void updatePlayerView(Player newPlayer);
-    void updateDamagedPlayer(Player newPlayer);
+    void updateDamagedAndMarkedPlayer(Player newPlayer);
     void updateActions(Map<ActionType, List<TurnEvent>> actions);
 
     void effectChoosingDialog(LegitEffects legitEffects);

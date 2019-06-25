@@ -54,7 +54,7 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
-    public void updateDamagedPlayer(Player newPlayer) {
+    public void updateDamagedAndMarkedPlayer(Player newPlayer) {
 
     }
 

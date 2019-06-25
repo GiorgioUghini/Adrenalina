@@ -710,7 +710,7 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
-    public void updateDamagedPlayer(Player newPlayer) {
+    public void updateDamagedAndMarkedPlayer(Player newPlayer) {
         List<Player> players = Client.getInstance().getPlayers();
         Player oldPlayer = players.get(players.indexOf(newPlayer));
         //REMOVE DAMAGE
@@ -768,19 +768,6 @@ public class GameViewGUI implements Initializable, GameView {
             }
         }
     }
-
-
-
-
-
-    //TODO IN DAMAGE UPDATE I DON'T RECEIVE ANY MARKS!!!
-    //TODO PLEASE CHECK
-    //TODO VILA
-
-
-
-    
-
 
     void drawMarkOnPlayer(Player to, Player from, int position) {
         //When drawing a circle, first arg is X, second is Y, third is radius. 138px is the height of where the circle must be placed

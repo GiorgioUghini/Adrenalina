@@ -230,13 +230,15 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(DamageUpdate response) {
-        ((GameView) Client.getInstance().getCurrentView()).updateDamagedPlayer(response.player);
+        ((GameView) Client.getInstance().getCurrentView()).updateDamagedAndMarkedPlayer(response.player);
         List<Player> players = Client.getInstance().getPlayers();
         players.set(players.indexOf(response.player), response.player);
     }
 
     @Override
     public void handle(MarkUpdate response) {
-
+        ((GameView) Client.getInstance().getCurrentView()).updateDamagedAndMarkedPlayer(response.player);
+        List<Player> players = Client.getInstance().getPlayers();
+        players.set(players.indexOf(response.player), response.player);
     }
 }
