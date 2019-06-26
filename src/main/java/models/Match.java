@@ -47,6 +47,7 @@ public class Match {
         int i = 0;
         for(Player p : players){
             p.setMatch(this);
+            p.setDeathManager(deathManager);
             p.setPlayerColor(getColor(i++));
         }
     }

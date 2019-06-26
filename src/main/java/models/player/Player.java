@@ -33,6 +33,7 @@ public class Player implements Subscriber, Serializable, Taggable {
     private transient GameMap gameMap;
     private boolean hasJustStarted;
     private Set<Player> playersDamagedByMeThisTurn;
+    private DeathManager deathManager;
     private transient Match match;
     private String circleColor = null;
 
@@ -333,6 +334,10 @@ public class Player implements Subscriber, Serializable, Taggable {
         this.match = match;
     }
 
+    public void setDeathManager(DeathManager deathManager){
+        this.deathManager = deathManager;
+    }
+
     public Match getMatch(){
         return match;
     }
@@ -510,10 +515,10 @@ public class Player implements Subscriber, Serializable, Taggable {
     }
 
     public void addPartialPointsCount(){
-        match.addPartialPointsCount(this);
+        deathManager.addPartialPointsCount(this, countPoints());
     }
 
     public int getDeathCount(){
-        return match.getDeathCount(this);
+        return deathManager.getDeathCount(this);
     }
 }
