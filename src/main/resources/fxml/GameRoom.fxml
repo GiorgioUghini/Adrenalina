@@ -200,9 +200,9 @@
                                                   <content>
                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                          <children>
-                                                            <AnchorPane layoutY="35.0" maxHeight="312.0" maxWidth="949.0" prefHeight="312.0" prefWidth="949.0">
+                                                            <AnchorPane fx:id="skullPane" layoutY="35.0" maxHeight="312.0" maxWidth="949.0" prefHeight="312.0" prefWidth="949.0">
                                                                <children>
-                                                                  <ImageView fx:id="skullPane" fitHeight="312.0" fitWidth="949.0" layoutX="1.0" pickOnBounds="true" preserveRatio="true">
+                                                                  <ImageView fitHeight="312.0" fitWidth="949.0" layoutX="1.0" pickOnBounds="true" preserveRatio="true">
                                                                      <image>
                                                                         <Image url="@../planciaDanni.png" />
                                                                      </image>
