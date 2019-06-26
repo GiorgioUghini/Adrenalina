@@ -3,6 +3,7 @@ package models.map;
 import errors.CardAlreadyExistsException;
 import models.card.Card;
 import models.card.WeaponCard;
+import models.player.Ammo;
 
 import java.io.Serializable;
 import java.util.*;
@@ -24,6 +25,11 @@ public class SpawnPoint extends Square implements Serializable {
     public void addCard(Card card){
         if(card == null) throw new NullPointerException();
         if(cards.size()>2)  throw new CardAlreadyExistsException();
+        WeaponCard toAdd = (WeaponCard) card;
+        toAdd.reset();
+        if(!toAdd.isLoaded()){
+            toAdd.load(new Ammo(3,3,3), null);
+        }
         cards.add((WeaponCard) card);
     }
 
