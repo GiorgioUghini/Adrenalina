@@ -1,14 +1,22 @@
 package network;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import controllers.ResourceController;
+import models.Config;
 import models.Lobby;
 
+import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.nio.file.Files;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Server {
     private static Server instance = null;
     private ServerConnection connection;
+    private Config config;
     private Lobby lobby;
     private int maxClients;
     private boolean debug;
@@ -31,7 +39,12 @@ public class Server {
     }
 
     public void start() throws IOException {
-        lobby = new Lobby();
+        File file = ResourceController.getResource("config.json");
+        String jsonConfig = new String(Files.readAllBytes(file.toPath()));
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        Gson gson = gsonBuilder.create();
+        config = gson.fromJson(jsonConfig, Config.class);
+        lobby = new Lobby(config);
         connection = new ServerConnection();
         connection.init();
     }

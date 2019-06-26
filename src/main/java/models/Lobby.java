@@ -1,5 +1,6 @@
 package models;
 
+import network.Connection;
 import network.ConnectionWrapper;
 import network.Response;
 import network.Server;
@@ -21,6 +22,11 @@ public class Lobby {
     private BiMap<Match, Player> matchPlayerMap = new BiMap<>();
     private BiMap<String, Player> tokenPlayerMap = new BiMap<>();
     private List<Player> waitingPlayers = new LinkedList<>();
+    private Config config;
+
+    public Lobby(Config config){
+        this.config = config;
+    }
 
     public List<Player> getWaitingPlayers() {
         return waitingPlayers;
@@ -92,7 +98,7 @@ public class Lobby {
             if (!(waitingPlayers.size() < 3)) {
                 chooseMapAndStartMatch();
             }
-        }, Constants.DELAY_SECONDS, TimeUnit.SECONDS);
+        }, config.getMatchConnectionTimeout(), TimeUnit.MILLISECONDS);
     }
 
     public synchronized List<Match> getActiveMatches() {
