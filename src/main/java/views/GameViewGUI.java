@@ -543,8 +543,8 @@ public class GameViewGUI implements Initializable, GameView {
         final String t = p.getStringColor();
         tabPane.getTabs().get(i).setDisable(false);
         if (i == 0) {
-            if (firstPlayerList.get(i).getImage() != null) {
-                Image image = new Image("firstplayer.png");
+            if (firstPlayerList.get(i).getImage() == null) {
+                Image image = new Image("firstPlayer.png");
                 Platform.runLater(() -> firstPlayerList.get(i).setImage(image));
             }
         }
