@@ -147,6 +147,8 @@ public class GameViewGUI implements Initializable, GameView {
     private AnchorPane anchorPanePlayer3;
     @FXML
     private AnchorPane anchorPanePlayer4;
+    @FXML
+    private AnchorPane skullPane;
 
     @FXML
     private Text redAmmoText;
@@ -774,8 +776,32 @@ public class GameViewGUI implements Initializable, GameView {
                 j++;
             }
         }
+        //UPDATE SKULLS IN MAIN PANE
+        removeAllSkullOnMainPane();
+        addSkullsOnMainPane();
         //UPDATE POINTS TODO: Move this line where the DAMAGER, not the DAMAGED, is updated.
         actualPointsList.get(Client.getInstance().getPlayers().indexOf(newPlayer)).setText("Actual Points: " + newPlayer.getPoints());
+    }
+
+    void addSkullsOnMainPane() {
+        int skulls = 0;
+        for (Player p : Client.getInstance().getPlayers()) {
+            skulls += p.getDeathCount();
+        }
+        for (int position=0; position<skulls; position++) {
+            Circle c = new Circle((double) (107 + position * 54), 120d, 17d);
+            c.setFill(Color.rgb(0,0,0));
+            Platform.runLater(() -> skullPane.getChildren().add(c));
+        }
+    }
+
+    void removeAllSkullOnMainPane() {
+        for (int i = 0; i<skullPane.getChildren().size(); i++) {
+            Node n = skullPane.getChildren().get(i);
+            if (n.getClass().equals(Circle.class)) {
+                Platform.runLater(() -> skullPane.getChildren().remove(n));
+            }
+        }
     }
 
     void removeAllDamageOnPlayer(Player p) {
