@@ -617,6 +617,13 @@ public class GameViewGUI implements Initializable, GameView {
         Platform.runLater( () -> gp.setStyle(""));
     }
 
+    private void undoHighlighAllGridPanes(){
+        for (Square sq : Client.getInstance().getMap().getAllSquares()) {
+            Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(sq);
+            undoHighlightGridPane(paneList.get(coord.getX()).get(coord.getY()));
+        }
+    }
+
     private void highlightSquare(Square square){
         Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(square);
         GridPane clickable = paneList.get(coord.getX()).get(coord.getY());
@@ -635,24 +642,9 @@ public class GameViewGUI implements Initializable, GameView {
             }
             canDoActionMap.put(ViewAction.SELECTPLAYER, false);
             onSelectDone(p);
-        } else if (canDoActionMap.get(ViewAction.SELECTSQUARE)) {
-            GridPane gridPane = (GridPane) clicked.getParent();
-            if(!clickableObjects.contains(gridPane)){
-                showMessage("You cannot click on this pane");
-                return;
-            }
-            canDoActionMap.put(ViewAction.SELECTSQUARE, false);
-            Square s = Client.getInstance().getMap().getPlayerPosition(p);
-            onSelectDone(s);
-        } else {
-            GridPane gridPane = (GridPane) clicked.getParent();
-            if(!clickableObjects.contains(gridPane)){
-                showMessage("You cannot click on this pane");
-                return;
-            }
-            canDoActionMap.put(ViewAction.SELECTROOM, false);
-            RoomColor rc = Client.getInstance().getMap().getPlayerPosition(p).getColor();
-            onSelectDone(rc);
+        } else if (canDoActionMap.get(ViewAction.SELECTSQUARE) || canDoActionMap.get(ViewAction.SELECTROOM)) {
+            Square square = Client.getInstance().getMap().getPlayerPosition(p);
+            squareClicked(square);
         }
     }
 
@@ -944,7 +936,7 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
-    private void switchActionPane(Square s) {
+    private void squareClicked(Square s) {
         //check that it was clickable
         Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(s);
         GridPane gridPane = paneList.get(coord.getX()).get(coord.getY());
@@ -962,73 +954,73 @@ public class GameViewGUI implements Initializable, GameView {
             if(canDoActionMap.get(ViewAction.SELECTROOM)){
                 RoomColor rc = s.getColor();
                 tagged = rc;
+                canDoActionMap.put(ViewAction.SELECTROOM, false);
+            }else{
+                canDoActionMap.put(ViewAction.SELECTSQUARE, false);
             }
             onSelectDone(tagged);
         }
-        for (Square sq : Client.getInstance().getMap().getAllSquares()) {
-            coord = Client.getInstance().getMap().getSquareCoordinates(sq);
-            undoHighlightGridPane(paneList.get(coord.getX()).get(coord.getY()));
-        }
+        undoHighlighAllGridPanes();
     }
 
     public void pane00Clicked() {
         Square s = Client.getInstance().getMap().getSquareByCoordinate(0, 0);
-        switchActionPane(s);
+        squareClicked(s);
     }
 
     public void pane01Clicked() {
         Square s = Client.getInstance().getMap().getSquareByCoordinate(0, 1);
-        switchActionPane(s);
+        squareClicked(s);
     }
 
     public void pane02Clicked() {
         Square s = Client.getInstance().getMap().getSquareByCoordinate(0, 2);
-        switchActionPane(s);
+        squareClicked(s);
     }
 
     public void pane10Clicked() {
         Square s = Client.getInstance().getMap().getSquareByCoordinate(1, 0);
-        switchActionPane(s);
+        squareClicked(s);
     }
 
     public void pane11Clicked() {
         Square s = Client.getInstance().getMap().getSquareByCoordinate(1, 1);
-        switchActionPane(s);
+        squareClicked(s);
     }
 
     public void pane12Clicked() {
         Square s = Client.getInstance().getMap().getSquareByCoordinate(1, 2);
-        switchActionPane(s);
+        squareClicked(s);
     }
 
     public void pane20Clicked() {
         Square s = Client.getInstance().getMap().getSquareByCoordinate(2, 0);
-        switchActionPane(s);
+        squareClicked(s);
     }
 
     public void pane21Clicked() {
         Square s = Client.getInstance().getMap().getSquareByCoordinate(2, 1);
-        switchActionPane(s);
+        squareClicked(s);
     }
 
     public void pane22Clicked() {
         Square s = Client.getInstance().getMap().getSquareByCoordinate(2, 2);
-        switchActionPane(s);
+        squareClicked(s);
     }
 
     public void pane30Clicked() {
         Square s = Client.getInstance().getMap().getSquareByCoordinate(3, 0);
-        switchActionPane(s);
+        squareClicked(s);
     }
 
     public void pane31Clicked() {
         Square s = Client.getInstance().getMap().getSquareByCoordinate(3, 1);
-        switchActionPane(s);
+        squareClicked(s);
     }
 
     public void pane32Clicked() {
         Square s = Client.getInstance().getMap().getSquareByCoordinate(3, 2);
-        switchActionPane(s);
+        squareClicked(s);
     }
 
     public void weaponOnSpawnPointClicked(RoomColor color, int position) {

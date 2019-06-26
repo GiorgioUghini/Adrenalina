@@ -2,7 +2,6 @@ package views;
 
 import models.card.LegitEffects;
 import models.card.Selectable;
-import models.card.WeaponCard;
 import models.map.GameMap;
 import models.player.Player;
 import models.turn.ActionType;
