@@ -11,8 +11,10 @@ import models.turn.ActionType;
 import network.Response;
 import network.Server;
 import network.updates.ChooseMapUpdate;
+import network.updates.MapUpdate;
 import network.updates.NextTurnUpdate;
 
+import java.sql.Time;
 import java.util.*;
 
 public class Match {
@@ -25,15 +27,22 @@ public class Match {
     private AmmoDeck ammoDeck;
     private GameMap gameMap;
     private DeathManager deathManager;
+    private Config config;
     private  Map<ActionType,  List<TurnEvent>> currentActions;
     private ActionType currentActionType;
     //private Turn actualTurn;
+    private Timer turnTimer;
+    private TimerTask turnTimerTask;
     private ActionGroup frenzy = null;
     private CardController cardController;
     int round;
     //null -> noFrenzy, Type1, Type2
-
     public Match(List<Player> players) {
+        this(players, new Config(7000, 60000));
+    }
+
+    public Match(List<Player> players, Config config) {
+        this.config = config;
         deathManager = new DeathManager();
         playerList = new LinkedList<>(players);
         cardController = new CardController();
@@ -226,6 +235,7 @@ public class Match {
      * Method that signal the start of the turn of a player. This method SHOULD be called each time a player starts his turn
      */
     public void nextTurn() {
+        stopTurnTimer();
         if(gameMap!=null){
             refillCards();
         }
@@ -267,6 +277,7 @@ public class Match {
         currentActionType = null;
         round = (turnType == TurnType.IN_GAME && currentPlayer.getLifeState() != ActionGroup.FRENZY_TYPE_2) ? 2: 1;
         addUpdate(new NextTurnUpdate(playerList.get(actualPlayerIndex).getName()));
+        startTurnTimer();
     }
 
     public void action(ActionType actionType) {
@@ -376,5 +387,38 @@ public class Match {
 
     public Map<Player, Integer> getTotalPoints() {
         return deathManager.getTotalPoints(playerList);
+    }
+
+    private void stopTurnTimer(){
+        if(turnTimerTask != null){
+            turnTimerTask.cancel();
+        }
+        if(turnTimer != null){
+            turnTimer.cancel();
+            turnTimer.purge();
+        }
+    }
+
+    private void startTurnTimer(){
+        turnTimer = new Timer();
+        turnTimerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Player currentPlayer = getCurrentPlayer();
+                if(currentPlayer.hasJustStarted()){
+                    while (currentPlayer.getPowerUpList().size() < 2){
+                        currentPlayer.drawPowerUp();
+                    }
+                    PowerUpCard powerUpCard = currentPlayer.getPowerUpList().get(0);
+                    currentPlayer.throwPowerUp(powerUpCard);
+                    GameMap map = getMap();
+                    SpawnPoint spawnPoint = map.getSpawnPoints().stream().filter(p -> p.getColor() == powerUpCard.color).findFirst().orElse(null);
+                    map.spawnPlayer(currentPlayer, spawnPoint);
+                    addUpdate(new MapUpdate(map));
+                }
+                nextTurn();
+            }
+        };
+        turnTimer.schedule(turnTimerTask, config.getTurnTimeout());
     }
 }

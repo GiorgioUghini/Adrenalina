@@ -83,7 +83,7 @@ public class Lobby {
     }
 
     public synchronized void chooseMapAndStartMatch() {
-        Match match = new Match(waitingPlayers);
+        Match match = new Match(waitingPlayers, config);
         for(Player waitingPlayer : waitingPlayers){
             matchPlayerMap.add(match, waitingPlayer);
         }
