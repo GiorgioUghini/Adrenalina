@@ -254,6 +254,6 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(PointsUpdate response) {
-
+        ((GameView) Client.getInstance().getCurrentView()).updatePoints(response.points);
     }
 }

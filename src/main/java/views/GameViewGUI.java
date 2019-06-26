@@ -291,7 +291,7 @@ public class GameViewGUI implements Initializable, GameView {
             Client.getInstance().setReconnecting(false);
             Platform.runLater(this::reconnect);
         }
-        Image image = new Image(ResourceController.getResource("planciaDanni.png").toURI().toString());
+        Image image = new Image("planciaDanni.png");
         Platform.runLater(() -> ((ImageView) skullPane.getChildren().get(0)).setImage(image));
         Platform.runLater(this::getValidActions);
     }
@@ -802,8 +802,13 @@ public class GameViewGUI implements Initializable, GameView {
         //UPDATE SKULLS IN MAIN PANE
         removeAllSkullOnMainPane();
         addSkullsOnMainPane();
-        //UPDATE POINTS TODO: Move this line where the DAMAGER, not the DAMAGED, is updated.
-        actualPointsList.get(Client.getInstance().getPlayers().indexOf(newPlayer)).setText("Actual Points: " + newPlayer.getPoints());
+    }
+
+    public void updatePoints(Map<Player, Integer> map) {
+        for (Player p : Client.getInstance().getPlayers()) {
+            int points = map.get(p);
+            actualPointsList.get(Client.getInstance().getPlayers().indexOf(p)).setText("Actual Points: " + points);
+        }
     }
 
     void addSkullsOnMainPane() {
@@ -812,9 +817,9 @@ public class GameViewGUI implements Initializable, GameView {
             skulls += p.getDeathCount();
         }
         for (int position=0; position<skulls; position++) {
-            Circle c = new Circle((double) (107 + position * 54), 120d, 17d);
+            Rectangle c = new Rectangle((double) (42 + position * 97), 100d, 60d, 105d);
             c.setFill(Color.rgb(0,0,0));
-            Platform.runLater(() -> skullPane.getChildren().add(c));
+            Platform.runLater( () -> skullPane.getChildren().add(c));
         }
     }
 

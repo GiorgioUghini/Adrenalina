@@ -23,6 +23,7 @@ public interface GameView extends View {
     void updateDamagedAndMarkedPlayer(Player newPlayer);
     void updateActions(Map<ActionType, List<TurnEvent>> actions);
 
+    void updatePoints(Map<Player, Integer> map);
     void effectChoosingDialog(LegitEffects legitEffects);
 
     void setTextAndEnableBtnActionGroup(ActionType actionType, int btnNum);
