@@ -186,6 +186,7 @@ public class GameViewGUI implements Initializable, GameView {
     private Set<Object> clickableObjects;
 
     private int maxRunDistance;
+    private boolean firstTurn = true;
 
     public GameViewGUI() {
         this.gameController = new GameController();
@@ -510,7 +511,8 @@ public class GameViewGUI implements Initializable, GameView {
             setTurnEventButtons(actions.get(currentActionType));
         }
 
-        setBtnEnabled(btnReload, turnIsEnding);
+        setBtnEnabled(btnReload, turnIsEnding && !firstTurn);
+        if(actions.isEmpty()) firstTurn = false;
     }
 
     private void setActionGroupButtons(Set<ActionType> groupActions){
