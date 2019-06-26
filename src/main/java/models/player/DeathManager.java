@@ -1,11 +1,12 @@
 package models.player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DeathManager {
+public class DeathManager implements Serializable {
     private List<Map<Player, Integer>> pointsMapList;
     private Map<Player, Integer> deathMap;
 
