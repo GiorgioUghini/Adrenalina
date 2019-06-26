@@ -196,6 +196,8 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             SpawnPoint spawnPoint = map.getSpawnPoints().stream().filter(p -> p.getColor() == color).findFirst().orElse(null);
             map.spawnPlayer(player,spawnPoint);
             match.addUpdate(new MapUpdate(match.getMap()));
+            match.addUpdate(new DamageUpdate(player));
+            match.addUpdate(new MarkUpdate(player));
             Server.getInstance().getConnection().getConnectionWrapper(token).addUpdate(new PlayerUpdate(player));
             match.turnEvent(TurnEvent.SPAWN);
             return new SpawnPlayerResponse();
