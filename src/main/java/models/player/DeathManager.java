@@ -29,7 +29,7 @@ public class DeathManager implements Serializable {
     public int getTotalPoints(Player player) {
         int points = 0;
         for (Map<Player, Integer> map : pointsMapList) {
-            points = points + map.get(player);
+            points = points + (map.get(player) != null ? map.get(player) : 0);
         }
         return points;
     }
