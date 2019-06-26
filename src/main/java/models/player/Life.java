@@ -133,6 +133,7 @@ class Life implements Serializable {
         myDamages.clear();
         damagedBy.clear();
         hurtMeLast = null;
+        me.setLifeState(ActionGroup.NORMAL);
     }
 
 
