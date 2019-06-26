@@ -18,7 +18,8 @@ public class LobbyStartMatchTest {
 
     @Test
     public void lobbyStartMatchTest() throws InterruptedException {
-        Lobby lobby = new Lobby();
+        Config config = new Config(7000, 60000);
+        Lobby lobby = new Lobby(config);
 
         lobby.registerPlayer("Cosimo", "");
         Player player1 = lobby.registerPlayer("Giorgio", "");

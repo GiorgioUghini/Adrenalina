@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.*;
@@ -15,7 +16,8 @@ public class LobbyTest {
 
     @Test
     public void lobbyTimerTest() {
-        Lobby lobby = new Lobby();
+        Config config = new Config(7000, 60000);
+        Lobby lobby = new Lobby(config);
         lobby.registerPlayer("Cosimo", "");
         lobby.registerPlayer("Giorgio", "");
         lobby.registerPlayer("Vila", "");
@@ -23,7 +25,7 @@ public class LobbyTest {
         assertEquals(0, activeMatches.size());
 
         try {
-            await().atMost(Constants.DELAY_SECONDS + 1, SECONDS).until(matchStarted(lobby));
+            await().atMost(config.getMatchConnectionTimeout() + 1000, MILLISECONDS).until(matchStarted(lobby));
         } catch (ConditionTimeoutException e) {
             assert false;
         }

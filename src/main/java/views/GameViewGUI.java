@@ -1208,7 +1208,9 @@ public class GameViewGUI implements Initializable, GameView {
             case ROOM:
                 showMessage("Please click on a ROOM highlighted in green.");
                 for (Taggable t : selectable.get()) {
-                    for (Square sq : Client.getInstance().getMap().getAllSquaresInRoom((RoomColor) t)) {
+                    RoomColor color = (RoomColor) t;
+                    Set<Square> squares = Client.getInstance().getMap().getAllSquaresInRoom(color);
+                    for (Square sq : squares) {
                         Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(sq);
                         GridPane clickable = paneList.get(coord.getX()).get(coord.getY());
                         clickableObjects.add(clickable);
