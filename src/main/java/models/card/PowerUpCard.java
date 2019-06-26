@@ -46,6 +46,11 @@ public class PowerUpCard extends EffectCard {
         return Objects.hash(name,color);
     }
 
+    public String getFullName(){
+        String color = "(" + this.color.toString().charAt(0) + ")";
+        return this.name + color;
+    }
+
     public boolean hasPrice(){
         return this.hasPrice;
     }
