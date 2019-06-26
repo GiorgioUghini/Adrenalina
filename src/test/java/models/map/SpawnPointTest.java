@@ -1,6 +1,7 @@
 package models.map;
 import controllers.CardController;
 import errors.CardAlreadyExistsException;
+import errors.NothingToGrabException;
 import models.card.AmmoCard;
 import models.card.WeaponCard;
 import models.card.WeaponDeck;
@@ -55,11 +56,11 @@ public class SpawnPointTest {
         try{
             spawnPoint.drawCard(null);
             assert false;
-        }catch(NullPointerException e){ assert true; }
+        }catch(NothingToGrabException e){ assert true; }
         try{
             spawnPoint.drawCard(card1);
             assert false;
-        }catch(NullPointerException e){ assert true; }
+        }catch(NothingToGrabException e){ assert true; }
     }
 
     private List<WeaponCard> getWeaponCards(int howMany){

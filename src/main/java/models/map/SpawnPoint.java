@@ -1,6 +1,7 @@
 package models.map;
 
 import errors.CardAlreadyExistsException;
+import errors.NothingToGrabException;
 import models.card.Card;
 import models.card.WeaponCard;
 import models.player.Ammo;
@@ -42,9 +43,9 @@ public class SpawnPoint extends Square implements Serializable {
 
     /** Draws a card and removes it from the list
      * @param card the card to draw
-     * @throws NullPointerException if it does not have that card */
+     * @throws NothingToGrabException if it does not have that card */
     public Card drawCard(WeaponCard card){
-        if(!cards.contains(card)) throw new NullPointerException();
+        if(!cards.contains(card)) throw new NothingToGrabException();
         cards.remove(card);
         return card;
     }
