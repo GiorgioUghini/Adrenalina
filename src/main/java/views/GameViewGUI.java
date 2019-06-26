@@ -154,11 +154,22 @@ public class GameViewGUI implements Initializable, GameView {
     private Text blueAmmoText;
     @FXML
     private Text yellowAmmoText;
+    @FXML
+    private Text actualPoints0;
+    @FXML
+    private Text actualPoints1;
+    @FXML
+    private Text actualPoints2;
+    @FXML
+    private Text actualPoints3;
+    @FXML
+    private Text actualPoints4;
 
     private List<ImageView> powerUpSpaces = new ArrayList<>();
     private List<ImageView> weaponSpaces = new ArrayList<>();
     private List<ImageView> firstPlayerList = new ArrayList<>();
     private List<AnchorPane> anchorPanePlayers = new ArrayList<>();
+    private List<Text> actualPointsList = new ArrayList<>();
     private HashMap<RoomColor, List<ImageView>> weaponOnSpawnPointMap = new HashMap<>();
 
     private HashMap<Integer, ActionType> buttonActionTypeMap = new HashMap<>();
@@ -199,6 +210,12 @@ public class GameViewGUI implements Initializable, GameView {
         firstPlayerList.add(firstPlayer2);
         firstPlayerList.add(firstPlayer3);
         firstPlayerList.add(firstPlayer4);
+        actualPointsList.add(actualPoints0);
+        actualPointsList.add(actualPoints1);
+        actualPointsList.add(actualPoints2);
+        actualPointsList.add(actualPoints3);
+        actualPointsList.add(actualPoints4);
+
 
         for (int i=0; i<5; i++) {
             String imageName = String.format("tabs/tab%d.png", i);
@@ -757,6 +774,8 @@ public class GameViewGUI implements Initializable, GameView {
                 j++;
             }
         }
+        //UPDATE POINTS TODO: Move this line where the DAMAGER, not the DAMAGED, is updated.
+        actualPointsList.get(Client.getInstance().getPlayers().indexOf(newPlayer)).setText("Actual Points: " + newPlayer.getPoints());
     }
 
     void removeAllDamageOnPlayer(Player p) {

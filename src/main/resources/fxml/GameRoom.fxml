@@ -39,6 +39,11 @@
                                                          <children>
                                                             <AnchorPane fx:id="anchorPanePlayer0" layoutY="68.0" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.bottomAnchor="269.0" AnchorPane.topAnchor="50.0" />
                                                             <ImageView fx:id="firstPlayer0" fitHeight="210.0" fitWidth="69.0" layoutX="30.0" layoutY="320.0" pickOnBounds="true" preserveRatio="true" />
+                                                            <Text fx:id="actualPoints0" layoutX="150.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Actual Points: 0">
+                                                               <font>
+                                                                  <Font size="25.0" />
+                                                               </font>
+                                                            </Text>
                                                          </children></AnchorPane>
                                                 </content>
                                               </Tab>
@@ -48,6 +53,11 @@
                                                          <children>
                                                             <AnchorPane fx:id="anchorPanePlayer1" layoutY="125.0" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.bottomAnchor="269.0" AnchorPane.topAnchor="50.0" />
                                                             <ImageView fx:id="firstPlayer1" fitHeight="210.0" fitWidth="69.0" layoutX="30.0" layoutY="320.0" pickOnBounds="true" preserveRatio="true" />
+                                                            <Text fx:id="actualPoints1" layoutX="150.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Actual Points: 0">
+                                                               <font>
+                                                                  <Font size="25.0" />
+                                                               </font>
+                                                            </Text>
                                                          </children></AnchorPane>
                                                 </content>
                                               </Tab>
@@ -57,6 +67,11 @@
                                                          <children>
                                                             <AnchorPane fx:id="anchorPanePlayer2" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.bottomAnchor="269.0" AnchorPane.topAnchor="50.0" />
                                                             <ImageView fx:id="firstPlayer2" fitHeight="210.0" fitWidth="69.0" layoutX="30.0" layoutY="320.0" pickOnBounds="true" preserveRatio="true" />
+                                                            <Text fx:id="actualPoints2" layoutX="150.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Actual Points: 0">
+                                                               <font>
+                                                                  <Font size="25.0" />
+                                                               </font>
+                                                            </Text>
                                                          </children></AnchorPane>
                                                   </content>
                                                 </Tab>
@@ -66,6 +81,11 @@
                                                          <children>
                                                             <AnchorPane fx:id="anchorPanePlayer3" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.bottomAnchor="269.0" AnchorPane.topAnchor="50.0" />
                                                             <ImageView fx:id="firstPlayer3" fitHeight="210.0" fitWidth="69.0" layoutX="30.0" layoutY="320.0" pickOnBounds="true" preserveRatio="true" />
+                                                            <Text fx:id="actualPoints3" layoutX="150.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Actual Points: 0">
+                                                               <font>
+                                                                  <Font size="25.0" />
+                                                               </font>
+                                                            </Text>
                                                          </children></AnchorPane>
                                                   </content>
                                                 </Tab>
@@ -75,6 +95,11 @@
                                                          <children>
                                                             <AnchorPane fx:id="anchorPanePlayer4" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.bottomAnchor="269.0" AnchorPane.topAnchor="50.0" />
                                                             <ImageView fx:id="firstPlayer4" fitHeight="210.0" fitWidth="69.0" layoutX="30.0" layoutY="320.0" pickOnBounds="true" preserveRatio="true" />
+                                                            <Text fx:id="actualPoints4" layoutX="150.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Actual Points: 0">
+                                                               <font>
+                                                                  <Font size="25.0" />
+                                                               </font>
+                                                            </Text>
                                                          </children></AnchorPane>
                                                   </content>
                                                 </Tab>
