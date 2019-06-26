@@ -27,7 +27,7 @@ public class TurnEngine {
                         break;
                     case VERY_LOW_LIFE:
                         map.put(ActionType.RUN_NORMAL, new LinkedList<>(Collections.singletonList(TurnEvent.RUN_3)));
-                        map.put(ActionType.GRAB_NORMAL, new LinkedList<>(Arrays.asList(TurnEvent.RUN_2, TurnEvent.GRAB)));
+                        map.put(ActionType.GRAB_LOW_LIFE, new LinkedList<>(Arrays.asList(TurnEvent.RUN_2, TurnEvent.GRAB)));
                         map.put(ActionType.SHOOT_VERY_LOW_LIFE, new LinkedList<>(Arrays.asList(TurnEvent.RUN_1, TurnEvent.SHOOT)));
                         break;
                     case FRENZY_TYPE_1:
