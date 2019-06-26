@@ -185,6 +185,8 @@ public class GameViewGUI implements Initializable, GameView {
     private BiMap<Circle, Player> circlePlayerMap = new BiMap<>();
     private Set<Object> clickableObjects;
 
+    private int maxRunDistance;
+
     public GameViewGUI() {
         this.gameController = new GameController();
         clickableObjects = new HashSet<>();
@@ -367,6 +369,7 @@ public class GameViewGUI implements Initializable, GameView {
         canDoActionMap.put(ViewAction.CLICKPOWERUP, true);
     }
     public void runBtnClicked() {
+        highlighAllSquaresAtMaxDistance(this.maxRunDistance);
         setBtnEnabled(btnRun, false);
         canDoActionMap.put(ViewAction.RUN, true);
         showMessage("Please click on the map where you want to go.");
@@ -477,8 +480,7 @@ public class GameViewGUI implements Initializable, GameView {
                 case RUN_2:
                 case RUN_3:
                 case RUN_4:
-                    int maxDistance = Character.getNumericValue(turnEvent.toString().charAt(4));
-                    highlighAllSquaresAtMaxDistance(maxDistance);
+                    this.maxRunDistance = Character.getNumericValue(turnEvent.toString().charAt(4));
                     buttonToShow = btnRun;
                     break;
                 case SHOOT:
