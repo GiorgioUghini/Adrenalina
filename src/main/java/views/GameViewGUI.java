@@ -172,13 +172,13 @@ public class GameViewGUI implements Initializable, GameView {
     private List<ImageView> firstPlayerList = new ArrayList<>();
     private List<AnchorPane> anchorPanePlayers = new ArrayList<>();
     private List<Text> actualPointsList = new ArrayList<>();
-    private HashMap<RoomColor, List<ImageView>> weaponOnSpawnPointMap = new HashMap<>();
+    private Map<RoomColor, List<ImageView>> weaponOnSpawnPointMap = new EnumMap<>(RoomColor.class);
 
     private HashMap<Integer, ActionType> buttonActionTypeMap = new HashMap<>();
 
     private WeaponCard toDiscard = null;
 
-    private HashMap<ViewAction, Boolean> canDoActionMap = new HashMap<>();
+    private Map<ViewAction, Boolean> canDoActionMap = new EnumMap<>(ViewAction.class);
 
     private GameController gameController;
 
