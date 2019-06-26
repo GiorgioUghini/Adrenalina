@@ -70,7 +70,7 @@ public class GameViewCLI implements GameView {
 
     @Override
     public void updatePoints(Map<Player, Integer> map) {
-        
+
     }
 
     @Override

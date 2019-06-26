@@ -1,6 +1,8 @@
 package models.map;
 
 import errors.CardAlreadyExistsException;
+import errors.NotEnoughAmmoException;
+import errors.NothingToGrabException;
 import models.card.AmmoCard;
 import models.card.Card;
 import models.card.WeaponCard;
@@ -51,6 +53,6 @@ public class AmmoPointTest {
         try{
             ammoPoint.drawCard();
             assert false;
-        }catch(NullPointerException e){assert true;}
+        }catch(NothingToGrabException e){assert true;}
     }
 }

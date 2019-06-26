@@ -1,6 +1,7 @@
 package models.map;
 
 import errors.CardAlreadyExistsException;
+import errors.NothingToGrabException;
 import models.card.AmmoCard;
 import models.card.Card;
 
@@ -36,9 +37,9 @@ public class AmmoPoint extends Square implements Serializable {
 
     /** draws the ammo card, that will no longer be available on the square and must be replaced at the end of the turn
      * @return the ammocard if there is one
-     * @throws NullPointerException if there is not an ammo card on this square */
+     * @throws NothingToGrabException if there is not an ammo card on this square */
     public AmmoCard drawCard(){
-        if(!hasAmmoCard()) throw new NullPointerException();
+        if(!hasAmmoCard()) throw new NothingToGrabException();
         AmmoCard tmp = ammoCard;
         this.ammoCard = null;
         return tmp;

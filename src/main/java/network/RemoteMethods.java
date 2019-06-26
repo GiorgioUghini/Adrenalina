@@ -1,8 +1,6 @@
 package network;
 
-import errors.CheatException;
-import errors.InvalidInputException;
-import errors.WrongPasswordException;
+import errors.*;
 import models.Lobby;
 import models.Match;
 import models.card.*;
@@ -265,6 +263,9 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             WeaponCard card = player.getWeaponList().stream().filter(w -> w.name.equals(cardName)).findFirst().orElse(null);
             if(player.getActiveWeapon()==null){
                 player.playWeapon(card);
+                if(Server.getInstance().isDebug()){
+                    card.load(new Ammo(3,3,3), null);
+                }
             }
             LegitEffects legitEffects = player.getWeaponEffects();
             Server.getInstance().getConnection().getConnectionWrapper(token).addUpdate(new PlayerUpdate(player));
@@ -421,9 +422,10 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
 
     @Override
     public synchronized Response grab(String token, WeaponCard drawn, WeaponCard toRelease,PowerUpCard powerUpCard) {
+        Match match = null;
         try{
             Player player = Server.getInstance().getLobby().getPlayer(token);
-            Match match = Server.getInstance().getLobby().getMatch(player);
+            match = Server.getInstance().getLobby().getMatch(player);
             GameMap map = match.getMap();
             Square playerSquare = map.getPlayerPosition(player);
             if(playerSquare.isSpawnPoint()){
@@ -443,6 +445,16 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             match.addUpdate(new MapUpdate(match.getMap()));
             Server.getInstance().getConnection().getConnectionWrapper(token).addUpdate(new PlayerUpdate(player));
             return new GrabResponse();
+        }
+        catch (NothingToGrabException e){
+            match.turnEvent(TurnEvent.GRAB);
+            e.printStackTrace();
+            return new ErrorResponse(e);
+        }
+        catch(NotEnoughAmmoException e){
+            match.turnEvent(TurnEvent.GRAB);
+            e.printStackTrace();
+            return new ErrorResponse(e);
         }
         catch (Exception ex){
             ex.printStackTrace();
