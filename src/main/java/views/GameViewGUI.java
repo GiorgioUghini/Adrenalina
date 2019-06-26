@@ -399,8 +399,66 @@ public class GameViewGUI implements Initializable, GameView {
         canDoActionMap.put(ViewAction.SHOOT, true);
     }
     public void reload() {
-
+        setBtnEnabled(btnReload, false);
+        Platform.runLater(() -> {
+            Map<WeaponCard, PowerUpCard> reloadingWeapons = new HashMap<>();
+            Player me = Client.getInstance().getPlayer();
+            List<WeaponCard> reloadableWeapons;
+            while( !(reloadableWeapons = getReloadableWeapons()).isEmpty() ){
+                WeaponCard toReload = showReloadAlert(reloadableWeapons);
+                if(toReload == null) break;
+                PowerUpCard powerUpToPay = null;
+                if(!me.getPowerUpList().isEmpty()){
+                    powerUpToPay = choosePowerUpDialog();
+                }
+                if(!me.canReloadWeapon(toReload, powerUpToPay)){
+                    if(powerUpToPay==null){
+                        showMessage("You need to use a powerup to reload this weapon");
+                    }else{
+                        showMessage("You cannot reload " + toReload.getName() + " with powerup " + powerUpToPay.getFullName());
+                    }
+                }else{
+                    reloadingWeapons.put(toReload, powerUpToPay);
+                    me.reloadWeapon(toReload, powerUpToPay);
+                }
+            }
+            Client.getInstance().getConnection().reload(reloadingWeapons);
+        });
     }
+
+    private List<WeaponCard> getReloadableWeapons(){
+        Player me = Client.getInstance().getPlayer();
+        List<WeaponCard> toReload = new ArrayList<>();
+        for(WeaponCard weaponCard : me.getWeaponList()){
+            if(!weaponCard.isLoaded() && me.canReloadWeapon(weaponCard)){
+                toReload.add(weaponCard);
+            }
+        }
+        return toReload;
+    }
+
+    private WeaponCard showReloadAlert(List<WeaponCard> reloadableWeapons){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Reload");
+        alert.setHeaderText("Choose a weapon to reload");
+        alert.setContentText("This box only shows the weapons you can actually reload. Please choose one or click x to exit");
+
+        List<ButtonType> btlist = new ArrayList<>();
+
+        for (WeaponCard weaponCard : reloadableWeapons) {
+            btlist.add(new ButtonType(weaponCard.name));
+        }
+
+        alert.getButtonTypes().setAll(btlist);
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if(result.isPresent()){
+            int index = btlist.indexOf(result.get());
+            return reloadableWeapons.get(index);
+        }
+        return null;
+    }
+
     public void usePowerUp() {
 
     }
@@ -440,7 +498,9 @@ public class GameViewGUI implements Initializable, GameView {
         Client client = Client.getInstance();
         ActionType currentActionType = client.getCurrentActionType();
 
-        setBtnEnabled(btnEndTurn, (actions.isEmpty() && client.isMyTurn()));
+        boolean turnIsEnding = actions.isEmpty() && client.isMyTurn();
+
+        setBtnEnabled(btnEndTurn, turnIsEnding);
 
         if(currentActionType==null){
             disableTurnEventButtons();
@@ -449,6 +509,8 @@ public class GameViewGUI implements Initializable, GameView {
             disableActionGroupButtons();
             setTurnEventButtons(actions.get(currentActionType));
         }
+
+        setBtnEnabled(btnReload, turnIsEnding);
     }
 
     private void setActionGroupButtons(Set<ActionType> groupActions){
@@ -1192,7 +1254,7 @@ public class GameViewGUI implements Initializable, GameView {
         List<PowerUpCard> powerUpCards = me.getPowerUpList();
 
         for (PowerUpCard powerUpCard : powerUpCards) {
-            btlist.add(new ButtonType(powerUpCard.name + "(" + powerUpCard.color.toString().charAt(0) + ")"));
+            btlist.add(new ButtonType(powerUpCard.getFullName()));
         }
 
         alert.getButtonTypes().setAll(btlist);

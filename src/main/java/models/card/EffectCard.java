@@ -104,7 +104,6 @@ public abstract class EffectCard extends Card {
     public void reset() {
         init();
         this.gameMap = null;
-        this.me = null;
     }
 
     private void checkActiveAction(ActionType expected) {
