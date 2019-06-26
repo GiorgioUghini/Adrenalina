@@ -117,9 +117,11 @@ class SelectorEngine {
                     out.removeAll(gameMap.getAllVisibleSquares(ref));
                     break;
                 case "cardinal":
+                    Set<Square> toRetain = new HashSet<>();
                     for(CardinalDirection direction : CardinalDirection.values()){
-                        out.retainAll(gameMap.getAllSquaresByCardinal(ref, direction, !radix.throughWalls));
+                        toRetain.addAll(gameMap.getAllSquaresByCardinal(ref, direction, !radix.throughWalls));
                     }
+                    out.retainAll(toRetain);
                     break;
                 case "other_rooms":
                     RoomColor myColor = ref.getColor();

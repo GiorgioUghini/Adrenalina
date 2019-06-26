@@ -375,6 +375,38 @@ public class EffectCardTest {
         assertEquals(1, players.get(2).getTotalDamage());
     }
 
+    @Test
+    public void testCardinalDirection(){
+        WeaponCard fucileLaser = getWeaponCard("Fucile laser");
+        List<WeaponCard> weaponCardList = new ArrayList<>();
+        weaponCardList.add(fucileLaser);
+        assertNotNull(fucileLaser);
+        List<Player> players = createTestPlayers(4);
+        GameMap gameMap = MapGenerator.generate(1);
+        Player me = players.get(0);
+        SpawnPoint yellow = getSpawnPoint(gameMap, RoomColor.YELLOW);
+        for(Player player : players){
+            gameMap.spawnPlayer(player, yellow);
+        }
+        me.setWeaponList(weaponCardList);
+        gameMap.movePlayer(me, yellow.getNextSquare(CardinalDirection.LEFT));
+        gameMap.movePlayer(players.get(1), yellow.getNextSquare(CardinalDirection.TOP).getNextSquare(CardinalDirection.LEFT));
+        gameMap.movePlayer(players.get(2), gameMap.getPlayerPosition(players.get(1)).getNextSquare(CardinalDirection.TOP));
+        gameMap.movePlayer(players.get(3), yellow.getNextSquare(CardinalDirection.TOP));
+        me.playWeapon(fucileLaser);
+        List<Effect> legitEffects = me.getWeaponEffects().getLegitEffects();
+        assertEquals(2, legitEffects.size());
+        Effect effect = legitEffects.stream().filter(e -> e.name.equals("Modalità base")).findFirst().orElse(null);
+        assertEquals("Modalità base", effect.name);
+        me.playWeaponEffect(effect, null);
+        me.playNextWeaponAction(); //select
+        Selectable selectable = fucileLaser.getSelectable();
+        Set<Taggable> taggables = selectable.get();
+        assertEquals(2, taggables.size());
+        assertTrue(taggables.contains(players.get(1)));
+        assertTrue(taggables.contains(players.get(2)));
+    }
+
     private SpawnPoint getSpawnPoint(GameMap gameMap, RoomColor color){
         for(SpawnPoint s : gameMap.getSpawnPoints()){
             if(s.getColor().equals(color)){
