@@ -8,12 +8,14 @@ import models.player.DeathManager;
 import models.player.Player;
 import models.turn.*;
 import models.turn.ActionType;
+import network.ConnectionWrapper;
 import network.Response;
 import network.Server;
 import network.updates.ChooseMapUpdate;
 import network.updates.MapUpdate;
 import network.updates.NextTurnUpdate;
 
+import java.io.Serializable;
 import java.sql.Time;
 import java.util.*;
 
@@ -28,7 +30,7 @@ public class Match {
     private GameMap gameMap;
     private DeathManager deathManager;
     private Config config;
-    private  Map<ActionType,  List<TurnEvent>> currentActions;
+    private Map<ActionType, List<TurnEvent>> currentActions;
     private ActionType currentActionType;
     //private Turn actualTurn;
     private Timer turnTimer;
@@ -36,6 +38,7 @@ public class Match {
     private ActionGroup frenzy = null;
     private CardController cardController;
     int round;
+
     //null -> noFrenzy, Type1, Type2
     public Match(List<Player> players) {
         this(players, new Config(7000, 60000));
@@ -54,21 +57,27 @@ public class Match {
         weaponDeck.shuffle();
         ammoDeck.shuffle();
         int i = 0;
-        for(Player p : players){
+        for (Player p : players) {
             p.setMatch(this);
             p.setDeathManager(deathManager);
             p.setPlayerColor(getColor(i++));
         }
     }
 
-    private String getColor(int index){
-        switch (index){
-            case 0: return "GREEN";
-            case 1: return "BLUE";
-            case 2: return "PURPLE";
-            case 3: return "WHITE";
-            case 4: return "YELLOW";
-            default: throw new NullPointerException("This color does not exist");
+    private String getColor(int index) {
+        switch (index) {
+            case 0:
+                return "GREEN";
+            case 1:
+                return "BLUE";
+            case 2:
+                return "PURPLE";
+            case 3:
+                return "WHITE";
+            case 4:
+                return "YELLOW";
+            default:
+                throw new NullPointerException("This color does not exist");
         }
     }
 
@@ -145,7 +154,7 @@ public class Match {
      */
     public Card drawPowerUp() {
         Card card = powerUpDeck.draw();
-        if(powerUpDeck.size()==0){
+        if (powerUpDeck.size() == 0) {
             powerUpDeck = new PowerUpDeck(thrownPowerUps);
             powerUpDeck.shuffle();
             thrownPowerUps = new ArrayList<>();
@@ -153,7 +162,7 @@ public class Match {
         return card;
     }
 
-    public void throwPowerUp(PowerUpCard powerUpCard){
+    public void throwPowerUp(PowerUpCard powerUpCard) {
         thrownPowerUps.add(powerUpCard);
     }
 
@@ -213,10 +222,10 @@ public class Match {
         ChooseMapUpdate update = new ChooseMapUpdate(playerList.get(0).getName());
         addUpdate(update);
 
-        if(Server.getInstance().isDebug()){
-            for(Player player : playerList){
+        if (Server.getInstance().isDebug()) {
+            for (Player player : playerList) {
                 List<WeaponCard> playerCards = new ArrayList<>();
-                for(int i=0;i<3;i++){
+                for (int i = 0; i < 3; i++) {
                     playerCards.add((WeaponCard) weaponDeck.draw());
                 }
                 player.setWeaponList(playerCards);
@@ -236,27 +245,26 @@ public class Match {
      */
     public void nextTurn() {
         stopTurnTimer();
-        if(gameMap!=null){
+        if (gameMap != null) {
             refillCards();
         }
-        for(Player player : playerList){
+        for (Player player : playerList) {
             player.onTurnEnded();
         }
 
         Player firstDeadPlayer = playerList.stream().filter(Player::isDead).findFirst().orElse(null);
 
-        if(tmpActualPlayerIndex >= 0){
+        if (tmpActualPlayerIndex >= 0) {
             actualPlayerIndex = tmpActualPlayerIndex;
             tmpActualPlayerIndex = -1;
         }
 
-        if(firstDeadPlayer != null){
+        if (firstDeadPlayer != null) {
             tmpActualPlayerIndex = actualPlayerIndex;
             actualPlayerIndex = playerList.indexOf(firstDeadPlayer);
-        }
-        else{
+        } else {
             actualPlayerIndex = (actualPlayerIndex == playerList.size() - 1) ? 0 : actualPlayerIndex + 1;
-            while (!playerList.get(actualPlayerIndex).isOnline()){
+            while (!playerList.get(actualPlayerIndex).isOnline()) {
                 actualPlayerIndex = (actualPlayerIndex == playerList.size() - 1) ? 0 : actualPlayerIndex + 1;
             }
         }
@@ -275,35 +283,33 @@ public class Match {
         }
         currentActions = new TurnEngine().getValidActions(turnType, currentPlayer.getLifeState());
         currentActionType = null;
-        round = (turnType == TurnType.IN_GAME && currentPlayer.getLifeState() != ActionGroup.FRENZY_TYPE_2) ? 2: 1;
+        round = (turnType == TurnType.IN_GAME && currentPlayer.getLifeState() != ActionGroup.FRENZY_TYPE_2) ? 2 : 1;
         addUpdate(new NextTurnUpdate(playerList.get(actualPlayerIndex).getName()));
         startTurnTimer();
     }
 
     public void action(ActionType actionType) {
-        if(!currentActions.keySet().contains(actionType))
+        if (!currentActions.keySet().contains(actionType))
             throw new CheatException();
-        if(currentActionType == null){
+        if (currentActionType == null) {
             currentActionType = actionType;
         }
     }
 
-    public ActionType getCurrentActionType()
-    {
+    public ActionType getCurrentActionType() {
         return currentActionType;
     }
 
     public void turnEvent(TurnEvent turnEvent) {
-        if(!currentActions.get(currentActionType).contains(turnEvent))
+        if (!currentActions.get(currentActionType).contains(turnEvent))
             throw new CheatException("Current action type: " + currentActionType + "; turn event: " + turnEvent);
         currentActions.get(currentActionType).subList(0, currentActions.get(currentActionType).indexOf(turnEvent) + 1).clear();
-        if(currentActions.get(currentActionType).isEmpty()){
+        if (currentActions.get(currentActionType).isEmpty()) {
             currentActionType = null;
-            round = round -1;
-            if(round <= 0){
+            round = round - 1;
+            if (round <= 0) {
                 currentActions = new HashMap<>();
-            }
-            else{
+            } else {
                 Player currentPlayer = playerList.get(actualPlayerIndex);
                 TurnType turnType = null;
                 if (currentPlayer.hasJustStarted()) {
@@ -317,13 +323,14 @@ public class Match {
             }
         }
     }
+
     /**
      * returns the set of possible moves (as a list) of the given player.
      *
      * @param p any player
      * @return a Set of possible moves of the player
      */
-    public Map<ActionType,  List<TurnEvent>> getPossibleAction(Player p) {
+    public Map<ActionType, List<TurnEvent>> getPossibleAction(Player p) {
         if (playerList.get(actualPlayerIndex).equals(p)) {
             return currentActions;
         } else {
@@ -352,24 +359,24 @@ public class Match {
         return playerList.stream().filter(f -> f.getName().equals(username)).findFirst().orElse(null);
     }
 
-    public Player getCurrentPlayer(){
+    public Player getCurrentPlayer() {
         return playerList.get(actualPlayerIndex);
     }
 
-    public boolean isDoingAction(){
-        return currentActionType!=null;
+    public boolean isDoingAction() {
+        return currentActionType != null;
     }
 
-    private void refillCards(){
+    private void refillCards() {
         Set<Square> toRefill = gameMap.getSquaresToRefill();
-        for(Square s : toRefill){
-            if(s.isSpawnPoint()){
+        for (Square s : toRefill) {
+            if (s.isSpawnPoint()) {
                 SpawnPoint spawnPoint = (SpawnPoint) s;
-                while(spawnPoint.showCards().size()<3){
+                while (spawnPoint.showCards().size() < 3) {
                     Card weaponCard = weaponDeck.draw();
                     spawnPoint.addCard(weaponCard);
                 }
-            }else{
+            } else {
                 AmmoPoint ammoPoint = (AmmoPoint) s;
                 Card ammoCard = ammoDeck.draw();
                 ammoPoint.addCard(ammoCard);
@@ -377,11 +384,11 @@ public class Match {
         }
     }
 
-    public void addPartialPointsCount(Player player){
+    public void addPartialPointsCount(Player player) {
         deathManager.addPartialPointsCount(player, player.countPoints());
     }
 
-    public int getDeathCount(Player player){
+    public int getDeathCount(Player player) {
         return deathManager.getDeathCount(player);
     }
 
@@ -389,34 +396,27 @@ public class Match {
         return deathManager.getTotalPoints(playerList);
     }
 
-    private void stopTurnTimer(){
-        if(turnTimerTask != null){
+    private void stopTurnTimer() {
+        if (turnTimerTask != null) {
             turnTimerTask.cancel();
         }
-        if(turnTimer != null){
+        if (turnTimer != null) {
             turnTimer.cancel();
             turnTimer.purge();
         }
     }
 
-    private void startTurnTimer(){
+    private void startTurnTimer() {
         turnTimer = new Timer();
         turnTimerTask = new TimerTask() {
             @Override
             public void run() {
                 Player currentPlayer = getCurrentPlayer();
-                if(currentPlayer.hasJustStarted()){
-                    while (currentPlayer.getPowerUpList().size() < 2){
-                        currentPlayer.drawPowerUp();
-                    }
-                    PowerUpCard powerUpCard = currentPlayer.getPowerUpList().get(0);
-                    currentPlayer.throwPowerUp(powerUpCard);
-                    GameMap map = getMap();
-                    SpawnPoint spawnPoint = map.getSpawnPoints().stream().filter(p -> p.getColor() == powerUpCard.color).findFirst().orElse(null);
-                    map.spawnPlayer(currentPlayer, spawnPoint);
-                    addUpdate(new MapUpdate(map));
+                if (Server.getInstance() != null) {
+                    String token = Server.getInstance().getLobby().getToken(currentPlayer);
+                    ConnectionWrapper connectionWrapper = Server.getInstance().getConnection().getConnectionWrapper(token);
+                    connectionWrapper.stop();
                 }
-                nextTurn();
             }
         };
         turnTimer.schedule(turnTimerTask, config.getTurnTimeout());
