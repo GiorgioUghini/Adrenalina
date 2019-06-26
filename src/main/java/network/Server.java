@@ -20,10 +20,12 @@ public class Server {
     private Lobby lobby;
     private int maxClients;
     private boolean debug;
+    private boolean autoReload;
 
     private Server() {
         maxClients = 5;
         debug = false;
+        autoReload = false;
     }
 
     /**
@@ -76,5 +78,13 @@ public class Server {
 
     public boolean isDebug(){
         return debug;
+    }
+
+    public void setAutoReload(boolean autoReload) {
+        this.autoReload = autoReload;
+    }
+
+    public boolean isAutoReload() {
+        return autoReload;
     }
 }

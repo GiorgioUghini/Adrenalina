@@ -14,6 +14,8 @@ public class StartServer {
                 maxClients = Integer.parseInt(s.replace("max-clients=", ""));
             }else if(s.equals("debug")){
                 server.setDebug(true);
+            }else if(s.equals("autoreload")){
+                server.setAutoReload(true);
             }
         }
         server.setMaxClients(maxClients);

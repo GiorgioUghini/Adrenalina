@@ -263,7 +263,8 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             WeaponCard card = player.getWeaponList().stream().filter(w -> w.name.equals(cardName)).findFirst().orElse(null);
             if(player.getActiveWeapon()==null){
                 player.playWeapon(card);
-                if(Server.getInstance().isDebug()){
+                Server server = Server.getInstance();
+                if(server.isDebug() && server.isAutoReload()){
                     card.load(new Ammo(3,3,3), null);
                 }
             }
