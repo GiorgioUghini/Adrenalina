@@ -477,6 +477,8 @@ public class GameViewGUI implements Initializable, GameView {
                 case RUN_2:
                 case RUN_3:
                 case RUN_4:
+                    int maxDistance = Character.getNumericValue(turnEvent.toString().charAt(4));
+                    highlighAllSquaresAtMaxDistance(maxDistance);
                     buttonToShow = btnRun;
                     break;
                 case SHOOT:
@@ -496,6 +498,16 @@ public class GameViewGUI implements Initializable, GameView {
                 //NE MANCANO ALCUNI! TIPO I VARI USEPOWERUP
             }
             setBtnEnabled(buttonToShow, true);
+        }
+    }
+
+    private void highlighAllSquaresAtMaxDistance(int distance){
+        Player me = Client.getInstance().getPlayer();
+        GameMap gameMap = Client.getInstance().getMap();
+        Square mySquare = gameMap.getPlayerPosition(me);
+        Set<Square> squares = gameMap.getAllSquaresAtDistanceLessThanOrEquals(mySquare, distance);
+        for(Square square : squares){
+            highlightSquare(square);
         }
     }
 
@@ -586,6 +598,7 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     private void highlightCircle(Circle c) {
+        clickableObjects.add(c);
         Platform.runLater( () -> c.setStrokeWidth(7d));
     }
 
@@ -593,13 +606,19 @@ public class GameViewGUI implements Initializable, GameView {
         Platform.runLater( () -> c.setStrokeWidth(0d));
     }
 
-    //TODO: It don't work in room highlighing!
     private void highlightGridPane(GridPane gp) {
+        clickableObjects.add(gp);
         Platform.runLater( () -> gp.setStyle("-fx-background-color: green; -fx-opacity: 0.5;"));
     }
 
     private void undoHighlightGridPane(GridPane gp) {
         Platform.runLater( () -> gp.setStyle(""));
+    }
+
+    private void highlightSquare(Square square){
+        Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(square);
+        GridPane clickable = paneList.get(coord.getX()).get(coord.getY());
+        highlightGridPane(clickable);
     }
 
     private void playerClicked(Player p) {
@@ -919,32 +938,29 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     private void switchActionPane(Square s) {
+        //check that it was clickable
+        Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(s);
+        GridPane gridPane = paneList.get(coord.getX()).get(coord.getY());
+        if(!clickableObjects.contains(gridPane)){
+            showMessage("You cannot click on this pane");
+            return;
+        }
+        clickableObjects.clear();
+        //-
         if (canDoActionMap.get(ViewAction.RUN)) {
             canDoActionMap.put(ViewAction.RUN, false);
             run(s);
         } else{
-            //check that it was clickable
-            Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(s);
-            GridPane gridPane = paneList.get(coord.getX()).get(coord.getY());
-            if(!clickableObjects.contains(gridPane)){
-                showMessage("You cannot click on this pane");
-                return;
-            }
-            //-
-            if (canDoActionMap.get(ViewAction.SELECTSQUARE)) {
-                onSelectDone(s);
-                for (Square sq : Client.getInstance().getMap().getAllSquares()) {
-                    coord = Client.getInstance().getMap().getSquareCoordinates(sq);
-                    undoHighlightGridPane(paneList.get(coord.getX()).get(coord.getY()));
-                }
-            } else if (canDoActionMap.get(ViewAction.SELECTROOM)) {
+            Taggable tagged = s;
+            if(canDoActionMap.get(ViewAction.SELECTROOM)){
                 RoomColor rc = s.getColor();
-                onSelectDone(rc);
-                for (Square sq : Client.getInstance().getMap().getAllSquares()) {
-                    coord = Client.getInstance().getMap().getSquareCoordinates(sq);
-                    undoHighlightGridPane(paneList.get(coord.getX()).get(coord.getY()));
-                }
+                tagged = rc;
             }
+            onSelectDone(tagged);
+        }
+        for (Square sq : Client.getInstance().getMap().getAllSquares()) {
+            coord = Client.getInstance().getMap().getSquareCoordinates(sq);
+            undoHighlightGridPane(paneList.get(coord.getX()).get(coord.getY()));
         }
     }
 
@@ -1213,10 +1229,7 @@ public class GameViewGUI implements Initializable, GameView {
                     RoomColor color = (RoomColor) t;
                     Set<Square> squares = Client.getInstance().getMap().getAllSquaresInRoom(color);
                     for (Square sq : squares) {
-                        Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(sq);
-                        GridPane clickable = paneList.get(coord.getX()).get(coord.getY());
-                        clickableObjects.add(clickable);
-                        highlightGridPane(clickable);
+                        highlightSquare(sq);
                     }
                 }
                 canDoActionMap.put(ViewAction.SELECTROOM, true);
@@ -1225,7 +1238,6 @@ public class GameViewGUI implements Initializable, GameView {
                 showMessage("Please click on a PLAYER stroked in black.");
                 for (Taggable t : selectable.get()) {
                     Circle clickable = circlePlayerMap.getSingleKey((Player) t);
-                    clickableObjects.add(clickable);
                     highlightCircle(clickable);
                 }
                 canDoActionMap.put(ViewAction.SELECTPLAYER, true);
@@ -1233,10 +1245,7 @@ public class GameViewGUI implements Initializable, GameView {
             case SQUARE:
                 showMessage("Please click on a SQUARE highlighted in green.");
                 for (Taggable t : selectable.get()) {
-                    Coordinate coord = Client.getInstance().getMap().getSquareCoordinates((Square) t);
-                    GridPane clickable = paneList.get(coord.getX()).get(coord.getY());
-                    clickableObjects.add(clickable);
-                    highlightGridPane(clickable);
+                    highlightSquare((Square)t);
                 }
                 canDoActionMap.put(ViewAction.SELECTSQUARE, true);
                 break;
