@@ -372,4 +372,8 @@ public class Match {
     public int getDeathCount(Player player){
         return deathManager.getDeathCount(player);
     }
+
+    public Map<Player, Integer> getTotalPoints() {
+        return deathManager.getTotalPoints(playerList);
+    }
 }

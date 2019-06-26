@@ -245,4 +245,9 @@ public class ResponseHandler implements ResponseHandlerInterface {
         List<Player> players = Client.getInstance().getPlayers();
         players.set(players.indexOf(response.player), response.player);
     }
+
+    @Override
+    public void handle(PointsUpdate response) {
+
+    }
 }
