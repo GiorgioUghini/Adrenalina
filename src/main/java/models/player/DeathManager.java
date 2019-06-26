@@ -34,7 +34,7 @@ public class DeathManager {
     }
 
     public int getDeathCount(Player player){
-        return deathMap.get(player);
+        return deathMap.get(player) != null ? deathMap.get(player) : 0;
     }
 
     public Map<Player, Integer> getTotalPoints(List<Player> players) {
