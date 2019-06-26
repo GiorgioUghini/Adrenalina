@@ -289,6 +289,8 @@ public class GameViewGUI implements Initializable, GameView {
             Client.getInstance().setReconnecting(false);
             Platform.runLater(this::reconnect);
         }
+        Image image = new Image(ResourceController.getResource("planciaDanni.png").toURI().toString());
+        Platform.runLater(() -> ((ImageView) skullPane.getChildren().get(0)).setImage(image));
         Platform.runLater(this::getValidActions);
     }
 
