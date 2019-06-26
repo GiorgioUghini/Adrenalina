@@ -96,22 +96,24 @@ class Life implements Serializable {
     Map<Player, Integer> countPoints() {
         Map<Player, Integer> result = new HashMap<>();
 
-        if (myDamages.isEmpty()) {
+        Map<Player, Integer> myDamagesCloned = new HashMap<>(myDamages);
+
+        if (myDamagesCloned.isEmpty()) {
             return result;
         } else {
 
-            Player firstAttacker = myDamages.entrySet()
+            Player firstAttacker = myDamagesCloned.entrySet()
                     .stream()
                     .reduce((first, second) -> first)
-                    .orElse(myDamages.entrySet().iterator().next())
+                    .orElse(myDamagesCloned.entrySet().iterator().next())
                     .getKey();
             result.put(firstAttacker, FIRST_BLOOD_POINTS);
 
             int countingOrder = 0;
-            while (!myDamages.isEmpty()) {
-                Map.Entry<Player, Integer> maxEntry = myDamages.entrySet().iterator().next();
+            while (!myDamagesCloned.isEmpty()) {
+                Map.Entry<Player, Integer> maxEntry = myDamagesCloned.entrySet().iterator().next();
 
-                for (Map.Entry<Player, Integer> entry : myDamages.entrySet()) {
+                for (Map.Entry<Player, Integer> entry : myDamagesCloned.entrySet()) {
                     if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0) {
                         maxEntry = entry;
                     }
@@ -119,7 +121,7 @@ class Life implements Serializable {
 
                 Optional<Integer> oldPoints = Optional.ofNullable(result.get(maxEntry.getKey()));
                 result.put(maxEntry.getKey(), assignablePoints[me.getNumberOfSkulls() + countingOrder] + oldPoints.orElse(0));
-                myDamages.remove(maxEntry.getKey());
+                myDamagesCloned.remove(maxEntry.getKey());
                 countingOrder++;
             }
         }
