@@ -296,8 +296,10 @@ public class Player implements Subscriber, Serializable, Taggable {
     /** Returns all the damages of this player. */
     public int getTotalDamage() { return this.life.getTotalDamage(); }
 
-    void setLifeState(ActionGroup lifeState) {
-        this.lifeState = lifeState;
+    public void setLifeState(ActionGroup lifeState) {
+        if(this.lifeState != ActionGroup.FRENZY_TYPE_1 && this.lifeState != ActionGroup.FRENZY_TYPE_2){
+            this.lifeState = lifeState;
+        }
     }
 
     public ActionGroup getLifeState() {

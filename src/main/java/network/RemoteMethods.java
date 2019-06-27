@@ -195,7 +195,6 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             player.throwPowerUp(powerUpCard);
             SpawnPoint spawnPoint = map.getSpawnPoints().stream().filter(p -> p.getColor() == color).findFirst().orElse(null);
             map.spawnPlayer(player,spawnPoint);
-            //TODO player.getNumberOfSkulls()
             match.addUpdate(new MapUpdate(match.getMap()));
             match.addUpdate(new DamageUpdate(player));
             match.addUpdate(new MarkUpdate(player));
@@ -231,6 +230,15 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                 else if(action.type == ActionType.DAMAGE){
                     for(Player damagedPlayer : player.getActiveWeapon().getPlayersToDamage().keySet()){
                         match.addUpdate(new DamageUpdate(damagedPlayer));
+                    }
+                    long deadCount = player.getActiveWeapon().getPlayersToDamage().keySet().stream().filter(Player::isDead).count();
+                    if(match.getSkullCount() + deadCount >= 8){
+                        player.resetWeapon();
+                        player.resetPowerUp();
+                        match.activateFrenzy();
+                        match.nextTurn();
+                        logger.fine("Returning a finish card response");
+                        return new FinishCardResponse();
                     }
                 }
                 else if(action.type == ActionType.MARK){
@@ -321,6 +329,15 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                     for(Player damagedPlayer : player.getActiveWeapon().getPlayersToDamage().keySet()){
                         match.addUpdate(new DamageUpdate(damagedPlayer));
                     }
+                    long deadCount = player.getActiveWeapon().getPlayersToDamage().keySet().stream().filter(Player::isDead).count();
+                    if(match.getSkullCount() + deadCount >= 8){
+                        player.resetWeapon();
+                        player.resetPowerUp();
+                        match.activateFrenzy();
+                        match.nextTurn();
+                        logger.fine("Returning a finish card response");
+                        return new FinishCardResponse();
+                    }
                 }
                 else if(action.type == ActionType.MARK){
                     for(Player markedPlayer : player.getActiveWeapon().getPlayersToMark().keySet()){
@@ -364,6 +381,15 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                 else if(action.type == ActionType.DAMAGE){
                     for(Player damagedPlayer : player.getActiveWeapon().getPlayersToDamage().keySet()){
                         match.addUpdate(new DamageUpdate(damagedPlayer));
+                    }
+                    long deadCount = player.getActiveWeapon().getPlayersToDamage().keySet().stream().filter(Player::isDead).count();
+                    if(match.getSkullCount() + deadCount >= 8){
+                        player.resetWeapon();
+                        player.resetPowerUp();
+                        match.activateFrenzy();
+                        match.nextTurn();
+                        logger.fine("Returning a finish card response");
+                        return new FinishPowerUpResponse();
                     }
                 }
                 else if(action.type == ActionType.MARK){
@@ -540,6 +566,15 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                 else if(action.type == ActionType.DAMAGE){
                     for(Player damagedPlayer : player.getActiveWeapon().getPlayersToDamage().keySet()){
                         match.addUpdate(new DamageUpdate(damagedPlayer));
+                    }
+                    long deadCount = player.getActiveWeapon().getPlayersToDamage().keySet().stream().filter(Player::isDead).count();
+                    if(match.getSkullCount() + deadCount >= 8){
+                        player.resetWeapon();
+                        player.resetPowerUp();
+                        match.activateFrenzy();
+                        match.nextTurn();
+                        logger.fine("Returning a finish card response");
+                        return new FinishPowerUpResponse();
                     }
                 }
                 else if(action.type == ActionType.MARK){

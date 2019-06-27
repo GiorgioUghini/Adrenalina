@@ -31,7 +31,6 @@ public class Match {
     //private Turn actualTurn;
     private Timer turnTimer;
     private TimerTask turnTimerTask;
-    private ActionGroup frenzy = null;
     private CardController cardController;
     int round;
 
@@ -105,10 +104,14 @@ public class Match {
     /**
      * Activate frenzy from now on
      *
-     * @param player the player who is activating frenzy mode.
      */
-    public void activateFrenzy(Player player) {
-        frenzy = ActionGroup.FRENZY_TYPE_1;
+    public void activateFrenzy() {
+        for(int i = actualPlayerIndex; i < playerList.size(); i++){
+            playerList.get(i).setLifeState(ActionGroup.FRENZY_TYPE_1);
+        }
+        for(int i = actualPlayerIndex-1; i >= 0; i--){
+            playerList.get(i).setLifeState(ActionGroup.FRENZY_TYPE_2);
+        }
     }
 
     /**
@@ -248,6 +251,8 @@ public class Match {
             player.onTurnEnded();
         }
 
+        playerList.stream().filter(Player::isDead).forEach(p->gameMap.removePlayer(p));
+
         Player firstDeadPlayer = playerList.stream().filter(Player::isDead).findFirst().orElse(null);
 
         if (tmpActualPlayerIndex >= 0) {
@@ -265,9 +270,6 @@ public class Match {
             }
         }
 
-        if ((frenzy != null) && (actualPlayerIndex == 0)) { //actualPlayerIndex == firstPlayerIndex
-            frenzy = ActionGroup.FRENZY_TYPE_2;
-        }
         Player currentPlayer = playerList.get(actualPlayerIndex);
         TurnType turnType = null;
         if (currentPlayer.hasJustStarted()) {
