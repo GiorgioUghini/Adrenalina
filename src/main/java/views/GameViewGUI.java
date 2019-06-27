@@ -186,6 +186,7 @@ public class GameViewGUI implements Initializable, GameView {
     private Set<Object> clickableObjects;
 
     private int maxRunDistance;
+    private boolean isShooting;
     private boolean firstTurn = true;
 
     public GameViewGUI() {
@@ -397,6 +398,7 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     public void shoot() {
+        isShooting = true;
         setBtnEnabled(btnShoot, false);
         showMessage("Select which weapon you'd like to use.");
         canDoActionMap.put(ViewAction.SHOOT, true);
@@ -463,7 +465,8 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     public void usePowerUp() {
-        //setBtnEnabled(btnUsePowerUp, false);
+        isShooting = false;
+        setBtnEnabled(btnUsePowerUp, false);
         showMessage("Select which power up you'd like to use.");
         canDoActionMap.put(ViewAction.USEPOWERUP, true);
     }
@@ -956,8 +959,9 @@ public class GameViewGUI implements Initializable, GameView {
             canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
             gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(0));
         } else if (canDoActionMap.get(ViewAction.USEPOWERUP)) {
-            canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
-            gameController.getEffects(Client.getInstance().getPlayer().getPowerUpList().get(0));
+            setBtnEnabled(btnUsePowerUp, true);
+            PowerUpCard toPay = choosePowerUpDialog();
+            gameController.getEffects(Client.getInstance().getPlayer().getPowerUpList().get(0), toPay);
         }
     }
     public void powerUp2Clicked() {
@@ -965,8 +969,9 @@ public class GameViewGUI implements Initializable, GameView {
             canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
             gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(1));
         } else if (canDoActionMap.get(ViewAction.USEPOWERUP)) {
-            canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
-            gameController.getEffects(Client.getInstance().getPlayer().getPowerUpList().get(1));
+            setBtnEnabled(btnUsePowerUp, true);
+            PowerUpCard toPay = choosePowerUpDialog();
+            gameController.getEffects(Client.getInstance().getPlayer().getPowerUpList().get(1), toPay);
         }
     }
     public void powerUp3Clicked() {
@@ -974,8 +979,9 @@ public class GameViewGUI implements Initializable, GameView {
             canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
             gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(2));
         } else if (canDoActionMap.get(ViewAction.USEPOWERUP)) {
-            canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
-            gameController.getEffects(Client.getInstance().getPlayer().getPowerUpList().get(2));
+            setBtnEnabled(btnUsePowerUp, true);
+            PowerUpCard toPay = choosePowerUpDialog();
+            gameController.getEffects(Client.getInstance().getPlayer().getPowerUpList().get(2), toPay);
         }
     }
     public void powerUp4Clicked() {
@@ -983,8 +989,9 @@ public class GameViewGUI implements Initializable, GameView {
             canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
             gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(3));
         } else if (canDoActionMap.get(ViewAction.USEPOWERUP)) {
-            canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
-            gameController.getEffects(Client.getInstance().getPlayer().getPowerUpList().get(3));
+            setBtnEnabled(btnUsePowerUp, true);
+            PowerUpCard toPay = choosePowerUpDialog();
+            gameController.getEffects(Client.getInstance().getPlayer().getPowerUpList().get(3), toPay);
         }
     }
 
@@ -1345,7 +1352,8 @@ public class GameViewGUI implements Initializable, GameView {
     private void onSelectDone(Taggable selected){
         clickableObjects.clear();
         setBtnEnabled(btnEndSelect, false);
-        Client.getInstance().getConnection().tagElement(selected);
+        gameController.tagElement(selected, isShooting);
+
     }
 
 

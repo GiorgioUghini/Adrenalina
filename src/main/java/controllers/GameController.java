@@ -2,6 +2,7 @@ package controllers;
 
 import models.card.Effect;
 import models.card.PowerUpCard;
+import models.card.Taggable;
 import models.card.WeaponCard;
 import models.map.Square;
 import models.player.Ammo;
@@ -38,7 +39,7 @@ public class GameController {
         Client.getInstance().getConnection().cardEffects(weaponCard.name);
     }
 
-    public void getEffects(PowerUpCard powerUpCard) { Client.getInstance().getConnection().cardEffects(powerUpCard.name); }
+    public void getEffects(PowerUpCard powerUpCard, PowerUpCard payWithThis) { Client.getInstance().getConnection().playPowerUp(powerUpCard.name, payWithThis == null ? Client.getInstance().getPlayer().getAmmo() : null, payWithThis); }
 
     public void playEffect(Effect effect, PowerUpCard powerUpCard) {
         Client.getInstance().getConnection().playEffect(effect, Client.getInstance().getPlayer().getAmmo(), powerUpCard);
@@ -50,5 +51,13 @@ public class GameController {
 
     public void endTurn() {
         Client.getInstance().getConnection().endTurn();
+    }
+
+    public void tagElement(Taggable selected, boolean shooting) {
+        if (shooting)
+            Client.getInstance().getConnection().tagElement(selected);
+        else
+            Client.getInstance().getConnection().powerUpTagElement(selected);
+
     }
 }
