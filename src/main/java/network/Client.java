@@ -25,7 +25,7 @@ public class Client {
     private MenuView menuView;
     private GameView gameView;
     private View currentView;
-    private Player me;
+    private String me;
     private boolean reconnecting;
     private boolean isMyTurn;
     private Map<ActionType, List<TurnEvent>> actions;
@@ -67,11 +67,19 @@ public class Client {
         return currentTurnType;
     }
 
-    public Player getPlayer() {
+    public String getPlayerUsername() {
         return me;
     }
 
+    public Player getPlayer() {
+        return players != null ? players.stream().filter(p->p.getName().equals(getPlayerUsername())).findFirst().orElse(null) : null;
+    }
+
     public void setPlayer(Player me) {
+        players.set(players.indexOf(me), me);
+    }
+
+    public void setPlayerUsername(String me) {
         this.me = me;
     }
 

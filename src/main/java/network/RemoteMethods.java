@@ -86,7 +86,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                 player = lobby.registerPlayer(username, password, token);
                 Server.getInstance().getConnection().addUpdateUnregisteredPlayers(new NewPlayerUpdate(player.getName()));
                 lobby.addUpdateWaitingPlayers(new NewPlayerUpdate(player.getName()));
-                return new RegisterPlayerResponse(player);
+                return new RegisterPlayerResponse(player.getName());
             }
         }
         catch (Exception ex){

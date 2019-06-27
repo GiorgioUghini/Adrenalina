@@ -23,7 +23,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
     public void handle(RegisterPlayerResponse response) {
         Client clientInstance = Client.getInstance();
         clientInstance.getCurrentView().showMessage("Registrato come nuovo utente");
-        clientInstance.setPlayer(response.getMe());
+        clientInstance.setPlayerUsername(response.getMe());
     }
 
     @Override
@@ -121,7 +121,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
     @Override
     public void handle(NextTurnUpdate response) {
         Client client = Client.getInstance();
-        client.setMyTurn(response.name.equals(client.getPlayer().getName()));
+        client.setMyTurn(response.name.equals(client.getPlayerUsername()));
         try {
             ((GameView)client.getCurrentView()).startTurn(response.name);
             ((GameView) Client.getInstance().getCurrentView()).getValidActions();
@@ -217,13 +217,17 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(PlayerUpdate response) {
-        Player me = Client.getInstance().getPlayer();
+        Client client = Client.getInstance();
+        Player me = client.getPlayer();
+
         if (me == null || me.getName().equals(response.player.getName())) {
             try {
                 ((GameView) Client.getInstance().getCurrentView()).updatePlayerView(response.player);
             } catch (Exception e) {
                 //Nothing
             }
+            int playerIndex = client.getPlayers().indexOf(me);
+            Client.getInstance().getPlayers().set(playerIndex, response.player);
             Client.getInstance().setPlayer(response.player);
         }
     }
@@ -243,6 +247,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
         ((GameView) Client.getInstance().getCurrentView()).updateDamagedAndMarkedPlayer(response.player);
         List<Player> players = Client.getInstance().getPlayers();
         players.set(players.indexOf(response.player), response.player);
+        //TODO Giorgio Pero dopo aver chiamato il metodo che aggiorna Quindi ho un ritardo di 1
     }
 
     @Override

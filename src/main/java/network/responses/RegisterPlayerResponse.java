@@ -6,13 +6,13 @@ import network.ResponseHandlerInterface;
 
 public class RegisterPlayerResponse implements Response {
 
-    private Player me;
+    private String me;
 
-    public RegisterPlayerResponse(Player p){
-        me = p;
+    public RegisterPlayerResponse(String name){
+        me = name;
     }
 
-    public Player getMe() {
+    public String getMe() {
         return me;
     }
 
