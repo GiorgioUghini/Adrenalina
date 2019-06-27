@@ -241,7 +241,8 @@ public class GameViewGUI implements Initializable, GameView {
         canDoActionMap.put(ViewAction.SELECTSQUARE, false);
         canDoActionMap.put(ViewAction.RUN, false);
 
-        this.turnEventButtons = new ArrayList<>(Arrays.asList(btnDrawPowerUp, btnGrab, btnSpawn, btnRun, btnShoot, btnReload, btnUsePowerUp));
+        //this.turnEventButtons = new ArrayList<>(Arrays.asList(btnDrawPowerUp, btnGrab, btnSpawn, btnRun, btnShoot, btnReload, btnUsePowerUp));
+        this.turnEventButtons = new ArrayList<>(Arrays.asList(btnDrawPowerUp, btnGrab, btnSpawn, btnRun, btnShoot, btnReload));
 
         ArrayList<GridPane> x0 = new ArrayList<>();
         x0.add(grid00);
@@ -462,7 +463,7 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     public void usePowerUp() {
-        setBtnEnabled(btnUsePowerUp, false);
+        //setBtnEnabled(btnUsePowerUp, false);
         showMessage("Select which power up you'd like to use.");
         canDoActionMap.put(ViewAction.USEPOWERUP, true);
     }

@@ -411,7 +411,7 @@
                                                       <Font size="20.0" />
                                                    </font>
                                                 </Button>
-                                                <Button fx:id="btnUsePowerUp" disable="true" mnemonicParsing="false" onAction="#usePowerUp" prefHeight="66.5" prefWidth="234.0" text="USE POWERUP">
+                                                <Button fx:id="btnUsePowerUp" mnemonicParsing="false" onAction="#usePowerUp" prefHeight="66.5" prefWidth="234.0" text="USE POWERUP">
                                                    <font>
                                                       <Font size="20.0" />
                                                    </font>
