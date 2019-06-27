@@ -38,6 +38,8 @@ public class GameController {
         Client.getInstance().getConnection().cardEffects(weaponCard.name);
     }
 
+    public void getEffects(PowerUpCard powerUpCard) { Client.getInstance().getConnection().cardEffects(powerUpCard.name); }
+
     public void playEffect(Effect effect, PowerUpCard powerUpCard) {
         Client.getInstance().getConnection().playEffect(effect, Client.getInstance().getPlayer().getAmmo(), powerUpCard);
     }

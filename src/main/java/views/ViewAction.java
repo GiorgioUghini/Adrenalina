@@ -7,5 +7,6 @@ public enum ViewAction {
     SELECTPLAYER,
     SELECTROOM,
     SELECTSQUARE,
-    RUN
+    RUN,
+    USEPOWERUP
 }
