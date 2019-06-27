@@ -219,14 +219,8 @@ public class ResponseHandler implements ResponseHandlerInterface {
         Client client = Client.getInstance();
         Player me = client.getPlayer();
 
-        if (me == null || me.getName().equals(response.player.getName())) {
-            try {
-                ((GameView) Client.getInstance().getCurrentView()).updatePlayerView(response.player);
-            } catch (Exception e) {
-                //Nothing
-            }
-            int playerIndex = client.getPlayers().indexOf(me);
-            Client.getInstance().getPlayers().set(playerIndex, response.player);
+        if (me.getName().equals(response.player.getName())) {
+            ((GameView) Client.getInstance().getCurrentView()).updatePlayerView(response.player);
             Client.getInstance().setPlayer(response.player);
         }
     }
@@ -245,14 +239,20 @@ public class ResponseHandler implements ResponseHandlerInterface {
     public void handle(DamageUpdate response) {
         ((GameView) Client.getInstance().getCurrentView()).updateDamagedAndMarkedPlayer(response.player);
         List<Player> players = Client.getInstance().getPlayers();
-        players.set(players.indexOf(response.player), response.player);
+        if (Client.getInstance().getPlayer().getName().equals(response.player.getName())) {
+            ((GameView) Client.getInstance().getCurrentView()).updatePlayerView(response.player);
+            players.set(players.indexOf(response.player), response.player);
+        }
     }
 
     @Override
     public void handle(MarkUpdate response) {
         ((GameView) Client.getInstance().getCurrentView()).updateDamagedAndMarkedPlayer(response.player);
         List<Player> players = Client.getInstance().getPlayers();
-        players.set(players.indexOf(response.player), response.player);
+        if (Client.getInstance().getPlayer().getName().equals(response.player.getName())) {
+            ((GameView) Client.getInstance().getCurrentView()).updatePlayerView(response.player);
+            players.set(players.indexOf(response.player), response.player);
+        }
     }
 
     @Override

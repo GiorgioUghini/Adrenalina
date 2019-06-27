@@ -1,7 +1,7 @@
 package views;
 
 public enum ViewAction {
-    CLICKPOWERUP,
+    CLICKPOWERUPSPAWN,
     CHOOSESPAWNPOINTWEAPON,
     SHOOT,
     SELECTPLAYER,

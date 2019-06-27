@@ -233,7 +233,7 @@ public class GameViewGUI implements Initializable, GameView {
         }
 
         canDoActionMap.put(ViewAction.USEPOWERUP, false);
-        canDoActionMap.put(ViewAction.CLICKPOWERUP, false);
+        canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
         canDoActionMap.put(ViewAction.CHOOSESPAWNPOINTWEAPON, false);
         canDoActionMap.put(ViewAction.SHOOT, false);
         canDoActionMap.put(ViewAction.SELECTPLAYER, false);
@@ -369,7 +369,7 @@ public class GameViewGUI implements Initializable, GameView {
     public void spawn() {
         showMessage("Please click on the power up card you wish to DISCARD and spawn accordingly.");
         setBtnEnabled(btnSpawn, false);
-        canDoActionMap.put(ViewAction.CLICKPOWERUP, true);
+        canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, true);
     }
     public void runBtnClicked() {
         highlighAllSquaresAtMaxDistance(this.maxRunDistance);
@@ -952,38 +952,38 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     public void powerUp1Clicked() {
-        if (canDoActionMap.get(ViewAction.CLICKPOWERUP) && (!Client.getInstance().getPlayer().getPowerUpList().isEmpty())) {
-            canDoActionMap.put(ViewAction.CLICKPOWERUP, false);
+        if (canDoActionMap.get(ViewAction.CLICKPOWERUPSPAWN) && (!Client.getInstance().getPlayer().getPowerUpList().isEmpty())) {
+            canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
             gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(0));
         } else if (canDoActionMap.get(ViewAction.USEPOWERUP)) {
-            canDoActionMap.put(ViewAction.CLICKPOWERUP, false);
+            canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
             gameController.getEffects(Client.getInstance().getPlayer().getPowerUpList().get(0));
         }
     }
     public void powerUp2Clicked() {
-        if (canDoActionMap.get(ViewAction.CLICKPOWERUP) && (Client.getInstance().getPlayer().getPowerUpList().size() > 1)) {
-            canDoActionMap.put(ViewAction.CLICKPOWERUP, false);
+        if (canDoActionMap.get(ViewAction.CLICKPOWERUPSPAWN) && (Client.getInstance().getPlayer().getPowerUpList().size() > 1)) {
+            canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
             gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(1));
         } else if (canDoActionMap.get(ViewAction.USEPOWERUP)) {
-            canDoActionMap.put(ViewAction.CLICKPOWERUP, false);
+            canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
             gameController.getEffects(Client.getInstance().getPlayer().getPowerUpList().get(1));
         }
     }
     public void powerUp3Clicked() {
-        if (canDoActionMap.get(ViewAction.CLICKPOWERUP) && (Client.getInstance().getPlayer().getPowerUpList().size() > 2)) {
-            canDoActionMap.put(ViewAction.CLICKPOWERUP, false);
+        if (canDoActionMap.get(ViewAction.CLICKPOWERUPSPAWN) && (Client.getInstance().getPlayer().getPowerUpList().size() > 2)) {
+            canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
             gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(2));
         } else if (canDoActionMap.get(ViewAction.USEPOWERUP)) {
-            canDoActionMap.put(ViewAction.CLICKPOWERUP, false);
+            canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
             gameController.getEffects(Client.getInstance().getPlayer().getPowerUpList().get(2));
         }
     }
     public void powerUp4Clicked() {
-        if (canDoActionMap.get(ViewAction.CLICKPOWERUP) && (Client.getInstance().getPlayer().getPowerUpList().size() > 3)) {
-            canDoActionMap.put(ViewAction.CLICKPOWERUP, false);
+        if (canDoActionMap.get(ViewAction.CLICKPOWERUPSPAWN) && (Client.getInstance().getPlayer().getPowerUpList().size() > 3)) {
+            canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
             gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(3));
         } else if (canDoActionMap.get(ViewAction.USEPOWERUP)) {
-            canDoActionMap.put(ViewAction.CLICKPOWERUP, false);
+            canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
             gameController.getEffects(Client.getInstance().getPlayer().getPowerUpList().get(3));
         }
     }
