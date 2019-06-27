@@ -120,7 +120,7 @@ class Life implements Serializable {
                 }
 
                 Optional<Integer> oldPoints = Optional.ofNullable(result.get(maxEntry.getKey()));
-                result.put(maxEntry.getKey(), assignablePoints[me.getNumberOfSkulls() + countingOrder] + oldPoints.orElse(0));
+                result.put(maxEntry.getKey(), assignablePoints[me.getDeathCount() + countingOrder] + oldPoints.orElse(0));
                 myDamagesCloned.remove(maxEntry.getKey());
                 countingOrder++;
             }

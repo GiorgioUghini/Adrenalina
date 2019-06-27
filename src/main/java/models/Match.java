@@ -417,4 +417,8 @@ public class Match {
         };
         turnTimer.schedule(turnTimerTask, config.getTurnTimeout());
     }
+
+    public int getSkullCount(){
+        return deathManager.getSkullCount(playerList);
+    }
 }
