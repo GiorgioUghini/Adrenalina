@@ -135,7 +135,7 @@ public class SocketConnection implements Connection {
     @Override
     public void finishCard() {
         try {
-            FinishCardResponse request = new FinishCardResponse();
+            FinishCardRequest request = new FinishCardRequest();
             write(request);
         } catch (IOException e) {
             e.printStackTrace();
