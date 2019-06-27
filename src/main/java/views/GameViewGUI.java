@@ -860,7 +860,7 @@ public class GameViewGUI implements Initializable, GameView {
         }
         //UPDATE SKULLS IN MAIN PANE
         removeAllSkullOnMainPane();
-        addSkullsOnMainPane();
+        addSkullsOnMainPane(newPlayer);
     }
 
     public void updatePoints(Map<Player, Integer> map) {
@@ -870,8 +870,11 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
-    void addSkullsOnMainPane() {
+    void addSkullsOnMainPane(Player newPlayer) {
         int skulls = 0;
+        if (newPlayer.getTotalDamage() > 10) {
+            skulls += 1;
+        }
         for (Player p : Client.getInstance().getPlayers()) {
             skulls += p.getDeathCount();
         }

@@ -149,7 +149,6 @@ public class ResponseHandler implements ResponseHandlerInterface {
         Client.getInstance().setCurrentActionType(null);
         ((GameView) Client.getInstance().getCurrentView()).getValidActions();
         Client.getInstance().setCurrentTurnType(TurnType.IN_GAME);
-        //TODO bho non lo so sei spawnato (Vai Giorgio)
     }
 
     @Override
@@ -247,7 +246,6 @@ public class ResponseHandler implements ResponseHandlerInterface {
         ((GameView) Client.getInstance().getCurrentView()).updateDamagedAndMarkedPlayer(response.player);
         List<Player> players = Client.getInstance().getPlayers();
         players.set(players.indexOf(response.player), response.player);
-        //TODO Giorgio Pero dopo aver chiamato il metodo che aggiorna Quindi ho un ritardo di 1
     }
 
     @Override
