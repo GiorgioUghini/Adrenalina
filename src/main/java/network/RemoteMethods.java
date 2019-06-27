@@ -195,6 +195,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             player.throwPowerUp(powerUpCard);
             SpawnPoint spawnPoint = map.getSpawnPoints().stream().filter(p -> p.getColor() == color).findFirst().orElse(null);
             map.spawnPlayer(player,spawnPoint);
+            //TODO player.getNumberOfSkulls()
             match.addUpdate(new MapUpdate(match.getMap()));
             match.addUpdate(new DamageUpdate(player));
             match.addUpdate(new MarkUpdate(player));
