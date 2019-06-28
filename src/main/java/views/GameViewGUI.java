@@ -471,6 +471,7 @@ public class GameViewGUI implements Initializable, GameView {
     public void endTurn() {
         gameController.endTurn();
         setBtnEnabled(btnEndTurn, false);
+        setBtnEnabled(btnReload, false);
     }
 
     @Override
