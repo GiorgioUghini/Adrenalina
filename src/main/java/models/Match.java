@@ -12,6 +12,7 @@ import network.ConnectionWrapper;
 import network.Response;
 import network.Server;
 import network.updates.ChooseMapUpdate;
+import network.updates.EndMatchUpdate;
 import network.updates.NextTurnUpdate;
 import java.util.*;
 
@@ -19,6 +20,7 @@ public class Match {
     private List<Player> playerList;
     private int actualPlayerIndex = 0;
     private int tmpActualPlayerIndex = -1;
+    private int endMatchPlayerIndex = -1;
     private PowerUpDeck powerUpDeck;
     private List<Card> thrownPowerUps;
     private WeaponDeck weaponDeck;
@@ -28,7 +30,7 @@ public class Match {
     private Config config;
     private Map<ActionType, List<TurnEvent>> currentActions;
     private ActionType currentActionType;
-    //private Turn actualTurn;
+    private boolean frenzy = false;
     private Timer turnTimer;
     private TimerTask turnTimerTask;
     private CardController cardController;
@@ -112,6 +114,7 @@ public class Match {
         for(int i = actualPlayerIndex-1; i >= 0; i--){
             playerList.get(i).setLifeState(ActionGroup.FRENZY_TYPE_2);
         }
+        frenzy = true;
     }
 
     /**
@@ -249,6 +252,14 @@ public class Match {
         }
         for (Player player : playerList) {
             player.onTurnEnded();
+        }
+
+        if(frenzy && endMatchPlayerIndex < 0){
+            endMatchPlayerIndex = actualPlayerIndex;
+        }
+        else if(frenzy && endMatchPlayerIndex == actualPlayerIndex){
+            addUpdate(new EndMatchUpdate(getTotalPoints()));
+            return;
         }
 
         playerList.stream().filter(Player::isDead).forEach(p->gameMap.removePlayer(p));
