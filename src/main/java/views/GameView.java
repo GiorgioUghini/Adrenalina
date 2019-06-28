@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface GameView extends View {
-    void chooseSpawnPoint();
 
     void getValidActions();
     void reconnect();

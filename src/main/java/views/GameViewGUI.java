@@ -187,7 +187,6 @@ public class GameViewGUI implements Initializable, GameView {
 
     private int maxRunDistance;
     private boolean isShooting;
-    private boolean firstTurn = true;
 
     public GameViewGUI() {
         this.gameController = new GameController();
@@ -494,11 +493,6 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
-    public void chooseSpawnPoint() {
-        //TODO: Delete this and use spawn()
-    }
-
-    @Override
     public void updateActions(Map<ActionType, List<TurnEvent>> actions){
         Client client = Client.getInstance();
         ActionType currentActionType = client.getCurrentActionType();
@@ -517,8 +511,6 @@ public class GameViewGUI implements Initializable, GameView {
         }else {
             setTurnEventButtons(actions.get(currentActionType));
         }
-
-        if(actions.isEmpty()) firstTurn = false;
     }
 
     private void setActionGroupButtons(Set<ActionType> groupActions){
@@ -806,7 +798,6 @@ public class GameViewGUI implements Initializable, GameView {
 
     @Override
     public void updatePlayerView(Player newPlayer) {
-        Player oldPlayer = Client.getInstance().getPlayer();
         Platform.runLater(() -> {
 
             //UPDATE AMMO
@@ -858,6 +849,7 @@ public class GameViewGUI implements Initializable, GameView {
         addSkullsOnMainPane(newPlayer);
     }
 
+    @Override
     public void updatePoints(Map<Player, Integer> map) {
         for (Player p : Client.getInstance().getPlayers()) {
             int points = map.get(p);
