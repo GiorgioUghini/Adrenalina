@@ -1203,57 +1203,59 @@ public class GameViewGUI implements Initializable, GameView {
 
     private ImageView getImageView(ActionType actionType) {
         ImageView iv;
+        double width = 150d;
+        double heigh = 50d;
         switch (actionType) {
             case RUN_NORMAL:
                 iv = new ImageView(new Image("actions/RUNNORMAL.png"));
-                iv.setFitHeight(25d);
-                iv.setFitHeight(75d);
+                iv.setFitHeight(heigh);
+                iv.setFitWidth(width);
                 return iv;
             case SHOOT_NORMAL:
                 iv = new ImageView(new Image("actions/SHOOTNORMAL.png"));
-                iv.setFitHeight(25d);
-                iv.setFitHeight(75d);
+                iv.setFitHeight(heigh);
+                iv.setFitWidth(width);
                 return iv;
             case GRAB_NORMAL:
                 iv = new ImageView(new Image("actions/GRABNORMAL.png"));
-                iv.setFitHeight(25d);
-                iv.setFitHeight(75d);
+                iv.setFitHeight(heigh);
+                iv.setFitWidth(width);
                 return iv;
             case GRAB_LOW_LIFE:
                 iv = new ImageView(new Image("actions/GRABLOWLIFE.png"));
-                iv.setFitHeight(25d);
-                iv.setFitHeight(75d);
+                iv.setFitHeight(heigh);
+                iv.setFitWidth(width);
                 return iv;
             case SHOOT_VERY_LOW_LIFE:
                 iv = new ImageView(new Image("actions/SHOOTVERYLOWLIFE.png"));
-                iv.setFitHeight(25d);
-                iv.setFitHeight(75d);
+                iv.setFitHeight(heigh);
+                iv.setFitWidth(width);
                 return iv;
             case RUN_FRENZY_1:
                 iv = new ImageView(new Image("actions/RUNFRENZY1.png"));
-                iv.setFitHeight(25d);
-                iv.setFitHeight(75d);
+                iv.setFitHeight(heigh);
+                iv.setFitWidth(width);
                 return iv;
             case GRAB_FRENZY_1:
                 iv = new ImageView(new Image("actions/GRABFRENZY1.png"));
-                iv.setFitHeight(25d);
-                iv.setFitHeight(75d);
+                iv.setFitHeight(heigh);
+                iv.setFitWidth(width);
                 return iv;
             case SHOOT_FRENZY_1:
                 iv = new ImageView(new Image("actions/SHOOTFRENZY1.png"));
-                iv.setFitHeight(25d);
-                iv.setFitHeight(75d);
+                iv.setFitHeight(heigh);
+                iv.setFitWidth(width);
                 return iv;
             case GRAB_FRENZY_2:
                 iv = new ImageView(new Image("actions/GRABFRENZY2.png"));
-                iv.setFitHeight(25d);
-                iv.setFitHeight(75d);
+                iv.setFitHeight(heigh);
+                iv.setFitWidth(width);
                 return iv;
             //case SHOOT_FRENZY_2:
             default:
                 iv = new ImageView(new Image("actions/SHOOTFRENZY2.png"));
-                iv.setFitHeight(25d);
-                iv.setFitHeight(75d);
+                iv.setFitHeight(heigh);
+                iv.setFitWidth(width);
                 return iv;
         }
     }
@@ -1266,18 +1268,21 @@ public class GameViewGUI implements Initializable, GameView {
                     btnActionGroup1.setVisible(true);
                     setBtnEnabled(btnActionGroup1, true);
                     btnActionGroup1.setGraphic(getImageView(actionType));
+                    btnActionGroup1.setText("");
                     buttonActionTypeMap.put(1, actionType);
                     break;
                 case 2:
                     btnActionGroup2.setVisible(true);
                     setBtnEnabled(btnActionGroup2, true);
                     btnActionGroup2.setGraphic(getImageView(actionType));
+                    btnActionGroup2.setText("");
                     buttonActionTypeMap.put(2, actionType);
                     break;
                 case 3:
                     btnActionGroup3.setVisible(true);
                     setBtnEnabled(btnActionGroup3, true);
                     btnActionGroup3.setGraphic(getImageView(actionType));
+                    btnActionGroup3.setText("");
                     buttonActionTypeMap.put(3, actionType);
                     break;
             }
