@@ -502,22 +502,23 @@ public class GameViewGUI implements Initializable, GameView {
 
         boolean turnIsEnding = actions.isEmpty() && client.isMyTurn();
 
+        disableTurnEventButtons();
+        disableActionGroupButtons();
+
         setBtnEnabled(btnEndTurn, turnIsEnding);
+        //this must be called before setTurnEventButtons or it breaks the frenzy reload
+        setBtnEnabled(btnReload, turnIsEnding);
 
         if(currentActionType==null){
-            disableTurnEventButtons();
             setActionGroupButtons(actions.keySet());
         }else {
-            disableActionGroupButtons();
             setTurnEventButtons(actions.get(currentActionType));
         }
 
-        setBtnEnabled(btnReload, turnIsEnding && !firstTurn);
         if(actions.isEmpty()) firstTurn = false;
     }
 
     private void setActionGroupButtons(Set<ActionType> groupActions){
-        disableActionGroupButtons();
         if(groupActions.size() > 1 && Client.getInstance().getCurrentActionType()==null){
             int i = 0;
             for(ActionType groupAction : groupActions){
@@ -534,7 +535,6 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     private void setTurnEventButtons(List<TurnEvent> turnEvents){
-        disableTurnEventButtons();
         for (TurnEvent turnEvent : turnEvents) {
             Button buttonToShow = null;
             switch (turnEvent) {
