@@ -57,7 +57,6 @@ public class EffectCardTest {
         int deckSize = deck.size();
         for(int i = 0; i<deckSize; i++){
             WeaponCard card = (WeaponCard) deck.draw();
-            System.out.println(card.name);
             for(Effect effect : card.effects){
                 for(Action action : effect.actions){
                     switch (action.type){
