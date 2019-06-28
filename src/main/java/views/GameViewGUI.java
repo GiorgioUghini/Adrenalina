@@ -422,6 +422,9 @@ public class GameViewGUI implements Initializable, GameView {
                 }
             }
             Client.getInstance().getConnection().reload(reloadingWeapons);
+            for(WeaponCard weaponCard : reloadingWeapons.keySet()){
+                showMessage("Successfully reloaded " + weaponCard.getName());
+            }
         });
     }
 
