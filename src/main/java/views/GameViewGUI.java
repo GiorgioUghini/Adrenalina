@@ -1201,6 +1201,63 @@ public class GameViewGUI implements Initializable, GameView {
         Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
     }
 
+    private ImageView getImageView(ActionType actionType) {
+        ImageView iv;
+        switch (actionType) {
+            case RUN_NORMAL:
+                iv = new ImageView(new Image("actions/RUNNORMAL.png"));
+                iv.setFitHeight(25d);
+                iv.setFitHeight(75d);
+                return iv;
+            case SHOOT_NORMAL:
+                iv = new ImageView(new Image("actions/SHOOTNORMAL.png"));
+                iv.setFitHeight(25d);
+                iv.setFitHeight(75d);
+                return iv;
+            case GRAB_NORMAL:
+                iv = new ImageView(new Image("actions/GRABNORMAL.png"));
+                iv.setFitHeight(25d);
+                iv.setFitHeight(75d);
+                return iv;
+            case GRAB_LOW_LIFE:
+                iv = new ImageView(new Image("actions/GRABLOWLIFE.png"));
+                iv.setFitHeight(25d);
+                iv.setFitHeight(75d);
+                return iv;
+            case SHOOT_VERY_LOW_LIFE:
+                iv = new ImageView(new Image("actions/SHOOTVERYLOWLIFE.png"));
+                iv.setFitHeight(25d);
+                iv.setFitHeight(75d);
+                return iv;
+            case RUN_FRENZY_1:
+                iv = new ImageView(new Image("actions/RUNFRENZY1.png"));
+                iv.setFitHeight(25d);
+                iv.setFitHeight(75d);
+                return iv;
+            case GRAB_FRENZY_1:
+                iv = new ImageView(new Image("actions/GRABFRENZY1.png"));
+                iv.setFitHeight(25d);
+                iv.setFitHeight(75d);
+                return iv;
+            case SHOOT_FRENZY_1:
+                iv = new ImageView(new Image("actions/SHOOTFRENZY1.png"));
+                iv.setFitHeight(25d);
+                iv.setFitHeight(75d);
+                return iv;
+            case GRAB_FRENZY_2:
+                iv = new ImageView(new Image("actions/GRABFRENZY2.png"));
+                iv.setFitHeight(25d);
+                iv.setFitHeight(75d);
+                return iv;
+            //case SHOOT_FRENZY_2:
+            default:
+                iv = new ImageView(new Image("actions/SHOOTFRENZY2.png"));
+                iv.setFitHeight(25d);
+                iv.setFitHeight(75d);
+                return iv;
+        }
+    }
+
     @Override
     public void setTextAndEnableBtnActionGroup(ActionType actionType, int btnNum) {
         Platform.runLater( () -> {
@@ -1208,19 +1265,19 @@ public class GameViewGUI implements Initializable, GameView {
                 case 1:
                     btnActionGroup1.setVisible(true);
                     setBtnEnabled(btnActionGroup1, true);
-                    btnActionGroup1.setText(actionType.name());
+                    btnActionGroup1.setGraphic(getImageView(actionType));
                     buttonActionTypeMap.put(1, actionType);
                     break;
                 case 2:
                     btnActionGroup2.setVisible(true);
                     setBtnEnabled(btnActionGroup2, true);
-                    btnActionGroup2.setText(actionType.name());
+                    btnActionGroup2.setGraphic(getImageView(actionType));
                     buttonActionTypeMap.put(2, actionType);
                     break;
                 case 3:
                     btnActionGroup3.setVisible(true);
                     setBtnEnabled(btnActionGroup3, true);
-                    btnActionGroup3.setText(actionType.name());
+                    btnActionGroup3.setGraphic(getImageView(actionType));
                     buttonActionTypeMap.put(3, actionType);
                     break;
             }
