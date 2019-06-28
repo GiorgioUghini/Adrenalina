@@ -520,6 +520,10 @@ public class Player implements Subscriber, Serializable, Taggable {
         deathManager.addPartialPointsCount(this, countPoints());
     }
 
+    public void setDeathCount(int value){
+        deathManager.setDeathCount(this, value);
+    }
+
     public int getDeathCount(){
         return deathManager.getDeathCount(this);
     }

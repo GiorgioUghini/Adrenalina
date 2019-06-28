@@ -561,11 +561,6 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         try{
             Player player = Server.getInstance().getLobby().getPlayer(token);
             Match match = Server.getInstance().getLobby().getMatch(player);
-/*
-            if(match.getCurrentActionType() != null){
-                throw new CheatException("You can't use power ups between actions!");
-            }
-*/
             if(powerUpAmmo!=null) powerUpAmmo = player.getPowerUpByName(powerUpAmmo.name, powerUpAmmo.color);
             PowerUpCard powerUpCard = player.getPowerUpList().stream().filter(c -> c.name.equals(powerUpName)).findFirst().orElse(null);
             player.playPowerUp(powerUpCard, ammo, powerUpAmmo);

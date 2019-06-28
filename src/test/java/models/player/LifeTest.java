@@ -92,9 +92,15 @@ public class LifeTest {
         Player pl2 = new Player( "Giorgio", "");
         Player pl3 = new Player( "Vila", "");
 
+        DeathManager deathManager = new DeathManager();
+
+        pl1.setDeathManager(deathManager);
+        pl2.setDeathManager(deathManager);
+        pl3.setDeathManager(deathManager);
+
         for (int skull = 0; skull <5; skull++) {
             pl2.clearDamages();
-            pl2.setNumberOfSkulls(skull); //I'm dead some times before this
+            pl2.setDeathCount(skull); //I'm dead some times before this
             pl2.getDamage(2, pl1);
             pl2.getDamage(4, pl3);
             pl2.getDamage(2, pl1);
@@ -113,6 +119,12 @@ public class LifeTest {
         Player pl1 = new Player( "Cosimo", "");
         Player pl2 = new Player( "Giorgio", "");
         Player pl3 = new Player( "Vila", "");
+
+        DeathManager deathManager = new DeathManager();
+
+        pl1.setDeathManager(deathManager);
+        pl2.setDeathManager(deathManager);
+        pl3.setDeathManager(deathManager);
 
         pl2.getDamage(5, pl1);
         pl2.getDamage(7, pl1);

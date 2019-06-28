@@ -26,6 +26,10 @@ public class DeathManager implements Serializable {
         }
     }
 
+    public void setDeathCount(Player player, int value){
+        deathMap.put(player, value);
+    }
+
     public int getTotalPoints(Player player) {
         int points = 0;
         for (Map<Player, Integer> map : pointsMapList) {
