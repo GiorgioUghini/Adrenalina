@@ -294,11 +294,18 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         logger.fine("Received finishCard request");
         try{
             Player player = Server.getInstance().getLobby().getPlayer(token);
-            player.resetWeapon();
-            logger.fine("Weapon succesfully reset");
+            if(player.getActiveWeapon()!=null){
+                player.resetWeapon();
+                logger.fine("Weapon succesfully reset");
+                Match match = player.getMatch();
+                match.turnEvent(TurnEvent.SHOOT);
+            }else if(player.getActivePowerUp() != null){
+                player.resetPowerUp();
+                logger.fine("PowerUp successfully reset");
+            }else{
+                logger.info("You tried to finish a card but the player had not active cards");
+            }
             Server.getInstance().getConnection().getConnectionWrapper(token).addUpdate(new PlayerUpdate(player));
-            Match match = player.getMatch();
-            match.turnEvent(TurnEvent.SHOOT);
             return new FinishCardResponse();
         }
         catch (Exception ex){
