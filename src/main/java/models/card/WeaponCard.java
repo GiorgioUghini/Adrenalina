@@ -1,6 +1,7 @@
 package models.card;
 
 import errors.NoActiveEffectException;
+import errors.NotEnoughAmmoException;
 import errors.WeaponCardException;
 import models.player.Ammo;
 import models.player.Player;
@@ -49,9 +50,9 @@ public class WeaponCard extends EffectCard {
 
     /** Removes the necessary ammos from the "ammo" param to reload the card. You can check if you have enough ammo to reload by calling canReload(ammo) method
      * @param ammo the ammo the player has, the reload cost will be deducted from here. ATTENTION: this function modifies the param
-     * @throws WeaponCardException if the given ammo is not enough to reload. */
+     * @throws NotEnoughAmmoException if the given ammo is not enough to reload. */
     public void load(Ammo ammo, PowerUpCard powerUpCard){
-        if(!hasEnoughAmmo(ammo, powerUpCard, reloadPrice)) throw new WeaponCardException("Not enough ammo to reload");
+        if(!hasEnoughAmmo(ammo, powerUpCard, reloadPrice)) throw new NotEnoughAmmoException();
         pay(reloadPrice, ammo, powerUpCard);
         loaded = true;
     }

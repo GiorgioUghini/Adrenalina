@@ -536,10 +536,11 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                     if(player.canReloadWeapon(weaponCard, reloadPowerUpCard)){
                         player.reloadWeapon(weaponCard, reloadPowerUpCard);
                     }else{
-                        //TODO: What if the weapon cannot be loaded?
+                        throw new NotEnoughAmmoException();
                     }
                 }
             }
+            Server.getInstance().getConnection().getConnectionWrapper(token).addUpdate(new PlayerUpdate(player));
             return new ReloadResponse();
         }
         catch (Exception ex){

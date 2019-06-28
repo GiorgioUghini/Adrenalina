@@ -400,7 +400,7 @@ public class Player implements Subscriber, Serializable, Taggable {
      * @param weaponCard the card you want to reload
      * @throws WeaponCardException if you do not have that weapon
      * @throws WeaponCardException if the weapon is already loaded
-     * @throws WeaponCardException if you do not have enough ammo to reload */
+     * @throws NotEnoughAmmoException if you do not have enough ammo to reload */
     public void reloadWeapon(WeaponCard weaponCard, PowerUpCard powerUpCard){
         checkHasWeapon(weaponCard);
         if(weaponCard.isLoaded()) throw new WeaponCardException("The weapon is already loaded");
