@@ -348,17 +348,11 @@ public class GameViewGUI implements Initializable, GameView {
         });
     }
 
-    public void removeCardToHand(EffectCard card, List<ImageView> where) {
+    public void removeCardsToHand(List<ImageView> where) {
         Platform.runLater( () -> {
-            int i = 0;
-            while (where.get(i).getImage() != null && !where.get(i).getImage().getUrl().contains(card.image)) {
-                i++;
+            for(ImageView imageView : where){
+                imageView.setImage(null);
             }
-
-            for (; i < (card.getClass().equals(WeaponCard.class) ? 2 : 3); i++) {
-                where.get(i).setImage(where.get(i + 1).getImage());
-            }
-            where.get((card.getClass().equals(WeaponCard.class) ? 2 : 3)).setImage(null);
         });
     }
 
@@ -818,19 +812,13 @@ public class GameViewGUI implements Initializable, GameView {
             blueAmmoText.setText(Integer.toString(myAmmo.blue));
             yellowAmmoText.setText(Integer.toString(myAmmo.yellow));
             //REMOVE OLD POWERUP IF ANY
-            if(oldPlayer != null)
-                for (PowerUpCard powerUpCard : oldPlayer.getPowerUpList()) {
-                    removeCardToHand(powerUpCard, powerUpSpaces);
-                }
+            removeCardsToHand(powerUpSpaces);
             //ADD NEW POWERUP
             for (PowerUpCard powerUpCard : newPlayer.getPowerUpList()) {
                 addCardToHand(powerUpCard, powerUpSpaces);
             }
             //REMOVE OLD WEAPONS IF ANY
-            if(oldPlayer != null)
-                for (WeaponCard weaponCard : oldPlayer.getWeaponList()) {
-                    removeCardToHand(weaponCard, weaponSpaces);
-                }
+            removeCardsToHand(weaponSpaces);
             //ADD NEW WEAPONS
             for (WeaponCard weaponCard : newPlayer.getWeaponList()) {
                 addCardToHand(weaponCard, weaponSpaces);
