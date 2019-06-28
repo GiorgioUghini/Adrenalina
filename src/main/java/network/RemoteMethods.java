@@ -423,7 +423,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             for(Player p : match.getPlayers()){
                 if(p.isDead()){
                     p.addPartialPointsCount();
-                    match.getMap().removePlayer(p);
+                    //match.getMap().removePlayer(p);
                 }
             }
             match.addUpdate(new PointsUpdate(match.getTotalPoints()));
