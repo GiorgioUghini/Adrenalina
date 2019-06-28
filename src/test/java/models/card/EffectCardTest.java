@@ -407,6 +407,40 @@ public class EffectCardTest {
         assertTrue(taggables.contains(players.get(2)));
     }
 
+    @Test
+    public void testRaggioSolare(){
+        WeaponCard raggioSolare = getWeaponCard("Raggio solare");
+        List<WeaponCard> weaponCardList = new ArrayList<>();
+        weaponCardList.add(raggioSolare);
+        assertNotNull(raggioSolare);
+        List<Player> players = createTestPlayers(4);
+        GameMap gameMap = MapGenerator.generate(1);
+        Player me = players.get(0);
+        Player enemy = players.get(1);
+        SpawnPoint yellow = getSpawnPoint(gameMap, RoomColor.YELLOW);
+        for(Player player : players){
+            gameMap.spawnPlayer(player, yellow);
+        }
+        me.setWeaponList(weaponCardList);
+        gameMap.movePlayer(enemy, yellow.getNextSquare(CardinalDirection.TOP));
+        me.playWeapon(raggioSolare);
+        List<Effect> legitEffects = me.getWeaponEffects().getLegitEffects();
+        assertEquals(1, legitEffects.size());
+        Effect effect = legitEffects.stream().filter(e -> e.name.equals("Modalità base")).findFirst().orElse(null);
+        assertEquals("Modalità base", effect.name);
+        me.playWeaponEffect(effect, null);
+        me.playNextWeaponAction(); //select
+        Selectable selectable = raggioSolare.getSelectable();
+        Set<Taggable> taggables = selectable.get();
+        assertEquals(1, taggables.size());
+        assertTrue(taggables.contains(enemy));
+        raggioSolare.select(enemy);
+        me.playNextWeaponAction(); //damage
+        assertEquals(1, enemy.getTotalDamage());
+        me.playNextWeaponAction(); //mark
+        assertEquals(1, enemy.getMarksFromPlayer(me));
+    }
+
     private SpawnPoint getSpawnPoint(GameMap gameMap, RoomColor color){
         for(SpawnPoint s : gameMap.getSpawnPoints()){
             if(s.getColor().equals(color)){

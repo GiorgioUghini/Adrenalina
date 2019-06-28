@@ -38,7 +38,7 @@ class DamageEngine {
             case SQUARE:
                 Square target = getSquareByTag(markOrDamage.target);
                 if(target==null) return out;
-                Set<Player> playersOnSquare = gameMap.getPlayersOnSquare(selectedSquares.get(markOrDamage.target));
+                Set<Player> playersOnSquare = gameMap.getPlayersOnSquare(target);
                 for(Player p : playersOnSquare){
                     out.put(p, markOrDamage.value);
                 }
@@ -73,6 +73,8 @@ class DamageEngine {
             return gameMap.getPlayerPosition(me);
         }else if(selectedSquares.containsKey(tag)){
             return selectedSquares.get(tag);
+        }else if(selectedPlayers.containsKey(tag)){
+            return gameMap.getPlayerPosition(selectedPlayers.get(tag));
         }
         return null;
     }
