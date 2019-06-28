@@ -39,7 +39,7 @@ public class GameController {
         Client.getInstance().getConnection().cardEffects(weaponCard.name);
     }
 
-    public void getEffects(PowerUpCard powerUpCard, PowerUpCard payWithThis) { Client.getInstance().getConnection().playPowerUp(powerUpCard.name, payWithThis == null ? Client.getInstance().getPlayer().getAmmo() : null, payWithThis); }
+    public void playPowerUp(PowerUpCard powerUpCard, Ammo whichAmmo, PowerUpCard payWithThis) { Client.getInstance().getConnection().playPowerUp(powerUpCard.name, whichAmmo, payWithThis);}
 
     public void playEffect(Effect effect, PowerUpCard powerUpCard) {
         Client.getInstance().getConnection().playEffect(effect, Client.getInstance().getPlayer().getAmmo(), powerUpCard);

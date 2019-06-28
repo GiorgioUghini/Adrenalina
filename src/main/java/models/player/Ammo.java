@@ -70,6 +70,10 @@ public class Ammo implements Serializable {
         return out;
     }
 
+    public boolean isEmpty(){
+        return red+blue+yellow == 0;
+    }
+
     /** @return true iff each ammo color of this is greater than or equal than the ammo given as param */
     public boolean isGreaterThanOrEqual(Ammo ammo){
         return(
@@ -77,6 +81,11 @@ public class Ammo implements Serializable {
             yellow >= ammo.yellow &&
             blue >= ammo.blue
         );
+    }
+
+    @Override
+    public String toString(){
+        return String.format("Red: %d; Blue: %d; Yellow: %d", red, blue, yellow);
     }
 
     @Override

@@ -386,10 +386,10 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                     return new SelectResponse(selectable);
                 }
                 else if(action.type == ActionType.DAMAGE){
-                    for(Player damagedPlayer : player.getActiveWeapon().getPlayersToDamage().keySet()){
+                    for(Player damagedPlayer : player.getActivePowerUp().getPlayersToDamage().keySet()){
                         match.addUpdate(new DamageUpdate(damagedPlayer));
                     }
-                    long deadCount = player.getActiveWeapon().getPlayersToDamage().keySet().stream().filter(Player::isDead).count();
+                    long deadCount = player.getActivePowerUp().getPlayersToDamage().keySet().stream().filter(Player::isDead).count();
                     if(match.getSkullCount() + deadCount >= 8){
                         player.resetWeapon();
                         player.resetPowerUp();
@@ -400,7 +400,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                     }
                 }
                 else if(action.type == ActionType.MARK){
-                    for(Player markedPlayer : player.getActiveWeapon().getPlayersToMark().keySet()){
+                    for(Player markedPlayer : player.getActivePowerUp().getPlayersToMark().keySet()){
                         match.addUpdate(new MarkUpdate(markedPlayer));
                     }
                 }
