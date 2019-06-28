@@ -830,7 +830,33 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
-    public void updateDamagedAndMarkedPlayer(Player newPlayer) {
+    public void onMark(Player markedPlayer){
+        updateDamagedAndMarkedPlayer(markedPlayer);
+    }
+
+    @Override
+    public void onDamage(Player damagedPlayer){
+        updateDamagedAndMarkedPlayer(damagedPlayer);
+        Player me = Client.getInstance().getPlayer();
+        if(damagedPlayer.equals(me)){
+            List<PowerUpCard> playable = new ArrayList<>();
+            for(PowerUpCard powerUpCard : me.getPowerUpList()){
+                if(powerUpCard.when.equals("on_damage_received")){
+                    playable.add(powerUpCard);
+                }
+            }
+            if(playable.isEmpty()) return;
+            if(me.getLastDamager()==null) return;
+            Platform.runLater(() -> {
+                PowerUpCard powerUpCard = choosePowerUpDialog("You have been damaged by " + me.getLastDamager().getName(), "Would you like to mark him?", playable);
+                if(powerUpCard!=null){
+                    Client.getInstance().getConnection().playPowerUp(powerUpCard.name, null, null);
+                }
+            });
+        }
+    }
+
+    private void updateDamagedAndMarkedPlayer(Player newPlayer) {
         List<Player> players = Client.getInstance().getPlayers();
         Player oldPlayer = players.get(players.indexOf(newPlayer));
         //REMOVE DAMAGE
@@ -1375,16 +1401,26 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     private PowerUpCard choosePowerUpDialog(){
-        if(Client.getInstance().getPlayer().getPowerUpList().isEmpty()) return null;
+        return choosePowerUpDialog(null, null, null);
+    }
+
+    private PowerUpCard choosePowerUpDialog(String headerText, String contentText, List<PowerUpCard> powerUpCards){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Just a question...");
-        alert.setHeaderText("Do you want to use a power up to pay for this action?");
-        alert.setContentText("If yes, select one of yours, if not, please click no.");
+        if(headerText==null) headerText = "Do you want to use a power up to pay for this action?";
+        if(contentText==null) contentText = "If yes, select one of yours, if not, please click no.";
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+
 
         List<ButtonType> btlist = new ArrayList<>();
         btlist.add(new ButtonType("No, I don't."));
         Player me = Client.getInstance().getPlayer();
-        List<PowerUpCard> powerUpCards = me.getPowerUpList();
+
+        if(powerUpCards == null){
+            powerUpCards = me.getPowerUpList();
+        }
+        if(powerUpCards == null || powerUpCards.isEmpty()) return null;
 
         for (PowerUpCard powerUpCard : powerUpCards) {
             btlist.add(new ButtonType(powerUpCard.getFullName()));

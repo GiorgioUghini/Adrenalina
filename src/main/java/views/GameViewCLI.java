@@ -54,17 +54,22 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
-    public void updateDamagedAndMarkedPlayer(Player newPlayer) {
-
-    }
-
-    @Override
     public void effectChoosingDialog(LegitEffects legitEffects) {
 
     }
 
     @Override
     public void updateActions(Map<ActionType, List<TurnEvent>> actions) {
+
+    }
+
+    @Override
+    public void onDamage(Player damagedPlayer) {
+
+    }
+
+    @Override
+    public void onMark(Player markedPlayer) {
 
     }
 

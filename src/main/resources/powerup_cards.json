@@ -219,7 +219,39 @@
   },
   {
     "name": "Raggio cinetico",
-    "effects": [],
+    "when": "my_turn",
+    "effects": [
+      {
+        "type": "select",
+        "select": {
+          "type": "player",
+          "id": "moved_player",
+          "radix": []
+        }
+      },
+      {
+        "type": "select",
+        "select": {
+          "type": "square",
+          "id": "dest_square",
+          "radix": [
+            {
+              "ref": "moved_player",
+              "area": "cardinal",
+              "max": 2,
+              "throughWalls": false
+            }
+          ]
+        }
+      },
+      {
+        "type": "move",
+        "move": {
+          "target": "moved_player",
+          "dest": "dest_square"
+        }
+      }
+    ],
     "color": "red",
     "image": "AD_powerups_IT_029.png"
   },

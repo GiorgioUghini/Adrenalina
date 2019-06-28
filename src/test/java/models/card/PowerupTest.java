@@ -15,6 +15,20 @@ import java.util.Set;
 
 public class PowerupTest {
     @Test
+    public void testMandatoryFields(){
+        PowerUpDeck deck = new CardController().getPowerUpDeck();
+        int deckSize = deck.size();
+        for(int i =0; i<deckSize; i++){
+            PowerUpCard card = (PowerUpCard)deck.draw();
+            assertNotNull(card.name);
+            assertNotNull(card.color);
+            System.out.println(card.getFullName());
+            assertNotNull(card.when);
+            assertNotNull(card.image);
+        }
+    }
+
+    @Test
     public void testTeletrasporto(){
         Player me = new Player("me", "password");
         Player p1 = new Player("p1", "password");
