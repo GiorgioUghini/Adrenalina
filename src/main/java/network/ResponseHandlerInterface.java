@@ -67,4 +67,6 @@ public interface ResponseHandlerInterface {
     void handle(MarkUpdate response);
 
     void handle(PointsUpdate response);
+
+    void handle(EndMatchUpdate response);
 }

@@ -259,4 +259,9 @@ public class ResponseHandler implements ResponseHandlerInterface {
     public void handle(PointsUpdate response) {
         ((GameView) Client.getInstance().getCurrentView()).updatePoints(response.points);
     }
+
+    @Override
+    public void handle(EndMatchUpdate response) {
+        //TODO show response.points
+    }
 }
