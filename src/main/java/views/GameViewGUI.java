@@ -242,8 +242,7 @@ public class GameViewGUI implements Initializable, GameView {
         canDoActionMap.put(ViewAction.SELECTSQUARE, false);
         canDoActionMap.put(ViewAction.RUN, false);
 
-        //this.turnEventButtons = new ArrayList<>(Arrays.asList(btnDrawPowerUp, btnGrab, btnSpawn, btnRun, btnShoot, btnReload, btnUsePowerUp));
-        this.turnEventButtons = new ArrayList<>(Arrays.asList(btnDrawPowerUp, btnGrab, btnSpawn, btnRun, btnShoot, btnReload));
+        this.turnEventButtons = new ArrayList<>(Arrays.asList(btnDrawPowerUp, btnGrab, btnSpawn, btnRun, btnShoot, btnReload, btnUsePowerUp));
 
         ArrayList<GridPane> x0 = new ArrayList<>();
         x0.add(grid00);
@@ -472,6 +471,7 @@ public class GameViewGUI implements Initializable, GameView {
         gameController.endTurn();
         setBtnEnabled(btnEndTurn, false);
         setBtnEnabled(btnReload, false);
+        setBtnEnabled(btnUsePowerUp, false);
     }
 
     @Override
@@ -515,6 +515,9 @@ public class GameViewGUI implements Initializable, GameView {
 
         if(currentActionType==null){
             setActionGroupButtons(actions.keySet());
+            if(client.isMyTurn() && !firstTurn){
+                setBtnEnabled(btnUsePowerUp, true);
+            }
         }else {
             setTurnEventButtons(actions.get(currentActionType));
         }
@@ -1024,6 +1027,7 @@ public class GameViewGUI implements Initializable, GameView {
                         powerUpCardToPay = choosePowerUpDialog();
                     }
                 }
+                canDoActionMap.put(ViewAction.USEPOWERUP, false);
                 gameController.playPowerUp(powerUpCard, ammoToPay, powerUpCardToPay);
             });
         }
