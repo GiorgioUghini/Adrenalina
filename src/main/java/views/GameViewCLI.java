@@ -455,39 +455,67 @@ public class GameViewCLI implements GameView {
         println("╔═══════════════════════════════════════╗");
         println("║             ADRENALINE MAP            ║");
         println("╠═════════╦═════════╦═════════╦═════════╣");
-        switch (num) {
-            case 0:     //TODO: I think all this map are not correct
-                print("║         ║ "); printColor("CELL 12", COLOR.BLU); print("   "); printColor("CELL 22", COLOR.BLU);  print("   "); printColor("CELL 32", COLOR.BLU);  println(" ║ ");
-                println("╠═════════╬═══   ═══╬═════════╬═══   ═══╬");
-                print("║ "); printColor("CELL 01", COLOR.YELLOW); print("   "); printColor("CELL 11", COLOR.PURPLE); print(" ║ "); printColor("CELL 21", COLOR.RED);  print(" ║ "); printColor("CELL 22", COLOR.RED);  println(" ║ ");
-                println("╠═════════╬═════════╬═══   ═══╬═════════╣");
-                print("║ "); printColor("CELL 00", COLOR.YELLOW); print("   "); printColor("CELL 10", COLOR.WHITE); print(" ║ "); printColor("CELL 20", COLOR.WHITE);  print(" ║ "); println("        ║ ");
-                println("╚═════════╩═════════╩═════════╩═════════╝");
-                break;
-            case 1:
-                print("║ "); printColor("CELL 02", COLOR.BLU); print("   "); printColor("CELL 12", COLOR.BLU); print("   "); printColor("CELL 22", COLOR.BLU);  print("   "); printColor("CELL 32", COLOR.GREEN);  println(" ║ ");
-                println("╠═══   ═══╬═════════╬═══   ═══╬═══   ═══╬");
-                print("║ "); printColor("CELL 01", COLOR.RED); print("   "); printColor("CELL 11", COLOR.RED); print(" ║ "); printColor("CELL 21", COLOR.YELLOW);  print(" ║ "); printColor("CELL 31", COLOR.YELLOW);  println(" ║ ");
-                println("╠═════════╬═══   ═══╬═══   ═══╬═══   ═══╣");
-                print("║         ║ "); printColor("CELL 00", COLOR.WHITE); print("   "); printColor("CELL 10", COLOR.YELLOW);  print("   "); printColor("CELL 20", COLOR.YELLOW);  println(" ║ ");
-                println("╚═════════╩═════════╩═════════╩═════════╝");
-                break;
-            case 2:
-                print("║ "); printColor("CELL 02", COLOR.RED); print("   "); printColor("CELL 12", COLOR.BLU); print("   "); printColor("CELL 22", COLOR.BLU);  print("   "); printColor("CELL 32", COLOR.GREEN);  println(" ║ ");
-                println("╠═══   ═══╬═══   ═══╬═══   ═══╬═══   ═══╬");
-                print("║ "); printColor("CELL 01", COLOR.RED); print(" ║ "); printColor("CELL 11", COLOR.PURPLE); print(" ║ "); printColor("CELL 21", COLOR.YELLOW);  print("   "); printColor("CELL 31", COLOR.YELLOW);  println(" ║ ");
-                println("╠═══   ═══╬═══   ═══╬═══   ═══╬═══   ═══╣");
-                print("║ "); printColor("CELL 00", COLOR.WHITE); print("   "); printColor("CELL 10", COLOR.WHITE); print("   "); printColor("CELL 20", COLOR.YELLOW);  print("   "); printColor("CELL 30", COLOR.YELLOW);  println(" ║ ");
-                println("╚═════════╩═════════╩═════════╩═════════╝");
-                break;
-            case 3:
-                print("║         ║ "); printColor("CELL 12", COLOR.BLU); print("   "); printColor("CELL 22", COLOR.BLU);  print("   "); printColor("CELL 32", COLOR.RED);  println(" ║ ");
-                println("╠═════════╬═══   ═══╬═══   ═══╬═══   ═══╬");
-                print("║ "); printColor("CELL 01", COLOR.YELLOW); print("   "); printColor("CELL 11", COLOR.PURPLE); print("   "); printColor("CELL 21", COLOR.PURPLE);  print(" ║ "); printColor("CELL 31", COLOR.RED);  println(" ║ ");
-                println("╠═══   ═══╬═════════╬═══   ═══╬═══   ═══╣");
-                print("║ "); printColor("CELL 00", COLOR.YELLOW); print("   "); printColor("CELL 10", COLOR.WHITE); print("   "); printColor("CELL 20", COLOR.WHITE);  print("   "); printColor("CELL 30", COLOR.WHITE);  println(" ║ ");
-                println("╚═════════╩═════════╩═════════╩═════════╝");
-                break;
+
+        GameMap gameMap = MapGenerator.generate(num);
+
+        for(int j = 0; j<5; j++){
+            for(int i = 0; i<4; i++){
+                if(j%2 ==0){
+                    printContent(gameMap, i, j/2);
+                }else{
+                    printBottom(gameMap, i, (j-1)/2);
+                }
+            }
+        }
+        println("╚═════════╩═════════╩═════════╩═════════╝");
+    }
+
+    private void printBottom(GameMap gameMap, int x, int y){
+        Square s = gameMap.getSquareByCoordinate(x, y);
+        boolean bottomWalk = s!=null && s.hasNextWalkable(CardinalDirection.BOTTOM);
+        if(x==0){
+            print("╠═══");
+        }else{
+            print("╬═══");
+        }
+        if(bottomWalk){
+            print("   ═══");
+        }else{
+            print("══════");
+        }
+        if(x==3){
+            print("╣\n");
+        }
+    }
+
+    private void printContent(GameMap gameMap, int x, int y){
+        Square s = gameMap.getSquareByCoordinate(x, y);
+
+        if(s==null){
+            print("║         ");
+        }else{
+            boolean leftWalk = s.hasNextWalkable(CardinalDirection.LEFT);
+            if(leftWalk)
+                print(" ");
+            else
+                print("║");
+
+            String text = String.format(" CELL %d%d ", x, y);
+            COLOR color = getColor(s.getColor());
+            printColor(text, color);
+        }
+        if(x==3) print("║\n");
+    }
+
+    private COLOR getColor(RoomColor color){
+        switch (color){
+            case YELLOW: return COLOR.YELLOW;
+            case BLUE: return COLOR.BLU;
+            case RED: return COLOR.RED;
+            case GREEN: return COLOR.GREEN;
+            case WHITE: return COLOR.WHITE;
+            case PURPLE: return COLOR.PURPLE;
+            default: return null;
         }
     }
 }
