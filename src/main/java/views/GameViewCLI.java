@@ -2,13 +2,6 @@ package views;
 
 import controllers.GameController;
 import errors.PlayerNotOnMapException;
-import javafx.application.Platform;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.shape.Circle;
 import models.card.*;
 import models.map.*;
 import models.player.Ammo;
@@ -27,6 +20,7 @@ public class GameViewCLI implements GameView {
 
     private int maxRunDistance;
     private HashMap<Integer, ActionType> buttonActionTypeMap = new HashMap<>();
+    private boolean isShooting;
 
     private Map<ViewAction, Boolean> canDoActionMap = new EnumMap<>(ViewAction.class);
 
@@ -118,24 +112,6 @@ public class GameViewCLI implements GameView {
         for (WeaponCard weaponCard : newPlayer.getWeaponList()) {
             Console.print(weaponCard.name + " ");
         }
-    }
-
-    @Override
-    public void updateDamagedAndMarkedPlayer(Player newPlayer) {
-        //ADD DAMAGE
-        Console.println(String.format("Player %swas hurt by ", newPlayer.getStringColor()));
-        for (Player from : newPlayer.getDamagedBy()) {
-            Console.print(String.format("Player %s ", from.getStringColor()));
-        }
-        //ADD MARKS
-        Console.println(String.format("Player %swas marked by ", newPlayer.getStringColor()));
-        for (Player from : Client.getInstance().getPlayers()) {
-            for (int k = 0; k < newPlayer.getMarksFromPlayer(from); k++) {
-                Console.print("Player " + from.getStringColor() + " ");
-            }
-        }
-        //UPDATE SKULLS IN MAIN PANE
-        addSkullsOnMainPane(newPlayer);
     }
 
     private void addSkullsOnMainPane(Player newPlayer) {
@@ -267,12 +243,26 @@ public class GameViewCLI implements GameView {
 
     @Override
     public void onDamage(Player damagedPlayer) {
-
+        //ADD DAMAGE
+        Console.println(String.format("Player %swas hurt by ", damagedPlayer.getStringColor()));
+        for (Player from : damagedPlayer.getDamagedBy()) {
+            Console.print(String.format("Player %s ", from.getStringColor()));
+        }
+        //UPDATE SKULLS IN MAIN PANE
+        addSkullsOnMainPane(damagedPlayer);
     }
 
     @Override
     public void onMark(Player markedPlayer) {
-
+        //ADD MARKS
+        Console.println(String.format("Player %swas marked by ", markedPlayer.getStringColor()));
+        for (Player from : Client.getInstance().getPlayers()) {
+            for (int k = 0; k < markedPlayer.getMarksFromPlayer(from); k++) {
+                Console.print("Player " + from.getStringColor() + " ");
+            }
+        }
+        //UPDATE SKULLS IN MAIN PANE
+        addSkullsOnMainPane(markedPlayer);
     }
 
     @Override
@@ -315,9 +305,13 @@ public class GameViewCLI implements GameView {
                 Console.println(i + ") I don't want to select nothing. ");
 
                 int choose1 = Console.nextInt();
-                RoomColor rc = (RoomColor) selectables1.get(choose1);
-                //Implement from scratch
-                roomSelected(rc);
+                if (choose1 == i) {
+                    gameController.tagElement(null, isShooting);
+                } else {
+                    RoomColor rc = (RoomColor) selectables1.get(choose1);
+                    //Implement from scratch
+                    gameController.tagElement(rc, isShooting);
+                }
                 break;
 
             case PLAYER:
@@ -330,9 +324,14 @@ public class GameViewCLI implements GameView {
                 }
                 Console.println(j + ") I don't want to select nothing. ");
                 int choose2 = Console.nextInt();
-                Player p = (Player) selectables2.get(choose2);
-                playerClicked(p);
+                if (choose2 == j) {
+                    gameController.tagElement(null, isShooting);
+                } else {
+                    Player p = (Player) selectables2.get(choose2);
+                    gameController.tagElement(p, isShooting);
+                }
                 break;
+
 
             case SQUARE:
                 showMessage("Please click on a SQUARE: ");
@@ -346,8 +345,12 @@ public class GameViewCLI implements GameView {
                 }
                 Console.println(k + ") Don't want to select nothing. ");
                 int choose3 = Console.nextInt();
-                Square s = (Square) selectables3.get(choose3);
-                squareClicked(s);
+                if (choose3 == k) {
+                    gameController.tagElement(null, isShooting);
+                } else {
+                    Square s = (Square) selectables3.get(choose3);
+                    gameController.tagElement(s, isShooting);
+                }
                 break;
         }
     }
@@ -381,6 +384,8 @@ public class GameViewCLI implements GameView {
     public void onPlayerDisconnected(String name) {
 
     }
+
+    //NELLA SHOOT() mettere isShooting a true, nella USEPOWERUP metterlo a false!!
 
     private void printMapNum(int num) {
         println("╔═══════════════════════════════════════╗");
