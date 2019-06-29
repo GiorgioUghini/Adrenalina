@@ -12,6 +12,7 @@ import network.Client;
 import utils.Console;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 import static utils.Console.*;
 import static utils.Console.println;
@@ -37,6 +38,7 @@ public class GameViewCLI implements GameView {
         canDoActionMap.put(ViewAction.SELECTROOM, false);
         canDoActionMap.put(ViewAction.SELECTSQUARE, false);
         canDoActionMap.put(ViewAction.RUN, false);
+        getValidActions();
     }
 
     @Override
@@ -46,7 +48,7 @@ public class GameViewCLI implements GameView {
 
     @Override
     public void reconnect() {
-
+        gameController.reconnect();
     }
 
     @Override
@@ -103,14 +105,18 @@ public class GameViewCLI implements GameView {
         Console.println("AMMO: You have ");
         Console.print(String.format("%d Red, %d Blue and %d Yellow", myAmmo.red, myAmmo.blue, myAmmo.yellow));
         //ADD NEW POWERUP
-        Console.println("POWER UP: You have ");
+        Console.print("\nPOWER UP: You have ");
         for (PowerUpCard powerUpCard : newPlayer.getPowerUpList()) {
             Console.print(powerUpCard.name + " ");
         }
-        Console.println("WEAPONS: You have ");
+        Console.print("\nWEAPONS: You have: ");
         //ADD NEW WEAPONS
         for (WeaponCard weaponCard : newPlayer.getWeaponList()) {
-            Console.print(weaponCard.name + " ");
+            if (newPlayer.getWeaponList().indexOf(weaponCard) == newPlayer.getWeaponList().size()-1) {
+                Console.println(weaponCard.name);
+            } else {
+                Console.print(weaponCard.name + " - ");
+            }
         }
     }
 
@@ -177,7 +183,7 @@ public class GameViewCLI implements GameView {
     }
 
     private void setBtnEnabled(String string, boolean isVisible){
-        if (isVisible) {
+        if (string != null && isVisible) {
             Console.println("You can " + string);
         }
     }
@@ -355,34 +361,40 @@ public class GameViewCLI implements GameView {
         }
     }
 
+    private WeaponCard actualWC = null;
+    public void setActualWC(WeaponCard wc) {
+        this.actualWC = wc;
+    }
     @Override
     public void continueWeapon() {
-
+        if (actualWC!=null) {
+            gameController.getEffects(actualWC);
+        }
     }
 
     @Override
     public void onEndWeapon() {
-
+        this.setActualWC(null);
     }
 
     @Override
     public void printError(String error) {
-
+        Logger.getAnonymousLogger().info(error);    //NON CREDO FUNZIONI
     }
 
     @Override
     public void showMessage(String message) {
-
+        Console.println(message);
     }
 
     @Override
     public void onNewPlayer(String playerName) {
-
+        showMessage("Player " + playerName + " connected!");
     }
 
     @Override
-    public void onPlayerDisconnected(String name) {
-
+    public void onPlayerDisconnected(String playerName) {
+        showMessage("Player " + playerName + " disconnected!");
     }
 
     //NELLA SHOOT() mettere isShooting a true, nella USEPOWERUP metterlo a false!!
@@ -392,7 +404,7 @@ public class GameViewCLI implements GameView {
         println("║             ADRENALINE MAP            ║");
         println("╠═════════╦═════════╦═════════╦═════════╣");
         switch (num) {
-            case 0:     //TODO: I think all this map is not correct
+            case 0:     //TODO: I think all this map are not correct
                 print("║         ║ "); printColor("CELL 12", COLOR.BLU); print("   "); printColor("CELL 22", COLOR.BLU);  print("   "); printColor("CELL 32", COLOR.BLU);  println(" ║ ");
                 println("╠═════════╬═══   ═══╬═════════╬═══   ═══╬");
                 print("║ "); printColor("CELL 01", COLOR.YELLOW); print("   "); printColor("CELL 11", COLOR.PURPLE); print(" ║ "); printColor("CELL 21", COLOR.RED);  print(" ║ "); printColor("CELL 22", COLOR.RED);  println(" ║ ");

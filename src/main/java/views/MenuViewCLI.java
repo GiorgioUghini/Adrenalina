@@ -130,8 +130,7 @@ public class MenuViewCLI implements MenuView {
                 print("Insert the map number you've chosen (1-4): ");
                 mapNum = Console.nextInt();
             }
-            menuController.chooseMap(mapNum);
-            //TODO: ADD TIMER (IN SERVER), AFTER IT TIMERS CHOOSE RANDOMLY
+            menuController.chooseMap(mapNum-1);
         }
     }
 
