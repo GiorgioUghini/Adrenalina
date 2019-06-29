@@ -111,9 +111,10 @@ public class Match {
         for(int i = actualPlayerIndex; i < playerList.size(); i++){
             playerList.get(i).setLifeState(ActionGroup.FRENZY_TYPE_1);
         }
-        for(int i = actualPlayerIndex-1; i >= 0; i--){
+        for(int i = actualPlayerIndex-1; i > 0; i--){
             playerList.get(i).setLifeState(ActionGroup.FRENZY_TYPE_2);
         }
+        playerList.get(0).setLifeState(ActionGroup.FRENZY_TYPE_2);
         frenzy = true;
     }
 
@@ -255,7 +256,7 @@ public class Match {
         }
 
         if(frenzy && endMatchPlayerIndex < 0){
-            endMatchPlayerIndex = actualPlayerIndex;
+            endMatchPlayerIndex = actualPlayerIndex + 1;
         }
         else if(frenzy && endMatchPlayerIndex == actualPlayerIndex){
             addUpdate(new EndMatchUpdate(getTotalPoints()));
