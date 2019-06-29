@@ -241,8 +241,7 @@ public class GameViewGUI implements Initializable, GameView {
         canDoActionMap.put(ViewAction.SELECTSQUARE, false);
         canDoActionMap.put(ViewAction.RUN, false);
 
-        //this.turnEventButtons = new ArrayList<>(Arrays.asList(btnDrawPowerUp, btnGrab, btnSpawn, btnRun, btnShoot, btnReload, btnUsePowerUp));
-        this.turnEventButtons = new ArrayList<>(Arrays.asList(btnDrawPowerUp, btnGrab, btnSpawn, btnRun, btnShoot, btnReload));
+        this.turnEventButtons = new ArrayList<>(Arrays.asList(btnDrawPowerUp, btnGrab, btnSpawn, btnRun, btnShoot, btnReload, btnUsePowerUp));
 
         ArrayList<GridPane> x0 = new ArrayList<>();
         x0.add(grid00);
@@ -470,6 +469,8 @@ public class GameViewGUI implements Initializable, GameView {
     public void endTurn() {
         gameController.endTurn();
         setBtnEnabled(btnEndTurn, false);
+        setBtnEnabled(btnReload, false);
+        setBtnEnabled(btnUsePowerUp, false);
     }
 
     @Override
@@ -508,6 +509,9 @@ public class GameViewGUI implements Initializable, GameView {
 
         if(currentActionType==null){
             setActionGroupButtons(actions.keySet());
+            if(client.isMyTurn() && !firstTurn){
+                setBtnEnabled(btnUsePowerUp, true);
+            }
         }else {
             setTurnEventButtons(actions.get(currentActionType));
         }
@@ -821,7 +825,33 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
-    public void updateDamagedAndMarkedPlayer(Player newPlayer) {
+    public void onMark(Player markedPlayer){
+        updateDamagedAndMarkedPlayer(markedPlayer);
+    }
+
+    @Override
+    public void onDamage(Player damagedPlayer){
+        updateDamagedAndMarkedPlayer(damagedPlayer);
+        Player me = Client.getInstance().getPlayer();
+        if(damagedPlayer.equals(me)){
+            List<PowerUpCard> playable = new ArrayList<>();
+            for(PowerUpCard powerUpCard : me.getPowerUpList()){
+                if(powerUpCard.when.equals("on_damage_received")){
+                    playable.add(powerUpCard);
+                }
+            }
+            if(playable.isEmpty()) return;
+            if(me.getLastDamager()==null) return;
+            Platform.runLater(() -> {
+                PowerUpCard powerUpCard = choosePowerUpDialog("You have been damaged by " + me.getLastDamager().getName(), "Would you like to mark him?", playable);
+                if(powerUpCard!=null){
+                    Client.getInstance().getConnection().playPowerUp(powerUpCard.name, null, null);
+                }
+            });
+        }
+    }
+
+    private void updateDamagedAndMarkedPlayer(Player newPlayer) {
         List<Player> players = Client.getInstance().getPlayers();
         Player oldPlayer = players.get(players.indexOf(newPlayer));
         //REMOVE DAMAGE
@@ -938,44 +968,97 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     public void powerUp1Clicked() {
-        if (canDoActionMap.get(ViewAction.CLICKPOWERUPSPAWN) && (!Client.getInstance().getPlayer().getPowerUpList().isEmpty())) {
-            canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
-            gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(0));
-        } else if (canDoActionMap.get(ViewAction.USEPOWERUP)) {
-            setBtnEnabled(btnUsePowerUp, true);
-            PowerUpCard toPay = choosePowerUpDialog();
-            gameController.getEffects(Client.getInstance().getPlayer().getPowerUpList().get(0), toPay);
+        List<PowerUpCard> powerUpCards = Client.getInstance().getPlayer().getPowerUpList();
+        if(powerUpCards.isEmpty()) {
+            showMessage("Cannot click here");
+            return;
         }
+        PowerUpCard clickedPowerUp = powerUpCards.get(0);
+        powerUpClicked(clickedPowerUp);
     }
     public void powerUp2Clicked() {
-        if (canDoActionMap.get(ViewAction.CLICKPOWERUPSPAWN) && (Client.getInstance().getPlayer().getPowerUpList().size() > 1)) {
-            canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
-            gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(1));
-        } else if (canDoActionMap.get(ViewAction.USEPOWERUP)) {
-            setBtnEnabled(btnUsePowerUp, true);
-            PowerUpCard toPay = choosePowerUpDialog();
-            gameController.getEffects(Client.getInstance().getPlayer().getPowerUpList().get(1), toPay);
+        List<PowerUpCard> powerUpCards = Client.getInstance().getPlayer().getPowerUpList();
+        if(powerUpCards.size() < 2) {
+            showMessage("Cannot click here");
+            return;
         }
+        PowerUpCard clickedPowerUp = powerUpCards.get(1);
+        powerUpClicked(clickedPowerUp);
     }
     public void powerUp3Clicked() {
-        if (canDoActionMap.get(ViewAction.CLICKPOWERUPSPAWN) && (Client.getInstance().getPlayer().getPowerUpList().size() > 2)) {
-            canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
-            gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(2));
-        } else if (canDoActionMap.get(ViewAction.USEPOWERUP)) {
-            setBtnEnabled(btnUsePowerUp, true);
-            PowerUpCard toPay = choosePowerUpDialog();
-            gameController.getEffects(Client.getInstance().getPlayer().getPowerUpList().get(2), toPay);
+        List<PowerUpCard> powerUpCards = Client.getInstance().getPlayer().getPowerUpList();
+        if(powerUpCards.size() < 3) {
+            showMessage("Cannot click here");
+            return;
         }
+        PowerUpCard clickedPowerUp = powerUpCards.get(2);
+        powerUpClicked(clickedPowerUp);
     }
     public void powerUp4Clicked() {
-        if (canDoActionMap.get(ViewAction.CLICKPOWERUPSPAWN) && (Client.getInstance().getPlayer().getPowerUpList().size() > 3)) {
-            canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
-            gameController.spawn(Client.getInstance().getPlayer().getPowerUpList().get(3));
-        } else if (canDoActionMap.get(ViewAction.USEPOWERUP)) {
-            setBtnEnabled(btnUsePowerUp, true);
-            PowerUpCard toPay = choosePowerUpDialog();
-            gameController.getEffects(Client.getInstance().getPlayer().getPowerUpList().get(3), toPay);
+        List<PowerUpCard> powerUpCards = Client.getInstance().getPlayer().getPowerUpList();
+        if(powerUpCards.size() < 4) {
+            showMessage("Cannot click here");
+            return;
         }
+        PowerUpCard clickedPowerUp = powerUpCards.get(3);
+        powerUpClicked(clickedPowerUp);
+    }
+
+    private void powerUpClicked(PowerUpCard powerUpCard){
+        if (canDoActionMap.get(ViewAction.CLICKPOWERUPSPAWN)) {
+            canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
+            gameController.spawn(powerUpCard);
+        } else if (canDoActionMap.get(ViewAction.USEPOWERUP)) {
+            Platform.runLater(() -> {
+                setBtnEnabled(btnUsePowerUp, true);
+                Ammo ammoToPay = null;
+                PowerUpCard powerUpCardToPay = null;
+                if(powerUpCard.hasPrice){
+                    ammoToPay = chooseAmmoDialog();
+                    if(ammoToPay == null || ammoToPay.isEmpty()){
+                        powerUpCardToPay = choosePowerUpDialog();
+                    }
+                }
+                canDoActionMap.put(ViewAction.USEPOWERUP, false);
+                gameController.playPowerUp(powerUpCard, ammoToPay, powerUpCardToPay);
+            });
+        }
+    }
+
+    private Ammo chooseAmmoDialog(){
+        if(Client.getInstance().getPlayer().getAmmo().isEmpty()) return null;
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Pay this powerup");
+        alert.setHeaderText("This powerup costs 1 ammo of your choice");
+        alert.setContentText("Click on one of the ammo buttons or the powerup button to pay with a powerup");
+
+        List<ButtonType> btlist = new ArrayList<>();
+        btlist.add(new ButtonType("Pay with powerup"));
+        Player me = Client.getInstance().getPlayer();
+        Ammo myAmmos = me.getAmmo();
+
+        if(myAmmos.yellow>0){
+            btlist.add(new ButtonType("Yellow"));
+        }
+        if(myAmmos.red>0){
+            btlist.add(new ButtonType("Red"));
+        }
+        if(myAmmos.blue>0){
+            btlist.add(new ButtonType("Blue"));
+        }
+
+        alert.getButtonTypes().setAll(btlist);
+        Optional<ButtonType> result = alert.showAndWait();
+        if(!result.isPresent() || result.get() == btlist.get(0)) return null;
+
+        String stringResult = result.get().getText();
+
+        switch (stringResult){
+            case "Yellow": return new Ammo(0,0,1);
+            case "Red": return new Ammo(0,1,0);
+            case "Blue": return new Ammo(1,0,0);
+        }
+        return null;
     }
 
     public void weaponClicked1() {
@@ -1315,16 +1398,26 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     private PowerUpCard choosePowerUpDialog(){
-        if(Client.getInstance().getPlayer().getPowerUpList().isEmpty()) return null;
+        return choosePowerUpDialog(null, null, null);
+    }
+
+    private PowerUpCard choosePowerUpDialog(String headerText, String contentText, List<PowerUpCard> powerUpCards){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Just a question...");
-        alert.setHeaderText("Do you want to use a power up to pay for this action?");
-        alert.setContentText("If yes, select one of yours, if not, please click no.");
+        if(headerText==null) headerText = "Do you want to use a power up to pay for this action?";
+        if(contentText==null) contentText = "If yes, select one of yours, if not, please click no.";
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+
 
         List<ButtonType> btlist = new ArrayList<>();
         btlist.add(new ButtonType("No, I don't."));
         Player me = Client.getInstance().getPlayer();
-        List<PowerUpCard> powerUpCards = me.getPowerUpList();
+
+        if(powerUpCards == null){
+            powerUpCards = me.getPowerUpList();
+        }
+        if(powerUpCards == null || powerUpCards.isEmpty()) return null;
 
         for (PowerUpCard powerUpCard : powerUpCards) {
             btlist.add(new ButtonType(powerUpCard.getFullName()));

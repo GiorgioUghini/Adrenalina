@@ -15,6 +15,41 @@ import java.util.Set;
 
 public class PowerupTest {
     @Test
+    public void testMandatoryFields(){
+        PowerUpDeck deck = new CardController().getPowerUpDeck();
+        int deckSize = deck.size();
+        for(int i =0; i<deckSize; i++){
+            PowerUpCard card = (PowerUpCard)deck.draw();
+            assertNotNull(card.name);
+            assertNotNull(card.color);
+            assertNotNull(card.when);
+            assertNotNull(card.image);
+            for(Action action : card.effects){
+                switch (action.type){
+                    case SELECT:
+                        assertNotNull(action.select.id);
+                        assertNotNull(action.select.type);
+                        break;
+                    case DAMAGE:
+                        assertNotNull(action.damage.target);
+                        assertNotNull(action.damage.type);
+                        assertNotEquals("me", action.damage.target);
+                        break;
+                    case MOVE:
+                        assertNotNull(action.move.target);
+                        assertNotNull(action.move.dest);
+                        break;
+                    case MARK:
+                        assertNotNull(action.mark.target);
+                        assertNotNull(action.mark.type);
+                        assertNotEquals("me", action.mark.target);
+                        break;
+                }
+            }
+        }
+    }
+
+    @Test
     public void testTeletrasporto(){
         Player me = new Player("me", "password");
         Player p1 = new Player("p1", "password");

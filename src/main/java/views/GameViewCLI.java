@@ -266,6 +266,16 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
+    public void onDamage(Player damagedPlayer) {
+
+    }
+
+    @Override
+    public void onMark(Player markedPlayer) {
+
+    }
+
+    @Override
     public void updatePoints(Map<Player, Integer> map) {
         for (Player p : Client.getInstance().getPlayers()) {
             int points = map.get(p);

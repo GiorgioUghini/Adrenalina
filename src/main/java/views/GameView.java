@@ -18,8 +18,10 @@ public interface GameView extends View {
 
     void updateMapView(GameMap map);
     void updatePlayerView(Player newPlayer);
-    void updateDamagedAndMarkedPlayer(Player newPlayer);
     void updateActions(Map<ActionType, List<TurnEvent>> actions);
+
+    void onDamage(Player damagedPlayer);
+    void onMark(Player markedPlayer);
 
     void updatePoints(Map<Player, Integer> map);
     void effectChoosingDialog(LegitEffects legitEffects);
