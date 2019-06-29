@@ -79,7 +79,7 @@ public class GameViewCLI implements GameView {
         for (SpawnPoint sp : map.getSpawnPoints()) {
             Console.println(String.format("Spawn point %s contains the following weapons:", sp.getColor()));
             for (WeaponCard card : sp.showCards()) {
-                Console.print(card + ", ");
+                Console.print(card.name + ", ");
             }
             Console.println("");
         }
@@ -88,12 +88,12 @@ public class GameViewCLI implements GameView {
         for (int x = 0; x<4; x++) {
             for (int y=0; y<3; y++) {
                 Square square = map.getSquareByCoordinate(x, y);
-                if (square == null) continue;
-                Console.println(String.format("CELL%d%d contains the following ammos: ", x, y));
+                if (square == null || square.isSpawnPoint()) continue;
+                Console.print(String.format("CELL%d%d contains the following ammos: ", x, y));
                 AmmoPoint ammoPoint = (AmmoPoint) square;
                 AmmoCard ammoCard = ammoPoint.showCard();
                 if (ammoCard==null) continue;
-                Console.print(String.format("Red: %d, Blue: %d, Yellow: %d", ammoCard.getRed(), ammoCard.getBlue(), ammoCard.getYellow()));
+                Console.println(String.format("Red: %d, Blue: %d, Yellow: %d", ammoCard.getRed(), ammoCard.getBlue(), ammoCard.getYellow()));
             }
         }
     }
@@ -102,12 +102,16 @@ public class GameViewCLI implements GameView {
     public void updatePlayerView(Player newPlayer) {
         //UPDATE AMMO
         Ammo myAmmo = newPlayer.getAmmo();
-        Console.println("AMMO: You have ");
+        Console.print("\nAMMO: You have ");
         Console.print(String.format("%d Red, %d Blue and %d Yellow", myAmmo.red, myAmmo.blue, myAmmo.yellow));
         //ADD NEW POWERUP
         Console.print("\nPOWER UP: You have ");
         for (PowerUpCard powerUpCard : newPlayer.getPowerUpList()) {
-            Console.print(powerUpCard.name + " ");
+            if (newPlayer.getPowerUpList().indexOf(powerUpCard) == newPlayer.getPowerUpList().size()-1) {
+                Console.print(String.format("%s (%s)", powerUpCard.name, powerUpCard.color));
+            } else {
+                Console.print(String.format("%s (%s) - ", powerUpCard.name, powerUpCard.color));
+            }
         }
         Console.print("\nWEAPONS: You have: ");
         //ADD NEW WEAPONS
@@ -197,7 +201,9 @@ public class GameViewCLI implements GameView {
     }
 
     private void setTurnEventButtons(List<TurnEvent> turnEvents){
+        int i = 0;
         for (TurnEvent turnEvent : turnEvents) {
+            i++;
             String buttonToShow = null;
             switch (turnEvent) {
                 case DRAW:
@@ -225,7 +231,8 @@ public class GameViewCLI implements GameView {
                     buttonToShow = "GRAB";
                     break;
             }
-            setBtnEnabled(buttonToShow, true);
+            if (buttonToShow!=null)
+                setBtnEnabled(i + ") " + buttonToShow, true);
         }
     }
 
@@ -244,13 +251,50 @@ public class GameViewCLI implements GameView {
             setActionGroupButtons(actions.keySet());
         } else {
             setTurnEventButtons(actions.get(currentActionType));
+
+            Console.print("Choose one: ");
+            int choose = Console.nextInt();
+            while ((choose > actions.get(currentActionType).size()) || choose<=0) {
+                Console.print("Number not valid. Choose one.");
+                choose = Console.nextInt();
+            }
+            actionChosen(actions.get(currentActionType).get(choose-1));
         }
+    }
+
+    void actionChosen(TurnEvent te) {
+        switch (te) {
+            case DRAW:
+                gameController.drawPowerUp();
+                gameController.getValidActions();
+                break;
+            case RUN_1:
+            case RUN_2:
+            case RUN_3:
+            case RUN_4:
+                break;
+            case SHOOT:
+                break;
+            case RELOAD:
+                break;
+            case SPAWN:
+                spawn();
+                break;
+            case GRAB:
+                break;
+        }
+    }
+
+    private void spawn() {
+        Console.print("Discard a powerup. Select a number, starting from 1: ");
+        PowerUpCard powerUpCard = Client.getInstance().getPlayer().getPowerUpList().get(Console.nextInt()-1);
+        gameController.spawn(powerUpCard);
     }
 
     @Override
     public void onDamage(Player damagedPlayer) {
         //ADD DAMAGE
-        Console.println(String.format("Player %swas hurt by ", damagedPlayer.getStringColor()));
+        Console.println(String.format("Player %s was hurt by ", damagedPlayer.getStringColor()));
         for (Player from : damagedPlayer.getDamagedBy()) {
             Console.print(String.format("Player %s ", from.getStringColor()));
         }
@@ -261,7 +305,15 @@ public class GameViewCLI implements GameView {
     @Override
     public void onMark(Player markedPlayer) {
         //ADD MARKS
-        Console.println(String.format("Player %swas marked by ", markedPlayer.getStringColor()));
+        boolean hasMarks = false;
+        for (Player from : Client.getInstance().getPlayers()) {
+            for (int k = 0; k < markedPlayer.getMarksFromPlayer(from); k++) {
+                hasMarks = true;
+                break;
+            }
+        }
+        if (!hasMarks) return;
+        Console.println(String.format("Player %s is marked by ", markedPlayer.getStringColor()));
         for (Player from : Client.getInstance().getPlayers()) {
             for (int k = 0; k < markedPlayer.getMarksFromPlayer(from); k++) {
                 Console.print("Player " + from.getStringColor() + " ");
@@ -384,7 +436,7 @@ public class GameViewCLI implements GameView {
 
     @Override
     public void showMessage(String message) {
-        Console.println(message);
+        Console.printColor(message + "\n", COLOR.PURPLE);
     }
 
     @Override
