@@ -495,11 +495,6 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
-    public void chooseSpawnPoint() {
-        //TODO: Delete this and use spawn()
-    }
-
-    @Override
     public void updateActions(Map<ActionType, List<TurnEvent>> actions){
         Client client = Client.getInstance();
         ActionType currentActionType = client.getCurrentActionType();
@@ -810,7 +805,6 @@ public class GameViewGUI implements Initializable, GameView {
 
     @Override
     public void updatePlayerView(Player newPlayer) {
-        Player oldPlayer = Client.getInstance().getPlayer();
         Platform.runLater(() -> {
 
             //UPDATE AMMO
@@ -888,6 +882,7 @@ public class GameViewGUI implements Initializable, GameView {
         addSkullsOnMainPane(newPlayer);
     }
 
+    @Override
     public void updatePoints(Map<Player, Integer> map) {
         for (Player p : Client.getInstance().getPlayers()) {
             int points = map.get(p);

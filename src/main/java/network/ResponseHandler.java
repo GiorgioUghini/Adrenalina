@@ -137,10 +137,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(DrawPowerUpResponse response) {
-        //((GameView) Client.getInstance().getCurrentView()).addPowerUpToHand(response.getCard());
-        Platform.runLater(() -> {
-            Client.getInstance().getCurrentView().showMessage("You drawn " + response.getCard().name + " and its color is " + response.getCard().color.name());
-        });
+        Client.getInstance().getCurrentView().showMessage("You drawn " + response.getCard().name + " and its color is " + response.getCard().color.name());
     }
 
     @Override
