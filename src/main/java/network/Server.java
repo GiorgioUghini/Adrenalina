@@ -8,6 +8,7 @@ import models.Lobby;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.util.logging.Level;
@@ -41,8 +42,8 @@ public class Server {
     }
 
     public void start() throws IOException {
-        File file = ResourceController.getResource("config.json");
-        String jsonConfig = new String(Files.readAllBytes(file.toPath()));
+        InputStream file = ResourceController.getResource("config.json");
+        String jsonConfig = new String(file.readAllBytes());
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();
         config = gson.fromJson(jsonConfig, Config.class);

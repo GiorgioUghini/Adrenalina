@@ -6,10 +6,9 @@ import com.google.gson.reflect.TypeToken;
 import models.card.*;
 import network.Server;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Type;
-import java.nio.file.Files;
 import java.util.List;
 
 public class CardController {
@@ -63,8 +62,8 @@ public class CardController {
     }
 
     private String getJsonCardDescriptor(String filename) throws IOException {
-        File file = ResourceController.getResource(filename);
-        return new String(Files.readAllBytes(file.toPath()));
+        InputStream file = ResourceController.getResource(filename);
+        return new String(file.readAllBytes());
     }
 
     public CardController() {

@@ -311,9 +311,9 @@ public class GameViewGUI implements Initializable, GameView {
 
     private void addWeaponOnMapSpawnPoint(WeaponCard card, RoomColor color) {
         int i = 0;
-        Image img = new Image(ResourceController.getResource("weaponcards/" + card.image).toURI().toString());
-        while (weaponOnSpawnPointMap.get(color).get(i).getImage() != null) {
-            i++;
+        Image img = new Image(ResourceController.getResource("weaponcards/" + card.image));
+        for(i = 0; i < weaponOnSpawnPointMap.get(color).size() && weaponOnSpawnPointMap.get(color).get(i).getImage() != null; i++){
+
         }
         if (i>2) return;
         weaponOnSpawnPointMap.get(color).get(i).setImage(img);
@@ -338,7 +338,7 @@ public class GameViewGUI implements Initializable, GameView {
     public void addCardToHand(EffectCard card, List<ImageView> where) {
         Platform.runLater( () -> {
             int i = 0;
-            Image img = new Image(ResourceController.getResource((card.getClass().equals(WeaponCard.class) ? "weaponcards/" : "powerupcards/")  + card.image).toURI().toString());
+            Image img = new Image(ResourceController.getResource((card.getClass().equals(WeaponCard.class) ? "weaponcards/" + card.image : "powerupcards/" + card.image)));
             while (where.get(i).getImage() != null) {
                 i++;
             }

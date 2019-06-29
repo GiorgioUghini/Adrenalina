@@ -1,10 +1,10 @@
 package controllers;
 
-import java.io.File;
+import java.io.InputStream;
 
 public class ResourceController {
-    public static File getResource(String filename){
+    public static InputStream getResource(String filename){
         ClassLoader classLoader = ResourceController.class.getClassLoader();
-        return new File(classLoader.getResource(filename).getFile());
+        return classLoader.getResourceAsStream(filename);
     }
 }
