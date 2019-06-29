@@ -1196,21 +1196,16 @@ public class GameViewGUI implements Initializable, GameView {
             position--;
         }
         if (canDoActionMap.get(ViewAction.CHOOSESPAWNPOINTWEAPON)) {
-            //START CHOOSE POWER UP DIALOG
-            powerUpChoosingDialog(wc);
-            //END CHOOSE POWER UP DIALOG
+            final WeaponCard weaponCard = wc;
+            Platform.runLater(() -> {
+                Player me = Client.getInstance().getPlayer();
+                PowerUpCard toPay = choosePowerUpDialog();
+                if (me.getWeaponList().size() == 3)
+                    discardWeaponChoosingDialog(weaponCard, toPay);
+                else
+                    gameController.grab(weaponCard, toDiscard, toPay);
+            });
         }
-    }
-
-    private void powerUpChoosingDialog(WeaponCard wc) {
-        Platform.runLater(() -> {
-            Player me = Client.getInstance().getPlayer();
-            PowerUpCard toPay = choosePowerUpDialog();
-            if (me.getWeaponList().size() == 3)
-                discardWeaponChoosingDialog(wc, toPay);
-            else
-                gameController.grab(wc, toDiscard, toPay);
-        });
     }
 
     private void discardWeaponChoosingDialog(WeaponCard wc, PowerUpCard payWith) {

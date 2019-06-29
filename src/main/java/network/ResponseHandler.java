@@ -68,7 +68,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
             Client.getInstance().getCurrentView().showMessage("You need more ammos to do this");
             Client.getInstance().getConnection().validActions();
         } catch(NothingToGrabException e){
-            Client.getInstance().getCurrentView().showMessage("Nothing to grab here");
+            Client.getInstance().getCurrentView().showMessage("Nothing to grab here. Maybe you do not have enough ammos?");
             Client.getInstance().getConnection().validActions();
         } catch (Exception ex) {
             String error = ex.getMessage();

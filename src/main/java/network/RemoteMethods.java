@@ -468,6 +468,16 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             Square playerSquare = map.getPlayerPosition(player);
             if(playerSquare.isSpawnPoint()){
                 SpawnPoint spawnPoint = (SpawnPoint) playerSquare;
+                //check if you can grab anything
+                boolean canDraw = false;
+                for(WeaponCard weaponCard : spawnPoint.showCards()){
+                    if(weaponCard.canDraw(player.getAmmo(), player.getPowerUpList())){
+                        canDraw = true;
+                        break;
+                    }
+                }
+                if(!canDraw || spawnPoint.showCards().isEmpty()){ throw new NothingToGrabException(); }
+                //-
                 drawn = (WeaponCard) spawnPoint.getByName(drawn.name);
                 if(powerUpCard!=null){
                     powerUpCard = player.getPowerUpByName(powerUpCard.name, powerUpCard.color);
@@ -490,7 +500,6 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             return new ErrorResponse(e);
         }
         catch(NotEnoughAmmoException e){
-            match.turnEvent(TurnEvent.GRAB);
             e.printStackTrace();
             return new ErrorResponse(e);
         }
