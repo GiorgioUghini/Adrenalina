@@ -187,6 +187,7 @@ public class GameViewGUI implements Initializable, GameView {
 
     private int maxRunDistance;
     private boolean isShooting;
+    private boolean firstTurn = true;
 
     public GameViewGUI() {
         this.gameController = new GameController();
@@ -515,6 +516,8 @@ public class GameViewGUI implements Initializable, GameView {
         }else {
             setTurnEventButtons(actions.get(currentActionType));
         }
+
+        if(actions.isEmpty()) firstTurn = false;
     }
 
     private void setActionGroupButtons(Set<ActionType> groupActions){
