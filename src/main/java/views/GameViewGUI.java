@@ -506,7 +506,7 @@ public class GameViewGUI implements Initializable, GameView {
 
         setBtnEnabled(btnEndTurn, turnIsEnding);
         //this must be called before setTurnEventButtons or it breaks the frenzy reload
-        setBtnEnabled(btnReload, turnIsEnding);
+        setBtnEnabled(btnReload, !firstTurn && turnIsEnding);
 
         if(currentActionType==null){
             setActionGroupButtons(actions.keySet());
