@@ -641,7 +641,7 @@ public class GameViewGUI implements Initializable, GameView {
     private void drawPlayerToken(GridPane pane, Player p) {
         Circle circle = new Circle(0.0d,0.0d,17.0d);
         int i = Client.getInstance().getPlayers().indexOf(p);
-        circle.setFill(p.getPlayerColor());
+        circle.setFill(getPlayerColor(p.getStringColor()));
         final String t = p.getStringColor();
         tabPane.getTabs().get(i).setDisable(false);
         if (i == 0) {
@@ -717,7 +717,7 @@ public class GameViewGUI implements Initializable, GameView {
 
     private void deletePlayerToken(GridPane pane, Player player) {
         Circle circle1 = new Circle(0.0d,0.0d,17.0d);
-        circle1.setFill(player.getPlayerColor());
+        circle1.setFill(getPlayerColor(player.getStringColor()));
         for (int num = 0; pane.getChildren().size() > num; num++) {
             Node n = pane.getChildren().get(num);
             if (n.getClass() == circle1.getClass()) {
@@ -915,7 +915,7 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     void removeAllDamageOnPlayer(Player p) {
-        if (p.getPlayerColor() != null) {
+        if (getPlayerColor(p.getStringColor()) != null) {
             int index = getIndex(p.getStringColor());
             AnchorPane anchorPane = anchorPanePlayers.get(index);
             for (int i = 0; i<anchorPane.getChildren().size(); i++) {
@@ -931,14 +931,14 @@ public class GameViewGUI implements Initializable, GameView {
         //When drawing a circle, first arg is X, second is Y, third is radius. 138px is the height of where the circle must be placed
         //Then, for every new damage, the circle must be on same height but trasled on X.
         Circle c = new Circle((double) (107 + position * 54), 120d, 17d);
-        c.setFill(from.getPlayerColor());
+        c.setFill(getPlayerColor(from.getStringColor()));
         int index = getIndex(to.getStringColor());
         AnchorPane anchorPane = anchorPanePlayers.get(index);
         Platform.runLater( () -> anchorPane.getChildren().add(c));
     }
 
     void removeAllMarksOnPlayer(Player p) {
-        if (p.getPlayerColor() != null) {
+        if (getPlayerColor(p.getStringColor()) != null) {
             int index = getIndex(p.getStringColor());
             AnchorPane anchorPane = anchorPanePlayers.get(index);
             for (int i = 0; i<anchorPane.getChildren().size(); i++) {
@@ -954,7 +954,7 @@ public class GameViewGUI implements Initializable, GameView {
         //When drawing a circle, first arg is X, second is Y, third is radius. 138px is the height of where the circle must be placed
         //Then, for every new damage, the circle must be on same height but trasled on X.
         Rectangle rectangle = new Rectangle((470d+ position * 42),14d,27d,27d); //X,Y,L,H
-        rectangle.setFill(from.getPlayerColor());
+        rectangle.setFill(getPlayerColor(from.getStringColor()));
         int index = getIndex(to.getStringColor());
         AnchorPane anchorPane = anchorPanePlayers.get(index);
         Platform.runLater( () -> anchorPane.getChildren().add(rectangle));
@@ -1490,6 +1490,22 @@ public class GameViewGUI implements Initializable, GameView {
         setBtnEnabled(btnEndSelect, false);
         gameController.tagElement(selected, isShooting);
 
+    }
+
+    public Color getPlayerColor(String circleColor) {
+        switch (circleColor){
+            case "GREEN":
+                return Color.rgb(50, 190, 55);
+            case "BLUE":
+                return Color.rgb(25, 135, 235);
+            case "PURPLE":
+                return Color.rgb(180, 25, 225);
+            case "WHITE":
+                return Color.rgb(255, 242, 246);
+            case "YELLOW":
+                return Color.rgb(200, 180, 30);
+        }
+        return null;
     }
 
 

@@ -4,7 +4,6 @@ import errors.CheatException;
 import errors.NotEnoughAmmoException;
 import errors.TooManyCardsException;
 import errors.WeaponCardException;
-import javafx.scene.paint.Color;
 import models.Match;
 import models.card.*;
 import models.map.*;
@@ -37,28 +36,8 @@ public class Player implements Subscriber, Serializable, Taggable {
     private transient Match match;
     private String circleColor = null;
 
-    public Color getPlayerColor() {
-        switch (circleColor){
-            case "GREEN":
-                return Color.rgb(50, 190, 55);
-            case "BLUE":
-                return Color.rgb(25, 135, 235);
-            case "PURPLE":
-                return Color.rgb(180, 25, 225);
-            case "WHITE":
-                return Color.rgb(255, 242, 246);
-            case "YELLOW":
-                return Color.rgb(200, 180, 30);
-        }
-        return null;
-    }
-
     public void setPlayerColor(String playerColor) {
         this.circleColor = playerColor;
-    }
-
-    private boolean isSameColor(Color a, Color b) {
-        return ((a.getBlue() == b.getBlue()) && (a.getRed() == b.getRed()) && (a.getGreen() == b.getGreen()));
     }
 
     public String getStringColor() {
