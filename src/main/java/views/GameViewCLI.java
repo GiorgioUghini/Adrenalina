@@ -68,7 +68,7 @@ public class GameViewCLI implements GameView {
         for (Player p : client.getPlayers()) {
             try {
                 Coordinate c = map.getPlayerCoordinates(p);
-                Console.println(String.format("Player %s is on CELL%d%d", p.getStringColor(), c.getX(), c.getX()));
+                Console.println(String.format("Player %s is on CELL%d%d", p.getStringColor(), c.getX(), c.getY()));
             }
             catch (PlayerNotOnMapException e) {
                 //Nothing to do, just don't draw it.
