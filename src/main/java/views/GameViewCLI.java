@@ -22,6 +22,9 @@ public class GameViewCLI implements GameView {
     private int maxRunDistance;
     private HashMap<Integer, ActionType> buttonActionTypeMap = new HashMap<>();
     private boolean isShooting;
+    private boolean firstTurn = true;
+
+    private List<BaseActions> baseActions = new ArrayList<>();
 
     private Map<ViewAction, Boolean> canDoActionMap = new EnumMap<>(ViewAction.class);
 
@@ -195,44 +198,62 @@ public class GameViewCLI implements GameView {
     private void setActionGroupButtons(Set<ActionType> groupActions){
         if(groupActions.size() > 1 && Client.getInstance().getCurrentActionType()==null){
             for(ActionType groupAction : groupActions){
-                Console.println("Action group: " + groupAction.name());
+                switch (groupAction){
+                    case SHOOT_VERY_LOW_LIFE:
+                    case SHOOT_FRENZY_2:
+                    case SHOOT_FRENZY_1:
+                    case SHOOT_NORMAL:
+                        baseActions.add(BaseActions.SHOOT);
+                        break;
+                    case GRAB_LOW_LIFE:
+                    case GRAB_FRENZY_2:
+                    case GRAB_FRENZY_1:
+                    case GRAB_NORMAL:
+                        baseActions.add(BaseActions.GRAB);
+                        break;
+                    case RUN_FRENZY_1:
+                    case RUN_NORMAL:
+                        baseActions.add(BaseActions.RUN);
+                        break;
+                }
             }
         }
     }
 
     private void setTurnEventButtons(List<TurnEvent> turnEvents){
-        int i = 0;
         for (TurnEvent turnEvent : turnEvents) {
-            i++;
-            String buttonToShow = null;
+            BaseActions buttonToShow = null;
             switch (turnEvent) {
                 case DRAW:
-                    buttonToShow = "DRAW";
+                    buttonToShow = BaseActions.DRAW;
                     break;
                 case RUN_1:
                 case RUN_2:
                 case RUN_3:
                 case RUN_4:
                     this.maxRunDistance = Character.getNumericValue(turnEvent.toString().charAt(4));
-                    buttonToShow = "RUN " + maxRunDistance + " spaces";
+                    buttonToShow = BaseActions.RUN;
                     break;
                 case SHOOT:
-                    buttonToShow = "SHOOT";
+                    buttonToShow = BaseActions.SHOOT;
                     break;
                 case RELOAD:
-                    buttonToShow = "RELOAD";
+                    buttonToShow = BaseActions.RELOAD;
                     break;
                 case SPAWN:
                     if(turnEvents.size()==1){
-                        buttonToShow = "SPAWN";
+                        buttonToShow = BaseActions.SPAWN;
                     }
                     break;
                 case GRAB:
-                    buttonToShow = "GRAB";
+                    buttonToShow = BaseActions.GRAB;
                     break;
+                default:
             }
-            if (buttonToShow!=null)
-                setBtnEnabled(i + ") " + buttonToShow, true);
+            if(buttonToShow!=null){
+                baseActions.add(buttonToShow);
+            }
+
         }
     }
 
@@ -243,35 +264,42 @@ public class GameViewCLI implements GameView {
 
         boolean turnIsEnding = actions.isEmpty() && client.isMyTurn();
 
-        setBtnEnabled("End Turn", turnIsEnding);
+        if(turnIsEnding) baseActions.add(BaseActions.END_TURN);
         //this must be called before setTurnEventButtons or it breaks the frenzy reload
-        setBtnEnabled("Reload", turnIsEnding);
+        if(turnIsEnding && !firstTurn) baseActions.add(BaseActions.RELOAD);
 
         if(currentActionType==null){
             setActionGroupButtons(actions.keySet());
         } else {
             setTurnEventButtons(actions.get(currentActionType));
-
-            Console.print("Choose one: ");
-            int choose = Console.nextInt();
-            while ((choose > actions.get(currentActionType).size()) || choose<=0) {
-                Console.print("Number not valid. Choose one.");
-                choose = Console.nextInt();
-            }
-            actionChosen(actions.get(currentActionType).get(choose-1));
         }
+
+        int i = 1;
+        for(BaseActions baseAction : baseActions){
+            Console.println(i++ + " - " + baseAction.toString());
+        }
+        if(!baseActions.isEmpty()){
+            chooseAction();
+        }
+
     }
 
-    void actionChosen(TurnEvent te) {
-        switch (te) {
+    void chooseAction() {
+        Console.print("Choose one: ");
+        int i = Console.nextInt();
+        while ((i > baseActions.size()) || i<=0) {
+            Console.print("Number not valid. Choose one.");
+            i = Console.nextInt();
+        }
+        BaseActions chosenAction = baseActions.get(i-1);
+
+
+        switch (chosenAction) {
             case DRAW:
                 gameController.drawPowerUp();
                 gameController.getValidActions();
                 break;
-            case RUN_1:
-            case RUN_2:
-            case RUN_3:
-            case RUN_4:
+            case RUN:
                 break;
             case SHOOT:
                 break;
@@ -282,7 +310,11 @@ public class GameViewCLI implements GameView {
                 break;
             case GRAB:
                 break;
+            case END_TURN:
+                gameController.endTurn();
+                Console.println("Your turn ended!");
         }
+        baseActions.clear();
     }
 
     private void spawn() {
