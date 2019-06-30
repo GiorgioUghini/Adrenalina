@@ -230,6 +230,9 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                 else if(action.type == ActionType.DAMAGE){
                     for(Player damagedPlayer : player.getActiveWeapon().getPlayersToDamage().keySet()){
                         match.addUpdate(new DamageUpdate(damagedPlayer));
+                        if (damagedPlayer.getTotalDamage() == 12) {
+                            match.addUpdate(new MarkUpdate(damagedPlayer.getLastDamager()));
+                        }
                     }
                     long deadCount = player.getActiveWeapon().getPlayersToDamage().keySet().stream().filter(Player::isDead).count();
                     if(match.getSkullCount() + deadCount >= 8){
@@ -335,6 +338,9 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                 else if(action.type == ActionType.DAMAGE){
                     for(Player damagedPlayer : player.getActiveWeapon().getPlayersToDamage().keySet()){
                         match.addUpdate(new DamageUpdate(damagedPlayer));
+                        if (damagedPlayer.getTotalDamage() == 12) {
+                            match.addUpdate(new MarkUpdate(damagedPlayer.getLastDamager()));
+                        }
                     }
                     long deadCount = player.getActiveWeapon().getPlayersToDamage().keySet().stream().filter(Player::isDead).count();
                     if(match.getSkullCount() + deadCount >= 8){
@@ -388,6 +394,9 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                 else if(action.type == ActionType.DAMAGE){
                     for(Player damagedPlayer : player.getActivePowerUp().getPlayersToDamage().keySet()){
                         match.addUpdate(new DamageUpdate(damagedPlayer));
+                        if (damagedPlayer.getTotalDamage() == 12) {
+                            match.addUpdate(new MarkUpdate(damagedPlayer.getLastDamager()));
+                        }
                     }
                     long deadCount = player.getActivePowerUp().getPlayersToDamage().keySet().stream().filter(Player::isDead).count();
                     if(match.getSkullCount() + deadCount >= 8){
@@ -583,6 +592,9 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                 else if(action.type == ActionType.DAMAGE){
                     for(Player damagedPlayer : player.getActivePowerUp().getPlayersToDamage().keySet()){
                         match.addUpdate(new DamageUpdate(damagedPlayer));
+                        if (damagedPlayer.getTotalDamage() == 12) {
+                            match.addUpdate(new MarkUpdate(damagedPlayer.getLastDamager()));
+                        }
                     }
                     long deadCount = player.getActivePowerUp().getPlayersToDamage().keySet().stream().filter(Player::isDead).count();
                     if(match.getSkullCount() + deadCount >= 8){
