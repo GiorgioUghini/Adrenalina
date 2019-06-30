@@ -1,10 +1,7 @@
 package network;
 
 import controllers.ScreenController;
-import errors.InvalidInputException;
-import errors.NotEnoughAmmoException;
-import errors.NothingToGrabException;
-import errors.WeaponCardException;
+import errors.*;
 import models.card.LegitEffects;
 import models.player.Player;
 import models.turn.ActionType;

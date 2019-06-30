@@ -286,6 +286,11 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             Server.getInstance().getConnection().getConnectionWrapper(token).addUpdate(new PlayerUpdate(player));
             return new CardEffectsResponse(legitEffects);
         }
+        catch (UnloadedWeaponException ex){
+            Server.getInstance().getLobby().getMatch(token).turnEvent(TurnEvent.SHOOT);
+            ex.printStackTrace();
+            return new ErrorResponse(ex);
+        }
         catch (Exception ex){
             ex.printStackTrace();
             return new ErrorResponse(ex);

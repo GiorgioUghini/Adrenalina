@@ -1,7 +1,6 @@
 package models.card;
 
 import controllers.CardController;
-import controllers.GameController;
 import models.map.*;
 import models.player.Ammo;
 import models.player.Player;

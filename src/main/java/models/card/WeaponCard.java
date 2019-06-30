@@ -2,6 +2,7 @@ package models.card;
 
 import errors.NoActiveEffectException;
 import errors.NotEnoughAmmoException;
+import errors.UnloadedWeaponException;
 import errors.WeaponCardException;
 import models.player.Ammo;
 import models.player.Player;
@@ -78,13 +79,13 @@ public class WeaponCard extends EffectCard {
     /** If the card is loaded, activate it and unload it
      * @param me the player who is going to use the card
      * @throws WeaponCardException if the weapon is already active
-     * @throws WeaponCardException if the weapon is not loaded
+     * @throws UnloadedWeaponException if the weapon is not loaded
      * @throws NullPointerException if player is null */
     @Override
     public void activate(Player me){
         if(me==null) throw new NullPointerException("Player cannot be null");
         if(activated) throw new WeaponCardException("Weapon is already active");
-        if(!isLoaded()) throw new WeaponCardException("The weapon is not loaded, cannot activate");
+        if(!isLoaded()) throw new UnloadedWeaponException();
         this.activated = true;
         this.loaded = false;
         this.gameMap = me.getGameMap();
