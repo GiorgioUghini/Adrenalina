@@ -155,12 +155,18 @@ public class GameViewCLI implements GameView {
         }
     }
 
-    private PowerUpCard choosePowerUpDialog() {
+    /** This should be used to pay */
+    private PowerUpCard choosePowerUpDialog(){
+        return choosePowerUpDialog(null, null);
+    }
+
+    private PowerUpCard choosePowerUpDialog(String title, List<PowerUpCard> powerUpCards) {
         if(Client.getInstance().getPlayer().getPowerUpList().isEmpty()) return null;
-        Console.println("Do you want to use a power up to pay for this action?");
+        if(title == null) title = "Do you want to use a power up to pay for this action?";
+        Console.println(title);
 
         Player me = Client.getInstance().getPlayer();
-        List<PowerUpCard> powerUpCards = me.getPowerUpList();
+        if(powerUpCards == null) powerUpCards = me.getPowerUpList();
 
         int i = 0;
         for (; i<powerUpCards.size(); i++) {
@@ -352,6 +358,22 @@ public class GameViewCLI implements GameView {
         }
         //UPDATE SKULLS IN MAIN PANE
         addSkullsOnMainPane(damagedPlayer);
+
+        Player me = Client.getInstance().getPlayer();
+        if(damagedPlayer.equals(me)){
+            List<PowerUpCard> playable = new ArrayList<>();
+            for(PowerUpCard powerUpCard : me.getPowerUpList()){
+                if(powerUpCard.when.equals("on_damage_received")){
+                    playable.add(powerUpCard);
+                }
+            }
+            if(playable.isEmpty()) return;
+            if(me.getLastDamager()==null) return;
+            PowerUpCard powerUpCard = choosePowerUpDialog("You have been damaged by " + me.getLastDamager().getName() + " would you like to mark him?", playable);
+            if(powerUpCard!=null){
+                Client.getInstance().getConnection().playPowerUp(powerUpCard.name, null, null);
+            }
+        }
     }
 
     @Override
