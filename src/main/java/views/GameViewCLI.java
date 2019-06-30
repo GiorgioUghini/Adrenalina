@@ -25,22 +25,14 @@ public class GameViewCLI implements GameView {
     private boolean firstTurn = true;
 
     private List<BaseActions> baseActions = new ArrayList<>();
-
-    private Map<ViewAction, Boolean> canDoActionMap = new EnumMap<>(ViewAction.class);
+    private Map<BaseActions, ActionType> actionTypeMap;
 
     public GameController gameController;
 
     public GameViewCLI() {
         printMapNum(Client.getInstance().getMapNum());
         this.gameController = new GameController();
-        canDoActionMap.put(ViewAction.USEPOWERUP, false);
-        canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
-        canDoActionMap.put(ViewAction.CHOOSESPAWNPOINTWEAPON, false);
-        canDoActionMap.put(ViewAction.SHOOT, false);
-        canDoActionMap.put(ViewAction.SELECTPLAYER, false);
-        canDoActionMap.put(ViewAction.SELECTROOM, false);
-        canDoActionMap.put(ViewAction.SELECTSQUARE, false);
-        canDoActionMap.put(ViewAction.RUN, false);
+        actionTypeMap = new EnumMap<>(BaseActions.class);
         getValidActions();
     }
 
@@ -196,6 +188,7 @@ public class GameViewCLI implements GameView {
     }
 
     private void setActionGroupButtons(Set<ActionType> groupActions){
+        Console.println("--> "+groupActions.toString());
         if(groupActions.size() > 1 && Client.getInstance().getCurrentActionType()==null){
             for(ActionType groupAction : groupActions){
                 switch (groupAction){
@@ -204,16 +197,19 @@ public class GameViewCLI implements GameView {
                     case SHOOT_FRENZY_1:
                     case SHOOT_NORMAL:
                         baseActions.add(BaseActions.SHOOT);
+                        actionTypeMap.put(BaseActions.SHOOT, groupAction);
                         break;
                     case GRAB_LOW_LIFE:
                     case GRAB_FRENZY_2:
                     case GRAB_FRENZY_1:
                     case GRAB_NORMAL:
                         baseActions.add(BaseActions.GRAB);
+                        actionTypeMap.put(BaseActions.GRAB, groupAction);
                         break;
                     case RUN_FRENZY_1:
                     case RUN_NORMAL:
                         baseActions.add(BaseActions.RUN);
+                        actionTypeMap.put(BaseActions.RUN, groupAction);
                         break;
                 }
             }
@@ -262,6 +258,8 @@ public class GameViewCLI implements GameView {
         Client client = Client.getInstance();
         ActionType currentActionType = client.getCurrentActionType();
 
+        Console.println("--> Current action type: " + currentActionType);
+
         boolean turnIsEnding = actions.isEmpty() && client.isMyTurn();
 
         if(turnIsEnding) baseActions.add(BaseActions.END_TURN);
@@ -292,7 +290,7 @@ public class GameViewCLI implements GameView {
             i = Console.nextInt();
         }
         BaseActions chosenAction = baseActions.get(i-1);
-
+        ActionType currentActionType = Client.getInstance().getCurrentActionType();
 
         switch (chosenAction) {
             case DRAW:
@@ -300,8 +298,24 @@ public class GameViewCLI implements GameView {
                 gameController.getValidActions();
                 break;
             case RUN:
+                if(currentActionType == null){
+                    ActionType actionType = actionTypeMap.get(chosenAction);
+                    Client.getInstance().setCurrentActionType(actionType);
+                    Client.getInstance().getConnection().action(actionType);
+                    actionTypeMap.clear();
+                }else{
+                    //run
+                }
                 break;
             case SHOOT:
+                if(currentActionType == null){
+                    ActionType actionType = actionTypeMap.get(chosenAction);
+                    Client.getInstance().setCurrentActionType(actionType);
+                    Client.getInstance().getConnection().action(actionType);
+                    actionTypeMap.clear();
+                }else{
+                    //shoot()
+                }
                 break;
             case RELOAD:
                 break;
@@ -309,6 +323,17 @@ public class GameViewCLI implements GameView {
                 spawn();
                 break;
             case GRAB:
+                Console.println("--> Grab chosen");
+                if(currentActionType == null){
+                    Console.println("--> Current action type is null");
+                    ActionType actionType = actionTypeMap.get(chosenAction);
+                    Client.getInstance().setCurrentActionType(actionType);
+                    Client.getInstance().getConnection().action(actionType);
+                    actionTypeMap.clear();
+                }else{
+                    Console.println("--> Current action type is NOT null. its value: " + currentActionType.toString());
+                    grab();
+                }
                 break;
             case END_TURN:
                 gameController.endTurn();
@@ -445,6 +470,47 @@ public class GameViewCLI implements GameView {
         }
     }
 
+    private void grab(){
+        Client client = Client.getInstance();
+        GameMap gameMap = client.getMap();
+        Player me = client.getPlayer();
+
+        Square mySquare = gameMap.getPlayerPosition(me);
+        if(mySquare.isSpawnPoint()){
+            SpawnPoint spawnPoint = (SpawnPoint) mySquare;
+            int i = 1;
+            Console.println("Which weapon do you want to draw?");
+            for(WeaponCard weaponCard : spawnPoint.showCards()){
+                Console.println(i++ + " " + weaponCard.name + ", price: " + weaponCard.drawPrice);
+            }
+            int result = readConsole(spawnPoint.showCards().size());
+            WeaponCard toDraw = spawnPoint.showCards().get(result);
+            PowerUpCard powerUpToPay = null;
+            WeaponCard toRelease = null;
+            if(!toDraw.drawPrice.isEmpty()){
+                powerUpToPay = choosePowerUpDialog();
+            }
+            if(me.getWeaponList().size() == 3){
+                Console.println("You have to leave one of your weapons to draw this one");
+                toRelease = chooseWeaponDialog(me.getWeaponList());
+            }
+            gameController.grab(toDraw, toRelease, powerUpToPay);
+        }else{
+            gameController.grab(null, null, null);
+        }
+        gameController.getValidActions();
+    }
+
+    private WeaponCard chooseWeaponDialog(List<WeaponCard> weaponCards){
+        Console.println("Choose a weapon:");
+        int i = 1;
+        for(WeaponCard weaponCard : weaponCards){
+            Console.println(i++ + ") " + weaponCard.name);
+        }
+        int result = readConsole(weaponCards.size());
+        return weaponCards.get(result);
+    }
+
     private WeaponCard actualWC = null;
     public void setActualWC(WeaponCard wc) {
         this.actualWC = wc;
@@ -549,5 +615,14 @@ public class GameViewCLI implements GameView {
             case PURPLE: return COLOR.PURPLE;
             default: return null;
         }
+    }
+
+    private int readConsole(int max){
+        int x = Console.nextInt();
+        while(x<1 || x > max){
+            Console.println("Invalid input. Try again:");
+            x = Console.nextInt();
+        }
+        return x-1;
     }
 }

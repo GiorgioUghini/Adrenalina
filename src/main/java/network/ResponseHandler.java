@@ -124,7 +124,6 @@ public class ResponseHandler implements ResponseHandlerInterface {
         client.setMyTurn(response.name.equals(client.getPlayerUsername()));
         try {
             ((GameView)client.getCurrentView()).startTurn(response.name);
-            ((GameView) Client.getInstance().getCurrentView()).getValidActions();
         } catch (Exception e) {
             Client.getInstance();
         }
