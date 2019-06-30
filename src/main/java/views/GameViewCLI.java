@@ -273,7 +273,7 @@ public class GameViewCLI implements GameView {
         if(!baseActions.isEmpty()){
             chooseAction();
         }
-
+        if(actions.isEmpty()) firstTurn = false;
     }
 
     void chooseAction() {
@@ -312,6 +312,7 @@ public class GameViewCLI implements GameView {
                 }
                 break;
             case RELOAD:
+                reload();
                 break;
             case SPAWN:
                 spawn();
@@ -482,6 +483,50 @@ public class GameViewCLI implements GameView {
         setActualWC(chosen);
         isShooting = true;
         continueWeapon();
+    }
+
+    private void reload(){
+        Player me = Client.getInstance().getPlayer();
+        if(getLoadedWeapons(me).size() == me.getWeaponList().size()){
+            showMessage("Nothing to reload");
+        }else{
+            List<WeaponCard> reloadableWeapons;
+            Map<WeaponCard, PowerUpCard> reloads = new HashMap<>();
+            while(!(reloadableWeapons= getReloadableWeapons(me)).isEmpty()){
+                Console.println("Choose which weapon you want to reload: ");
+                int i = 1;
+                for(WeaponCard weaponCard : reloadableWeapons){
+                    Console.println(i++ + ") " + weaponCard.getName() + ", price: " + weaponCard.getReloadPrice());
+                }
+                Console.println(i + ") Nothing");
+                int result = readConsole(i);
+                if(result == reloadableWeapons.size()){
+                    break;
+                }
+                WeaponCard toReload = reloadableWeapons.get(result);
+                PowerUpCard toPay = null;
+                if(!me.getPowerUpList().isEmpty()){
+                    toPay = choosePowerUpDialog();
+                }
+                reloads.put(toReload, toPay);
+                me.reloadWeapon(toReload, toPay);
+            }
+            if(reloadableWeapons.isEmpty()) {
+                showMessage("You cannot reload anything else");
+            }
+            Client.getInstance().getConnection().reload(reloads);
+        }
+        gameController.getValidActions();
+    }
+
+    private List<WeaponCard> getReloadableWeapons(Player player){
+        List<WeaponCard> reloadable = new ArrayList<>();
+        for(WeaponCard weaponCard : player.getWeaponList()){
+            if(!weaponCard.isLoaded() && weaponCard.canReload(player.getAmmo(), player.getPowerUpList())){
+                reloadable.add(weaponCard);
+            }
+        }
+        return reloadable;
     }
 
     private boolean canShoot(){
