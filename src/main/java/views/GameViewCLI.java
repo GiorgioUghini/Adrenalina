@@ -22,22 +22,17 @@ public class GameViewCLI implements GameView {
     private int maxRunDistance;
     private HashMap<Integer, ActionType> buttonActionTypeMap = new HashMap<>();
     private boolean isShooting;
+    private boolean firstTurn = true;
 
-    private Map<ViewAction, Boolean> canDoActionMap = new EnumMap<>(ViewAction.class);
+    private List<BaseActions> baseActions = new ArrayList<>();
+    private Map<BaseActions, ActionType> actionTypeMap;
 
     public GameController gameController;
 
     public GameViewCLI() {
         printMapNum(Client.getInstance().getMapNum());
         this.gameController = new GameController();
-        canDoActionMap.put(ViewAction.USEPOWERUP, false);
-        canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
-        canDoActionMap.put(ViewAction.CHOOSESPAWNPOINTWEAPON, false);
-        canDoActionMap.put(ViewAction.SHOOT, false);
-        canDoActionMap.put(ViewAction.SELECTPLAYER, false);
-        canDoActionMap.put(ViewAction.SELECTROOM, false);
-        canDoActionMap.put(ViewAction.SELECTSQUARE, false);
-        canDoActionMap.put(ViewAction.RUN, false);
+        actionTypeMap = new EnumMap<>(BaseActions.class);
         getValidActions();
     }
 
@@ -100,6 +95,7 @@ public class GameViewCLI implements GameView {
 
     @Override
     public void updatePlayerView(Player newPlayer) {
+        Client.getInstance().setPlayer(newPlayer);
         //UPDATE AMMO
         Ammo myAmmo = newPlayer.getAmmo();
         Console.print("\nAMMO: You have ");
@@ -139,34 +135,39 @@ public class GameViewCLI implements GameView {
     public void effectChoosingDialog(LegitEffects legitEffects) {
         Console.println("Which effect do you want to use now?");
 
-        int i = 0;
-        for (; i<legitEffects.getLegitEffects().size(); i++) {
-            Effect effect = legitEffects.getLegitEffects().get(i);
-            Console.println(String.format("%d) %s", i, effect.name));
+        int i = 1;
+        int effectsNumber = legitEffects.getLegitEffects().size();
+        for (Effect effect : legitEffects.getLegitEffects()) {
+            Console.println(String.format("%d) %s", i++, effect.name));
         }
         Console.println(i + ") I don't want to use any effect. ");
-        Console.println("Choose one.");
-        int choose = Console.nextInt();
-        while ((choose > legitEffects.getLegitEffects().size()) || choose<0) {
-            Console.print("Number not valid. Choose one.");
-            choose = Console.nextInt();
-        }
+        int choose = readConsole(i);
 
-        if (choose == legitEffects.getLegitEffects().size()) {
+        if (choose == effectsNumber) {
             gameController.finishCard();
         } else {
-            //Would you like to pay with power up?
-            PowerUpCard toPay = choosePowerUpDialog();
-            gameController.playEffect(legitEffects.getLegitEffects().get(choose), toPay);
+            Effect chosenEffect = legitEffects.getLegitEffects().get(choose);
+            PowerUpCard toPay = null;
+            if(!chosenEffect.price.isEmpty()){
+                //Would you like to pay with power up?
+                toPay = choosePowerUpDialog();
+            }
+            gameController.playEffect(chosenEffect, toPay);
         }
     }
 
-    private PowerUpCard choosePowerUpDialog() {
+    /** This should be used to pay */
+    private PowerUpCard choosePowerUpDialog(){
+        return choosePowerUpDialog(null, null);
+    }
+
+    private PowerUpCard choosePowerUpDialog(String title, List<PowerUpCard> powerUpCards) {
         if(Client.getInstance().getPlayer().getPowerUpList().isEmpty()) return null;
-        Console.println("Do you want to use a power up to pay for this action?");
+        if(title == null) title = "Do you want to use a power up to pay for this action?";
+        Console.println(title);
 
         Player me = Client.getInstance().getPlayer();
-        List<PowerUpCard> powerUpCards = me.getPowerUpList();
+        if(powerUpCards == null) powerUpCards = me.getPowerUpList();
 
         int i = 0;
         for (; i<powerUpCards.size(); i++) {
@@ -186,108 +187,169 @@ public class GameViewCLI implements GameView {
         return powerUpCards.get(choose);
     }
 
-    private void setBtnEnabled(String string, boolean isVisible){
-        if (string != null && isVisible) {
-            Console.println("You can " + string);
-        }
-    }
-
     private void setActionGroupButtons(Set<ActionType> groupActions){
         if(groupActions.size() > 1 && Client.getInstance().getCurrentActionType()==null){
             for(ActionType groupAction : groupActions){
-                Console.println("Action group: " + groupAction.name());
+                switch (groupAction){
+                    case SHOOT_VERY_LOW_LIFE:
+                    case SHOOT_FRENZY_2:
+                    case SHOOT_FRENZY_1:
+                    case SHOOT_NORMAL:
+                        if(canShoot()){
+                            baseActions.add(BaseActions.SHOOT);
+                            actionTypeMap.put(BaseActions.SHOOT, groupAction);
+                        }
+                        break;
+                    case GRAB_LOW_LIFE:
+                    case GRAB_FRENZY_2:
+                    case GRAB_FRENZY_1:
+                    case GRAB_NORMAL:
+                        baseActions.add(BaseActions.GRAB);
+                        actionTypeMap.put(BaseActions.GRAB, groupAction);
+                        break;
+                    case RUN_FRENZY_1:
+                    case RUN_NORMAL:
+                        baseActions.add(BaseActions.RUN);
+                        actionTypeMap.put(BaseActions.RUN, groupAction);
+                        break;
+                }
             }
         }
     }
 
     private void setTurnEventButtons(List<TurnEvent> turnEvents){
-        int i = 0;
         for (TurnEvent turnEvent : turnEvents) {
-            i++;
-            String buttonToShow = null;
+            BaseActions buttonToShow = null;
             switch (turnEvent) {
                 case DRAW:
-                    buttonToShow = "DRAW";
+                    buttonToShow = BaseActions.DRAW;
                     break;
                 case RUN_1:
                 case RUN_2:
                 case RUN_3:
                 case RUN_4:
                     this.maxRunDistance = Character.getNumericValue(turnEvent.toString().charAt(4));
-                    buttonToShow = "RUN " + maxRunDistance + " spaces";
+                    buttonToShow = BaseActions.RUN;
                     break;
                 case SHOOT:
-                    buttonToShow = "SHOOT";
+                    buttonToShow = BaseActions.SHOOT;
                     break;
                 case RELOAD:
-                    buttonToShow = "RELOAD";
+                    buttonToShow = BaseActions.RELOAD;
                     break;
                 case SPAWN:
                     if(turnEvents.size()==1){
-                        buttonToShow = "SPAWN";
+                        buttonToShow = BaseActions.SPAWN;
                     }
                     break;
                 case GRAB:
-                    buttonToShow = "GRAB";
+                    buttonToShow = BaseActions.GRAB;
                     break;
+                default:
             }
-            if (buttonToShow!=null)
-                setBtnEnabled(i + ") " + buttonToShow, true);
+            if(buttonToShow!=null){
+                baseActions.add(buttonToShow);
+            }
+
         }
     }
 
     @Override
-    public void updateActions(Map<ActionType, List<TurnEvent>> actions) {
+    public synchronized void updateActions(Map<ActionType, List<TurnEvent>> actions) {
         Client client = Client.getInstance();
         ActionType currentActionType = client.getCurrentActionType();
 
         boolean turnIsEnding = actions.isEmpty() && client.isMyTurn();
 
-        setBtnEnabled("End Turn", turnIsEnding);
+        if(turnIsEnding) baseActions.add(BaseActions.END_TURN);
         //this must be called before setTurnEventButtons or it breaks the frenzy reload
-        setBtnEnabled("Reload", turnIsEnding);
+        if(turnIsEnding && !firstTurn) baseActions.add(BaseActions.RELOAD);
 
         if(currentActionType==null){
             setActionGroupButtons(actions.keySet());
+            if(actions.size()!=1  && Client.getInstance().isMyTurn() && !firstTurn){
+                baseActions.add(BaseActions.USE_POWERUP);
+            }
         } else {
             setTurnEventButtons(actions.get(currentActionType));
-
-            Console.print("Choose one: ");
-            int choose = Console.nextInt();
-            while ((choose > actions.get(currentActionType).size()) || choose<=0) {
-                Console.print("Number not valid. Choose one.");
-                choose = Console.nextInt();
-            }
-            actionChosen(actions.get(currentActionType).get(choose-1));
         }
+
+        int i = 1;
+        for(BaseActions baseAction : baseActions){
+            Console.println(i++ + " - " + baseAction.toString());
+        }
+        if(!baseActions.isEmpty()){
+            chooseAction();
+        }
+        if(actions.isEmpty()) firstTurn = false;
     }
 
-    void actionChosen(TurnEvent te) {
-        switch (te) {
+    void chooseAction() {
+        Console.print("\nChoose one: ");
+        int choice = readConsole(baseActions.size());
+        BaseActions chosenAction = baseActions.get(choice);
+        ActionType currentActionType = Client.getInstance().getCurrentActionType();
+
+        switch (chosenAction) {
             case DRAW:
                 gameController.drawPowerUp();
                 gameController.getValidActions();
                 break;
-            case RUN_1:
-            case RUN_2:
-            case RUN_3:
-            case RUN_4:
+            case RUN:
+                if(currentActionType == null){
+                    ActionType actionType = actionTypeMap.get(chosenAction);
+                    Client.getInstance().setCurrentActionType(actionType);
+                    Client.getInstance().getConnection().action(actionType);
+                    actionTypeMap.clear();
+                }else{
+                    run();
+                }
                 break;
             case SHOOT:
+                if(currentActionType == null){
+                    ActionType actionType = actionTypeMap.get(chosenAction);
+                    Client.getInstance().setCurrentActionType(actionType);
+                    Client.getInstance().getConnection().action(actionType);
+                    actionTypeMap.clear();
+                }else{
+                    shoot();
+                }
                 break;
             case RELOAD:
+                reload();
                 break;
             case SPAWN:
                 spawn();
                 break;
             case GRAB:
+                if(currentActionType == null){
+                    ActionType actionType = actionTypeMap.get(chosenAction);
+                    Client.getInstance().setCurrentActionType(actionType);
+                    Client.getInstance().getConnection().action(actionType);
+                    actionTypeMap.clear();
+                }else{
+                    grab();
+                }
                 break;
+            case USE_POWERUP:
+                playPowerUp();
+                break;
+            case END_TURN:
+                gameController.endTurn();
+                Console.println("Your turn ended!");
         }
+        baseActions.clear();
     }
 
     private void spawn() {
-        Console.print("Discard a powerup. Select a number, starting from 1: ");
-        PowerUpCard powerUpCard = Client.getInstance().getPlayer().getPowerUpList().get(Console.nextInt()-1);
+        Console.println("Choose a powerup to discard and spawn: ");
+        Player me = Client.getInstance().getPlayer();
+        int i = 1;
+        for(PowerUpCard powerUpCard : me.getPowerUpList()){
+            Console.println(i++ + ") " + powerUpCard.getFullName());
+        }
+        int choice = readConsole(me.getPowerUpList().size());
+        PowerUpCard powerUpCard = me.getPowerUpList().get(choice);
         gameController.spawn(powerUpCard);
     }
 
@@ -300,6 +362,22 @@ public class GameViewCLI implements GameView {
         }
         //UPDATE SKULLS IN MAIN PANE
         addSkullsOnMainPane(damagedPlayer);
+
+        Player me = Client.getInstance().getPlayer();
+        if(damagedPlayer.equals(me)){
+            List<PowerUpCard> playable = new ArrayList<>();
+            for(PowerUpCard powerUpCard : me.getPowerUpList()){
+                if(powerUpCard.when.equals("on_damage_received")){
+                    playable.add(powerUpCard);
+                }
+            }
+            if(playable.isEmpty()) return;
+            if(me.getLastDamager()==null) return;
+            PowerUpCard powerUpCard = choosePowerUpDialog("You have been damaged by " + me.getLastDamager().getName() + " would you like to mark him?", playable);
+            if(powerUpCard!=null){
+                Client.getInstance().getConnection().playPowerUp(powerUpCard.name, null, null);
+            }
+        }
     }
 
     @Override
@@ -333,84 +411,242 @@ public class GameViewCLI implements GameView {
 
     @Override
     public void setTextAndEnableBtnActionGroup(ActionType actionType, int btnNum) {
-        switch (btnNum) {
-            case 1:
-                setBtnEnabled(actionType.name(), true);
-                buttonActionTypeMap.put(1, actionType);
-                break;
-            case 2:
-                setBtnEnabled(actionType.name(), true);
-                buttonActionTypeMap.put(2, actionType);
-                break;
-            case 3:
-                setBtnEnabled(actionType.name(), true);
-                buttonActionTypeMap.put(3, actionType);
-                break;
-        }
+
     }
 
     @Override
     public void selectTag(Selectable selectable) {
-        switch (selectable.getType()) {
-            case ROOM:
-                Console.println("Please select a ROOM: ");
-                int i = 0;
-                ArrayList<Taggable> selectables1 = new ArrayList<>(selectable.get());
-                for (; i<selectables1.size(); i++) {
-                    Taggable t = selectables1.get(i);
-                    Console.println(String.format("%d) Room %s", i, ((RoomColor) t).name()));
-                }
-                Console.println(i + ") I don't want to select nothing. ");
-
-                int choose1 = Console.nextInt();
-                if (choose1 == i) {
-                    gameController.tagElement(null, isShooting);
-                } else {
-                    RoomColor rc = (RoomColor) selectables1.get(choose1);
-                    //Implement from scratch
-                    gameController.tagElement(rc, isShooting);
-                }
-                break;
-
-            case PLAYER:
-                showMessage("Please select a PLAYER: ");
-                int j = 0;
-                ArrayList<Taggable> selectables2 = new ArrayList<>(selectable.get());
-                for (; j<selectables2.size(); j++) {
-                    Taggable t = selectables2.get(j);
-                    Console.println(String.format("%d) Player %s", j, ((Player) t).getStringColor()));
-                }
-                Console.println(j + ") I don't want to select nothing. ");
-                int choose2 = Console.nextInt();
-                if (choose2 == j) {
-                    gameController.tagElement(null, isShooting);
-                } else {
-                    Player p = (Player) selectables2.get(choose2);
-                    gameController.tagElement(p, isShooting);
-                }
-                break;
-
-
-            case SQUARE:
-                showMessage("Please click on a SQUARE: ");
-                int k = 0;
-                ArrayList<Taggable> selectables3 = new ArrayList<>(selectable.get());
-                for (; k<selectables3.size(); k++) {
-                    Taggable t = selectables3.get(k);
-                    Square s = (Square) t;
-                    Coordinate c = Client.getInstance().getMap().getSquareCoordinates(s);
-                    Console.println(String.format("%d) CELL%d%d", k, c.getX(), c.getY()));
-                }
-                Console.println(k + ") Don't want to select nothing. ");
-                int choose3 = Console.nextInt();
-                if (choose3 == k) {
-                    gameController.tagElement(null, isShooting);
-                } else {
-                    Square s = (Square) selectables3.get(choose3);
-                    gameController.tagElement(s, isShooting);
-                }
-                break;
+        Console.println("Please select a " + selectable.getType());
+        List<Taggable> taggables = new ArrayList<>(selectable.get());
+        int i = 1;
+        int max = taggables.size();
+        for(Taggable taggable : taggables){
+            String tag = null;
+            switch (selectable.getType()){
+                case ROOM:
+                    tag = taggable.toString();
+                    break;
+                case SQUARE:
+                    Coordinate c = Client.getInstance().getMap().getSquareCoordinates((Square) taggable);
+                    tag = "CELL " + c.getX() + c.getY();
+                    break;
+                case PLAYER:
+                    tag = ((Player) taggable).getStringColor();
+            }
+            Console.println(i++ + ") " + tag);
         }
+        if(selectable.isOptional()){
+            Console.println(i + ") Nothing");
+            max++;
+        }
+        int result = readConsole(max);
+        if(result == taggables.size()){
+            gameController.tagElement(null, isShooting);
+        }else{
+            Taggable tagged = taggables.get(result);
+            gameController.tagElement(tagged, isShooting);
+        }
+    }
+
+    private void grab(){
+        Client client = Client.getInstance();
+        GameMap gameMap = client.getMap();
+        Player me = client.getPlayer();
+
+        Square mySquare = gameMap.getPlayerPosition(me);
+        if(mySquare.isSpawnPoint()){
+            SpawnPoint spawnPoint = (SpawnPoint) mySquare;
+            int i = 1;
+            Console.println("Which weapon do you want to draw?");
+            for(WeaponCard weaponCard : spawnPoint.showCards()){
+                Console.println(i++ + " " + weaponCard.name + ", price: " + weaponCard.drawPrice);
+            }
+            int result = readConsole(spawnPoint.showCards().size());
+            WeaponCard toDraw = spawnPoint.showCards().get(result);
+            PowerUpCard powerUpToPay = null;
+            WeaponCard toRelease = null;
+            if(!toDraw.drawPrice.isEmpty()){
+                powerUpToPay = choosePowerUpDialog();
+            }
+            if(me.getWeaponList().size() == 3){
+                Console.println("You have to leave one of your weapons to draw this one");
+                toRelease = chooseWeaponDialog(me.getWeaponList());
+            }
+            gameController.grab(toDraw, toRelease, powerUpToPay);
+        }else{
+            gameController.grab(null, null, null);
+        }
+    }
+
+    private void run(){
+        Client client = Client.getInstance();
+        GameMap gameMap = client.getMap();
+        Player me = client.getPlayer();
+        Square myPosition = gameMap.getPlayerPosition(me);
+        Set<Square> runnableSet = gameMap.getAllSquaresAtDistanceLessThanOrEquals(myPosition, maxRunDistance);
+        List<Square> runnableList = new ArrayList<>(runnableSet);
+        Console.println("Where do you want to go?");
+        int i = 1;
+        for(Square s : runnableList){
+            Coordinate c = gameMap.getSquareCoordinates(s);
+            Console.println(i++ + ") CELL " + c.getX() + c.getY());
+        }
+        int result = readConsole(runnableList.size());
+        Square selected = runnableList.get(result);
+        TurnEvent te = Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType()).get(0);
+        gameController.run(te, selected);
+    }
+
+    private void shoot(){
+        //if you are here you surely have at least one loaded weapon.
+        Client client = Client.getInstance();
+        GameMap gameMap = client.getMap();
+        Player me = client.getPlayer();
+
+        List<WeaponCard> loadedWeapons = getLoadedWeapons(me);
+        Console.println("Only the loaded weapons are shown.");
+        WeaponCard chosen = chooseWeaponDialog(loadedWeapons);
+        setActualWC(chosen);
+        isShooting = true;
+        continueWeapon();
+    }
+
+    private void reload(){
+        Player me = Client.getInstance().getPlayer();
+        if(getLoadedWeapons(me).size() == me.getWeaponList().size()){
+            showMessage("Nothing to reload");
+        }else{
+            List<WeaponCard> reloadableWeapons;
+            Map<WeaponCard, PowerUpCard> reloads = new HashMap<>();
+            while(!(reloadableWeapons= getReloadableWeapons(me)).isEmpty()){
+                Console.println("Choose which weapon you want to reload: ");
+                int i = 1;
+                for(WeaponCard weaponCard : reloadableWeapons){
+                    Console.println(i++ + ") " + weaponCard.getName() + ", price: " + weaponCard.getReloadPrice());
+                }
+                Console.println(i + ") Nothing");
+                int result = readConsole(i);
+                if(result == reloadableWeapons.size()){
+                    break;
+                }
+                WeaponCard toReload = reloadableWeapons.get(result);
+                PowerUpCard toPay = null;
+                if(!me.getPowerUpList().isEmpty()){
+                    toPay = choosePowerUpDialog();
+                }
+                reloads.put(toReload, toPay);
+                me.reloadWeapon(toReload, toPay);
+            }
+            if(reloadableWeapons.isEmpty()) {
+                showMessage("You cannot reload anything else");
+            }
+            Client.getInstance().getConnection().reload(reloads);
+        }
+        gameController.getValidActions();
+    }
+
+    private void playPowerUp() {
+        Player me = Client.getInstance().getPlayer();
+        List<PowerUpCard> selectablePowerUps = getPlayablePowerUps(me);
+        if(selectablePowerUps.isEmpty()){
+            showMessage("You cannot play any powerUp");
+        }else{
+            PowerUpCard powerUpCard = choosePowerUpDialog("Which powerup do you want to use?", selectablePowerUps);
+            Ammo ammoToPay = null;
+            PowerUpCard powerUpToPay = null;
+            if(powerUpCard!=null){
+                if(powerUpCard.hasPrice()){
+                    ammoToPay = chooseOneAmmoDialog(me);
+                    if(ammoToPay == null){
+                        List<PowerUpCard> powerUpsToPay = me.getPowerUpList();
+                        powerUpsToPay.remove(powerUpCard);
+                        powerUpToPay = choosePowerUpDialog("Choose a powerUp to pay", powerUpsToPay);
+                        if(powerUpToPay==null) {
+                            showMessage("You must pay to use this powerUp");
+                            gameController.getValidActions();
+                            return;
+                        }
+                    }
+                }
+                isShooting = false;
+                gameController.playPowerUp(powerUpCard, ammoToPay, powerUpToPay);
+            }
+        }
+        gameController.getValidActions();
+    }
+
+    /** Shows all ammo colors of which you have at least one cube and an option to pay with a powerup instead */
+    private Ammo chooseOneAmmoDialog(Player player) {
+        Ammo myAmmo = player.getAmmo();
+        if(myAmmo.isEmpty()) return null;
+        Console.println("Choose one ammo cube of any color:");
+        List<String> options = new ArrayList<>();
+        if(myAmmo.red>0)options.add("Red");
+        if(myAmmo.blue>0)options.add("Blue");
+        if(myAmmo.yellow>0)options.add("Yellow");
+        options.add("I want to pay with a powerUp");
+
+        int i =1;
+        for(String s : options){
+            Console.println(i++ + ") " + s);
+        }
+        int choice = readConsole(options.size());
+        String chosenOption = options.get(choice);
+        switch (chosenOption){
+            case "Red":
+                return new Ammo(1,0,0);
+            case "Blue":
+                return new Ammo(0,1,0);
+            case "Yellow":
+                return new Ammo(0,0,1);
+            default:
+                return null;
+        }
+    }
+
+    private List<PowerUpCard> getPlayablePowerUps(Player player){
+        List<PowerUpCard> out = player.getPowerUpList();
+        List<PowerUpCard> toRemove = new ArrayList<>();
+        for(PowerUpCard powerUpCard : out){
+            if(powerUpCard.when.equals("on_damage_received") || (powerUpCard.hasPrice() && player.getAmmo().isEmpty() && player.getPowerUpList().size()==1) ) {
+                toRemove.add(powerUpCard);
+            }
+        }
+        out.removeAll(toRemove);
+        return out;
+    }
+
+    private List<WeaponCard> getReloadableWeapons(Player player){
+        List<WeaponCard> reloadable = new ArrayList<>();
+        for(WeaponCard weaponCard : player.getWeaponList()){
+            if(!weaponCard.isLoaded() && weaponCard.canReload(player.getAmmo(), player.getPowerUpList())){
+                reloadable.add(weaponCard);
+            }
+        }
+        return reloadable;
+    }
+
+    private boolean canShoot(){
+        Player me = Client.getInstance().getPlayer();
+        return !getLoadedWeapons(me).isEmpty();
+    }
+
+    private List<WeaponCard> getLoadedWeapons(Player player){
+        List<WeaponCard> loadedWeapons = new ArrayList<>();
+        for(WeaponCard weaponCard : player.getWeaponList()){
+            if(weaponCard.isLoaded()) loadedWeapons.add(weaponCard);
+        }
+        return loadedWeapons;
+    }
+
+    private WeaponCard chooseWeaponDialog(List<WeaponCard> weaponCards){
+        Console.println("Choose a weapon:");
+        int i = 1;
+        for(WeaponCard weaponCard : weaponCards){
+            Console.println(i++ + ") " + weaponCard.name);
+        }
+        int result = readConsole(weaponCards.size());
+        return weaponCards.get(result);
     }
 
     private WeaponCard actualWC = null;
@@ -427,6 +663,7 @@ public class GameViewCLI implements GameView {
     @Override
     public void onEndWeapon() {
         this.setActualWC(null);
+        this.isShooting = false;
     }
 
     @Override
@@ -517,5 +754,14 @@ public class GameViewCLI implements GameView {
             case PURPLE: return COLOR.PURPLE;
             default: return null;
         }
+    }
+
+    private int readConsole(int max){
+        int x = Console.nextInt();
+        while(x<1 || x > max){
+            Console.println("Invalid input. Try again:");
+            x = Console.nextInt();
+        }
+        return x-1;
     }
 }

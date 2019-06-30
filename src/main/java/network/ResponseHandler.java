@@ -5,7 +5,6 @@ import errors.InvalidInputException;
 import errors.NotEnoughAmmoException;
 import errors.NothingToGrabException;
 import errors.WeaponCardException;
-import javafx.application.Platform;
 import models.card.LegitEffects;
 import models.player.Player;
 import models.turn.ActionType;
@@ -124,7 +123,6 @@ public class ResponseHandler implements ResponseHandlerInterface {
         client.setMyTurn(response.name.equals(client.getPlayerUsername()));
         try {
             ((GameView)client.getCurrentView()).startTurn(response.name);
-            ((GameView) Client.getInstance().getCurrentView()).getValidActions();
         } catch (Exception e) {
             Client.getInstance();
         }
