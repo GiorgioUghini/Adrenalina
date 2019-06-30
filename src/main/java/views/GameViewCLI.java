@@ -390,20 +390,7 @@ public class GameViewCLI implements GameView {
 
     @Override
     public void setTextAndEnableBtnActionGroup(ActionType actionType, int btnNum) {
-        switch (btnNum) {
-            case 1:
-                setBtnEnabled(actionType.name(), true);
-                buttonActionTypeMap.put(1, actionType);
-                break;
-            case 2:
-                setBtnEnabled(actionType.name(), true);
-                buttonActionTypeMap.put(2, actionType);
-                break;
-            case 3:
-                setBtnEnabled(actionType.name(), true);
-                buttonActionTypeMap.put(3, actionType);
-                break;
-        }
+
     }
 
     @Override
