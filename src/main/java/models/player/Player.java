@@ -330,7 +330,8 @@ public class Player implements Subscriber, Serializable, Taggable {
      * */
     public void playWeapon(WeaponCard weaponCard){
         checkHasWeapon(weaponCard);
-        weaponCard.activate(this);
+        weaponCard.setPlayer(this);
+        weaponCard.activate();
         activeWeapon = weaponCard;
     }
 
@@ -362,8 +363,9 @@ public class Player implements Subscriber, Serializable, Taggable {
             default:
                 throw new WeaponCardException("Unhandled 'when' case in powerup " + powerUpCard.name + ": " + powerUpCard.when);
         }
+        powerUpCard.setPlayer(this);
         powerUpCard.payPrice(this.ammo, ammo, paymentPowerUpCard);
-        powerUpCard.activate(this);
+        powerUpCard.activate();
         activePowerUp = powerUpCard;
     }
 

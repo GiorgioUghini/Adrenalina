@@ -30,7 +30,10 @@ public abstract class EffectCard extends Card {
         activated = false;
     }
 
-    public abstract void activate(Player me);
+    public abstract void activate();
+    public void setPlayer(Player player){
+        this.me = player;
+    }
 
     /**
      * @return an object containing a set of taggable that can be selected, boolean that indicates if the select is mandatory

@@ -77,19 +77,17 @@ public class WeaponCard extends EffectCard {
     }
 
     /** If the card is loaded, activate it and unload it
-     * @param me the player who is going to use the card
      * @throws WeaponCardException if the weapon is already active
      * @throws UnloadedWeaponException if the weapon is not loaded
      * @throws NullPointerException if player is null */
     @Override
-    public void activate(Player me){
+    public void activate(){
         if(me==null) throw new NullPointerException("Player cannot be null");
         if(activated) throw new WeaponCardException("Weapon is already active");
         if(!isLoaded()) throw new UnloadedWeaponException();
         this.activated = true;
         this.loaded = false;
         this.gameMap = me.getGameMap();
-        this.me = me;
     }
 
     /** Get all effects, with a TRUE flag on the ones that can be used. The card must have been activated

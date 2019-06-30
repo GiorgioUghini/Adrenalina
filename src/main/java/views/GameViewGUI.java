@@ -1007,6 +1007,7 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     private void powerUpClicked(PowerUpCard powerUpCard){
+        Player me = Client.getInstance().getPlayer();
         if (canDoActionMap.get(ViewAction.CLICKPOWERUPSPAWN)) {
             canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
             gameController.spawn(powerUpCard);
@@ -1018,7 +1019,11 @@ public class GameViewGUI implements Initializable, GameView {
                 if(powerUpCard.hasPrice){
                     ammoToPay = chooseAmmoDialog();
                     if(ammoToPay == null || ammoToPay.isEmpty()){
-                        powerUpCardToPay = choosePowerUpDialog();
+                        List<PowerUpCard> payable = new ArrayList<>(me.getPowerUpList());
+                        payable.remove(powerUpCard);
+                        if(!payable.isEmpty()){
+                            powerUpCardToPay = choosePowerUpDialog(null, null, payable);
+                        }
                     }
                 }
                 canDoActionMap.put(ViewAction.USEPOWERUP, false);

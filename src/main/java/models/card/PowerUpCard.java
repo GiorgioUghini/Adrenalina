@@ -67,12 +67,11 @@ public class PowerUpCard extends EffectCard {
     }
 
     @Override
-    public void activate(Player me){
+    public void activate(){
         if(me==null) throw new NullPointerException("Player cannot be null");
         if(hasPrice && !pricePaid) throw new WeaponCardException("You need to pay this powerup price to active it. card: " + this.name);
         this.activated = true;
         this.gameMap = me.getGameMap();
-        this.me = me;
     }
 
     /** activates the next action inside the effect. Must be called for the first action too. It also cancels the active effect and action if
