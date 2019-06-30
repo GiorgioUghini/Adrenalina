@@ -1057,8 +1057,8 @@ public class GameViewGUI implements Initializable, GameView {
 
         switch (stringResult){
             case "Yellow": return new Ammo(0,0,1);
-            case "Red": return new Ammo(0,1,0);
-            case "Blue": return new Ammo(1,0,0);
+            case "Blue": return new Ammo(0,1,0);
+            case "Red": return new Ammo(1,0,0);
         }
         return null;
     }
