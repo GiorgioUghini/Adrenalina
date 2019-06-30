@@ -126,7 +126,6 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             Match currentMatch = lobby.getMatch(currentPlayer);
             boolean isNewActions = currentMatch.getCurrentActionType() == null;
             Map<models.turn.ActionType,  List<TurnEvent>>  actions = currentMatch.getPossibleAction(currentPlayer);
-            System.out.println("--> Valid actions: " + actions.toString());
             return new ValidActionsResponse(actions, isNewActions);
         }
         catch (Exception ex){
@@ -444,7 +443,6 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         try{
             Player player = Server.getInstance().getLobby().getPlayer(token);
             Match match = Server.getInstance().getLobby().getMatch(player);
-            System.out.println("--> Action Type: " + actionType);
             try{
                 match.action(actionType);
             }
