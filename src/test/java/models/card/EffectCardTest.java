@@ -439,6 +439,83 @@ public class EffectCardTest {
         assertEquals(1, enemy.getMarksFromPlayer(me));
     }
 
+    @Test
+    public void testTorpedine(){
+        WeaponCard torpedine = getWeaponCard("Torpedine");
+        List<WeaponCard> weaponCardList = new ArrayList<>();
+        weaponCardList.add(torpedine);
+        assertNotNull(torpedine);
+        List<Player> players = createTestPlayers(4);
+        GameMap gameMap = MapGenerator.generate(1);
+        Player me = players.get(0);
+        Player enemy1 = players.get(1);
+        Player enemy2 = players.get(2);
+        Player enemy3 = players.get(3);
+        me.setAmmo(new Ammo(3,3,3));
+
+        SpawnPoint yellow = getSpawnPoint(gameMap, RoomColor.YELLOW);
+        SpawnPoint blue = getSpawnPoint(gameMap, RoomColor.BLUE);
+        SpawnPoint red = getSpawnPoint(gameMap, RoomColor.RED);
+
+        gameMap.spawnPlayer(me, yellow);
+        gameMap.spawnPlayer(enemy1,blue);
+        gameMap.movePlayer(enemy1, blue.getNextSquare(CardinalDirection.BOTTOM));
+        gameMap.spawnPlayer(enemy2, blue);
+        gameMap.movePlayer(enemy2, blue.getNextSquare(CardinalDirection.LEFT).getNextSquare(CardinalDirection.LEFT));
+        gameMap.spawnPlayer(enemy3, red);
+        gameMap.movePlayer(enemy3, red.getNextSquare(CardinalDirection.RIGHT));
+
+        me.setWeaponList(weaponCardList);
+        me.playWeapon(torpedine);
+        List<Effect> legitEffects = me.getWeaponEffects().getLegitEffects();
+        assertEquals(1, legitEffects.size()); //effetto base
+        Effect effect = legitEffects.stream().filter(e -> e.name.equals("Effetto base")).findFirst().orElse(null);
+        assertEquals("Effetto base", effect.name);
+        me.playWeaponEffect(effect, null);
+        me.playNextWeaponAction(); //select
+        Selectable selectable = torpedine.getSelectable();
+        Set<Taggable> taggables = selectable.get();
+        assertEquals(1, taggables.size());
+        assertTrue(taggables.contains(enemy1));
+        torpedine.select(enemy1);
+        me.playNextWeaponAction(); //damage
+        assertEquals(2, enemy1.getTotalDamage());
+        assertEquals(0, enemy2.getTotalDamage());
+        assertEquals(0, enemy3.getTotalDamage());
+
+        legitEffects = me.getWeaponEffects().getLegitEffects();
+        assertEquals(1, legitEffects.size());
+        effect = legitEffects.stream().filter(e -> e.name.equals("Reazione a catena")).findFirst().orElse(null);
+        assertEquals("Reazione a catena", effect.name);
+        me.playWeaponEffect(effect, null);
+        me.playNextWeaponAction(); //select
+        selectable = torpedine.getSelectable();
+        taggables = selectable.get();
+        assertEquals(1, taggables.size());
+        assertTrue(taggables.contains(enemy2));
+        torpedine.select(enemy2);
+        me.playNextWeaponAction(); //damage
+        assertEquals(2, enemy1.getTotalDamage());
+        assertEquals(1, enemy2.getTotalDamage());
+        assertEquals(0, enemy3.getTotalDamage());
+
+        legitEffects = me.getWeaponEffects().getLegitEffects();
+        assertEquals(1, legitEffects.size());
+        effect = legitEffects.stream().filter(e -> e.name.equals("Alta tensione")).findFirst().orElse(null);
+        assertEquals("Alta tensione", effect.name);
+        me.playWeaponEffect(effect, null);
+        me.playNextWeaponAction(); //select
+        selectable = torpedine.getSelectable();
+        taggables = selectable.get();
+        assertEquals(1, taggables.size());
+        assertTrue(taggables.contains(enemy3));
+        torpedine.select(enemy3);
+        me.playNextWeaponAction(); //damage
+        assertEquals(2, enemy1.getTotalDamage());
+        assertEquals(1, enemy2.getTotalDamage());
+        assertEquals(2, enemy3.getTotalDamage());
+    }
+
     private SpawnPoint getSpawnPoint(GameMap gameMap, RoomColor color){
         for(SpawnPoint s : gameMap.getSpawnPoints()){
             if(s.getColor().equals(color)){

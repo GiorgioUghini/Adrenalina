@@ -270,7 +270,7 @@
             "type": "damage",
             "damage": {
               "type": "player",
-              "target": "enemy",
+              "target": "primary_enemy",
               "value": 2
             }
           }
