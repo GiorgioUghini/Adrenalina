@@ -134,25 +134,24 @@ public class GameViewCLI implements GameView {
     public void effectChoosingDialog(LegitEffects legitEffects) {
         Console.println("Which effect do you want to use now?");
 
-        int i = 0;
-        for (; i<legitEffects.getLegitEffects().size(); i++) {
-            Effect effect = legitEffects.getLegitEffects().get(i);
-            Console.println(String.format("%d) %s", i, effect.name));
+        int i = 1;
+        int effectsNumber = legitEffects.getLegitEffects().size();
+        for (Effect effect : legitEffects.getLegitEffects()) {
+            Console.println(String.format("%d) %s", i++, effect.name));
         }
         Console.println(i + ") I don't want to use any effect. ");
-        Console.println("Choose one.");
-        int choose = Console.nextInt();
-        while ((choose > legitEffects.getLegitEffects().size()) || choose<0) {
-            Console.print("Number not valid. Choose one.");
-            choose = Console.nextInt();
-        }
+        int choose = readConsole(i);
 
-        if (choose == legitEffects.getLegitEffects().size()) {
+        if (choose == effectsNumber) {
             gameController.finishCard();
         } else {
-            //Would you like to pay with power up?
-            PowerUpCard toPay = choosePowerUpDialog();
-            gameController.playEffect(legitEffects.getLegitEffects().get(choose), toPay);
+            Effect chosenEffect = legitEffects.getLegitEffects().get(choose);
+            PowerUpCard toPay = null;
+            if(!chosenEffect.price.isEmpty()){
+                //Would you like to pay with power up?
+                toPay = choosePowerUpDialog();
+            }
+            gameController.playEffect(chosenEffect, toPay);
         }
     }
 
@@ -181,14 +180,7 @@ public class GameViewCLI implements GameView {
         return powerUpCards.get(choose);
     }
 
-    private void setBtnEnabled(String string, boolean isVisible){
-        if (string != null && isVisible) {
-            Console.println("You can " + string);
-        }
-    }
-
     private void setActionGroupButtons(Set<ActionType> groupActions){
-        Console.println("--> "+groupActions.toString());
         if(groupActions.size() > 1 && Client.getInstance().getCurrentActionType()==null){
             for(ActionType groupAction : groupActions){
                 switch (groupAction){
@@ -196,8 +188,10 @@ public class GameViewCLI implements GameView {
                     case SHOOT_FRENZY_2:
                     case SHOOT_FRENZY_1:
                     case SHOOT_NORMAL:
-                        baseActions.add(BaseActions.SHOOT);
-                        actionTypeMap.put(BaseActions.SHOOT, groupAction);
+                        if(canShoot()){
+                            baseActions.add(BaseActions.SHOOT);
+                            actionTypeMap.put(BaseActions.SHOOT, groupAction);
+                        }
                         break;
                     case GRAB_LOW_LIFE:
                     case GRAB_FRENZY_2:
@@ -314,7 +308,7 @@ public class GameViewCLI implements GameView {
                     Client.getInstance().getConnection().action(actionType);
                     actionTypeMap.clear();
                 }else{
-                    //shoot()
+                    shoot();
                 }
                 break;
             case RELOAD:
@@ -395,65 +389,35 @@ public class GameViewCLI implements GameView {
 
     @Override
     public void selectTag(Selectable selectable) {
-        switch (selectable.getType()) {
-            case ROOM:
-                Console.println("Please select a ROOM: ");
-                int i = 0;
-                ArrayList<Taggable> selectables1 = new ArrayList<>(selectable.get());
-                for (; i<selectables1.size(); i++) {
-                    Taggable t = selectables1.get(i);
-                    Console.println(String.format("%d) Room %s", i, ((RoomColor) t).name()));
-                }
-                Console.println(i + ") I don't want to select nothing. ");
-
-                int choose1 = Console.nextInt();
-                if (choose1 == i) {
-                    gameController.tagElement(null, isShooting);
-                } else {
-                    RoomColor rc = (RoomColor) selectables1.get(choose1);
-                    //Implement from scratch
-                    gameController.tagElement(rc, isShooting);
-                }
-                break;
-
-            case PLAYER:
-                showMessage("Please select a PLAYER: ");
-                int j = 0;
-                ArrayList<Taggable> selectables2 = new ArrayList<>(selectable.get());
-                for (; j<selectables2.size(); j++) {
-                    Taggable t = selectables2.get(j);
-                    Console.println(String.format("%d) Player %s", j, ((Player) t).getStringColor()));
-                }
-                Console.println(j + ") I don't want to select nothing. ");
-                int choose2 = Console.nextInt();
-                if (choose2 == j) {
-                    gameController.tagElement(null, isShooting);
-                } else {
-                    Player p = (Player) selectables2.get(choose2);
-                    gameController.tagElement(p, isShooting);
-                }
-                break;
-
-
-            case SQUARE:
-                showMessage("Please click on a SQUARE: ");
-                int k = 0;
-                ArrayList<Taggable> selectables3 = new ArrayList<>(selectable.get());
-                for (; k<selectables3.size(); k++) {
-                    Taggable t = selectables3.get(k);
-                    Square s = (Square) t;
-                    Coordinate c = Client.getInstance().getMap().getSquareCoordinates(s);
-                    Console.println(String.format("%d) CELL%d%d", k, c.getX(), c.getY()));
-                }
-                Console.println(k + ") Don't want to select nothing. ");
-                int choose3 = Console.nextInt();
-                if (choose3 == k) {
-                    gameController.tagElement(null, isShooting);
-                } else {
-                    Square s = (Square) selectables3.get(choose3);
-                    gameController.tagElement(s, isShooting);
-                }
-                break;
+        Console.println("Please select a " + selectable.getType());
+        List<Taggable> taggables = new ArrayList<>(selectable.get());
+        int i = 1;
+        int max = taggables.size();
+        for(Taggable taggable : taggables){
+            String tag = null;
+            switch (selectable.getType()){
+                case ROOM:
+                    tag = taggable.toString();
+                    break;
+                case SQUARE:
+                    Coordinate c = Client.getInstance().getMap().getSquareCoordinates((Square) taggable);
+                    tag = "CELL " + c.getX() + c.getY();
+                    break;
+                case PLAYER:
+                    tag = ((Player) taggable).getStringColor();
+            }
+            Console.println(i++ + ") " + tag);
+            if(selectable.isOptional()){
+                Console.println(i + ") Nothing");
+                max++;
+            }
+            int result = readConsole(max);
+            if(result == taggables.size()){
+                gameController.tagElement(null, isShooting);
+            }else{
+                Taggable tagged = taggables.get(result);
+                gameController.tagElement(tagged, isShooting);
+            }
         }
     }
 
@@ -506,6 +470,33 @@ public class GameViewCLI implements GameView {
         gameController.run(te, selected);
     }
 
+    private void shoot(){
+        //if you are here you surely have at least one loaded weapon.
+        Client client = Client.getInstance();
+        GameMap gameMap = client.getMap();
+        Player me = client.getPlayer();
+
+        List<WeaponCard> loadedWeapons = getLoadedWeapons(me);
+        Console.println("Only the loaded weapons are shown.");
+        WeaponCard chosen = chooseWeaponDialog(loadedWeapons);
+        setActualWC(chosen);
+        isShooting = true;
+        continueWeapon();
+    }
+
+    private boolean canShoot(){
+        Player me = Client.getInstance().getPlayer();
+        return !getLoadedWeapons(me).isEmpty();
+    }
+
+    private List<WeaponCard> getLoadedWeapons(Player player){
+        List<WeaponCard> loadedWeapons = new ArrayList<>();
+        for(WeaponCard weaponCard : player.getWeaponList()){
+            if(weaponCard.isLoaded()) loadedWeapons.add(weaponCard);
+        }
+        return loadedWeapons;
+    }
+
     private WeaponCard chooseWeaponDialog(List<WeaponCard> weaponCards){
         Console.println("Choose a weapon:");
         int i = 1;
@@ -530,6 +521,7 @@ public class GameViewCLI implements GameView {
     @Override
     public void onEndWeapon() {
         this.setActualWC(null);
+        this.isShooting = false;
     }
 
     @Override
