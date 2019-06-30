@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class DeathManager implements Serializable {
     private List<Map<Player, Integer>> pointsMapList;
-    private Map<Player, Integer> deathMap;
+    private Map<String, Integer> deathMap;
 
 
     public DeathManager() {
@@ -18,16 +18,16 @@ public class DeathManager implements Serializable {
 
     public void addPartialPointsCount(Player player, Map<Player, Integer> pointsCount) {
         pointsMapList.add(pointsCount);
-        Integer deathCount = deathMap.get(player);
+        Integer deathCount = deathMap.get(player.getName());
         if (deathCount != null) {
-            deathMap.put(player, deathCount + 1);
+            deathMap.put(player.getName(), deathCount + 1);
         } else {
-            deathMap.put(player, 1);
+            deathMap.put(player.getName(), 1);
         }
     }
 
     public void setDeathCount(Player player, int value){
-        deathMap.put(player, value);
+        deathMap.put(player.getName(), value);
     }
 
     public int getTotalPoints(Player player) {
@@ -39,7 +39,7 @@ public class DeathManager implements Serializable {
     }
 
     public int getDeathCount(Player player){
-        return deathMap.get(player) != null ? deathMap.get(player) : 0;
+        return deathMap.get(player.getName()) != null ? deathMap.get(player.getName()) : 0;
     }
 
     public int getSkullCount(List<Player> players){
