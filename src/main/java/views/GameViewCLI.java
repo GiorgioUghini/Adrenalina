@@ -304,7 +304,7 @@ public class GameViewCLI implements GameView {
                     Client.getInstance().getConnection().action(actionType);
                     actionTypeMap.clear();
                 }else{
-                    //run
+                    run();
                 }
                 break;
             case SHOOT:
@@ -498,7 +498,25 @@ public class GameViewCLI implements GameView {
         }else{
             gameController.grab(null, null, null);
         }
-        gameController.getValidActions();
+    }
+
+    private void run(){
+        Client client = Client.getInstance();
+        GameMap gameMap = client.getMap();
+        Player me = client.getPlayer();
+        Square myPosition = gameMap.getPlayerPosition(me);
+        Set<Square> runnableSet = gameMap.getAllSquaresAtDistanceLessThanOrEquals(myPosition, maxRunDistance);
+        List<Square> runnableList = new ArrayList<>(runnableSet);
+        Console.println("Where do you want to go?");
+        int i = 1;
+        for(Square s : runnableList){
+            Coordinate c = gameMap.getSquareCoordinates(s);
+            Console.println(i++ + ") CELL " + c.getX() + c.getY());
+        }
+        int result = readConsole(runnableList.size());
+        Square selected = runnableList.get(result);
+        TurnEvent te = Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType()).get(0);
+        gameController.run(te, selected);
     }
 
     private WeaponCard chooseWeaponDialog(List<WeaponCard> weaponCards){
