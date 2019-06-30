@@ -506,4 +506,8 @@ public class Player implements Subscriber, Serializable, Taggable {
     public int getDeathCount(){
         return deathManager.getDeathCount(this);
     }
+
+    public int getSkullCount(List<Player> players){
+        return deathManager.getSkullCount(players);
+    }
 }

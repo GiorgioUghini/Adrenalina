@@ -24,6 +24,7 @@ import models.player.Player;
 import models.turn.ActionType;
 import models.turn.TurnEvent;
 import network.Client;
+import network.Server;
 import utils.BiMap;
 
 import java.net.URL;
@@ -895,9 +896,7 @@ public class GameViewGUI implements Initializable, GameView {
         if (newPlayer.getTotalDamage() > 10) {
             skulls += 1;
         }
-        for (Player p : Client.getInstance().getPlayers()) {
-            skulls += p.getDeathCount();
-        }
+        skulls += newPlayer.getSkullCount(Client.getInstance().getPlayers());
         for (int position=0; position<skulls; position++) {
             Rectangle c = new Rectangle((double) (42 + position * 97), 100d, 60d, 105d);
             c.setFill(Color.rgb(0,0,0));
