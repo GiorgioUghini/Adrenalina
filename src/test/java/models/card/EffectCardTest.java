@@ -205,20 +205,16 @@ public class EffectCardTest {
         Player p1 = new Player("p1", "password");
         Player p2 = new Player("p2", "password");
         Player p3 = new Player("p3", "password");
+
         WeaponCard cannoneVortex = getWeaponCard("Cannone vortex");
-        Set<SpawnPoint> spawnPoints = gameMap.getSpawnPoints();
-        SpawnPoint yellow = null;
-        SpawnPoint red = null;
-        for(SpawnPoint sp : spawnPoints){
-            if(sp.getColor().equals(RoomColor.YELLOW)){
-                yellow = sp;
-            }else if(sp.getColor().equals(RoomColor.RED)){
-                red = sp;
-            }
-        }
+        SpawnPoint yellow = getSpawnPoint(gameMap, RoomColor.YELLOW);
+        SpawnPoint red = getSpawnPoint(gameMap, RoomColor.RED);
+        SpawnPoint blue = getSpawnPoint(gameMap, RoomColor.BLUE);
+
         gameMap.spawnPlayer(me, yellow);
         gameMap.spawnPlayer(p1, yellow);
-        gameMap.spawnPlayer(p2, yellow);
+        gameMap.movePlayer(p1, yellow.getNextSquare(CardinalDirection.TOP));
+        gameMap.spawnPlayer(p2, blue);
         gameMap.spawnPlayer(p3, red);
         List<WeaponCard> myWeapons = new ArrayList<>();
         myWeapons.add(cannoneVortex);
@@ -230,10 +226,11 @@ public class EffectCardTest {
         Effect effect = effects.get(0);
         assertEquals("Effetto base", effect.name);
         me.playWeaponEffect(effect, null);
+
         me.playNextWeaponAction(); //select square
         Selectable selectable = cannoneVortex.getSelectable();
         assertEquals(3, selectable.get().size());
-        Square selectedSquare = yellow.getNextSquare(CardinalDirection.TOP);
+        Square selectedSquare = yellow.getNextSquare(CardinalDirection.TOP).getNextSquare(CardinalDirection.LEFT);
         assertTrue(selectable.get().contains(selectedSquare));
         cannoneVortex.select(selectedSquare);
         me.playNextWeaponAction(); //select player
@@ -241,11 +238,13 @@ public class EffectCardTest {
         assertEquals(2, selectable.get().size());
         assertTrue(selectable.get().contains(p1));
         assertTrue(selectable.get().contains(p2));
-        cannoneVortex.select(p1);
-        me.playNextWeaponAction(); //move P1 into vortex
-        assertEquals(selectedSquare, gameMap.getPlayerPosition(p1));
+        cannoneVortex.select(p2);
+        me.playNextWeaponAction(); //move P2 into vortex
+        assertEquals(selectedSquare, gameMap.getPlayerPosition(p2));
         me.playNextWeaponAction(); // damage
-        assertEquals(2, p1.getTotalDamage());
+        assertEquals(2, p2.getTotalDamage());
+        assertEquals(0, p1.getTotalDamage());
+        assertEquals(0, p3.getTotalDamage());
     }
 
     @Test
