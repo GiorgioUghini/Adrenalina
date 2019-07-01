@@ -12,11 +12,13 @@ public class ReconnectPlayerResponse implements Response {
     public Player player;
     public GameMap map;
     public List<Player> players;
+    public int mapIndex;
 
-    public ReconnectPlayerResponse(Player player, GameMap map, List<Player> players){
+    public ReconnectPlayerResponse(Player player, GameMap map, List<Player> players, int mapIndex){
         this.player = player;
         this.map = map;
         this.players = players;
+        this.mapIndex = mapIndex;
     }
 
     @Override

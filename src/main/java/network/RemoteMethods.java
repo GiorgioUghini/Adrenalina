@@ -81,7 +81,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                 Match match = player.getMatch();
                 GameMap map = match.getMap();
                 Server.getInstance().getLobby().reconnectPlayer(token, player);
-                return new ReconnectPlayerResponse(player, map, match.getPlayers());
+                return new ReconnectPlayerResponse(player, map, match.getPlayers(),match.getMapIndex() );
             } else {
                 player = lobby.registerPlayer(username, password, token);
                 Server.getInstance().getConnection().addUpdateUnregisteredPlayers(new NewPlayerUpdate(player.getName()));
@@ -151,6 +151,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         try{
             Player player = Server.getInstance().getLobby().getPlayer(token);
             Match match = Server.getInstance().getLobby().getMatch(player);
+            match.setMapIndex(map);
             match.createMap(map);
             match.nextTurn();
             match.addUpdate(new MapChosenUpdate(match.getMap(), map));

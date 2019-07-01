@@ -26,6 +26,7 @@ public class Match {
     private WeaponDeck weaponDeck;
     private AmmoDeck ammoDeck;
     private GameMap gameMap;
+    private int mapIndex;
     private DeathManager deathManager;
     private Config config;
     private Map<ActionType, List<TurnEvent>> currentActions;
@@ -433,5 +434,13 @@ public class Match {
 
     public int getSkullCount(){
         return deathManager.getSkullCount(playerList);
+    }
+
+    public int getMapIndex() {
+        return mapIndex;
+    }
+
+    public void setMapIndex(int mapIndex) {
+        this.mapIndex = mapIndex;
     }
 }
