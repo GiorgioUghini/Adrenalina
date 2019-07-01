@@ -2,6 +2,7 @@ package network;
 
 import models.player.Player;
 import java.util.concurrent.BlockingQueue;
+import java.util.logging.Logger;
 
 public class UpdatePusher implements Runnable {
 
@@ -25,7 +26,7 @@ public class UpdatePusher implements Runnable {
                     break;
                 socketWrapper.write(update);
             } catch (Exception e) {
-                e.printStackTrace();
+                Logger.getAnonymousLogger().info(e.toString());
             }
         }
     }

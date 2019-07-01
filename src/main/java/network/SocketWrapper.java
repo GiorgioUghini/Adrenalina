@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.Logger;
 
 public class SocketWrapper implements ConnectionWrapper {
     private Socket socket;
@@ -26,7 +27,7 @@ public class SocketWrapper implements ConnectionWrapper {
             updates = new LinkedBlockingQueue<>();
             Server.getInstance().getConnection().addConnectionWrapper(token, this);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -56,7 +57,7 @@ public class SocketWrapper implements ConnectionWrapper {
             in.close();
             socket.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 

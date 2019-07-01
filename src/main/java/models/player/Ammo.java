@@ -6,6 +6,7 @@ import models.card.PowerUpCard;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 public class Ammo implements Serializable {
     public Ammo() {

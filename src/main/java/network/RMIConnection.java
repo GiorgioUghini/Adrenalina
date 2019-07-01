@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.Logger;
 
 public class RMIConnection implements Connection {
 
@@ -26,15 +27,15 @@ public class RMIConnection implements Connection {
     private ResponseHandler responseHandler;
     private Registry registry;
     private BlockingQueue<Response> queue;
-    private String token;
+    private String stringToken;
 
     @Override
     public void registerPlayer(String username, String password) {
         try {
-            Response response = remoteMethods.registerPlayer(username, password, token);
+            Response response = remoteMethods.registerPlayer(username, password, stringToken);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -44,7 +45,7 @@ public class RMIConnection implements Connection {
             Response response = remoteMethods.waitingPlayer();
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -55,7 +56,7 @@ public class RMIConnection implements Connection {
             Response response = remoteMethods.validActions(token);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -66,7 +67,7 @@ public class RMIConnection implements Connection {
             Response response = remoteMethods.chooseMap(token, map);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -77,7 +78,7 @@ public class RMIConnection implements Connection {
             Response response = remoteMethods.cardEffects(token, cardName);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -88,7 +89,7 @@ public class RMIConnection implements Connection {
             Response response = remoteMethods.drawPowerUp(token);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -99,7 +100,7 @@ public class RMIConnection implements Connection {
             Response response = remoteMethods.spawnPlayer(token, powerUpCard);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -110,7 +111,7 @@ public class RMIConnection implements Connection {
             Response response = remoteMethods.tagElement(token, taggable);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -121,7 +122,7 @@ public class RMIConnection implements Connection {
             Response response = remoteMethods.powerUpTagElement(token, taggable);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -132,7 +133,7 @@ public class RMIConnection implements Connection {
             Response response = remoteMethods.playEffect(token, effect, ammo, powerUpCard);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -143,7 +144,7 @@ public class RMIConnection implements Connection {
             Response response = remoteMethods.finishCard(token);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -154,7 +155,7 @@ public class RMIConnection implements Connection {
             Response response = remoteMethods.endTurn(token);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -165,7 +166,7 @@ public class RMIConnection implements Connection {
             Response response = remoteMethods.grab(token, drawn, toRelease, powerUpCard);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -176,7 +177,7 @@ public class RMIConnection implements Connection {
             Response response = remoteMethods.run(token, turnEvent, square);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -187,7 +188,7 @@ public class RMIConnection implements Connection {
             Response response = remoteMethods.reload(token, weaponsMap);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -198,7 +199,7 @@ public class RMIConnection implements Connection {
             Response response = remoteMethods.action(token, actionType);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -209,7 +210,7 @@ public class RMIConnection implements Connection {
             Response response = remoteMethods.playPowerUp(token, powerUpName, ammo, powerUpAmmo);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -220,7 +221,7 @@ public class RMIConnection implements Connection {
             Response response = remoteMethods.reconnect(token);
             Client.getInstance().getConnection().receiveResponse(response);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -237,27 +238,25 @@ public class RMIConnection implements Connection {
             remoteMethods = (RemoteMethodsInterface) registry.lookup("RemoteMethods");
             queue = new LinkedBlockingQueue<>(100);
             responseHandler = new ResponseHandler();
-            token = remoteMethods.handshake();
+            stringToken = remoteMethods.handshake();
             LongPollingTask longPollingTask = new LongPollingTask(remoteMethods, queue);
             Timer timer = new Timer();
             timer.schedule(longPollingTask, 0, 300);
             PollingQueueListener pollingQueueListener = new PollingQueueListener(queue);
             (new Thread(pollingQueueListener)).start();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        } catch (NotBoundException e) {
-            e.printStackTrace();
+        } catch (RemoteException | NotBoundException e) {
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
     @Override
     public void setToken(String token) {
-        this.token = token;
+        this.stringToken = token;
     }
 
     @Override
     public String getToken() {
-        return token;
+        return stringToken;
     }
 
     public RemoteMethodsInterface getRemoteMethods() {

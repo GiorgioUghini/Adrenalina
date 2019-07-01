@@ -9,6 +9,7 @@ import views.StartGUI;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.logging.Logger;
 
 
 public class ScreenController {
@@ -51,7 +52,7 @@ public class ScreenController {
                         URL url = getClass().getClassLoader().getResource("fxml/" + name);
                         newParent = FXMLLoader.load(url);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Logger.getAnonymousLogger().info(e.toString());
                     }
                     Scene newParentScene = new Scene(newParent);
                     actualStage.setScene(newParentScene);

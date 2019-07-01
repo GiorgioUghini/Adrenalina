@@ -22,6 +22,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 
 public class SocketConnection implements Connection {
@@ -38,7 +39,7 @@ public class SocketConnection implements Connection {
             RegisterPlayerRequest request = new RegisterPlayerRequest(username, password);
             write(request);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -48,7 +49,7 @@ public class SocketConnection implements Connection {
             WaitingPlayerRequest request = new WaitingPlayerRequest();
             write(request);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -58,7 +59,7 @@ public class SocketConnection implements Connection {
             ValidActionsRequest request = new ValidActionsRequest();
             write(request);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -68,7 +69,7 @@ public class SocketConnection implements Connection {
             ChooseMapRequest request = new ChooseMapRequest(map);
             write(request);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -78,7 +79,7 @@ public class SocketConnection implements Connection {
             CardEffectsRequest request = new CardEffectsRequest(cardName);
             write(request);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -88,7 +89,7 @@ public class SocketConnection implements Connection {
             DrawPowerUpRequest request = new DrawPowerUpRequest();
             write(request);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -98,7 +99,7 @@ public class SocketConnection implements Connection {
             SpawnPlayerRequest request = new SpawnPlayerRequest(powerUpCard);
             write(request);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -108,7 +109,7 @@ public class SocketConnection implements Connection {
             TagElementRequest request = new TagElementRequest(taggable);
             write(request);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -118,7 +119,7 @@ public class SocketConnection implements Connection {
             PowerUpTagElementRequest request = new PowerUpTagElementRequest(taggable);
             write(request);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -128,7 +129,7 @@ public class SocketConnection implements Connection {
             PlayEffectRequest request = new PlayEffectRequest(effect, ammo, powerUpCard);
             write(request);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -138,7 +139,7 @@ public class SocketConnection implements Connection {
             FinishCardRequest request = new FinishCardRequest();
             write(request);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -148,7 +149,7 @@ public class SocketConnection implements Connection {
             EndTurnRequest request = new EndTurnRequest();
             write(request);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -158,7 +159,7 @@ public class SocketConnection implements Connection {
             GrabRequest request = new GrabRequest(drawn,toRelease,powerUpCard);
             write(request);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -168,7 +169,7 @@ public class SocketConnection implements Connection {
             RunRequest request = new RunRequest(turnEvent, square);
             write(request);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -178,7 +179,7 @@ public class SocketConnection implements Connection {
             ReloadRequest request = new ReloadRequest(weaponsMap);
             write(request);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -188,7 +189,7 @@ public class SocketConnection implements Connection {
             TurnActionRequest request = new TurnActionRequest(actionType);
             write(request);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -198,7 +199,7 @@ public class SocketConnection implements Connection {
             PlayPowerUpRequest request = new PlayPowerUpRequest(powerUpName, ammo, powerUpAmmo);
             write(request);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -208,7 +209,7 @@ public class SocketConnection implements Connection {
             ReconnectRequest request = new ReconnectRequest();
             write(request);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
@@ -226,7 +227,7 @@ public class SocketConnection implements Connection {
             ServerListener serverListener = new ServerListener();
             (new Thread(serverListener)).start();
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.toString());
         }
     }
 
