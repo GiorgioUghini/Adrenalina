@@ -1,6 +1,5 @@
 package network.requests;
 
-import models.card.Taggable;
 import network.Request;
 import network.RequestHandlerInterface;
 import network.Response;

@@ -1,6 +1,5 @@
 package network.responses;
 
-import models.player.Player;
 import network.Response;
 import network.ResponseHandlerInterface;
 

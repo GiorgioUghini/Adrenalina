@@ -1,8 +1,6 @@
 package network.requests;
 
 import models.card.PowerUpCard;
-import models.map.RoomColor;
-import network.Client;
 import network.Request;
 import network.RequestHandlerInterface;
 import network.Response;

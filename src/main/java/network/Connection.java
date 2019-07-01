@@ -4,13 +4,11 @@ import models.card.Effect;
 import models.card.PowerUpCard;
 import models.card.Taggable;
 import models.card.WeaponCard;
-import models.map.RoomColor;
 import models.map.Square;
 import models.player.Ammo;
 import models.turn.ActionType;
 import models.turn.TurnEvent;
 
-import java.util.List;
 import java.util.Map;
 
 public interface Connection {

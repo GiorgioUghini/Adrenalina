@@ -555,7 +555,7 @@ public class GameViewCLI implements GameView {
             Ammo ammoToPay = null;
             PowerUpCard powerUpToPay = null;
             if(powerUpCard!=null){
-                if(powerUpCard.hasPrice()){
+                if(powerUpCard.getHasPrice()){
                     ammoToPay = chooseOneAmmoDialog(me);
                     if(ammoToPay == null){
                         List<PowerUpCard> powerUpsToPay = me.getPowerUpList();
@@ -608,7 +608,7 @@ public class GameViewCLI implements GameView {
         List<PowerUpCard> out = player.getPowerUpList();
         List<PowerUpCard> toRemove = new ArrayList<>();
         for(PowerUpCard powerUpCard : out){
-            if(powerUpCard.when.equals("on_damage_received") || (powerUpCard.hasPrice() && player.getAmmo().isEmpty() && player.getPowerUpList().size()==1) ) {
+            if(powerUpCard.when.equals("on_damage_received") || (powerUpCard.getHasPrice() && player.getAmmo().isEmpty() && player.getPowerUpList().size()==1) ) {
                 toRemove.add(powerUpCard);
             }
         }

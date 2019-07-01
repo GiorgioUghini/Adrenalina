@@ -1,14 +1,10 @@
 package controllers;
 
-import network.*;
-import utils.Constants;
-import errors.InvalidConnectionTypeException;
-import network.requests.RegisterPlayerRequest;
-import network.responses.RegisterPlayerResponse;
+import network.Client;
+import network.Connection;
+import network.ConnectionFactory;
+import network.ConnectionType;
 import views.MenuView;
-
-import java.io.IOException;
-import java.rmi.NotBoundException;
 
 public class MenuController {
     public void createConnection(ConnectionType type) {

@@ -1,15 +1,13 @@
 package network;
 
-import models.card.*;
-import models.map.RoomColor;
+import models.card.Effect;
+import models.card.PowerUpCard;
+import models.card.Taggable;
+import models.card.WeaponCard;
 import models.map.Square;
 import models.player.Ammo;
 import models.turn.ActionType;
 import models.turn.TurnEvent;
-import models.turn.TurnType;
-import network.responses.RegisterPlayerResponse;
-import network.responses.ValidActionsResponse;
-import network.responses.WaitingPlayerResponse;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

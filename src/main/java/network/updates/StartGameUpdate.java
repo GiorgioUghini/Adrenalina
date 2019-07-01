@@ -1,7 +1,8 @@
 package network.updates;
 
 import models.player.Player;
-import network.*;
+import network.Response;
+import network.ResponseHandlerInterface;
 
 import java.util.List;
 

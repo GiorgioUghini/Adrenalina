@@ -3,7 +3,6 @@ package models.card;
 import errors.WeaponCardException;
 import models.map.RoomColor;
 import models.player.Ammo;
-import models.player.Player;
 
 import java.util.List;
 import java.util.Objects;
@@ -51,7 +50,7 @@ public class PowerUpCard extends EffectCard {
         return this.name + color;
     }
 
-    public boolean hasPrice(){
+    public boolean getHasPrice(){
         return this.hasPrice;
     }
 

@@ -4,8 +4,6 @@ import models.card.LegitEffects;
 import network.Response;
 import network.ResponseHandlerInterface;
 
-import java.util.Map;
-
 public class CardEffectsResponse implements Response {
 
     public LegitEffects legitEffects;

@@ -1,6 +1,7 @@
 package network.updates;
 
-import network.*;
+import network.Response;
+import network.ResponseHandlerInterface;
 
 public class NewPlayerUpdate implements Response {
     private String name;

@@ -1,8 +1,6 @@
 package network;
 
 import errors.InvalidViewTypeException;
-import errors.NotImplementedException;
-import models.card.Action;
 import models.map.Coordinate;
 import models.map.GameMap;
 import models.player.Player;

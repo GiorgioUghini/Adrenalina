@@ -1,7 +1,5 @@
 package models;
 
-import network.Connection;
-
 public class Config {
     private int MATCH_CONNECTION_TIMEOUT;
     private int TURN_TIMEOUT;

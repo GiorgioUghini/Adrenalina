@@ -4,7 +4,6 @@ import models.player.Player;
 import network.Response;
 import network.ResponseHandlerInterface;
 
-import java.util.List;
 import java.util.Map;
 
 public class PointsUpdate implements Response {

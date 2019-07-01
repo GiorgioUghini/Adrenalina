@@ -1,6 +1,5 @@
 package network;
 
-import models.player.Player;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
 

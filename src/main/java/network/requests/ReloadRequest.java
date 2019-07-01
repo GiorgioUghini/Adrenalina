@@ -7,7 +7,6 @@ import network.RequestHandlerInterface;
 import network.Response;
 
 import java.rmi.RemoteException;
-import java.util.List;
 import java.util.Map;
 
 public class ReloadRequest implements Request {

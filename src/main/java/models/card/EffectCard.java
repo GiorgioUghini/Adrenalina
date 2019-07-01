@@ -6,7 +6,9 @@ import models.map.RoomColor;
 import models.map.Square;
 import models.player.Player;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public abstract class EffectCard extends Card {
     public String name;

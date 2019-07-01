@@ -1,7 +1,6 @@
 package network.responses;
 
 import models.card.PowerUpCard;
-import models.card.WeaponCard;
 import network.Response;
 import network.ResponseHandlerInterface;
 

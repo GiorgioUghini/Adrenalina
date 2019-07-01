@@ -1,7 +1,5 @@
 package network;
 
-import models.player.Player;
-import network.updates.NewPlayerUpdate;
 import utils.BiMap;
 import utils.Constants;
 
@@ -11,11 +9,9 @@ import java.net.Socket;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class ServerConnection {

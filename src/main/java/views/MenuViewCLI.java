@@ -7,11 +7,10 @@ import utils.Console;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static utils.Console.*;
+import static utils.Console.print;
 
 public class MenuViewCLI implements MenuView {
     private MenuController menuController;

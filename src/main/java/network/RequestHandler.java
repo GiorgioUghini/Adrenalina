@@ -1,15 +1,8 @@
 package network;
 
-import models.Match;
 import network.requests.*;
-import network.responses.ErrorResponse;
-import network.responses.RegisterPlayerResponse;
 
-import java.lang.management.MemoryUsage;
 import java.rmi.RemoteException;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class RequestHandler implements RequestHandlerInterface {
 
