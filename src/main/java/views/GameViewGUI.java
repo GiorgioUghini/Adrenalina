@@ -1358,9 +1358,11 @@ public class GameViewGUI implements Initializable, GameView {
                 if (index == btlist.size()-1) {
                     gameController.finishCard();
                 } else  {
+                    Effect chosenEffect = legitEffects.getLegitEffects().get(index);
                     //Would you like to pay with power up?
-                    PowerUpCard toPay = choosePowerUpDialog();
-                    gameController.playEffect(legitEffects.getLegitEffects().get(index), toPay);
+                    PowerUpCard toPay = null;
+                    if(!chosenEffect.price.isEmpty()) toPay = choosePowerUpDialog();
+                    gameController.playEffect(chosenEffect, toPay);
                 }
             }
         });
