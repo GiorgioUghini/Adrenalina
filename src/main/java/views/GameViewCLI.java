@@ -385,10 +385,7 @@ public class GameViewCLI implements GameView {
         //ADD MARKS
         boolean hasMarks = false;
         for (Player from : Client.getInstance().getPlayers()) {
-            for (int k = 0; k < markedPlayer.getMarksFromPlayer(from); k++) {
-                hasMarks = true;
-                break;
-            }
+            hasMarks = markedPlayer.getMarksFromPlayer(from) > 0;
         }
         if (!hasMarks) return;
         Console.println(String.format("Player %s is marked by ", markedPlayer.getStringColor()));
@@ -668,7 +665,7 @@ public class GameViewCLI implements GameView {
 
     @Override
     public void printError(String error) {
-        Logger.getAnonymousLogger().info(error);    //NON CREDO FUNZIONI
+        Logger.getAnonymousLogger().info(error);
     }
 
     @Override

@@ -12,6 +12,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
+import java.util.logging.Logger;
+
 public final class Toast
 {
     public static void makeText(Stage ownerStage, String toastMsg, int toastDelay, int fadeInDelay, int fadeOutDelay)
@@ -37,24 +39,24 @@ public final class Toast
         Timeline fadeInTimeline = new Timeline();
         KeyFrame fadeInKey1 = new KeyFrame(Duration.millis(fadeInDelay), new KeyValue (toastStage.getScene().getRoot().opacityProperty(), 1));
         fadeInTimeline.getKeyFrames().add(fadeInKey1);
-        fadeInTimeline.setOnFinished((ae) ->
-        {
-            new Thread(() -> {
-                try
-                {
-                    Thread.sleep(toastDelay);
-                }
-                catch (InterruptedException e)
-                {
-                    e.printStackTrace();
-                }
-                Timeline fadeOutTimeline = new Timeline();
-                KeyFrame fadeOutKey1 = new KeyFrame(Duration.millis(fadeOutDelay), new KeyValue (toastStage.getScene().getRoot().opacityProperty(), 0));
-                fadeOutTimeline.getKeyFrames().add(fadeOutKey1);
-                fadeOutTimeline.setOnFinished((aeb) -> toastStage.close());
-                fadeOutTimeline.play();
-            }).start();
-        });
+        fadeInTimeline.setOnFinished(ae ->
+                new Thread(() -> {
+                    try
+                    {
+                        Thread.sleep(toastDelay);
+                    }
+                    catch (InterruptedException e)
+                    {
+                        Logger logger = Logger.getAnonymousLogger();
+                        logger.info("Interrupted!");
+                        Thread.currentThread().interrupt();
+                    }
+                    Timeline fadeOutTimeline = new Timeline();
+                    KeyFrame fadeOutKey1 = new KeyFrame(Duration.millis(fadeOutDelay), new KeyValue (toastStage.getScene().getRoot().opacityProperty(), 0));
+                    fadeOutTimeline.getKeyFrames().add(fadeOutKey1);
+                    fadeOutTimeline.setOnFinished(aeb -> toastStage.close());
+                    fadeOutTimeline.play();
+                }).start());
         fadeInTimeline.play();
     }
 }

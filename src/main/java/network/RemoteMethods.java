@@ -280,7 +280,11 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                 player.playWeapon(card);
                 Server server = Server.getInstance();
                 if(server.isDebug() && server.isAutoReload()){
-                    card.load(new Ammo(3,3,3), null);
+                    if (card == null) {
+                        throw new NullPointerException();
+                    } else {
+                        card.load(new Ammo(3, 3, 3), null);
+                    }
                 }
             }
             LegitEffects legitEffects = player.getWeaponEffects();
@@ -289,11 +293,11 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         }
         catch (UnloadedWeaponException ex){
             Server.getInstance().getLobby().getMatch(token).turnEvent(TurnEvent.SHOOT);
-            ex.printStackTrace();
+            Logger.getAnonymousLogger().info(ex.toString());
             return new ErrorResponse(ex);
         }
         catch (Exception ex){
-            ex.printStackTrace();
+            Logger.getAnonymousLogger().info(ex.toString());
             return new ErrorResponse(ex);
         }
     }
@@ -318,7 +322,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             return new FinishCardResponse();
         }
         catch (Exception ex){
-            ex.printStackTrace();
+            Logger.getAnonymousLogger().info(ex.toString());
             return new ErrorResponse(ex);
         }
     }
@@ -329,7 +333,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             Player player = Server.getInstance().getLobby().getPlayer(token);
             Match match = Server.getInstance().getLobby().getMatch(player);
             WeaponCard card = player.getActiveWeapon();
-            logger.fine("Tagging: " + taggable);
+            logger.fine(String.format("Tagging: %s", taggable));
             card.select(taggable);
             logger.fine("Tag successful");
             Action action;
@@ -378,7 +382,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             }
         }
         catch (Exception ex){
-            ex.printStackTrace();
+            Logger.getAnonymousLogger().info(ex.toString());
             return new ErrorResponse(ex);
         }
     }
@@ -510,16 +514,15 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
             return new GrabResponse();
         }
         catch (NothingToGrabException e){
-            match.turnEvent(TurnEvent.GRAB);
-            e.printStackTrace();
-            return new ErrorResponse(e);
-        }
-        catch(NotEnoughAmmoException e){
-            e.printStackTrace();
+            if (match != null) {
+                match.turnEvent(TurnEvent.GRAB);
+            } else {
+                Logger.getAnonymousLogger().info(e.toString());
+            }
             return new ErrorResponse(e);
         }
         catch (Exception ex){
-            ex.printStackTrace();
+            Logger.getAnonymousLogger().info(ex.toString());
             return new ErrorResponse(ex);
         }
     }

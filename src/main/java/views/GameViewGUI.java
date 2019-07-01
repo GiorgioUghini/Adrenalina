@@ -87,7 +87,7 @@ public class GameViewGUI implements Initializable, GameView {
     @FXML
     private GridPane grid32;
 
-    private ArrayList<ArrayList<GridPane>> paneList = new ArrayList<>();
+    private ArrayList<ArrayList<GridPane>> paneList;
 
 
     @FXML
@@ -245,48 +245,15 @@ public class GameViewGUI implements Initializable, GameView {
 
         this.turnEventButtons = new ArrayList<>(Arrays.asList(btnDrawPowerUp, btnGrab, btnSpawn, btnRun, btnShoot, btnReload, btnUsePowerUp));
 
-        ArrayList<GridPane> x0 = new ArrayList<>();
-        x0.add(grid00);
-        x0.add(grid01);
-        x0.add(grid02);
-        ArrayList<GridPane> x1 = new ArrayList<>();
-        x1.add(grid10);
-        x1.add(grid11);
-        x1.add(grid12);
-        ArrayList<GridPane> x2 = new ArrayList<>();
-        x2.add(grid20);
-        x2.add(grid21);
-        x2.add(grid22);
-        ArrayList<GridPane> x3 = new ArrayList<>();
-        x3.add(grid30);
-        x3.add(grid31);
-        x3.add(grid32);
-        paneList.add(x0);
-        paneList.add(x1);
-        paneList.add(x2);
-        paneList.add(x3);
+        ArrayList<GridPane> x0 = new ArrayList<>(Arrays.asList(grid00,grid01,grid02));
+        ArrayList<GridPane> x1 = new ArrayList<>(Arrays.asList(grid10,grid11,grid12));
+        ArrayList<GridPane> x2 = new ArrayList<>(Arrays.asList(grid20,grid21,grid22));
+        ArrayList<GridPane> x3 = new ArrayList<>(Arrays.asList(grid30,grid31,grid32));
+        paneList = new ArrayList<>(Arrays.asList(x0,x1,x2,x3));
 
-        ArrayList<ImageView> redSPImages = new ArrayList<ImageView>() {
-            {
-                add(weaponSPRed1);
-                add(weaponSPRed2);
-                add(weaponSPRed3);
-            }
-        };
-        ArrayList<ImageView> blueSPImages = new ArrayList<ImageView>() {
-            {
-                add(weaponSPBlue1);
-                add(weaponSPBlue2);
-                add(weaponSPBlue3);
-            }
-        };
-        ArrayList<ImageView> yellowSPImages = new ArrayList<ImageView>() {
-            {
-                add(weaponSPYellow1);
-                add(weaponSPYellow2);
-                add(weaponSPYellow3);
-            }
-        };
+        ArrayList<ImageView> redSPImages = new ArrayList<>(Arrays.asList(weaponSPRed1,weaponSPRed2,weaponSPRed3));
+        ArrayList<ImageView> blueSPImages = new ArrayList<>(Arrays.asList(weaponSPBlue1,weaponSPBlue2,weaponSPBlue3));
+        ArrayList<ImageView> yellowSPImages = new ArrayList<>(Arrays.asList(weaponSPYellow1,weaponSPYellow2,weaponSPYellow3));
         weaponOnSpawnPointMap.put(RoomColor.RED, redSPImages);
         weaponOnSpawnPointMap.put(RoomColor.BLUE, blueSPImages);
         weaponOnSpawnPointMap.put(RoomColor.YELLOW, yellowSPImages);
@@ -1174,8 +1141,11 @@ public class GameViewGUI implements Initializable, GameView {
         squareClicked(s);
     }
 
-    public void weaponOnSpawnPointClicked(RoomColor color, int position) {
+    void weaponOnSpawnPointClicked(RoomColor color, int position) {
         SpawnPoint spawnPoint = (SpawnPoint) Client.getInstance().getMap().getAllSquaresInRoom(color).stream().filter(Square::isSpawnPoint).findFirst().orElse(null);
+        if (spawnPoint == null) {
+            return;
+        }
         Iterator<WeaponCard> it = spawnPoint.showCards().iterator();
         WeaponCard wc = null;
         while (position!=0) {

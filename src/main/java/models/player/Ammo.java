@@ -5,6 +5,7 @@ import errors.NotEnoughAmmoException;
 import models.card.PowerUpCard;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Ammo implements Serializable {
     public Ammo() {
@@ -106,5 +107,10 @@ public class Ammo implements Serializable {
             yellow == ammo.yellow &&
             red == ammo.red
         );
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(blue, yellow, red);
     }
 }

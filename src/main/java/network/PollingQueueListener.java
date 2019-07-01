@@ -1,13 +1,14 @@
 package network;
 
 import java.util.concurrent.BlockingQueue;
+import java.util.logging.Logger;
 
 public class PollingQueueListener implements Runnable {
 
     private BlockingQueue<Response> queue;
     private boolean stop;
 
-    public PollingQueueListener(BlockingQueue queue) {
+    public PollingQueueListener(BlockingQueue<Response> queue) {
         this.queue = queue;
         this.stop = false;
     }
@@ -21,7 +22,8 @@ public class PollingQueueListener implements Runnable {
                 update = queue.take();
                 update.handle(updateHandler);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
+                Logger.getAnonymousLogger().info(e.toString());
             }
         }
     }
