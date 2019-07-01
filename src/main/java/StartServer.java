@@ -8,6 +8,7 @@ public class StartServer {
         Server server = Server.getInstance();
         int registryPort = Constants.REGISTRY_PORT;
         int socketPort = Constants.PORT;
+        String hostname = Constants.HOSTNAME;
         int maxClients = 5;
         for (String s: args) {
             s = s.replace(Constants.ARG_PREFIX, "").toLowerCase();
@@ -18,6 +19,9 @@ public class StartServer {
             }else if(s.equals("autoreload")){
                 server.setAutoReload(true);
             }
+            else if(s.startsWith("hostname")){
+                hostname = s.replace("hostname=", "");
+            }
             else if(s.startsWith("socketport")){
                 socketPort = Integer.parseInt(s.replace("socketport=", ""));
             }
@@ -26,6 +30,6 @@ public class StartServer {
             }
         }
         server.setMaxClients(maxClients);
-        server.start(socketPort, registryPort);
+        server.start(hostname, socketPort, registryPort);
     }
 }

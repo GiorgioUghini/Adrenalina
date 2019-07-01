@@ -21,6 +21,7 @@ public class Server {
     private Lobby lobby;
     private int registryPort;
     private int socketPort;
+    private String hostname;
     private int maxClients;
     private boolean debug;
     private boolean autoReload;
@@ -43,9 +44,10 @@ public class Server {
         return instance;
     }
 
-    public void start(int socketPort, int registryPort) throws IOException {
+    public void start(String hostname, int socketPort, int registryPort) throws IOException {
         this.registryPort = registryPort;
         this.socketPort = socketPort;
+        this.hostname = hostname;
         InputStream file = ResourceController.getResource("config.json");
         String jsonConfig = new String(file.readAllBytes());
         GsonBuilder gsonBuilder = new GsonBuilder();
@@ -99,5 +101,9 @@ public class Server {
 
     public int getSocketPort() {
         return socketPort;
+    }
+
+    public String getHostname() {
+        return hostname;
     }
 }
