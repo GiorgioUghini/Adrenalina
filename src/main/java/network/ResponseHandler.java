@@ -25,8 +25,10 @@ public class ResponseHandler implements ResponseHandlerInterface {
     @Override
     public void handle(ReconnectPlayerResponse response) {
         Client.getInstance().setReconnecting(true);
+        Client.getInstance().setPlayerUsername(response.player.getName());
         Client.getInstance().setPlayers(response.players);
         Client.getInstance().setMap(response.map);
+        Client.getInstance().setMapNum(response.mapIndex);
         Client.getInstance().setPlayer(response.player);
         ScreenController.getInstance().activate("GameRoom.fxml");
     }
