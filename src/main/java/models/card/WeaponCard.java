@@ -42,7 +42,7 @@ public class WeaponCard extends EffectCard {
 
     /** @return the price to draw the ammo */
     public Ammo getDrawPrice(){
-        return this.reloadPrice;
+        return this.drawPrice;
     }
 
     public boolean isLoaded(){
