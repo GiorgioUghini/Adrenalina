@@ -20,6 +20,9 @@ public class Client {
     private static Client instance = null;
 
     private boolean debug;
+    private String hostname;
+    private int socketPort;
+    private int registryPort;
     private Connection connection;
     private ViewType viewType;
     private MenuView menuView;
@@ -108,8 +111,11 @@ public class Client {
         currentView = gameView;
     }
 
-    public void start(ViewType viewType) throws InterruptedException {
+    public void start(ViewType viewType, String hostname, int socketPort, int registryPort) throws InterruptedException {
         this.viewType = viewType;
+        this.hostname = hostname;
+        this.socketPort = socketPort;
+        this.registryPort = registryPort;
         if(viewType == ViewType.CLI){
             menuView = new MenuViewCLI();
         }
@@ -186,5 +192,17 @@ public class Client {
 
     public void setReconnecting(boolean reconnecting) {
         this.reconnecting = reconnecting;
+    }
+
+    public String getHostname() {
+        return hostname;
+    }
+
+    public int getSocketPort() {
+        return socketPort;
+    }
+
+    public int getRegistryPort() {
+        return registryPort;
     }
 }

@@ -6,7 +6,8 @@ import java.io.IOException;
 public class StartServer {
     public static void main(String[] args) throws IOException {
         Server server = Server.getInstance();
-
+        int registryPort = Constants.REGISTRY_PORT;
+        int socketPort = Constants.PORT;
         int maxClients = 5;
         for (String s: args) {
             s = s.replace(Constants.ARG_PREFIX, "").toLowerCase();
@@ -17,8 +18,14 @@ public class StartServer {
             }else if(s.equals("autoreload")){
                 server.setAutoReload(true);
             }
+            else if(s.startsWith("socketport")){
+                socketPort = Integer.parseInt(s.replace("socketport=", ""));
+            }
+            else if(s.startsWith("registryport")){
+                registryPort = Integer.parseInt(s.replace("registryport=", ""));
+            }
         }
         server.setMaxClients(maxClients);
-        server.start();
+        server.start(socketPort, registryPort);
     }
 }

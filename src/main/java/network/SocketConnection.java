@@ -219,7 +219,7 @@ public class SocketConnection implements Connection {
 
     public void init() {
         try {
-            socket = new Socket(Constants.HOSTNAME, Constants.PORT);
+            socket = new Socket(Client.getInstance().getHostname(), Client.getInstance().getSocketPort());
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
             responseHandler = new ResponseHandler();

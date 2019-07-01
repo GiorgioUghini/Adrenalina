@@ -232,7 +232,7 @@ public class RMIConnection implements Connection {
     @Override
     public void init() {
         try {
-            registry = LocateRegistry.getRegistry();
+            registry = LocateRegistry.getRegistry(Client.getInstance().getRegistryPort());
             remoteMethods = (RemoteMethodsInterface) registry.lookup("RemoteMethods");
             queue = new LinkedBlockingQueue<>(100);
             responseHandler = new ResponseHandler();

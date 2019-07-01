@@ -28,10 +28,10 @@ public class ServerConnection {
     public ServerConnection() throws IOException {
         close = false;
         pool = Executors.newCachedThreadPool();
-        serverSocket = new ServerSocket(Constants.PORT);
+        serverSocket = new ServerSocket(Server.getInstance().getSocketPort());
         connectionWrapperMap = new BiMap<>();
 
-        registry = LocateRegistry.createRegistry(Constants.REGISTRY_PORT);
+        registry = LocateRegistry.createRegistry(Server.getInstance().getRegistryPort());
         registry.rebind(Constants.REGISTRY_NAME, new RemoteMethods());
     }
 
