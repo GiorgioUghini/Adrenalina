@@ -506,7 +506,8 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
                 }
                 player.drawWeaponCard(drawn, powerUpCard, toRelease);
             }else{
-                player.drawAmmoCard();
+                AmmoCard ammoCard = player.drawAmmoCard();
+                match.throwAmmo(ammoCard);
             }
             match.turnEvent(TurnEvent.GRAB);
             match.addUpdate(new MapUpdate(match.getMap()));

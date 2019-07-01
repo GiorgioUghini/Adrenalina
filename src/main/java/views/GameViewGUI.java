@@ -295,13 +295,22 @@ public class GameViewGUI implements Initializable, GameView {
 
     public void addCardToHand(EffectCard card, List<ImageView> where) {
         Platform.runLater( () -> {
+            boolean isWeapon = card.getClass().equals(WeaponCard.class);
             int i = 0;
-            Image img = new Image(ResourceController.getResource((card.getClass().equals(WeaponCard.class) ? "weaponcards/" + card.image : "powerupcards/" + card.image)));
+            Image img = new Image(ResourceController.getResource((isWeapon ? "weaponcards/" + card.image : "powerupcards/" + card.image)));
             while (where.get(i).getImage() != null) {
                 i++;
             }
             if (i > 3) return;
             where.get(i).setImage(img);
+            if(isWeapon){
+                WeaponCard weaponCard = (WeaponCard) card;
+                if(!weaponCard.isLoaded()){
+                    where.get(i).setStyle("-fx-opacity: 0.5;");
+                }else{
+                    where.get(i).setStyle("-fx-opacity: 1;");
+                }
+            }
         });
     }
 

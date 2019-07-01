@@ -35,4 +35,13 @@ public class MarkTest {
         //assertEquals(2, pl2Marks); impl with at most 3 marks in total
         assertEquals(3, pl2Marks);
     }
+
+    @Test
+    public void testOverKill(){
+        Player a = new Player("a", "a");
+        Player b = new Player("b", "b");
+
+        b.getDamage(12, a);
+        assertEquals(1, a.getMarksFromPlayer(b));
+    }
 }
