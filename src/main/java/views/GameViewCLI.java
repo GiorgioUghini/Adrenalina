@@ -87,8 +87,11 @@ public class GameViewCLI implements GameView {
                 Console.print(String.format("CELL%d%d contains the following ammos: ", x, y));
                 AmmoPoint ammoPoint = (AmmoPoint) square;
                 AmmoCard ammoCard = ammoPoint.showCard();
-                if (ammoCard==null) continue;
-                Console.println(String.format("Red: %d, Blue: %d, Yellow: %d", ammoCard.getRed(), ammoCard.getBlue(), ammoCard.getYellow()));
+                if (ammoCard!=null) {
+                    Console.print(String.format("Red: %d, Blue: %d, Yellow: %d", ammoCard.getRed(), ammoCard.getBlue(), ammoCard.getYellow()));
+                    if(ammoCard.hasPowerup()) Console.print(" and a PowerUp");
+                }
+                Console.println("");
             }
         }
     }
