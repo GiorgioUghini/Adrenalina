@@ -96,13 +96,14 @@ public class Player implements Subscriber, Serializable, Taggable {
         //TODO: What to do when the states changes?
     }
 
-    public void drawAmmoCard(){
+    public AmmoCard drawAmmoCard(){
         AmmoPoint mySquare = (AmmoPoint) gameMap.getPlayerPosition(this);
         AmmoCard ammoCard = mySquare.drawCard();
         this.ammo.add(ammoCard.getAmmo());
         if(ammoCard.hasPowerup()){
             drawPowerUp();
         }
+        return ammoCard;
     }
 
     public PowerUpCard drawPowerUp() {
