@@ -22,6 +22,7 @@ public class Match {
     private int tmpActualPlayerIndex = -1;
     private int endMatchPlayerIndex = -1;
     private PowerUpDeck powerUpDeck;
+    private List<Card> thrownAmmos;
     private List<Card> thrownPowerUps;
     private WeaponDeck weaponDeck;
     private AmmoDeck ammoDeck;
@@ -49,6 +50,7 @@ public class Match {
         cardController = new CardController();
         powerUpDeck = cardController.getPowerUpDeck();
         thrownPowerUps = new ArrayList<>();
+        thrownAmmos = new ArrayList<>();
         weaponDeck = cardController.getWeaponDeck();
         ammoDeck = cardController.getAmmoDeck();
         powerUpDeck.shuffle();
@@ -168,6 +170,10 @@ public class Match {
 
     public void throwPowerUp(PowerUpCard powerUpCard) {
         thrownPowerUps.add(powerUpCard);
+    }
+
+    public void throwAmmo(AmmoCard ammoCard) {
+        thrownAmmos.add(ammoCard);
     }
 
     /**
@@ -388,6 +394,11 @@ public class Match {
                 }
             } else {
                 AmmoPoint ammoPoint = (AmmoPoint) s;
+                if(ammoDeck.size() == 0){
+                    ammoDeck = new AmmoDeck(thrownAmmos);
+                    thrownAmmos = new ArrayList<>();
+                    ammoDeck.shuffle();
+                }
                 Card ammoCard = ammoDeck.draw();
                 ammoPoint.addCard(ammoCard);
             }
