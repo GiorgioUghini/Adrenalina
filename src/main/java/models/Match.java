@@ -255,14 +255,6 @@ public class Match {
             player.onTurnEnded();
         }
 
-        if(frenzy && endMatchPlayerIndex < 0){
-            endMatchPlayerIndex = actualPlayerIndex + 1;
-        }
-        else if(frenzy && endMatchPlayerIndex == actualPlayerIndex){
-            addUpdate(new EndMatchUpdate(getTotalPoints()));
-            return;
-        }
-
         playerList.stream().filter(Player::isDead).forEach(p->gameMap.removePlayer(p));
 
         Player firstDeadPlayer = playerList.stream().filter(Player::isDead).findFirst().orElse(null);
@@ -276,6 +268,13 @@ public class Match {
             tmpActualPlayerIndex = actualPlayerIndex;
             actualPlayerIndex = playerList.indexOf(firstDeadPlayer);
         } else {
+            if(frenzy && endMatchPlayerIndex < 0){
+                endMatchPlayerIndex = actualPlayerIndex + 1;
+            }
+            else if(frenzy && endMatchPlayerIndex == actualPlayerIndex){
+                addUpdate(new EndMatchUpdate(getTotalPoints()));
+                return;
+            }
             actualPlayerIndex = (actualPlayerIndex == playerList.size() - 1) ? 0 : actualPlayerIndex + 1;
             while (!playerList.get(actualPlayerIndex).isOnline()) {
                 actualPlayerIndex = (actualPlayerIndex == playerList.size() - 1) ? 0 : actualPlayerIndex + 1;
