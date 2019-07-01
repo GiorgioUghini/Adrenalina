@@ -23,6 +23,7 @@ public class RMIStatusTask extends TimerTask {
     @Override
     public synchronized void run() {
         if(!ping){
+            rmiWrapper.stop();
             String token = Server.getInstance().getConnection().getToken(rmiWrapper);
             Player player = Server.getInstance().getLobby().getPlayer(token);
             if(player != null){
@@ -50,7 +51,6 @@ public class RMIStatusTask extends TimerTask {
                     }
                     match.addUpdate(new PlayerDisconnectUpdate(player.getName()));
                 }
-                rmiWrapper.stop();
             }
             Server.getInstance().getConnection().removeConnection(token);
         }

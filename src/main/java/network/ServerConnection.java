@@ -26,6 +26,7 @@ public class ServerConnection {
     private boolean close;
 
     public ServerConnection() throws IOException {
+        System.setProperty("java.rmi.server.hostname","localhost");
         close = false;
         pool = Executors.newCachedThreadPool();
         serverSocket = new ServerSocket(Server.getInstance().getSocketPort());
