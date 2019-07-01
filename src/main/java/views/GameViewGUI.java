@@ -320,20 +320,10 @@ public class GameViewGUI implements Initializable, GameView {
         weaponOnSpawnPointMap.get(color).get(i).setImage(img);
     }
 
-    private void removeWeaponOnMapSpawnPoint(WeaponCard card, RoomColor color) {
-        int i = 0;
-        try {
-            while (weaponOnSpawnPointMap.get(color).get(i).getImage() != null && !weaponOnSpawnPointMap.get(color).get(i).getImage().getUrl().contains(card.image)) {
-                i++;
-            }
-        } catch (NullPointerException e) {
-            return;
+    private void removeWeaponOnMapSpawnPoint(RoomColor color) {
+        for (int i=0; i<3; i++) {
+            weaponOnSpawnPointMap.get(color).get(i).setImage(null);
         }
-
-        for(;i<2;i++) {
-            weaponOnSpawnPointMap.get(color).get(i).setImage(weaponOnSpawnPointMap.get(color).get(i+1).getImage());
-        }
-        weaponOnSpawnPointMap.get(color).get(2).setImage(null);
     }
 
     public void addCardToHand(EffectCard card, List<ImageView> where) {
@@ -762,9 +752,7 @@ public class GameViewGUI implements Initializable, GameView {
         }
         //REMOVE OLD WEAPONS
         for (SpawnPoint sp : client.getMap().getSpawnPoints()) {
-            for (WeaponCard cardOld : sp.showCards()) {
-                removeWeaponOnMapSpawnPoint(cardOld, sp.getColor());
-            }
+            removeWeaponOnMapSpawnPoint(sp.getColor());
         }
         //REMOVE OLD AMMO
         for (int x = 0; x<4; x++) {
