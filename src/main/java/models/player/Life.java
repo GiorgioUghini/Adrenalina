@@ -19,20 +19,11 @@ class Life implements Serializable {
     Life(Player me) {
         this.me = me;
         myDamages = new LinkedHashMap<>();
-        observingPlayers = new ArrayList<>();
         damagedBy = new ArrayList<>();
     }
 
     Map<Player, Integer> getMyDamages() {
         return this.myDamages;
-    }
-
-    void addObserver(Player subscriber) {
-        this.observingPlayers.add(subscriber);
-    }
-
-    void removeObserver(Player subscriber) {
-        this.observingPlayers.remove(subscriber);
     }
 
     boolean isDead() {
@@ -80,16 +71,6 @@ class Life implements Serializable {
                 break;
             default:
                 break;
-        }
-
-
-        //Check if the player's dead
-        if (totalDamage > 10) {
-
-            //OBSERVER PATTERN
-            for (Player subscriber : this.observingPlayers) {
-                subscriber.update(me);
-            }
         }
     }
 
