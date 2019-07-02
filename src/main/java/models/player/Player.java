@@ -285,6 +285,10 @@ public class Player implements Subscriber, Serializable, Taggable, Observable {
 
     void removeAllMarkFromPlayer(Player fromWho) { this.marks.removeAllMarkFromPlayer(fromWho); }
 
+    public boolean hasMarks(){
+        return !this.marks.getAllMarks().isEmpty();
+    }
+
     /** Returns all the damages of this player. */
     public int getTotalDamage() { return this.life.getTotalDamage(); }
 

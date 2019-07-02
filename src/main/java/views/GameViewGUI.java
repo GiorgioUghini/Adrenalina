@@ -430,8 +430,14 @@ public class GameViewGUI implements Initializable, GameView {
     public void usePowerUp() {
         isShooting = false;
         setBtnEnabled(btnUsePowerUp, false);
-        showMessage("Select which power up you'd like to use.");
-        canDoActionMap.put(ViewAction.USEPOWERUP, true);
+        Player me = Client.getInstance().getPlayer();
+
+        if(!me.getPowerUpList().isEmpty()){
+            showMessage("Select which power up you'd like to use.");
+            canDoActionMap.put(ViewAction.USEPOWERUP, true);
+        }else{
+            showMessage("You do not have any powerUp");
+        }
     }
 
     public void endTurn() {
@@ -752,7 +758,8 @@ public class GameViewGUI implements Initializable, GameView {
 
     @Override
     public void onMark(Player markedPlayer){
-        Platform.runLater(() -> showMessage(markedPlayer.getName() + " has been marked"));
+        if(markedPlayer.hasMarks())
+            Platform.runLater(() -> showMessage(markedPlayer.getName() + " has been marked"));
         updateDamagedAndMarkedPlayer(markedPlayer);
     }
 
