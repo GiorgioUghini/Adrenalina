@@ -582,17 +582,6 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
-    private void removeFromPane(GridPane pane, Node node) {
-        Platform.runLater( () -> {
-            pane.getChildren().remove(node);
-            ArrayList<Node> arr = new ArrayList<>(pane.getChildren());
-            pane.getChildren().clear();
-            for (Node n : arr) {
-                addOnPane(pane, n);
-            }
-        });
-    }
-
     private int getIndex(String color) {
         switch (color){
             case "GREEN": return 0;
@@ -763,11 +752,13 @@ public class GameViewGUI implements Initializable, GameView {
 
     @Override
     public void onMark(Player markedPlayer){
+        Platform.runLater(() -> showMessage(markedPlayer.getName() + " has been marked"));
         updateDamagedAndMarkedPlayer(markedPlayer);
     }
 
     @Override
     public void onDamage(Player damagedPlayer){
+        showMessage(damagedPlayer.getName() + " has been damaged");
         updateDamagedAndMarkedPlayer(damagedPlayer);
         Player me = Client.getInstance().getPlayer();
         if(damagedPlayer.equals(me)){
@@ -962,6 +953,7 @@ public class GameViewGUI implements Initializable, GameView {
                 canDoActionMap.put(ViewAction.USEPOWERUP, false);
                 gameController.playPowerUp(powerUpCard, ammoToPay, powerUpCardToPay);
             });
+            showMessage("You played " + powerUpCard.getFullName());
         }
     }
 
@@ -1009,6 +1001,7 @@ public class GameViewGUI implements Initializable, GameView {
             WeaponCard we = Client.getInstance().getPlayer().getWeaponList().get(0);
             setActualWC(we);
             gameController.getEffects(we);
+            showMessage("You clicked on " + we.getName());
         }
     }
     public void weaponClicked2() {
@@ -1019,6 +1012,7 @@ public class GameViewGUI implements Initializable, GameView {
             WeaponCard we = Client.getInstance().getPlayer().getWeaponList().get(1);
             setActualWC(we);
             gameController.getEffects(we);
+            showMessage("You clicked on " + we.getName());
         }
     }
     public void weaponClicked3() {
@@ -1029,6 +1023,7 @@ public class GameViewGUI implements Initializable, GameView {
             WeaponCard we = Client.getInstance().getPlayer().getWeaponList().get(2);
             setActualWC(we);
             gameController.getEffects(we);
+            showMessage("You clicked on " + we.getName());
         }
     }
 
