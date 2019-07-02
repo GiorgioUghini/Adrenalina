@@ -169,7 +169,7 @@ public class RemoteMethods extends UnicastRemoteObject implements RemoteMethodsI
         try{
             Player player = Server.getInstance().getLobby().getPlayer(token);
             Match match = Server.getInstance().getLobby().getMatch(player);
-            PowerUpCard card = player.drawPowerUp();
+            PowerUpCard card = player.drawPowerUp(true);
             Server.getInstance().getConnection().getConnectionWrapper(token).addUpdate(new PlayerUpdate(player));
             match.turnEvent(TurnEvent.DRAW);
             return new DrawPowerUpResponse(card);

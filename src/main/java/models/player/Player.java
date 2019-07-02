@@ -113,9 +113,14 @@ public class Player implements Subscriber, Serializable, Taggable, Observable {
         return ammoCard;
     }
 
-    public PowerUpCard drawPowerUp() {
+    public PowerUpCard drawPowerUp(){
+        return drawPowerUp(false);
+    }
+
+    public PowerUpCard drawPowerUp(boolean isSpawning) {
         PowerUpCard powerUpCard = null;
-        if(powerUpList.size() < 3 ){
+        int max = isSpawning ? 4 : 3;
+        if(powerUpList.size() < max ){
             powerUpCard = (PowerUpCard) match.drawPowerUp();
             powerUpList.add(powerUpCard);
         }
