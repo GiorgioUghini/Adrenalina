@@ -8,13 +8,18 @@ import models.Match;
 import models.card.*;
 import models.map.*;
 import models.turn.ActionGroup;
+import network.Response;
 import network.Server;
+import network.updates.DamageUpdate;
+import network.updates.MarkUpdate;
+import utils.Observable;
+import utils.Observer;
 
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Player implements Subscriber, Serializable, Taggable {
+public class Player implements Subscriber, Serializable, Taggable, Observable {
 
     private String name;
     private String password;
@@ -35,6 +40,7 @@ public class Player implements Subscriber, Serializable, Taggable {
     private DeathManager deathManager;
     private transient Match match;
     private String circleColor = null;
+    private transient List<Observer> observers;
 
     public void setPlayerColor(String playerColor) {
         this.circleColor = playerColor;
@@ -66,6 +72,7 @@ public class Player implements Subscriber, Serializable, Taggable {
         gameMap = null;
         hasJustStarted = true;
         playersDamagedByMeThisTurn = new HashSet<>();
+        this.observers = new ArrayList<>();
         //token generation
     }
 
@@ -223,14 +230,6 @@ public class Player implements Subscriber, Serializable, Taggable {
         return this.life.getMyDamages();
     }
 
-    public void addObserver(Player subscriber) {
-        this.life.addObserver(subscriber);
-    }
-
-    public void removeObserver(Player subscriber) {
-        this.life.removeObserver(subscriber);
-    }
-
     public boolean isDead() {
         return this.life.isDead();
     }
@@ -242,6 +241,11 @@ public class Player implements Subscriber, Serializable, Taggable {
     public void getDamage(int damage, Player attacker) {
         this.life.damage(damage, attacker);
         attacker.addDamagedPlayerToList(this);
+
+        updateObservers(new DamageUpdate(this));
+        if(getTotalDamage()==12){
+            updateObservers(new MarkUpdate(getLastDamager()));
+        }
     }
 
     private void addDamagedPlayerToList(Player damagedPlayer){
@@ -267,7 +271,10 @@ public class Player implements Subscriber, Serializable, Taggable {
     /** Damage this player
      * @param numberOfMarks the number of marks to give. Could be any number, without needs to check limitation of it.
      * @param fromWho the player witch is giveing marks */
-    public void giveMark(int numberOfMarks, Player fromWho) { this.marks.addMark(fromWho, numberOfMarks); }
+    public void giveMark(int numberOfMarks, Player fromWho) {
+        this.marks.addMark(fromWho, numberOfMarks);
+        updateObservers(new MarkUpdate(this));
+    }
 
     public int getMarksFromPlayer(Player fromWho) { return this.marks.getMarksFromPlayer(fromWho); }
 
@@ -512,5 +519,21 @@ public class Player implements Subscriber, Serializable, Taggable {
 
     public int getSkullCount(List<Player> players){
         return deathManager.getSkullCount(players);
+    }
+
+    @Override
+    public void register(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void unRegister(Observer observer) {
+        observers.remove(observer);
+    }
+
+    private void updateObservers(Response update){
+        for(Observer observer : observers){
+            observer.update(update);
+        }
     }
 }

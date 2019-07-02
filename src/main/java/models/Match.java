@@ -14,10 +14,11 @@ import network.Server;
 import network.updates.ChooseMapUpdate;
 import network.updates.EndMatchUpdate;
 import network.updates.NextTurnUpdate;
+import utils.Observer;
 
 import java.util.*;
 
-public class Match {
+public class Match implements Observer {
     private List<Player> playerList;
     private int actualPlayerIndex = 0;
     private int tmpActualPlayerIndex = -1;
@@ -454,5 +455,10 @@ public class Match {
 
     public void setMapIndex(int mapIndex) {
         this.mapIndex = mapIndex;
+    }
+
+    @Override
+    public void update(Response response) {
+        addUpdate(response);
     }
 }

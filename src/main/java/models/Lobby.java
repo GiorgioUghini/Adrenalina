@@ -86,6 +86,7 @@ public class Lobby {
         Match match = new Match(waitingPlayers, config);
         for(Player waitingPlayer : waitingPlayers){
             matchPlayerMap.add(match, waitingPlayer);
+            waitingPlayer.register(match);
         }
         match.chooseMapAndStartMatch();  //Call this method when you want to start the match
         waitingPlayers.clear();
