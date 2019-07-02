@@ -24,11 +24,11 @@ import models.player.Player;
 import models.turn.ActionType;
 import models.turn.TurnEvent;
 import network.Client;
-import network.Server;
 import utils.BiMap;
 
 import java.net.URL;
 import java.util.*;
+import java.util.logging.Logger;
 
 public class GameViewGUI implements Initializable, GameView {
 
@@ -709,36 +709,31 @@ public class GameViewGUI implements Initializable, GameView {
     @Override
     public void updateMapView(GameMap map) {
         Client client = Client.getInstance();
+
+        //delete everything on map
+        for(List<GridPane> paneRow : paneList){
+            for(GridPane gridPane : paneRow){
+                Platform.runLater(gridPane.getChildren()::clear);
+            }
+        }
+        circlePlayerMap.clear();
+        client.getPlayerCoordinateMap().clear();
+
         //UPDATE PLAYERS POSITIONS
         for (Player p : client.getPlayers()) {
             try {
                 Coordinate c = map.getPlayerCoordinates(p);
-                Coordinate oldCoord = client.getPlayerCoordinateMap().get(p);
-                if (!c.equals(oldCoord)) {
-                    if (oldCoord != null) {
-                        deletePlayerToken(paneList.get(oldCoord.getX()).get(oldCoord.getY()), p);
-                    }
-                    drawPlayerToken(paneList.get(c.getX()).get(c.getY()), p);
-                    client.getPlayerCoordinateMap().put(p, c);
-                }
+                drawPlayerToken(paneList.get(c.getX()).get(c.getY()), p);
+                client.getPlayerCoordinateMap().put(p, c);
             }
             catch (PlayerNotOnMapException e) {
-                //Nothing to do, just don't draw it.
+                Logger.getAnonymousLogger().info("Player " + p.getName() + " is not on map");
+                client.getPlayerCoordinateMap().put(p, null);
             }
         }
         //REMOVE OLD WEAPONS
         for (SpawnPoint sp : client.getMap().getSpawnPoints()) {
             removeWeaponOnMapSpawnPoint(sp.getColor());
-        }
-        //REMOVE OLD AMMO
-        for (int x = 0; x<4; x++) {
-            for (int y = 0; y < 3; y++) {
-                Square square = map.getSquareByCoordinate(x, y);
-                if (square == null) continue;
-                if (square.isSpawnPoint()) continue;
-                GridPane panetoremove = paneList.get(x).get(y);
-                deleteAllAmmoOnPane(panetoremove);
-            }
         }
         //UPDATE AMMO'S AND WEAPONS ON MAP
         for (int x = 0; x<4; x++) {
@@ -765,13 +760,11 @@ public class GameViewGUI implements Initializable, GameView {
                 }
             }
         }
-
     }
 
     @Override
     public void updatePlayerView(Player newPlayer) {
         Platform.runLater(() -> {
-
             //UPDATE AMMO
             Ammo myAmmo = newPlayer.getAmmo();
             redAmmoText.setText(Integer.toString(myAmmo.red));
