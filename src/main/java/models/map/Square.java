@@ -94,6 +94,6 @@ public abstract class Square implements Taggable, Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId()) * getMapId().hashCode();
+        return Objects.hash(getId(), getMapId());
     }
 }

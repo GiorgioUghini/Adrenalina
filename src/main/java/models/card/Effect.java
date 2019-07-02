@@ -35,6 +35,6 @@ public class Effect implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(name);
+        return Objects.hash(name);
     }
 }
