@@ -682,30 +682,6 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
-    private void deletePlayerToken(GridPane pane, Player player) {
-        Circle circle1 = new Circle(0.0d,0.0d,17.0d);
-        circle1.setFill(getPlayerColor(player.getStringColor()));
-        for (int num = 0; pane.getChildren().size() > num; num++) {
-            Node n = pane.getChildren().get(num);
-            if (n.getClass() == circle1.getClass()) {
-                if (((Circle) n).getFill().equals(circle1.getFill())) {
-                    circlePlayerMap.removeByKey((Circle) n);
-                    removeFromPane(pane, n);
-                }
-            }
-        }
-    }
-
-    private void deleteAllAmmoOnPane(GridPane pane) { //To be used when updating map
-        for (int num = 0; pane.getChildren().size() > num; num++) {
-            Node n = pane.getChildren().get(num);
-            if (n.getClass().equals(ImageView.class)) {
-                removeFromPane(pane, n);
-            }
-        }
-    }
-
-
     @Override
     public void updateMapView(GameMap map) {
         Client client = Client.getInstance();

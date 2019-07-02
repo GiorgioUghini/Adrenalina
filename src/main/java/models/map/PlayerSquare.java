@@ -33,11 +33,21 @@ public class PlayerSquare implements Serializable {
     }
 
     public boolean hasPlayer(Player player){
-        return hashMap.containsKey(player);
+        if(hashMap.containsKey(player)) return true;
+        for(Player p : hashMap.keySet()){
+            if(p.getName().equals(player.getName())) return true;
+        }
+        return false;
     }
 
     public Square getSquare(Player player){
-        return hashMap.get(player);
+        if(hashMap.get(player)!=null) return hashMap.get(player);
+        for(Map.Entry entry : hashMap.entrySet()){
+            if(entry.getKey().equals(player)){
+                return (Square) entry.getValue();
+            }
+        }
+        return null;
     }
 
     public Set<Player> getPlayers(Square square){
