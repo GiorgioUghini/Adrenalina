@@ -10,6 +10,7 @@ import models.player.Player;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 class SelectorEngine {
     private GameMap gameMap;
@@ -141,9 +142,13 @@ class SelectorEngine {
         }
         if(radix.straight!=null){
             Square to = getSquareWithTag(radix.straight);
-            if(to==null)throw new WeaponCardException("The tag of a 'straight' radix must exist");
-            CardinalDirection direction = gameMap.getDirection(ref, to);
-            out.retainAll(gameMap.getAllSquaresByCardinal(ref, direction, !radix.throughWalls));
+            if(to!=null){
+                CardinalDirection direction = gameMap.getDirection(ref, to);
+                out.retainAll(gameMap.getAllSquaresByCardinal(ref, direction, !radix.throughWalls));
+            }else{
+                Logger.getAnonymousLogger().info("The tag of a 'straight' radix must exist!");
+                out.clear();
+            }
         }
         return out;
     }
