@@ -15,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import models.card.*;
@@ -812,6 +813,9 @@ public class GameViewGUI implements Initializable, GameView {
         //UPDATE SKULLS IN MAIN PANE
         removeAllSkullOnMainPane();
         addSkullsOnMainPane(newPlayer);
+        //UPDATE SKULLS IN PLAYER PANE
+        removeAllSkullsOnPlayerPane(newPlayer);
+        addSkullsOnPlayerPane(newPlayer);
     }
 
     @Override
@@ -819,6 +823,31 @@ public class GameViewGUI implements Initializable, GameView {
         for (Player p : Client.getInstance().getPlayers()) {
             int points = map.get(p);
             actualPointsList.get(Client.getInstance().getPlayers().indexOf(p)).setText("Actual Points: " + points);
+        }
+    }
+
+    void addSkullsOnPlayerPane(Player who) {
+        int numberOfDeath = 0;
+        if (who.getTotalDamage() > 10) {
+            numberOfDeath += 1;
+        }
+        numberOfDeath += who.getDeathCount();
+        for (int i=0; i<numberOfDeath; i++) {
+            Ellipse ellipse = new Ellipse(222 + i * 51, 197, 20, 25);
+            ellipse.setFill(Color.rgb(0,0,0));
+            int index = getIndex(who.getStringColor());
+            AnchorPane anchorPane = anchorPanePlayers.get(index);
+            Platform.runLater( () -> anchorPane.getChildren().add(ellipse));
+        }
+    }
+
+    void removeAllSkullsOnPlayerPane(Player who) {
+        AnchorPane anchorPane = anchorPanePlayers.get(getIndex(who.getStringColor()));
+        for (int i = 0; i<anchorPane.getChildren().size(); i++) {
+            Node n = anchorPane.getChildren().get(i);
+            if (n.getClass().equals(Ellipse.class)) {
+                Platform.runLater(() -> anchorPane.getChildren().remove(n));
+            }
         }
     }
 
