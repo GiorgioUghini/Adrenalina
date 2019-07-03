@@ -26,8 +26,6 @@ public interface GameView extends View {
     void updatePoints(Map<Player, Integer> map);
     void effectChoosingDialog(LegitEffects legitEffects);
 
-    void setTextAndEnableBtnActionGroup(ActionType actionType, int btnNum);
-
     void selectTag(Selectable selectable);
 
     void continueWeapon();

@@ -406,11 +406,6 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
-    public void setTextAndEnableBtnActionGroup(ActionType actionType, int btnNum) {
-
-    }
-
-    @Override
     public void selectTag(Selectable selectable) {
         Console.println("Please select a " + selectable.getType());
         List<Taggable> taggables = new ArrayList<>(selectable.get());

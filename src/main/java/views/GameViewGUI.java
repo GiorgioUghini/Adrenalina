@@ -26,7 +26,6 @@ import models.turn.ActionType;
 import models.turn.TurnEvent;
 import network.Client;
 import utils.BiMap;
-import utils.Console;
 
 import java.net.URL;
 import java.util.*;
@@ -1359,7 +1358,6 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
-    @Override
     public void setTextAndEnableBtnActionGroup(ActionType actionType, int btnNum) {
         Platform.runLater( () -> {
             switch (btnNum) {
