@@ -6,6 +6,7 @@ import models.map.GameMap;
 import models.map.SpawnPoint;
 import models.player.Player;
 import network.Server;
+import network.updates.EndMatchUpdate;
 import network.updates.MapUpdate;
 import network.updates.PlayerDisconnectUpdate;
 
@@ -13,6 +14,12 @@ public class DisconnectionHandler {
     public static void handle(Player player){
         player.disconnect();
         Match match = Server.getInstance().getLobby().getMatch(player);
+
+        if(match.getPlayersOnlineNumber()<3){
+            match.addUpdate(new EndMatchUpdate(match.getTotalPoints()));
+            return;
+        }
+
         if(match.getCurrentPlayer().getName().equals(player.getName())){
             if(player.hasJustStarted()){
                 while (player.getPowerUpList().size() < 2){

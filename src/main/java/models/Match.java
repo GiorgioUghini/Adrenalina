@@ -373,6 +373,14 @@ public class Match implements Observer {
         return playerList;
     }
 
+    public int getPlayersOnlineNumber(){
+        int i = 0;
+        for(Player player : playerList){
+            if(player.isOnline()) i++;
+        }
+        return i;
+    }
+
     public Player getPlayerByUsername(String username) {
         return playerList.stream().filter(f -> f.getName().equals(username)).findFirst().orElse(null);
     }
