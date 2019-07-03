@@ -348,10 +348,17 @@ public class GameViewGUI implements Initializable, GameView {
         disableTurnEventButtons();
         GameMap map = Client.getInstance().getMap();
         Player me = Client.getInstance().getPlayer();
-        if (map.getPlayerPosition(me).isSpawnPoint()) {
+        Square myPosition = map.getPlayerPosition(me);
+        if (myPosition.isSpawnPoint()) {
             //Spawn Point
-            showMessage("Please select which weapon you want to draw.");
-            canDoActionMap.put(ViewAction.CHOOSESPAWNPOINTWEAPON, true);
+            SpawnPoint spawnPoint = (SpawnPoint) myPosition;
+            if(spawnPoint.showCards().isEmpty()){
+                showMessage("Nothing to grab here");
+                gameController.grab(null, null, null);
+            }else{
+                showMessage("Please select which weapon you want to draw.");
+                canDoActionMap.put(ViewAction.CHOOSESPAWNPOINTWEAPON, true);
+            }
         } else {
             //Ammo point
             gameController.grab(null, null, null);
