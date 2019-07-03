@@ -27,6 +27,7 @@ class SelectorEngine {
         this.selectedSquares = selectedSquares;
     }
 
+    /** @return a set of Taggable that the user can tag */
     Set<Taggable> getSelectable(){
         Set<Taggable> out = new HashSet<>();
         switch (select.type){
@@ -43,6 +44,7 @@ class SelectorEngine {
         return out;
     }
 
+    /** @return A set of player the user can tag */
     private Set<Player> getSelectablePlayers(){
         Set<Player> out = new HashSet<>();
         boolean hasRules = select.rules!=null;
@@ -66,6 +68,7 @@ class SelectorEngine {
         return out;
     }
 
+    /** @return A set of squares the user can tag */
     private Set<Square> getSelectableSquares(){
         Set<Square> out = new HashSet<>();
         boolean hasRules = select.rules!=null;
@@ -86,6 +89,7 @@ class SelectorEngine {
         return out;
     }
 
+    /** @return a set of rooms the user can tag */
     private Set<RoomColor> getSelectableRooms(){
         Set<RoomColor> out = new HashSet<>();
         Set<Square> squares = getAllSquaresInRadix(select.radix);
@@ -95,6 +99,7 @@ class SelectorEngine {
         return out;
     }
 
+    /** @return A set of squares included in a given radix array, which means all the radix objects in this select */
     private Set<Square> getAllSquaresInRadix(Radix[] radixArray){
         Set<Square> radix = gameMap.getAllSquares();
         if(radixArray==null) return radix;
@@ -105,6 +110,7 @@ class SelectorEngine {
         return radix;
     }
 
+    /** @return a set of squares given a single radix object */
     private Set<Square> getAllSquaresInRadix(Radix radix){
         Set<Square> out = gameMap.getAllSquares();
         Square ref = getSquareWithTag(radix.ref);
@@ -153,6 +159,7 @@ class SelectorEngine {
         return out;
     }
 
+    /** @return all players with the given tag, or all players on squares with the given tag. Could be an empty set */
     private Set<Player> getAllPlayersWithTag(String tag){
         Set<Player> out = new HashSet<>();
         if(tag.equals("last_damager")) {
@@ -167,6 +174,7 @@ class SelectorEngine {
         return out;
     }
 
+    /** @return all squares with the given tag */
     private Square getSquareWithTag(String tag){
         Square out = null;
         if(tag.equals("me")){
@@ -179,6 +187,7 @@ class SelectorEngine {
         return out;
     }
 
+    /** Since you cannot shoot yourself this method removes your player from the tag */
     private void removeMe(Set<Player> players){
         players.remove(me);
     }

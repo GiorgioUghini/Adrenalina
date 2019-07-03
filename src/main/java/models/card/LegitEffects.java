@@ -17,6 +17,7 @@ public class LegitEffects implements Serializable {
         this.effects = effects;
     }
 
+    /** Returns a list of the effects that the user can actually activate */
     public List<Effect> getLegitEffects(){
         List<Effect> out = new ArrayList<>();
         for(Map.Entry<Effect, Boolean> entry : effects.entrySet()){
@@ -25,6 +26,7 @@ public class LegitEffects implements Serializable {
         return out;
     }
 
+    /** Returns only the effect the user cannot activate */
     public List<Effect> getIllegalEffects(){
         List<Effect> out = new ArrayList<>();
         for(Map.Entry<Effect, Boolean> entry : effects.entrySet()){
@@ -33,10 +35,14 @@ public class LegitEffects implements Serializable {
         return out;
     }
 
-    public void addEffect(Effect effect, Boolean legit){
+    /**
+     * @param effect the effect to add to the list
+     * @param legit a boolean that indicates whether the effect can be activated or not */
+    void addEffect(Effect effect, Boolean legit){
         effects.put(effect, legit);
     }
 
+    /** @return  all the effects of the card */
     public List<Effect> getAllEffects(){
         List<Effect> out = new ArrayList<>();
         for(Map.Entry<Effect, Boolean> entry : effects.entrySet()){
@@ -48,7 +54,7 @@ public class LegitEffects implements Serializable {
     /** confront these effects with those of the other list and returns a list in which the legit effects are only
      * those valid in both lists.
      * @param other the other list */
-    public LegitEffects logicalAnd(LegitEffects other){
+    LegitEffects logicalAnd(LegitEffects other){
         Map<Effect, Boolean> map = new HashMap<>();
         map.putAll(effects);
         for(Effect e : other.getIllegalEffects()){

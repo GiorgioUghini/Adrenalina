@@ -29,7 +29,6 @@ import utils.BiMap;
 
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.Semaphore;
 import java.util.logging.Logger;
 
 public class GameViewGUI implements Initializable, GameView {
@@ -175,7 +174,6 @@ public class GameViewGUI implements Initializable, GameView {
     private List<ImageView> firstPlayerList = new ArrayList<>();
     private List<AnchorPane> anchorPanePlayers = new ArrayList<>();
     private List<Text> actualPointsList = new ArrayList<>();
-    private Semaphore fxSemaphore = new Semaphore(1);
     private Map<RoomColor, List<ImageView>> weaponOnSpawnPointMap = new EnumMap<>(RoomColor.class);
 
     private HashMap<Integer, ActionType> buttonActionTypeMap = new HashMap<>();
@@ -680,11 +678,10 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
-    public void updateMapView(GameMap map) throws InterruptedException {
+    public void updateMapView(GameMap map) {
         Client client = Client.getInstance();
 
         //delete everything on map
-        fxSemaphore.acquire();
         for(List<GridPane> paneRow : paneList){
             for(GridPane gridPane : paneRow){
                 Platform.runLater(gridPane.getChildren()::clear);
@@ -734,7 +731,6 @@ public class GameViewGUI implements Initializable, GameView {
                 }
             }
         }
-        fxSemaphore.release();
     }
 
     @Override
@@ -764,23 +760,14 @@ public class GameViewGUI implements Initializable, GameView {
     public void onMark(Player markedPlayer){
         if(markedPlayer.hasMarks())
             Platform.runLater(() -> showMessage(markedPlayer.getName() + " has been marked"));
-        try {
-            updateDamagedAndMarkedPlayer(markedPlayer);
-        } catch (InterruptedException e) {
-            Logger.getAnonymousLogger().info(e.toString());
-            Thread.currentThread().interrupt();
-        }
+        updateDamagedAndMarkedPlayer(markedPlayer);
     }
 
     @Override
     public void onDamage(Player damagedPlayer){
         showMessage(damagedPlayer.getName() + " has been damaged");
-        try {
-            updateDamagedAndMarkedPlayer(damagedPlayer);
-        } catch (InterruptedException e) {
-            Logger.getAnonymousLogger().info(e.toString());
-            Thread.currentThread().interrupt();
-        }
+        updateDamagedAndMarkedPlayer(damagedPlayer);
+
         Player me = Client.getInstance().getPlayer();
         if(damagedPlayer.equals(me)){
             List<PowerUpCard> playable = new ArrayList<>();
@@ -800,10 +787,9 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
-    private void updateDamagedAndMarkedPlayer(Player newPlayer) throws InterruptedException {
+    private void updateDamagedAndMarkedPlayer(Player newPlayer) {
         List<Player> players = Client.getInstance().getPlayers();
         Player oldPlayer = players.get(players.indexOf(newPlayer));
-        fxSemaphore.acquire();
         //REMOVE DAMAGE
         if(oldPlayer != null) {
             removeAllDamageOnPlayer(oldPlayer);
@@ -832,7 +818,6 @@ public class GameViewGUI implements Initializable, GameView {
         //UPDATE SKULLS IN PLAYER PANE
         removeAllSkullsOnPlayerPane(newPlayer);
         addSkullsOnPlayerPane(newPlayer);
-        fxSemaphore.release();
     }
 
     @Override

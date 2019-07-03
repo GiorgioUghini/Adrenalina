@@ -12,10 +12,12 @@ public abstract class Deck {
         this.cards.addAll(cards);
     }
 
+    /** shuffles the deck, does not remove nor add cards */
     public void shuffle(){
         Collections.shuffle(cards);
     }
 
+    /** @return the first card of the deck and removes it */
     public Card draw(){
         return cards.pop();
     }

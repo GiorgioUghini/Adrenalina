@@ -7,10 +7,10 @@ public class Radix implements Serializable {
     public String area;
     public Integer min;
     public Integer max;
-    /** Parto da "ref" e andando dritto verso "straight" mi fermo solo se trovo un muro
-     *  (throughWalls=false) o vado avanti finché non finisce la mappa (throughWalls=true) */
+    /** Starting from 'ref' and going straight towards "straight". Stop at walls if throughWalls=false,
+     * otherwise go straight till a wall is found */
     public String straight;
-    /** da usare in combinazione con "straight" e "area":"cardinal" */
+    /** to be used with "straight" and "cardinal" */
     public boolean throughWalls;
 
     public Radix(){

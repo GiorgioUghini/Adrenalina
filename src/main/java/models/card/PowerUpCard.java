@@ -19,6 +19,7 @@ public class PowerUpCard extends EffectCard {
     }
 
     @Override
+    /** {@inheritDoc} */
     protected void init(){
         super.init();
         pricePaid = false;
@@ -45,15 +46,21 @@ public class PowerUpCard extends EffectCard {
         return Objects.hash(name,color);
     }
 
+    /** @return the name of the card and a character representing its color (e.g Teletrasporto(B)) */
     public String getFullName(){
         String color = "(" + this.color.toString().charAt(0) + ")";
         return this.name + color;
     }
 
+    /** @return true if the card has a price */
     public boolean getHasPrice(){
         return this.hasPrice;
     }
 
+    /**
+     * @param yourAmmo the total ammos of the player
+     * @param whichAmmo an Ammo object in which only one of the color should value 1, represents the ammo you want to pay with
+     * @param powerUpCard if you want to pay with a powerUp, in this case whichAmmo can be null */
     public void payPrice(Ammo yourAmmo, Ammo whichAmmo, PowerUpCard powerUpCard){
         if(!hasPrice) return;
         if(!hasEnoughAmmo(yourAmmo, whichAmmo, powerUpCard)) throw new WeaponCardException("Not enough ammo to pay");
@@ -61,11 +68,9 @@ public class PowerUpCard extends EffectCard {
         pay(yourAmmo, whichAmmo, powerUpCard);
         this.pricePaid = true;
     }
-    public boolean pricePaid(){
-        return (!hasPrice || pricePaid);
-    }
 
     @Override
+    /** {@inheritDoc} */
     public void activate(){
         if(me==null) throw new NullPointerException("Player cannot be null");
         if(hasPrice && !pricePaid) throw new WeaponCardException("You need to pay this powerup price to active it. card: " + this.name);
@@ -95,6 +100,7 @@ public class PowerUpCard extends EffectCard {
         return activeAction;
     }
 
+    /** if the ammo is free return true, otherwise check that you have at least the ammo you want to pay with or a powerUp */
     private boolean hasEnoughAmmo(Ammo ammo, Ammo whichAmmo, PowerUpCard powerUpCard){
         if(!hasPrice) return true;
         if(powerUpCard != null) return true;
@@ -102,6 +108,7 @@ public class PowerUpCard extends EffectCard {
         return ammo.isGreaterThanOrEqual(whichAmmo);
     }
 
+    /** Removes the ammo or throws the powerUp based on what you wanted to pay with */
     private void pay(Ammo yourAmmo, Ammo whichAmmo, PowerUpCard powerUpCard){
         if(powerUpCard!=null){
             me.throwPowerUp(powerUpCard);

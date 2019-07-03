@@ -24,6 +24,7 @@ public abstract class EffectCard extends Card {
         init();
     }
 
+    /** Initializes the card, making it ready to use again, but keeps it unloaded */
     protected void init() {
         activeAction = null;
         selectedPlayers = new HashMap<>();
@@ -32,7 +33,9 @@ public abstract class EffectCard extends Card {
         activated = false;
     }
 
+    /** Activates the card and make it usable. a Player should already have been set at this point */
     public abstract void activate();
+    /** Set the player who owns the card */
     public void setPlayer(Player player){
         this.me = player;
     }
@@ -98,6 +101,10 @@ public abstract class EffectCard extends Card {
         return new DamageEngine(activeAction.mark, selectedPlayers, selectedSquares, selectedRooms, gameMap, me).getDamages();
     }
 
+    /**
+     * @return a map with the players as keys and the squares they are moving to as the value
+     * @throws WeaponCardException if the current action is not a mark
+     */
     public Map<Player, Square> getPlayersMoves() {
         checkActiveAction(ActionType.MOVE);
         return new MoveEngine(activeAction.move, selectedPlayers, selectedSquares, gameMap, me).getNewPositions();

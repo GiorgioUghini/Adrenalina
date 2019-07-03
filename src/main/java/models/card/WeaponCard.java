@@ -58,19 +58,25 @@ public class WeaponCard extends EffectCard {
     }
 
     /** @param ammo your ammo availability
+     * @param powerUpCards PowerUp cards you can pay with
      *  @return true if the provided ammos are enough to reload. */
     public boolean canReload(Ammo ammo, List<PowerUpCard> powerUpCards){
         return hasEnoughAmmo(ammo, powerUpCards, reloadPrice);
     }
 
+    /** @param ammo your ammo availability
+     * @param powerUpCard the PowerUp card you want to pay with
+     *  @return true if the provided ammos are enough to reload. */
     public boolean canReload(Ammo ammo, PowerUpCard powerUpCard){
         return hasEnoughAmmo(ammo, powerUpCard, reloadPrice);
     }
 
+    /** Check that you have enough money to draw the card */
     public boolean canDraw(Ammo ammo, List<PowerUpCard> powerUpCards){
         return hasEnoughAmmo(ammo, powerUpCards, drawPrice);
     }
 
+    /** Check that you have enough money to draw the card */
     public boolean canDraw(Ammo ammo, PowerUpCard powerUpCard){
         return hasEnoughAmmo(ammo, powerUpCard, drawPrice);
     }
@@ -207,6 +213,7 @@ public class WeaponCard extends EffectCard {
         return new LegitEffects(map);
     }
 
+    /** Remove the ammos from your reserve and throws the powerUp */
     private void pay(Ammo price, Ammo ammo, PowerUpCard powerUpCard){
         Ammo newPrice = price.getCopy();
         if(powerUpCard!=null){

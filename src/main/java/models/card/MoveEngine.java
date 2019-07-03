@@ -22,6 +22,7 @@ class MoveEngine {
         this.me = me;
     }
 
+    /** @return a Map containing the player and the position it will go to */
     Map<Player, Square> getNewPositions(){
         Map<Player, Square> out = new HashMap<>();
         Player playerToMove = getPlayerByTag(move.target);
@@ -31,6 +32,7 @@ class MoveEngine {
         return out;
     }
 
+    /** @return a square if the tag exists, null otherwise */
     private Square getSquareByTag(String tag){
         if(tag.equals("me")){
             return gameMap.getPlayerPosition(me);
@@ -43,6 +45,7 @@ class MoveEngine {
         return null;
     }
 
+    /** @return a Player if the tag exists, null otherwise */
     private Player getPlayerByTag(String tag){
         if(tag.equals("me")){
             return me;

@@ -16,7 +16,7 @@ public interface GameView extends View {
     void reconnect();
     void startTurn(String name);
 
-    void updateMapView(GameMap map) throws InterruptedException;
+    void updateMapView(GameMap map);
     void updatePlayerView(Player newPlayer);
     void updateActions(Map<ActionType, List<TurnEvent>> actions);
 
