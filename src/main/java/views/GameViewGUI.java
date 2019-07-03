@@ -26,9 +26,11 @@ import models.turn.ActionType;
 import models.turn.TurnEvent;
 import network.Client;
 import utils.BiMap;
+import utils.Console;
 
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.Semaphore;
 import java.util.logging.Logger;
 
 public class GameViewGUI implements Initializable, GameView {
@@ -174,6 +176,7 @@ public class GameViewGUI implements Initializable, GameView {
     private List<ImageView> firstPlayerList = new ArrayList<>();
     private List<AnchorPane> anchorPanePlayers = new ArrayList<>();
     private List<Text> actualPointsList = new ArrayList<>();
+    private Semaphore fxSemaphore = new Semaphore(1);
     private Map<RoomColor, List<ImageView>> weaponOnSpawnPointMap = new EnumMap<>(RoomColor.class);
 
     private HashMap<Integer, ActionType> buttonActionTypeMap = new HashMap<>();
@@ -285,13 +288,21 @@ public class GameViewGUI implements Initializable, GameView {
 
         }
         if (i>2) return;
-        weaponOnSpawnPointMap.get(color).get(i).setImage(img);
+        final int j = i;
+        Platform.runLater( () -> {
+            weaponOnSpawnPointMap.get(color).get(j).setImage(img);
+            fxSemaphore.release();
+        });
     }
 
     private void removeWeaponOnMapSpawnPoint(RoomColor color) {
-        for (int i=0; i<3; i++) {
-            weaponOnSpawnPointMap.get(color).get(i).setImage(null);
-        }
+        Platform.runLater( () -> {
+            for (int i=0; i<3; i++) {
+                weaponOnSpawnPointMap.get(color).get(i).setImage(null);
+            }
+            fxSemaphore.release();
+        });
+
     }
 
     public void addCardToHand(EffectCard card, List<ImageView> where) {
@@ -302,7 +313,10 @@ public class GameViewGUI implements Initializable, GameView {
             while (where.get(i).getImage() != null) {
                 i++;
             }
-            if (i > 3) return;
+            if (i > 3) {
+                fxSemaphore.release();
+                return;
+            }
             where.get(i).setImage(img);
             if(isWeapon){
                 WeaponCard weaponCard = (WeaponCard) card;
@@ -312,6 +326,7 @@ public class GameViewGUI implements Initializable, GameView {
                     where.get(i).setStyle("-fx-opacity: 1;");
                 }
             }
+            fxSemaphore.release();
         });
     }
 
@@ -320,6 +335,7 @@ public class GameViewGUI implements Initializable, GameView {
             for(ImageView imageView : where){
                 imageView.setImage(null);
             }
+            fxSemaphore.release();
         });
     }
 
@@ -632,7 +648,10 @@ public class GameViewGUI implements Initializable, GameView {
         circle.setStrokeWidth(0d);
         circle.setStroke(Color.BLACK);
         circlePlayerMap.add(circle, p);
-        Platform.runLater(() -> addOnPane(pane, circle));
+        Platform.runLater(() -> {
+            addOnPane(pane, circle);
+            fxSemaphore.release();
+        });
     }
 
     private void highlightCircle(Circle c) {
@@ -685,13 +704,16 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
-    public void updateMapView(GameMap map) {
+    public synchronized void updateMapView(GameMap map) {
         Client client = Client.getInstance();
-
         //delete everything on map
         for(List<GridPane> paneRow : paneList){
             for(GridPane gridPane : paneRow){
-                Platform.runLater(gridPane.getChildren()::clear);
+                acquireLock();
+                Platform.runLater(() -> {
+                    gridPane.getChildren().clear();
+                    fxSemaphore.release();
+                });
             }
         }
         circlePlayerMap.clear();
@@ -700,18 +722,21 @@ public class GameViewGUI implements Initializable, GameView {
         //UPDATE PLAYERS POSITIONS
         for (Player p : client.getPlayers()) {
             try {
+                acquireLock();
                 Coordinate c = map.getPlayerCoordinates(p);
-                drawPlayerToken(paneList.get(c.getX()).get(c.getY()), p);
+                drawPlayerToken(paneList.get(c.getX()).get(c.getY()), p);   //INSIDE IT RELEASE LOCKS
                 client.getPlayerCoordinateMap().put(p, c);
             }
             catch (PlayerNotOnMapException e) {
+                fxSemaphore.release();
                 Logger.getAnonymousLogger().info("Player " + p.getName() + " is not on map");
                 client.getPlayerCoordinateMap().put(p, null);
             }
         }
         //REMOVE OLD WEAPONS
         for (SpawnPoint sp : client.getMap().getSpawnPoints()) {
-            removeWeaponOnMapSpawnPoint(sp.getColor());
+            acquireLock();
+            removeWeaponOnMapSpawnPoint(sp.getColor());    //INSIDE IT RELEASE LOCKS
         }
         //UPDATE AMMO'S AND WEAPONS ON MAP
         for (int x = 0; x<4; x++) {
@@ -722,45 +747,66 @@ public class GameViewGUI implements Initializable, GameView {
                     SpawnPoint spawnPoint = (SpawnPoint) square;
                     //ADD NEW WEAPONS
                     for (WeaponCard card : spawnPoint.showCards()) {
-                        addWeaponOnMapSpawnPoint(card, spawnPoint.getColor());
+                        acquireLock();
+                        addWeaponOnMapSpawnPoint(card, spawnPoint.getColor());    //INSIDE IT RELEASE LOCKS
                     }
                 } else {
                     AmmoPoint ammoPoint = (AmmoPoint) square;
                     AmmoCard ammoCard = ammoPoint.showCard();
                     if (ammoCard==null) continue;
+                    acquireLock();
                     String imageName = String.format("ammo/%d%d%d%s.png", ammoCard.getRed(), ammoCard.getBlue(), ammoCard.getYellow(), ammoCard.hasPowerup() ? "y" : "n");
                     Image image = new Image(imageName);
                     ImageView imageView = new ImageView(image);
                     imageView.setFitWidth(45);
                     imageView.setFitHeight(45);
                     GridPane panetoadd = paneList.get(x).get(y);
-                    Platform.runLater(() -> addOnPane(panetoadd, imageView));
+                    Platform.runLater(() -> {
+                        addOnPane(panetoadd, imageView);
+                        fxSemaphore.release();
+                    });
                 }
             }
         }
     }
 
+    private void acquireLock() {
+        try {
+            fxSemaphore.acquire();
+        } catch (InterruptedException e) {
+            Logger.getAnonymousLogger().info(e.toString());
+            Thread.currentThread().interrupt();
+        }
+    }
     @Override
-    public void updatePlayerView(Player newPlayer) {
+    public synchronized void updatePlayerView(Player newPlayer) {
+        acquireLock();
         Platform.runLater(() -> {
             //UPDATE AMMO
             Ammo myAmmo = newPlayer.getAmmo();
             redAmmoText.setText(Integer.toString(myAmmo.red));
             blueAmmoText.setText(Integer.toString(myAmmo.blue));
             yellowAmmoText.setText(Integer.toString(myAmmo.yellow));
-            //REMOVE OLD POWERUP IF ANY
-            removeCardsToHand(powerUpSpaces);
-            //ADD NEW POWERUP
-            for (PowerUpCard powerUpCard : newPlayer.getPowerUpList()) {
-                addCardToHand(powerUpCard, powerUpSpaces);
-            }
-            //REMOVE OLD WEAPONS IF ANY
-            removeCardsToHand(weaponSpaces);
-            //ADD NEW WEAPONS
-            for (WeaponCard weaponCard : newPlayer.getWeaponList()) {
-                addCardToHand(weaponCard, weaponSpaces);
-            }
+            fxSemaphore.release();
         });
+
+        //REMOVE OLD POWERUP IF ANY
+        acquireLock();
+        removeCardsToHand(powerUpSpaces);
+        //ADD NEW POWERUP
+        for (PowerUpCard powerUpCard : newPlayer.getPowerUpList()) {
+            acquireLock();
+            addCardToHand(powerUpCard, powerUpSpaces);
+        }
+        //REMOVE OLD WEAPONS IF ANY
+        acquireLock();
+        removeCardsToHand(weaponSpaces);
+        //ADD NEW WEAPONS
+        for (WeaponCard weaponCard : newPlayer.getWeaponList()) {
+            acquireLock();
+            addCardToHand(weaponCard, weaponSpaces);
+        }
+
     }
 
     @Override
