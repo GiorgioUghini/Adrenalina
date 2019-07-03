@@ -386,11 +386,7 @@ public class GameViewCLI implements GameView {
     @Override
     public void onMark(Player markedPlayer) {
         //ADD MARKS
-        boolean hasMarks = false;
-        for (Player from : Client.getInstance().getPlayers()) {
-            hasMarks = markedPlayer.getMarksFromPlayer(from) > 0;
-        }
-        if (!hasMarks) return;
+        if(!markedPlayer.hasMarks()) return;
         Console.println(String.format("Player %s is marked by ", markedPlayer.getStringColor()));
         for (Player from : Client.getInstance().getPlayers()) {
             for (int k = 0; k < markedPlayer.getMarksFromPlayer(from); k++) {
