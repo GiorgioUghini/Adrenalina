@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Player implements Subscriber, Serializable, Taggable, Observable {
+public class Player implements Serializable, Taggable, Observable {
 
     private String name;
     private String password;
@@ -96,11 +96,6 @@ public class Player implements Subscriber, Serializable, Taggable, Observable {
     @Override
     public int hashCode() {
         return Objects.hash(name);
-    }
-
-    @Override
-    public void update(Object playerLife) {
-        //TODO: What to do when the states changes?
     }
 
     public AmmoCard drawAmmoCard(){

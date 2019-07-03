@@ -1,6 +1,9 @@
 package models;
 
 import models.card.PowerUpCard;
+import models.map.AmmoPoint;
+import models.map.GameMap;
+import models.map.SpawnPoint;
 import models.player.Player;
 import models.turn.ActionGroup;
 import org.junit.Test;
@@ -102,6 +105,33 @@ public class MatchTest {
 
         possibleActions = m.getPossibleAction(pl3);
         assertFalse(possibleActions.isEmpty());
+    }
+
+    @Test
+    public void testRefillCards(){
+        Match match = generateMatch(3);
+        match.createMap(0);
+        GameMap gameMap = match.getMap();
+        AmmoPoint ammoPoint = (AmmoPoint) gameMap.getSquareById(0);
+        SpawnPoint spawnPoint = (SpawnPoint) gameMap.getSquareById(2);
+        ammoPoint.drawCard();
+        spawnPoint.drawCard(spawnPoint.showCards().get(0));
+
+        assertNull(ammoPoint.showCard());
+        assertEquals(2, spawnPoint.showCards().size());
+        match.nextTurn();
+        assertNotNull(ammoPoint.showCard());
+        assertEquals(3, spawnPoint.showCards().size());
+    }
+
+    @Test
+    public void testGetters(){
+        Match match = generateMatch(3);
+        match.createMap(0);
+        assertEquals(0, match.getMapIndex());
+        match.setMapIndex(1);
+        assertEquals(1, match.getMapIndex());
+        assertEquals(0, match.getSkullCount());
     }
 
     private Match generateMatch(int howManyPlayers){
