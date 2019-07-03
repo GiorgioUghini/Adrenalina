@@ -2,7 +2,6 @@ package models;
 
 import models.card.PowerUpCard;
 import models.player.Player;
-import models.turn.ActionElement;
 import models.turn.ActionGroup;
 import org.junit.Test;
 
@@ -28,13 +27,11 @@ public class MatchTest {
 
     @Test
     public void testActivateFrenzy(){
-        List<Player> players = new ArrayList<>();
-        players.add(new Player("a", ""));
-        players.add(new Player("b", ""));
-        players.add(new Player("c", ""));
-
-        Match match = new Match(players);
+        Match match = generateMatch(3);
         match.activateFrenzy();
+
+        List<Player> players = match.getPlayers();
+
         assertEquals(players.get(0), match.getCurrentPlayer());
         assertEquals("a", players.get(0).getName());
 
@@ -49,12 +46,9 @@ public class MatchTest {
 
     @Test
     public void testSetFirstPlayer(){
-        List<Player> players = new ArrayList<>();
         Player a = new Player("a", "");
         Player b = new Player("b", "");
-        players.add(a);
-        players.add(b);
-        Match match = new Match(players);
+        Match match = generateMatch(2);
         assertEquals(2, match.getPlayersNumber());
         assertEquals(a, match.getFirstPlayer());
         match.setFirstPlayer(b);
@@ -64,8 +58,7 @@ public class MatchTest {
 
     @Test
     public void testAddRemove(){
-        List<Player> players = new ArrayList<>();
-        Match match = new Match(players);
+        Match match = generateMatch(0);
         match.addPlayer(new Player("a", ""));
         match.addPlayer(new Player("b", ""));
         match.removePlayer(new Player("a", ""));
@@ -75,9 +68,7 @@ public class MatchTest {
 
     @Test
     public void testDrawPowerUp(){
-        List<Player> players = new ArrayList<>();
-        players.add(new Player("a", ""));
-        Match match = new Match(players);
+        Match match = generateMatch(1);
         for(int i=0;i<100;i++){
             PowerUpCard powerUpCard = (PowerUpCard) match.drawPowerUp();
             match.throwPowerUp(powerUpCard);
@@ -111,6 +102,16 @@ public class MatchTest {
 
         possibleActions = m.getPossibleAction(pl3);
         assertFalse(possibleActions.isEmpty());
+    }
+
+    private Match generateMatch(int howManyPlayers){
+        List<Player> players = new ArrayList<>();
+        String[] names = {"a", "b", "c", "d", "e"};
+        for(int i =0; i<howManyPlayers; i++){
+            players.add(new Player(names[i], ""));
+        }
+        Match match = new Match(players);
+        return match;
     }
 
 }
