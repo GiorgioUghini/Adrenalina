@@ -113,13 +113,13 @@ public class Match implements Observer {
      *
      */
     public void activateFrenzy() {
+        playerList.get(0).setLifeState(ActionGroup.FRENZY_TYPE_2);
         for(int i = actualPlayerIndex; i < playerList.size(); i++){
             playerList.get(i).setLifeState(ActionGroup.FRENZY_TYPE_1);
         }
         for(int i = actualPlayerIndex-1; i > 0; i--){
             playerList.get(i).setLifeState(ActionGroup.FRENZY_TYPE_2);
         }
-        playerList.get(0).setLifeState(ActionGroup.FRENZY_TYPE_2);
         frenzy = true;
     }
 
