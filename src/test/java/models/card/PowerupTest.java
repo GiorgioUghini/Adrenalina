@@ -153,6 +153,7 @@ public class PowerupTest {
         teletrasporto.select(destSquare);
         me.playNextPowerUpAction(); //move
         assertEquals(destSquare, gameMap.getPlayerPosition(me));
+        me.resetWeapon();
     }
 
     @Test

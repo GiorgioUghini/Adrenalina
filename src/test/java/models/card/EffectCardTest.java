@@ -198,6 +198,9 @@ public class EffectCardTest {
             }
         }
         assertEquals(0, p2.getTotalDamage());
+        me.setAmmo(new Ammo(3,3,3));
+        me.reloadWeapon(distruttore, null);
+        me.resetWeapon();
     }
 
     @Test
