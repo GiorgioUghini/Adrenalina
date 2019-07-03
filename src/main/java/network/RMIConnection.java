@@ -225,7 +225,9 @@ public class RMIConnection implements Connection {
 
     @Override
     public void receiveResponse(Response response) {
-        response.handle(responseHandler);
+        new Thread(() -> {
+            response.handle(responseHandler);
+        }).start();
     }
 
     @Override
