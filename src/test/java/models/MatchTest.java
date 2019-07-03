@@ -1,5 +1,6 @@
 package models;
 
+import models.card.PowerUpCard;
 import models.player.Player;
 import models.turn.ActionElement;
 import models.turn.ActionGroup;
@@ -43,6 +44,44 @@ public class MatchTest {
             }else{
                 assertEquals(ActionGroup.FRENZY_TYPE_1, player.getLifeState());
             }
+        }
+    }
+
+    @Test
+    public void testSetFirstPlayer(){
+        List<Player> players = new ArrayList<>();
+        Player a = new Player("a", "");
+        Player b = new Player("b", "");
+        players.add(a);
+        players.add(b);
+        Match match = new Match(players);
+        assertEquals(2, match.getPlayersNumber());
+        assertEquals(a, match.getFirstPlayer());
+        match.setFirstPlayer(b);
+        assertEquals(2, match.getPlayersNumber());
+        assertEquals(b, match.getFirstPlayer());
+    }
+
+    @Test
+    public void testAddRemove(){
+        List<Player> players = new ArrayList<>();
+        Match match = new Match(players);
+        match.addPlayer(new Player("a", ""));
+        match.addPlayer(new Player("b", ""));
+        match.removePlayer(new Player("a", ""));
+        assertEquals(1, match.getPlayersNumber());
+        assertEquals(new Player("b", ""), match.getFirstPlayer());
+    }
+
+    @Test
+    public void testDrawPowerUp(){
+        List<Player> players = new ArrayList<>();
+        players.add(new Player("a", ""));
+        Match match = new Match(players);
+        for(int i=0;i<100;i++){
+            PowerUpCard powerUpCard = (PowerUpCard) match.drawPowerUp();
+            match.throwPowerUp(powerUpCard);
+            assertNotNull(powerUpCard);
         }
     }
 

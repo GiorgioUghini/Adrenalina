@@ -55,7 +55,7 @@ public class Match implements Observer {
         thrownAmmos = new ArrayList<>();
         weaponDeck = cardController.getWeaponDeck();
         ammoDeck = cardController.getAmmoDeck();
-        powerUpDeck.shuffle();
+        shufflePowerUpDeck();
         weaponDeck.shuffle();
         ammoDeck.shuffle();
         int i = 0;
@@ -164,7 +164,7 @@ public class Match implements Observer {
         Card card = powerUpDeck.draw();
         if (powerUpDeck.size() == 0) {
             powerUpDeck = new PowerUpDeck(thrownPowerUps);
-            powerUpDeck.shuffle();
+            shufflePowerUpDeck();
             thrownPowerUps = new ArrayList<>();
         }
         return card;
@@ -391,7 +391,7 @@ public class Match implements Observer {
             if (s.isSpawnPoint()) {
                 SpawnPoint spawnPoint = (SpawnPoint) s;
                 while (spawnPoint.showCards().size() < 3) {
-                    Card weaponCard = weaponDeck.draw();
+                    Card weaponCard = drawWeapon();
                     spawnPoint.addCard(weaponCard);
                 }
             } else {
