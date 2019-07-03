@@ -20,6 +20,7 @@ public class ThreadQueueConsumer implements Runnable {
             try {
                 t = queue.take();
                 t.start();
+                t.join();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 Logger.getAnonymousLogger().info(e.toString());
