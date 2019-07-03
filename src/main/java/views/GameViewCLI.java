@@ -53,7 +53,7 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
-    public void updateMapView(GameMap map) {
+    public synchronized void updateMapView(GameMap map) {
         Console.println("");
         Console.println("");
         printMapNum(Client.getInstance().getMapNum());
@@ -96,7 +96,7 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
-    public void updatePlayerView(Player newPlayer) {
+    public synchronized void updatePlayerView(Player newPlayer) {
         Client.getInstance().setPlayer(newPlayer);
         //UPDATE AMMO
         Ammo myAmmo = newPlayer.getAmmo();
@@ -356,7 +356,7 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
-    public void onDamage(Player damagedPlayer) {
+    public synchronized void onDamage(Player damagedPlayer) {
         //ADD DAMAGE
         Console.println(String.format("Player %s was hurt by ", damagedPlayer.getStringColor()));
         for (Player from : damagedPlayer.getDamagedBy()) {
@@ -383,7 +383,7 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
-    public void onMark(Player markedPlayer) {
+    public synchronized void onMark(Player markedPlayer) {
         //ADD MARKS
         if(!markedPlayer.hasMarks()) return;
         Console.println(String.format("Player %s is marked by ", markedPlayer.getStringColor()));
