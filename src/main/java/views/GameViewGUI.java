@@ -771,7 +771,6 @@ public class GameViewGUI implements Initializable, GameView {
 
     private void acquireLock() {
         try {
-            Console.println(Integer.toString(fxSemaphore.availablePermits()));
             fxSemaphore.acquire();
         } catch (InterruptedException e) {
             Logger.getAnonymousLogger().info(e.toString());
