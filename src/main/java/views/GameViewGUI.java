@@ -29,6 +29,7 @@ import utils.BiMap;
 
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.Semaphore;
 import java.util.logging.Logger;
 
 public class GameViewGUI implements Initializable, GameView {
@@ -174,6 +175,7 @@ public class GameViewGUI implements Initializable, GameView {
     private List<ImageView> firstPlayerList = new ArrayList<>();
     private List<AnchorPane> anchorPanePlayers = new ArrayList<>();
     private List<Text> actualPointsList = new ArrayList<>();
+    private Semaphore fxSemaphore = new Semaphore(1);
     private Map<RoomColor, List<ImageView>> weaponOnSpawnPointMap = new EnumMap<>(RoomColor.class);
 
     private HashMap<Integer, ActionType> buttonActionTypeMap = new HashMap<>();
@@ -509,7 +511,6 @@ public class GameViewGUI implements Initializable, GameView {
         setBtnEnabled(btnActionGroup2, false);
         setBtnEnabled(btnActionGroup3, false);
     }
-
     private void setTurnEventButtons(List<TurnEvent> turnEvents){
         for (TurnEvent turnEvent : turnEvents) {
             Button buttonToShow = null;
@@ -679,10 +680,11 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
-    public void updateMapView(GameMap map) {
+    public void updateMapView(GameMap map) throws InterruptedException {
         Client client = Client.getInstance();
 
         //delete everything on map
+        fxSemaphore.acquire();
         for(List<GridPane> paneRow : paneList){
             for(GridPane gridPane : paneRow){
                 Platform.runLater(gridPane.getChildren()::clear);
@@ -732,6 +734,7 @@ public class GameViewGUI implements Initializable, GameView {
                 }
             }
         }
+        fxSemaphore.release();
     }
 
     @Override
@@ -761,13 +764,23 @@ public class GameViewGUI implements Initializable, GameView {
     public void onMark(Player markedPlayer){
         if(markedPlayer.hasMarks())
             Platform.runLater(() -> showMessage(markedPlayer.getName() + " has been marked"));
-        updateDamagedAndMarkedPlayer(markedPlayer);
+        try {
+            updateDamagedAndMarkedPlayer(markedPlayer);
+        } catch (InterruptedException e) {
+            Logger.getAnonymousLogger().info(e.toString());
+            Thread.currentThread().interrupt();
+        }
     }
 
     @Override
     public void onDamage(Player damagedPlayer){
         showMessage(damagedPlayer.getName() + " has been damaged");
-        updateDamagedAndMarkedPlayer(damagedPlayer);
+        try {
+            updateDamagedAndMarkedPlayer(damagedPlayer);
+        } catch (InterruptedException e) {
+            Logger.getAnonymousLogger().info(e.toString());
+            Thread.currentThread().interrupt();
+        }
         Player me = Client.getInstance().getPlayer();
         if(damagedPlayer.equals(me)){
             List<PowerUpCard> playable = new ArrayList<>();
@@ -787,12 +800,14 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
-    private void updateDamagedAndMarkedPlayer(Player newPlayer) {
+    private void updateDamagedAndMarkedPlayer(Player newPlayer) throws InterruptedException {
         List<Player> players = Client.getInstance().getPlayers();
         Player oldPlayer = players.get(players.indexOf(newPlayer));
+        fxSemaphore.acquire();
         //REMOVE DAMAGE
-        if(oldPlayer != null)
+        if(oldPlayer != null) {
             removeAllDamageOnPlayer(oldPlayer);
+        }
         //ADD DAMAGE
         int i = 0;
         for (Player from : newPlayer.getDamagedBy()) {
@@ -800,8 +815,9 @@ public class GameViewGUI implements Initializable, GameView {
             i++;
         }
         //REMOVE MARKS
-        if(oldPlayer != null)
+        if(oldPlayer != null) {
             removeAllMarksOnPlayer(oldPlayer);
+        }
         //ADD MARKS
         int j = 0;
         for (Player from : Client.getInstance().getPlayers()) {
@@ -816,6 +832,7 @@ public class GameViewGUI implements Initializable, GameView {
         //UPDATE SKULLS IN PLAYER PANE
         removeAllSkullsOnPlayerPane(newPlayer);
         addSkullsOnPlayerPane(newPlayer);
+        fxSemaphore.release();
     }
 
     @Override
