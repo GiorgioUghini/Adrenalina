@@ -40,7 +40,8 @@ public class GameViewCLI implements GameView {
     private void acquireLock(String fromWho){
         try{
             semaphore.acquire();
-            System.out.println("--> acquired "+ semaphore.availablePermits() + " from: "+ fromWho);
+            if(Client.getInstance().isDebug())
+                Console.println("--> acquired "+ semaphore.availablePermits() + " from: "+ fromWho);
         }catch (InterruptedException e){
             Logger.getAnonymousLogger().severe(e.getMessage());
             Thread.currentThread().interrupt();
@@ -48,7 +49,8 @@ public class GameViewCLI implements GameView {
     }
     private void releaseLock(){
         semaphore.release();
-        System.out.println("--> released "+ semaphore.availablePermits());
+        if(Client.getInstance().isDebug())
+            Console.println("--> released "+ semaphore.availablePermits());
     }
 
     @Override
