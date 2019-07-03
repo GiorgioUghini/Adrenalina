@@ -728,6 +728,7 @@ public class GameViewGUI implements Initializable, GameView {
                 client.getPlayerCoordinateMap().put(p, c);
             }
             catch (PlayerNotOnMapException e) {
+                fxSemaphore.release();
                 Logger.getAnonymousLogger().info("Player " + p.getName() + " is not on map");
                 client.getPlayerCoordinateMap().put(p, null);
             }
