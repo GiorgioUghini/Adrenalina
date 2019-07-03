@@ -46,7 +46,7 @@ class Life implements Serializable {
     void damage(int damage, Player attacker) {
         int additionalDamage = me.getMarksFromPlayer(attacker);
         me.removeAllMarkFromPlayer(attacker);
-        damage = damage + additionalDamage;
+        damage += additionalDamage;
         int totalDamage = myDamages.values().stream().mapToInt(Integer::intValue).sum();
         hurtMeLast = attacker;
         if (totalDamage+damage > MAX_LIFEPOINTS) {
@@ -55,9 +55,9 @@ class Life implements Serializable {
         for (int i = 0; i<damage; i++) {
             damagedBy.add(attacker);
         }
-        Optional<Integer> oldDamage = Optional.ofNullable(myDamages.get(attacker));
-        myDamages.put(attacker, damage + oldDamage.orElse(0));
-        totalDamage = damage + oldDamage.orElse(0);
+        Optional<Integer> oldDamageFrom = Optional.ofNullable(myDamages.get(attacker));
+        myDamages.put(attacker, damage + oldDamageFrom.orElse(0));
+        totalDamage = myDamages.values().stream().mapToInt(Integer::intValue).sum();
         if (totalDamage == 12) {    //Give revenge mark
             attacker.giveMark(1, me);
         }
