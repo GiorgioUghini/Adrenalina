@@ -8,6 +8,7 @@ import models.player.Player;
 import network.updates.MapUpdate;
 import network.updates.PlayerDisconnectUpdate;
 import utils.Console;
+import utils.DisconnectionHandler;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -47,23 +48,7 @@ public class ClientListener implements Runnable{
                     Server.getInstance().getLobby().disconnectPlayer(player);
                 }
                 else{
-                    player.disconnect();
-                    Match match = Server.getInstance().getLobby().getMatch(player);
-                    if(match.getCurrentPlayer().getName().equals(player.getName())){
-                        if(player.hasJustStarted()){
-                            while (player.getPowerUpList().size() < 2){
-                                player.drawPowerUp();
-                            }
-                            PowerUpCard powerUpCard = player.getPowerUpList().get(0);
-                            player.throwPowerUp(powerUpCard);
-                            GameMap map = match.getMap();
-                            SpawnPoint spawnPoint = map.getSpawnPoints().stream().filter(p -> p.getColor() == powerUpCard.color).findFirst().orElse(null);
-                            map.spawnPlayer(player, spawnPoint);
-                            match.addUpdate(new MapUpdate(match.getMap()));
-                        }
-                        match.nextTurn();
-                    }
-                    match.addUpdate(new PlayerDisconnectUpdate(player.getName()));
+                    DisconnectionHandler.handle(player);
                 }
             }
             Server.getInstance().getConnection().removeConnection(token);
