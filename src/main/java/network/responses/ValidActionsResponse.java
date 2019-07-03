@@ -18,11 +18,6 @@ public class ValidActionsResponse implements Response {
         this.newActions = newActions;
     }
 
-    public ValidActionsResponse(Map<ActionType, List<TurnEvent>> actions){
-        this.actions = actions;
-        this.newActions = false;
-    }
-
     @Override
     public void handle(ResponseHandlerInterface handler) {
         handler.handle(this);

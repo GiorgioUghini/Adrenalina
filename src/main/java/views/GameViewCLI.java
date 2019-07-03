@@ -33,7 +33,6 @@ public class GameViewCLI implements GameView {
         printMapNum(Client.getInstance().getMapNum());
         this.gameController = new GameController();
         actionTypeMap = new EnumMap<>(BaseActions.class);
-        getValidActions();
     }
 
     @Override

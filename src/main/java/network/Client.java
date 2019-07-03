@@ -107,6 +107,7 @@ public class Client {
     public void activateGameViewCLI() {
         gameView = new GameViewCLI();
         currentView = gameView;
+        gameView.getValidActions();
     }
 
     public void start(ViewType viewType, String hostname, int socketPort, int registryPort) throws InterruptedException {
