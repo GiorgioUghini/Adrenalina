@@ -12,6 +12,7 @@ import network.Client;
 import utils.Console;
 
 import java.util.*;
+import java.util.concurrent.Semaphore;
 import java.util.logging.Logger;
 
 import static utils.Console.*;
@@ -20,7 +21,7 @@ import static utils.Console.println;
 public class GameViewCLI implements GameView {
 
     private int maxRunDistance;
-    private HashMap<Integer, ActionType> buttonActionTypeMap = new HashMap<>();
+    private Semaphore semaphore;
     private boolean isShooting;
     private boolean firstTurn = true;
 
@@ -33,6 +34,21 @@ public class GameViewCLI implements GameView {
         printMapNum(Client.getInstance().getMapNum());
         this.gameController = new GameController();
         actionTypeMap = new EnumMap<>(BaseActions.class);
+        this.semaphore = new Semaphore(1);
+    }
+
+    private void acquireLock(String fromWho){
+        try{
+            semaphore.acquire();
+            System.out.println("--> acquired "+ semaphore.availablePermits() + " from: "+ fromWho);
+        }catch (InterruptedException e){
+            Logger.getAnonymousLogger().severe(e.getMessage());
+            Thread.currentThread().interrupt();
+        }
+    }
+    private void releaseLock(){
+        semaphore.release();
+        System.out.println("--> released "+ semaphore.availablePermits());
     }
 
     @Override
@@ -53,7 +69,9 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
-    public synchronized void updateMapView(GameMap map) {
+    public void updateMapView(GameMap map) {
+        Client.getInstance().setMap(map);
+        acquireLock("updateMapView");
         Console.println("");
         Console.println("");
         printMapNum(Client.getInstance().getMapNum());
@@ -62,7 +80,12 @@ public class GameViewCLI implements GameView {
         for (Player p : client.getPlayers()) {
             try {
                 Coordinate c = map.getPlayerCoordinates(p);
-                Console.println(String.format("Player %s is on CELL%d%d", p.getStringColor(), c.getX(), c.getY()));
+                if(p.equals(client.getPlayer())){
+                    Console.println(String.format("Player %s (you) is on CELL%d%d", p.getStringColor(), c.getX(), c.getY()));
+                }else{
+                    Console.println(String.format("Player %s is on CELL%d%d", p.getStringColor(), c.getX(), c.getY()));
+                }
+
             }
             catch (PlayerNotOnMapException e) {
                 //Nothing to do, just don't draw it.
@@ -93,11 +116,13 @@ public class GameViewCLI implements GameView {
                 Console.println("");
             }
         }
+        releaseLock();
     }
 
     @Override
-    public synchronized void updatePlayerView(Player newPlayer) {
+    public void updatePlayerView(Player newPlayer) {
         Client.getInstance().setPlayer(newPlayer);
+        acquireLock("updatePlayerView");
         //UPDATE AMMO
         Ammo myAmmo = newPlayer.getAmmo();
         Console.print("\nAMMO: You have ");
@@ -120,6 +145,7 @@ public class GameViewCLI implements GameView {
                 Console.print(weaponCard.name + " - ");
             }
         }
+        releaseLock();
     }
 
     private void addSkullsOnMainPane(Player newPlayer) {
@@ -135,6 +161,7 @@ public class GameViewCLI implements GameView {
 
     @Override
     public void effectChoosingDialog(LegitEffects legitEffects) {
+        acquireLock("effectChoosingDialog");
         Console.println("Which effect do you want to use now?");
 
         int i = 1;
@@ -144,6 +171,7 @@ public class GameViewCLI implements GameView {
         }
         Console.println(i + ") I don't want to use any effect. ");
         int choose = readConsole(i);
+        releaseLock();
 
         if (choose == effectsNumber) {
             gameController.finishCard();
@@ -277,12 +305,14 @@ public class GameViewCLI implements GameView {
         }
 
         int i = 1;
+        acquireLock("updateActions");
         for(BaseActions baseAction : baseActions){
             Console.println(i++ + " - " + baseAction.toString());
         }
         if(!baseActions.isEmpty()){
             chooseAction();
         }
+        releaseLock();
         if(actions.isEmpty()) firstTurn = false;
     }
 
@@ -356,12 +386,14 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
-    public synchronized void onDamage(Player damagedPlayer) {
+    public void onDamage(Player damagedPlayer) {
         //ADD DAMAGE
-        Console.println(String.format("Player %s was hurt by ", damagedPlayer.getStringColor()));
+        acquireLock("onDamage");
+        Console.print(String.format("Player %s was hurt by: ", damagedPlayer.getStringColor()));
         for (Player from : damagedPlayer.getDamagedBy()) {
-            Console.print(String.format("Player %s ", from.getStringColor()));
+            Console.print(String.format("%s ", from.getStringColor()));
         }
+        Console.println("\n");
         //UPDATE SKULLS IN MAIN PANE
         addSkullsOnMainPane(damagedPlayer);
 
@@ -373,39 +405,51 @@ public class GameViewCLI implements GameView {
                     playable.add(powerUpCard);
                 }
             }
-            if(playable.isEmpty()) return;
-            if(me.getLastDamager()==null) return;
+            if(playable.isEmpty() || me.getLastDamager()==null) {
+                releaseLock();
+                return;
+            }
             PowerUpCard powerUpCard = choosePowerUpDialog("You have been damaged by " + me.getLastDamager().getName() + " would you like to mark him?", playable);
             if(powerUpCard!=null){
                 Client.getInstance().getConnection().playPowerUp(powerUpCard.name, null, null);
             }
         }
+        releaseLock();
     }
 
     @Override
-    public synchronized void onMark(Player markedPlayer) {
+    public void onMark(Player markedPlayer) {
         //ADD MARKS
-        if(!markedPlayer.hasMarks()) return;
-        Console.println(String.format("Player %s is marked by ", markedPlayer.getStringColor()));
+        acquireLock("onMark");
+        if(!markedPlayer.hasMarks()) {
+            releaseLock();
+            return;
+        }
+        Console.print(String.format("Player %s is marked by: ", markedPlayer.getStringColor()));
         for (Player from : Client.getInstance().getPlayers()) {
             for (int k = 0; k < markedPlayer.getMarksFromPlayer(from); k++) {
-                Console.print("Player " + from.getStringColor() + " ");
+                Console.print(from.getStringColor() + " ");
             }
         }
+        Console.println("\n");
         //UPDATE SKULLS IN MAIN PANE
         addSkullsOnMainPane(markedPlayer);
+        releaseLock();
     }
 
     @Override
     public void updatePoints(Map<Player, Integer> map) {
+        acquireLock("updatePoints");
         for (Player p : Client.getInstance().getPlayers()) {
             int points = map.get(p);
             Console.println(String.format("Player %s has %d points.", p.getStringColor(), points));
         }
+        releaseLock();
     }
 
     @Override
     public void selectTag(Selectable selectable) {
+        acquireLock("selectTag");
         Console.println("Please select a " + selectable.getType());
         List<Taggable> taggables = new ArrayList<>(selectable.get());
         int i = 1;
@@ -430,6 +474,7 @@ public class GameViewCLI implements GameView {
             max++;
         }
         int result = readConsole(max);
+        releaseLock();
         if(result == taggables.size()){
             gameController.tagElement(null, isShooting);
         }else{
@@ -504,7 +549,7 @@ public class GameViewCLI implements GameView {
     private void reload(){
         Player me = Client.getInstance().getPlayer();
         if(getLoadedWeapons(me).size() == me.getWeaponList().size()){
-            showMessage("Nothing to reload");
+            Console.println("Nothing to reload");
         }else{
             List<WeaponCard> reloadableWeapons;
             Map<WeaponCard, PowerUpCard> reloads = new HashMap<>();
@@ -528,7 +573,7 @@ public class GameViewCLI implements GameView {
                 me.reloadWeapon(toReload, toPay);
             }
             if(reloadableWeapons.isEmpty()) {
-                showMessage("You cannot reload anything else");
+                Console.println("You cannot reload anything else");
             }
             Client.getInstance().getConnection().reload(reloads);
         }
@@ -539,7 +584,7 @@ public class GameViewCLI implements GameView {
         Player me = Client.getInstance().getPlayer();
         List<PowerUpCard> selectablePowerUps = getPlayablePowerUps(me);
         if(selectablePowerUps.isEmpty()){
-            showMessage("You cannot play any powerUp");
+            Console.println("You cannot play any powerUp!");
         }else{
             PowerUpCard powerUpCard = choosePowerUpDialog("Which powerup do you want to use?", selectablePowerUps);
             Ammo ammoToPay = null;
@@ -552,7 +597,7 @@ public class GameViewCLI implements GameView {
                         powerUpsToPay.remove(powerUpCard);
                         powerUpToPay = choosePowerUpDialog("Choose a powerUp to pay", powerUpsToPay);
                         if(powerUpToPay==null) {
-                            showMessage("You must pay to use this powerUp");
+                            Console.println("You must pay to use this powerUp");
                             gameController.getValidActions();
                             return;
                         }
@@ -658,6 +703,7 @@ public class GameViewCLI implements GameView {
 
     @Override
     public void onEndMatch(List<Player> winners, Map<Player, Integer> pointers) {
+        acquireLock("onEndMatch");
         for(Map.Entry<Player, Integer> entry : pointers.entrySet()){
             Console.println(String.format("%s scored %d points", entry.getKey().getName(), entry.getValue()));
         }
@@ -665,6 +711,7 @@ public class GameViewCLI implements GameView {
         for(Player player : winners){
             Console.println(player.getName() + " WON!");
         }
+        releaseLock();
     }
 
     @Override
@@ -674,7 +721,9 @@ public class GameViewCLI implements GameView {
 
     @Override
     public void showMessage(String message) {
+        acquireLock("showMessage");
         Console.printColor(message + "\n", COLOR.PURPLE);
+        releaseLock();
     }
 
     @Override
