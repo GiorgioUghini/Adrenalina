@@ -667,6 +667,17 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
+    public void onEndMatch(List<Player> winners, Map<Player, Integer> pointers) {
+        for(Map.Entry<Player, Integer> entry : pointers.entrySet()){
+            Console.println(String.format("%s scored %d points", entry.getKey().getName(), entry.getValue()));
+        }
+        Console.println("\n");
+        for(Player player : winners){
+            Console.println(player.getName() + " WON!");
+        }
+    }
+
+    @Override
     public void printError(String error) {
         Logger.getAnonymousLogger().info(error);
     }

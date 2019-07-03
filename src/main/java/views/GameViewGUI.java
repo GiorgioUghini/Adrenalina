@@ -1474,6 +1474,16 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
+    public void onEndMatch(List<Player> winners, Map<Player, Integer> pointers) {
+        disableActionGroupButtons();
+        disableTurnEventButtons();
+
+        for(Player player : winners){
+            showMessage(player.getName() + " WON!");
+        }
+    }
+
+    @Override
     public void selectTag(Selectable selectable) {
         switch (selectable.getType()) {
             case ROOM:

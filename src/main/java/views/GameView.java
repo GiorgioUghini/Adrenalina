@@ -32,5 +32,6 @@ public interface GameView extends View {
 
     void continueWeapon();
     void onEndWeapon();
+    void onEndMatch(List<Player> winners, Map<Player, Integer> pointers);
 
 }

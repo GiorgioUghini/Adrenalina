@@ -15,7 +15,7 @@ import utils.Console;
 import views.GameView;
 import views.MenuView;
 
-import java.util.List;
+import java.util.*;
 
 public class ResponseHandler implements ResponseHandlerInterface {
 
@@ -260,6 +260,20 @@ public class ResponseHandler implements ResponseHandlerInterface {
 
     @Override
     public void handle(EndMatchUpdate response) {
-        //TODO show response.points
+        Map<Player, Integer> points = response.points;
+        List<Player> winners = new ArrayList<>();
+        int maxPoints = 0;
+        for(Player p : points.keySet()){
+            int x = points.get(p);
+            if(x>maxPoints) {
+                winners.clear();
+                winners.add(p);
+                maxPoints = x;
+            }else if(x==maxPoints){
+                winners.add(p);
+            }
+        }
+
+        ((GameView) Client.getInstance().getCurrentView()).onEndMatch(winners, points);
     }
 }
