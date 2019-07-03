@@ -1,10 +1,12 @@
 package models.card;
 
 import controllers.CardController;
+import errors.WeaponCardException;
 import models.Match;
 import models.map.GameMap;
 import models.map.RoomColor;
 import models.map.SpawnPoint;
+import models.player.Ammo;
 import models.player.Player;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -14,6 +16,71 @@ import java.util.List;
 import java.util.Set;
 
 public class PowerupTest {
+    @Test
+    public void testEquals(){
+        PowerUpCard teletrasporto = getPowerUpByName("Teletrasporto");
+        PowerUpCard teletrasporto2 = getPowerUpByName("Teletrasporto");
+        PowerUpCard raggioTraente = getPowerUpByName("Raggio traente");
+
+        assertTrue(teletrasporto.equals(teletrasporto));
+        assertFalse(teletrasporto.equals(null));
+        assertFalse(teletrasporto.equals(new Object()));
+        assertFalse(teletrasporto.equals(raggioTraente));
+        assertTrue(teletrasporto.equals(teletrasporto2));
+    }
+
+    @Test
+    public void testFullName(){
+        PowerUpCard teletrasporto = getPowerUpByName("Teletrasporto", RoomColor.RED);
+        assertNotNull(teletrasporto);
+        assertEquals("Teletrasporto(R)", teletrasporto.getFullName());
+
+    }
+
+    @Test
+    public void testPayPrice(){
+        PowerUpCard teletrasporto = getPowerUpByName("Teletrasporto");
+        PowerUpCard mirino = getPowerUpByName("Mirino");
+
+        assertNotNull(teletrasporto);
+        assertNotNull(mirino);
+
+        teletrasporto.payPrice(null, null, null); //does not have price
+        Ammo myAmmo = new Ammo(3,3,3);
+        Ammo whichAmmo = new Ammo(1,0,0);
+
+        mirino.payPrice(myAmmo, whichAmmo, null);
+        assertEquals(new Ammo(2,3,3), myAmmo);
+    }
+
+    @Test
+    public void testPayPriceWrongAmmo(){
+        PowerUpCard mirino = getPowerUpByName("Mirino");
+        assertNotNull(mirino);
+
+        Ammo myAmmo = new Ammo(3,3,3);
+        Ammo whichAmmo = new Ammo(2,0,0);
+
+        try{
+            mirino.payPrice(myAmmo, whichAmmo, null);
+            assert false;
+        }catch (WeaponCardException e){
+            assertEquals("You have to pay exactly one ammo of any color", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testPayWithPowerUp(){
+        Player player = new Player("x", "");
+        PowerUpCard mirino = getPowerUpByName("Mirino");
+        mirino.setPlayer(player);
+        assertNotNull(mirino);
+        Ammo myAmmo = new Ammo(0,0,0);
+        Ammo whichAmmo = null;
+        PowerUpCard toPay = getPowerUpByName("Teletrasporto");
+        mirino.payPrice(myAmmo, whichAmmo, toPay);
+    }
+
     @Test
     public void testMandatoryFields(){
         PowerUpDeck deck = new CardController().getPowerUpDeck();
@@ -135,14 +202,21 @@ public class PowerupTest {
         return out;
     }
 
-    private PowerUpCard getPowerUpByName(String name){
+    private PowerUpCard getPowerUpByName(String name, RoomColor color){
         PowerUpDeck powerUpDeck = new CardController().getPowerUpDeck();
         int deckSize = powerUpDeck.size();
         for(int i=0; i<deckSize; i++){
             PowerUpCard card = (PowerUpCard) powerUpDeck.draw();
-            if(card.name.equals(name)) return card;
+            if(card.name.equals(name)){
+                if(color==null) return card;
+                if(color.equals(card.color)) return card;
+            }
         }
         return null;
+    }
+
+    private PowerUpCard getPowerUpByName(String name){
+        return getPowerUpByName(name, null);
     }
 
     private void spawnPlayer(Player player, GameMap gameMap, RoomColor spawnPointColor){
