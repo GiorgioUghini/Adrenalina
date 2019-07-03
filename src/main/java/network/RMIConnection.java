@@ -25,6 +25,7 @@ public class RMIConnection implements Connection {
     private ResponseHandler responseHandler;
     private Registry registry;
     private BlockingQueue<Response> queue;
+    private BlockingQueue<Thread> threadQueue;
     private String stringToken;
 
     @Override
@@ -225,9 +226,7 @@ public class RMIConnection implements Connection {
 
     @Override
     public void receiveResponse(Response response) {
-        new Thread(() -> {
-            response.handle(responseHandler);
-        }).start();
+        threadQueue.add(new Thread(() -> response.handle(responseHandler)));
     }
 
     @Override
@@ -237,6 +236,7 @@ public class RMIConnection implements Connection {
             registry = LocateRegistry.getRegistry(Client.getInstance().getHostname(), Client.getInstance().getRegistryPort());
             remoteMethods = (RemoteMethodsInterface) registry.lookup("RemoteMethods");
             queue = new LinkedBlockingQueue<>(100);
+            threadQueue = new LinkedBlockingQueue<>(100);
             responseHandler = new ResponseHandler();
             stringToken = remoteMethods.handshake();
             LongPollingTask longPollingTask = new LongPollingTask(remoteMethods, queue);
@@ -244,6 +244,8 @@ public class RMIConnection implements Connection {
             timer.schedule(longPollingTask, 0, 300);
             PollingQueueListener pollingQueueListener = new PollingQueueListener(queue);
             (new Thread(pollingQueueListener)).start();
+            ThreadQueueConsumer threadQueueConsumer = new ThreadQueueConsumer(threadQueue);
+            (new Thread(threadQueueConsumer)).start();
         } catch (RemoteException | NotBoundException e) {
             Logger.getAnonymousLogger().info(e.toString());
         }
