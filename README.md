@@ -13,6 +13,19 @@ GitHub Repository for the Source Code and Project Deliverables for group number 
   * [Launching the Application (expert) - Windows](#launching-the-application---windows)
 
 
+## Features
+
+We developped all the base features, including:
+- Complete Game Rules
+- CLI
+- GUI
+- Socket
+- RMI
+
+### Additional features
+
+We've choosen to implement a Server that can run Multiple Matches at the same time.
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for testing purposes. See deployment for notes on how to deploy the project on a live system.
@@ -122,16 +135,3 @@ start javaw --module-path ./javafx-sdk-11.0.2-win/lib --add-modules javafx.contr
 cd deliverables/app
 start javaw --module-path ./javafx-sdk-11.0.2-win/lib --add-modules javafx.controls,javafx.fxml -jar ing-sw-2019-17-client.jar --hostname <server-ip>
 ```  
-
-## Features
-
-We developped all the base features, including:
-- Complete Game Rules
-- CLI
-- GUI
-- Socket
-- RMI
-
-### Additional features
-
-We've choosen to implement a Server that can run Multiple Matches at the same time.
