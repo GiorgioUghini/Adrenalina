@@ -186,30 +186,12 @@ public class Match implements Observer {
     }
 
     /**
-     * Get how many cards remains into this match' power up deck
-     *
-     * @return how many cards remains into this match' power up deck.
-     */
-    public int getSizePowerUpDeck() {
-        return powerUpDeck.size();
-    }
-
-    /**
      * Draw a card from this match' weapons deck
      *
      * @return the card that is drawn.
      */
     public Card drawWeapon() {
         return weaponDeck.draw();
-    }
-
-    /**
-     * Get how many cards remains into this match' weapons deck
-     *
-     * @return how many cards remains into this match' weapons deck.
-     */
-    public int getSizeWeaponDeck() {
-        return weaponDeck.size();
     }
 
     /**
@@ -356,19 +338,6 @@ public class Match implements Observer {
         }
     }
 
-    private boolean isOrderedSubset(List biggerList, List smallerList) {
-        int indexSmaller = 0;
-        int indexBigger = 0;
-        while (indexSmaller < smallerList.size() && indexBigger < biggerList.size()) {
-            if (smallerList.get(indexSmaller) == biggerList.get(indexBigger)) {
-                indexBigger += 1;
-            }
-            indexSmaller += 1;
-        }
-
-        return (indexBigger == biggerList.size());
-    }
-
     public List<Player> getPlayers() {
         return playerList;
     }
@@ -413,14 +382,6 @@ public class Match implements Observer {
                 ammoPoint.addCard(ammoCard);
             }
         }
-    }
-
-    public void addPartialPointsCount(Player player) {
-        deathManager.addPartialPointsCount(player, player.countPoints());
-    }
-
-    public int getDeathCount(Player player) {
-        return deathManager.getDeathCount(player);
     }
 
     public Map<Player, Integer> getTotalPoints() {
