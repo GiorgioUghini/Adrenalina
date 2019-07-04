@@ -1,69 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.GameViewGUI">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.GameViewGUI">
     <children>
-        <SplitPane dividerPositions="0.625" layoutX="500.0" layoutY="320.0" prefHeight="800.0" prefWidth="1200.0"
-                   AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                   AnchorPane.topAnchor="0.0">
+        <SplitPane dividerPositions="0.625" layoutX="500.0" layoutY="320.0" prefHeight="800.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                     <children>
-                        <SplitPane dividerPositions="0.55" layoutX="339.0" layoutY="413.0" orientation="VERTICAL"
-                                   prefHeight="1078.0" prefWidth="955.0" AnchorPane.bottomAnchor="0.0"
-                                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <SplitPane dividerPositions="0.55" layoutX="339.0" layoutY="413.0" orientation="VERTICAL" prefHeight="1078.0" prefWidth="955.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <items>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                     <children>
-                                        <SplitPane dividerPositions="0.8" layoutX="106.0" layoutY="140.0"
-                                                   prefHeight="534.0" prefWidth="1193.0" AnchorPane.bottomAnchor="0.0"
-                                                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                                   AnchorPane.topAnchor="0.0">
+                                        <SplitPane dividerPositions="0.8" layoutX="106.0" layoutY="140.0" prefHeight="534.0" prefWidth="1193.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <items>
-                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0"
-                                                            prefWidth="100.0">
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                                     <children>
-                                                        <TabPane fx:id="tabPane" layoutX="375.0" layoutY="115.0"
-                                                                 prefHeight="532.0" prefWidth="949.0"
-                                                                 tabClosingPolicy="UNAVAILABLE"
-                                                                 AnchorPane.bottomAnchor="0.0"
-                                                                 AnchorPane.leftAnchor="0.0"
-                                                                 AnchorPane.rightAnchor="0.0"
-                                                                 AnchorPane.topAnchor="0.0">
+                                                        <TabPane fx:id="tabPane" layoutX="375.0" layoutY="115.0" prefHeight="532.0" prefWidth="949.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                             <tabs>
                                                                 <Tab disable="true" text="Player GREEN">
                                                                     <content>
-                                                                        <AnchorPane minHeight="0.0" minWidth="0.0"
-                                                                                    prefHeight="180.0"
-                                                                                    prefWidth="200.0">
+                                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                             <children>
-                                                                                <AnchorPane fx:id="anchorPanePlayer0"
-                                                                                            layoutY="68.0"
-                                                                                            maxHeight="234.0"
-                                                                                            maxWidth="949.0"
-                                                                                            prefHeight="234.0"
-                                                                                            prefWidth="949.0"
-                                                                                            AnchorPane.bottomAnchor="269.0"
-                                                                                            AnchorPane.topAnchor="50.0"/>
-                                                                                <ImageView fx:id="firstPlayer0"
-                                                                                           fitHeight="210.0"
-                                                                                           fitWidth="69.0"
-                                                                                           layoutX="30.0"
-                                                                                           layoutY="320.0"
-                                                                                           pickOnBounds="true"
-                                                                                           preserveRatio="true"/>
-                                                                                <Text fx:id="actualPoints0"
-                                                                                      layoutX="150.0" layoutY="430.0"
-                                                                                      strokeType="OUTSIDE"
-                                                                                      strokeWidth="0.0"
-                                                                                      text="Actual Points: 0">
+                                                                                <AnchorPane fx:id="anchorPanePlayer0" layoutY="68.0" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.bottomAnchor="269.0" AnchorPane.topAnchor="50.0" />
+                                                                                <ImageView fx:id="firstPlayer0" fitHeight="210.0" fitWidth="69.0" layoutX="30.0" layoutY="320.0" pickOnBounds="true" preserveRatio="true" />
+                                                                                <Text fx:id="actualPoints0" layoutX="150.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Actual Points: 0">
                                                                                     <font>
-                                                                                        <Font size="25.0"/>
+                                                                                        <Font size="25.0" />
                                                                                     </font>
                                                                                 </Text>
                                                                             </children>
@@ -72,32 +50,13 @@
                                                                 </Tab>
                                                                 <Tab disable="true" text="Player BLUE">
                                                                     <content>
-                                                                        <AnchorPane minHeight="0.0" minWidth="0.0"
-                                                                                    prefHeight="180.0"
-                                                                                    prefWidth="200.0">
+                                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                             <children>
-                                                                                <AnchorPane fx:id="anchorPanePlayer1"
-                                                                                            layoutY="125.0"
-                                                                                            maxHeight="234.0"
-                                                                                            maxWidth="949.0"
-                                                                                            prefHeight="234.0"
-                                                                                            prefWidth="949.0"
-                                                                                            AnchorPane.bottomAnchor="269.0"
-                                                                                            AnchorPane.topAnchor="50.0"/>
-                                                                                <ImageView fx:id="firstPlayer1"
-                                                                                           fitHeight="210.0"
-                                                                                           fitWidth="69.0"
-                                                                                           layoutX="30.0"
-                                                                                           layoutY="320.0"
-                                                                                           pickOnBounds="true"
-                                                                                           preserveRatio="true"/>
-                                                                                <Text fx:id="actualPoints1"
-                                                                                      layoutX="150.0" layoutY="430.0"
-                                                                                      strokeType="OUTSIDE"
-                                                                                      strokeWidth="0.0"
-                                                                                      text="Actual Points: 0">
+                                                                                <AnchorPane fx:id="anchorPanePlayer1" layoutY="125.0" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.bottomAnchor="269.0" AnchorPane.topAnchor="50.0" />
+                                                                                <ImageView fx:id="firstPlayer1" fitHeight="210.0" fitWidth="69.0" layoutX="30.0" layoutY="320.0" pickOnBounds="true" preserveRatio="true" />
+                                                                                <Text fx:id="actualPoints1" layoutX="150.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Actual Points: 0">
                                                                                     <font>
-                                                                                        <Font size="25.0"/>
+                                                                                        <Font size="25.0" />
                                                                                     </font>
                                                                                 </Text>
                                                                             </children>
@@ -106,31 +65,13 @@
                                                                 </Tab>
                                                                 <Tab disable="true" text="Player PURPLE">
                                                                     <content>
-                                                                        <AnchorPane minHeight="0.0" minWidth="0.0"
-                                                                                    prefHeight="180.0"
-                                                                                    prefWidth="200.0">
+                                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                             <children>
-                                                                                <AnchorPane fx:id="anchorPanePlayer2"
-                                                                                            maxHeight="234.0"
-                                                                                            maxWidth="949.0"
-                                                                                            prefHeight="234.0"
-                                                                                            prefWidth="949.0"
-                                                                                            AnchorPane.bottomAnchor="269.0"
-                                                                                            AnchorPane.topAnchor="50.0"/>
-                                                                                <ImageView fx:id="firstPlayer2"
-                                                                                           fitHeight="210.0"
-                                                                                           fitWidth="69.0"
-                                                                                           layoutX="30.0"
-                                                                                           layoutY="320.0"
-                                                                                           pickOnBounds="true"
-                                                                                           preserveRatio="true"/>
-                                                                                <Text fx:id="actualPoints2"
-                                                                                      layoutX="150.0" layoutY="430.0"
-                                                                                      strokeType="OUTSIDE"
-                                                                                      strokeWidth="0.0"
-                                                                                      text="Actual Points: 0">
+                                                                                <AnchorPane fx:id="anchorPanePlayer2" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.bottomAnchor="269.0" AnchorPane.topAnchor="50.0" />
+                                                                                <ImageView fx:id="firstPlayer2" fitHeight="210.0" fitWidth="69.0" layoutX="30.0" layoutY="320.0" pickOnBounds="true" preserveRatio="true" />
+                                                                                <Text fx:id="actualPoints2" layoutX="150.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Actual Points: 0">
                                                                                     <font>
-                                                                                        <Font size="25.0"/>
+                                                                                        <Font size="25.0" />
                                                                                     </font>
                                                                                 </Text>
                                                                             </children>
@@ -139,31 +80,13 @@
                                                                 </Tab>
                                                                 <Tab disable="true" text="Player WHITE">
                                                                     <content>
-                                                                        <AnchorPane minHeight="0.0" minWidth="0.0"
-                                                                                    prefHeight="180.0"
-                                                                                    prefWidth="200.0">
+                                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                             <children>
-                                                                                <AnchorPane fx:id="anchorPanePlayer3"
-                                                                                            maxHeight="234.0"
-                                                                                            maxWidth="949.0"
-                                                                                            prefHeight="234.0"
-                                                                                            prefWidth="949.0"
-                                                                                            AnchorPane.bottomAnchor="269.0"
-                                                                                            AnchorPane.topAnchor="50.0"/>
-                                                                                <ImageView fx:id="firstPlayer3"
-                                                                                           fitHeight="210.0"
-                                                                                           fitWidth="69.0"
-                                                                                           layoutX="30.0"
-                                                                                           layoutY="320.0"
-                                                                                           pickOnBounds="true"
-                                                                                           preserveRatio="true"/>
-                                                                                <Text fx:id="actualPoints3"
-                                                                                      layoutX="150.0" layoutY="430.0"
-                                                                                      strokeType="OUTSIDE"
-                                                                                      strokeWidth="0.0"
-                                                                                      text="Actual Points: 0">
+                                                                                <AnchorPane fx:id="anchorPanePlayer3" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.bottomAnchor="269.0" AnchorPane.topAnchor="50.0" />
+                                                                                <ImageView fx:id="firstPlayer3" fitHeight="210.0" fitWidth="69.0" layoutX="30.0" layoutY="320.0" pickOnBounds="true" preserveRatio="true" />
+                                                                                <Text fx:id="actualPoints3" layoutX="150.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Actual Points: 0">
                                                                                     <font>
-                                                                                        <Font size="25.0"/>
+                                                                                        <Font size="25.0" />
                                                                                     </font>
                                                                                 </Text>
                                                                             </children>
@@ -172,31 +95,13 @@
                                                                 </Tab>
                                                                 <Tab disable="true" text="Player YELLOW">
                                                                     <content>
-                                                                        <AnchorPane minHeight="0.0" minWidth="0.0"
-                                                                                    prefHeight="180.0"
-                                                                                    prefWidth="200.0">
+                                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                             <children>
-                                                                                <AnchorPane fx:id="anchorPanePlayer4"
-                                                                                            maxHeight="234.0"
-                                                                                            maxWidth="949.0"
-                                                                                            prefHeight="234.0"
-                                                                                            prefWidth="949.0"
-                                                                                            AnchorPane.bottomAnchor="269.0"
-                                                                                            AnchorPane.topAnchor="50.0"/>
-                                                                                <ImageView fx:id="firstPlayer4"
-                                                                                           fitHeight="210.0"
-                                                                                           fitWidth="69.0"
-                                                                                           layoutX="30.0"
-                                                                                           layoutY="320.0"
-                                                                                           pickOnBounds="true"
-                                                                                           preserveRatio="true"/>
-                                                                                <Text fx:id="actualPoints4"
-                                                                                      layoutX="150.0" layoutY="430.0"
-                                                                                      strokeType="OUTSIDE"
-                                                                                      strokeWidth="0.0"
-                                                                                      text="Actual Points: 0">
+                                                                                <AnchorPane fx:id="anchorPanePlayer4" maxHeight="234.0" maxWidth="949.0" prefHeight="234.0" prefWidth="949.0" AnchorPane.bottomAnchor="269.0" AnchorPane.topAnchor="50.0" />
+                                                                                <ImageView fx:id="firstPlayer4" fitHeight="210.0" fitWidth="69.0" layoutX="30.0" layoutY="320.0" pickOnBounds="true" preserveRatio="true" />
+                                                                                <Text fx:id="actualPoints4" layoutX="150.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Actual Points: 0">
                                                                                     <font>
-                                                                                        <Font size="25.0"/>
+                                                                                        <Font size="25.0" />
                                                                                     </font>
                                                                                 </Text>
                                                                             </children>
@@ -205,182 +110,87 @@
                                                                 </Tab>
                                                                 <Tab text="Weapons on SpawnPoints">
                                                                     <content>
-                                                                        <AnchorPane minHeight="0.0" minWidth="0.0"
-                                                                                    prefHeight="180.0"
-                                                                                    prefWidth="200.0">
+                                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                             <children>
-                                                                                <VBox layoutX="425.0" layoutY="174.0"
-                                                                                      prefHeight="499.0"
-                                                                                      prefWidth="949.0"
-                                                                                      AnchorPane.bottomAnchor="0.0"
-                                                                                      AnchorPane.leftAnchor="0.0"
-                                                                                      AnchorPane.rightAnchor="0.0"
-                                                                                      AnchorPane.topAnchor="0.0">
+                                                                                <VBox layoutX="425.0" layoutY="174.0" prefHeight="499.0" prefWidth="949.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                                     <children>
-                                                                                        <HBox alignment="CENTER_LEFT"
-                                                                                              maxHeight="184.0"
-                                                                                              prefHeight="184.0"
-                                                                                              prefWidth="947.0">
+                                                                                        <HBox alignment="CENTER_LEFT" maxHeight="183.0" prefHeight="183.0" prefWidth="947.0">
                                                                                             <children>
-                                                                                                <Text fill="#2202a1"
-                                                                                                      fontSmoothingType="LCD"
-                                                                                                      strokeType="OUTSIDE"
-                                                                                                      strokeWidth="0.0"
-                                                                                                      text="BLUE SPAWN&#10;POINT: "
-                                                                                                      textAlignment="CENTER">
+                                                                                                <Text fill="#2202a1" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="BLUE SPAWN&#10;POINT: " textAlignment="CENTER">
                                                                                                     <HBox.margin>
-                                                                                                        <Insets left="20.0"/>
+                                                                                                        <Insets left="20.0" />
                                                                                                     </HBox.margin>
                                                                                                     <font>
-                                                                                                        <Font size="20.0"/>
+                                                                                                        <Font size="20.0" />
                                                                                                     </font>
                                                                                                 </Text>
-                                                                                                <ImageView
-                                                                                                        fx:id="weaponSPBlue1"
-                                                                                                        fitHeight="184.0"
-                                                                                                        fitWidth="121.0"
-                                                                                                        onMouseClicked="#blueWeaponClicked1"
-                                                                                                        pickOnBounds="true"
-                                                                                                        preserveRatio="true">
+                                                                                                <ImageView fx:id="weaponSPBlue1" fitHeight="175.0" fitWidth="120.0" onMouseClicked="#blueWeaponClicked1" pickOnBounds="true" preserveRatio="true">
                                                                                                     <HBox.margin>
-                                                                                                        <Insets left="25.0"
-                                                                                                                right="17.0"/>
+                                                                                                        <Insets left="25.0" right="17.0" />
                                                                                                     </HBox.margin>
                                                                                                 </ImageView>
-                                                                                                <ImageView
-                                                                                                        fx:id="weaponSPBlue2"
-                                                                                                        fitHeight="184.0"
-                                                                                                        fitWidth="121.0"
-                                                                                                        onMouseClicked="#blueWeaponClicked2"
-                                                                                                        pickOnBounds="true"
-                                                                                                        preserveRatio="true">
+                                                                                                <ImageView fx:id="weaponSPBlue2" fitHeight="175.0" fitWidth="120.0" onMouseClicked="#blueWeaponClicked2" pickOnBounds="true" preserveRatio="true">
                                                                                                     <HBox.margin>
-                                                                                                        <Insets left="17.0"
-                                                                                                                right="17.0"/>
+                                                                                                        <Insets left="17.0" right="17.0" />
                                                                                                     </HBox.margin>
                                                                                                 </ImageView>
-                                                                                                <ImageView
-                                                                                                        fx:id="weaponSPBlue3"
-                                                                                                        fitHeight="184.0"
-                                                                                                        fitWidth="121.0"
-                                                                                                        onMouseClicked="#blueWeaponClicked3"
-                                                                                                        pickOnBounds="true"
-                                                                                                        preserveRatio="true">
+                                                                                                <ImageView fx:id="weaponSPBlue3" fitHeight="175.0" fitWidth="120.0" onMouseClicked="#blueWeaponClicked3" pickOnBounds="true" preserveRatio="true">
                                                                                                     <HBox.margin>
-                                                                                                        <Insets left="17.0"
-                                                                                                                right="17.0"/>
+                                                                                                        <Insets left="17.0" right="17.0" />
                                                                                                     </HBox.margin>
                                                                                                 </ImageView>
                                                                                             </children>
                                                                                         </HBox>
-                                                                                        <HBox alignment="CENTER_LEFT"
-                                                                                              maxHeight="184.0"
-                                                                                              prefHeight="184.0"
-                                                                                              prefWidth="947.0">
+                                                                                        <HBox alignment="CENTER_LEFT" maxHeight="183.0" prefHeight="183.0" prefWidth="947.0">
                                                                                             <children>
-                                                                                                <Text fill="#c60303"
-                                                                                                      fontSmoothingType="LCD"
-                                                                                                      strokeType="OUTSIDE"
-                                                                                                      strokeWidth="0.0"
-                                                                                                      text="RED SPAWN&#10;POINT: "
-                                                                                                      textAlignment="CENTER">
+                                                                                                <Text fill="#c60303" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="RED SPAWN&#10;POINT: " textAlignment="CENTER">
                                                                                                     <HBox.margin>
-                                                                                                        <Insets left="20.0"/>
+                                                                                                        <Insets left="20.0" />
                                                                                                     </HBox.margin>
                                                                                                     <font>
-                                                                                                        <Font size="20.0"/>
+                                                                                                        <Font size="20.0" />
                                                                                                     </font>
                                                                                                 </Text>
-                                                                                                <ImageView
-                                                                                                        fx:id="weaponSPRed1"
-                                                                                                        fitHeight="184.0"
-                                                                                                        fitWidth="121.0"
-                                                                                                        onMouseClicked="#redWeaponClicked1"
-                                                                                                        pickOnBounds="true"
-                                                                                                        preserveRatio="true">
+                                                                                                <ImageView fx:id="weaponSPRed1" fitHeight="175.0" fitWidth="120.0" onMouseClicked="#redWeaponClicked1" pickOnBounds="true" preserveRatio="true">
                                                                                                     <HBox.margin>
-                                                                                                        <Insets left="32.0"
-                                                                                                                right="17.0"/>
+                                                                                                        <Insets left="32.0" right="17.0" />
                                                                                                     </HBox.margin>
                                                                                                 </ImageView>
-                                                                                                <ImageView
-                                                                                                        fx:id="weaponSPRed2"
-                                                                                                        fitHeight="184.0"
-                                                                                                        fitWidth="121.0"
-                                                                                                        onMouseClicked="#redWeaponClicked2"
-                                                                                                        pickOnBounds="true"
-                                                                                                        preserveRatio="true">
+                                                                                                <ImageView fx:id="weaponSPRed2" fitHeight="175.0" fitWidth="120.0" onMouseClicked="#redWeaponClicked2" pickOnBounds="true" preserveRatio="true">
                                                                                                     <HBox.margin>
-                                                                                                        <Insets left="17.0"
-                                                                                                                right="17.0"/>
+                                                                                                        <Insets left="17.0" right="17.0" />
                                                                                                     </HBox.margin>
                                                                                                 </ImageView>
-                                                                                                <ImageView
-                                                                                                        fx:id="weaponSPRed3"
-                                                                                                        fitHeight="184.0"
-                                                                                                        fitWidth="121.0"
-                                                                                                        onMouseClicked="#redWeaponClicked3"
-                                                                                                        pickOnBounds="true"
-                                                                                                        preserveRatio="true">
+                                                                                                <ImageView fx:id="weaponSPRed3" fitHeight="175.0" fitWidth="120.0" onMouseClicked="#redWeaponClicked3" pickOnBounds="true" preserveRatio="true">
                                                                                                     <HBox.margin>
-                                                                                                        <Insets left="17.0"
-                                                                                                                right="17.0"/>
+                                                                                                        <Insets left="17.0" right="17.0" />
                                                                                                     </HBox.margin>
                                                                                                 </ImageView>
                                                                                             </children>
                                                                                         </HBox>
-                                                                                        <HBox alignment="CENTER_LEFT"
-                                                                                              maxHeight="184.0"
-                                                                                              prefHeight="184.0"
-                                                                                              prefWidth="947.0">
+                                                                                        <HBox alignment="CENTER_LEFT" maxHeight="183.0" prefHeight="183.0" prefWidth="947.0">
                                                                                             <children>
-                                                                                                <Text fill="#b2a903"
-                                                                                                      fontSmoothingType="LCD"
-                                                                                                      strokeType="OUTSIDE"
-                                                                                                      strokeWidth="0.0"
-                                                                                                      text="YELLOW&#10;SPAWN&#10;POINT: "
-                                                                                                      textAlignment="CENTER">
+                                                                                                <Text fill="#b2a903" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="YELLOW&#10;SPAWN&#10;POINT: " textAlignment="CENTER">
                                                                                                     <HBox.margin>
-                                                                                                        <Insets left="20.0"/>
+                                                                                                        <Insets left="20.0" />
                                                                                                     </HBox.margin>
                                                                                                     <font>
-                                                                                                        <Font size="20.0"/>
+                                                                                                        <Font size="20.0" />
                                                                                                     </font>
                                                                                                 </Text>
-                                                                                                <ImageView
-                                                                                                        fx:id="weaponSPYellow1"
-                                                                                                        fitHeight="184.0"
-                                                                                                        fitWidth="121.0"
-                                                                                                        onMouseClicked="#yellowWeaponClicked1"
-                                                                                                        pickOnBounds="true"
-                                                                                                        preserveRatio="true">
+                                                                                                <ImageView fx:id="weaponSPYellow1" fitHeight="175.0" fitWidth="120.0" onMouseClicked="#yellowWeaponClicked1" pickOnBounds="true" preserveRatio="true">
                                                                                                     <HBox.margin>
-                                                                                                        <Insets left="70.0"
-                                                                                                                right="17.0"/>
+                                                                                                        <Insets left="70.0" right="17.0" />
                                                                                                     </HBox.margin>
                                                                                                 </ImageView>
-                                                                                                <ImageView
-                                                                                                        fx:id="weaponSPYellow2"
-                                                                                                        fitHeight="184.0"
-                                                                                                        fitWidth="121.0"
-                                                                                                        onMouseClicked="#yellowWeaponClicked2"
-                                                                                                        pickOnBounds="true"
-                                                                                                        preserveRatio="true">
+                                                                                                <ImageView fx:id="weaponSPYellow2" fitHeight="175.0" fitWidth="120.0" onMouseClicked="#yellowWeaponClicked2" pickOnBounds="true" preserveRatio="true">
                                                                                                     <HBox.margin>
-                                                                                                        <Insets left="17.0"
-                                                                                                                right="17.0"/>
+                                                                                                        <Insets left="17.0" right="17.0" />
                                                                                                     </HBox.margin>
                                                                                                 </ImageView>
-                                                                                                <ImageView
-                                                                                                        fx:id="weaponSPYellow3"
-                                                                                                        fitHeight="184.0"
-                                                                                                        fitWidth="121.0"
-                                                                                                        onMouseClicked="#yellowWeaponClicked3"
-                                                                                                        pickOnBounds="true"
-                                                                                                        preserveRatio="true">
+                                                                                                <ImageView fx:id="weaponSPYellow3" fitHeight="175.0" fitWidth="120.0" onMouseClicked="#yellowWeaponClicked3" pickOnBounds="true" preserveRatio="true">
                                                                                                     <HBox.margin>
-                                                                                                        <Insets left="17.0"
-                                                                                                                right="17.0"/>
+                                                                                                        <Insets left="17.0" right="17.0" />
                                                                                                     </HBox.margin>
                                                                                                 </ImageView>
                                                                                             </children>
@@ -393,21 +203,11 @@
                                                                 </Tab>
                                                                 <Tab text="Game Status">
                                                                     <content>
-                                                                        <AnchorPane minHeight="0.0" minWidth="0.0"
-                                                                                    prefHeight="180.0"
-                                                                                    prefWidth="200.0">
+                                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                             <children>
-                                                                                <AnchorPane fx:id="skullPane"
-                                                                                            layoutY="35.0"
-                                                                                            maxHeight="312.0"
-                                                                                            maxWidth="949.0"
-                                                                                            prefHeight="312.0"
-                                                                                            prefWidth="949.0">
+                                                                                <AnchorPane fx:id="skullPane" layoutY="35.0" maxHeight="312.0" maxWidth="949.0" prefHeight="312.0" prefWidth="949.0">
                                                                                     <children>
-                                                                                        <ImageView fitHeight="312.0"
-                                                                                                   fitWidth="950.0"
-                                                                                                   pickOnBounds="true"
-                                                                                                   preserveRatio="true"/>
+                                                                                        <ImageView fitHeight="312.0" fitWidth="950.0" pickOnBounds="true" preserveRatio="true" />
                                                                                     </children>
                                                                                 </AnchorPane>
                                                                             </children>
@@ -418,43 +218,28 @@
                                                         </TabPane>
                                                     </children>
                                                 </AnchorPane>
-                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0"
-                                                            prefWidth="100.0">
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                                     <children>
-                                                        <VBox layoutX="67.0" layoutY="159.0" prefHeight="532.0"
-                                                              prefWidth="234.0" AnchorPane.bottomAnchor="0.0"
-                                                              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                                              AnchorPane.topAnchor="0.0">
+                                                        <VBox layoutX="67.0" layoutY="159.0" prefHeight="532.0" prefWidth="234.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                             <children>
-                                                                <Button fx:id="btnEndTurn" mnemonicParsing="false"
-                                                                        onAction="#endTurn" prefHeight="66.5"
-                                                                        prefWidth="234.0" text="END TURN">
+                                                                <Button fx:id="btnEndTurn" mnemonicParsing="false" onAction="#endTurn" prefHeight="66.5" prefWidth="234.0" text="END TURN">
                                                                     <font>
-                                                                        <Font size="20.0"/>
+                                                                        <Font size="20.0" />
                                                                     </font>
                                                                 </Button>
-                                                                <Button fx:id="btnActionGroup1" mnemonicParsing="false"
-                                                                        onAction="#btnActionGroup1Clicked"
-                                                                        prefHeight="66.5" prefWidth="234.0"
-                                                                        text="ACTIONGROUP_1" visible="false">
+                                                                <Button fx:id="btnActionGroup1" mnemonicParsing="false" onAction="#btnActionGroup1Clicked" prefHeight="66.5" prefWidth="234.0" text="ACTIONGROUP_1" visible="false">
                                                                     <font>
-                                                                        <Font size="20.0"/>
+                                                                        <Font size="20.0" />
                                                                     </font>
                                                                 </Button>
-                                                                <Button fx:id="btnActionGroup2" mnemonicParsing="false"
-                                                                        onAction="#btnActionGroup2Clicked"
-                                                                        prefHeight="66.5" prefWidth="234.0"
-                                                                        text="ACTIONGROUP_2" visible="false">
+                                                                <Button fx:id="btnActionGroup2" mnemonicParsing="false" onAction="#btnActionGroup2Clicked" prefHeight="66.5" prefWidth="234.0" text="ACTIONGROUP_2" visible="false">
                                                                     <font>
-                                                                        <Font size="20.0"/>
+                                                                        <Font size="20.0" />
                                                                     </font>
                                                                 </Button>
-                                                                <Button fx:id="btnActionGroup3" mnemonicParsing="false"
-                                                                        onAction="#btnActionGroup3Clicked"
-                                                                        prefHeight="66.5" prefWidth="234.0"
-                                                                        text="ACTIONGROUP_3" visible="false">
+                                                                <Button fx:id="btnActionGroup3" mnemonicParsing="false" onAction="#btnActionGroup3Clicked" prefHeight="66.5" prefWidth="234.0" text="ACTIONGROUP_3" visible="false">
                                                                     <font>
-                                                                        <Font size="20.0"/>
+                                                                        <Font size="20.0" />
                                                                     </font>
                                                                 </Button>
                                                             </children>
@@ -467,238 +252,126 @@
                                 </AnchorPane>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                     <children>
-                                        <SplitPane dividerPositions="0.8" layoutX="199.0" layoutY="126.0"
-                                                   prefHeight="534.0" prefWidth="1193.0" AnchorPane.bottomAnchor="0.0"
-                                                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                                   AnchorPane.topAnchor="0.0">
+                                        <SplitPane dividerPositions="0.8" layoutX="199.0" layoutY="126.0" prefHeight="534.0" prefWidth="1193.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <items>
-                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0"
-                                                            prefWidth="100.0">
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                                     <children>
-                                                        <SplitPane dividerPositions="0.5" layoutX="395.0"
-                                                                   layoutY="166.0" orientation="VERTICAL"
-                                                                   prefHeight="532.0" prefWidth="949.0"
-                                                                   AnchorPane.bottomAnchor="0.0"
-                                                                   AnchorPane.leftAnchor="0.0"
-                                                                   AnchorPane.rightAnchor="0.0"
-                                                                   AnchorPane.topAnchor="0.0">
+                                                        <SplitPane dividerPositions="0.5" layoutX="395.0" layoutY="166.0" orientation="VERTICAL" prefHeight="532.0" prefWidth="949.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                             <items>
-                                                                <AnchorPane minHeight="0.0" minWidth="0.0"
-                                                                            prefHeight="100.0" prefWidth="160.0">
+                                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                                                     <children>
-                                                                        <HBox alignment="CENTER_LEFT" layoutX="374.0"
-                                                                              layoutY="81.0"
-                                                                              AnchorPane.bottomAnchor="0.0"
-                                                                              AnchorPane.leftAnchor="0.0"
-                                                                              AnchorPane.rightAnchor="0.0"
-                                                                              AnchorPane.topAnchor="0.0">
+                                                                        <HBox alignment="CENTER_LEFT" layoutX="374.0" layoutY="81.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                             <children>
-                                                                                <Text fontSmoothingType="LCD"
-                                                                                      strokeType="OUTSIDE"
-                                                                                      strokeWidth="0.0"
-                                                                                      text="YOUR &#10;POWER UPs: "
-                                                                                      textAlignment="CENTER">
+                                                                                <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="YOUR &#10;POWER UPs: " textAlignment="CENTER">
                                                                                     <HBox.margin>
-                                                                                        <Insets left="20.0"/>
+                                                                                        <Insets left="20.0" />
                                                                                     </HBox.margin>
                                                                                     <font>
-                                                                                        <Font size="25.0"/>
+                                                                                        <Font size="25.0" />
                                                                                     </font>
                                                                                 </Text>
-                                                                                <ImageView fx:id="imgYourPowerUpCard1"
-                                                                                           fitHeight="233.0"
-                                                                                           fitWidth="151.0"
-                                                                                           onMouseClicked="#powerUp1Clicked"
-                                                                                           pickOnBounds="true"
-                                                                                           preserveRatio="true">
+                                                                                <ImageView fx:id="imgYourPowerUpCard1" fitHeight="230.0" fitWidth="151.0" onMouseClicked="#powerUp1Clicked" pickOnBounds="true" preserveRatio="true">
                                                                                     <HBox.margin>
-                                                                                        <Insets left="17.0"
-                                                                                                right="17.0"/>
+                                                                                        <Insets left="17.0" right="17.0" />
                                                                                     </HBox.margin>
                                                                                 </ImageView>
-                                                                                <ImageView fx:id="imgYourPowerUpCard2"
-                                                                                           fitHeight="233.0"
-                                                                                           fitWidth="151.0"
-                                                                                           onMouseClicked="#powerUp2Clicked"
-                                                                                           pickOnBounds="true"
-                                                                                           preserveRatio="true">
+                                                                                <ImageView fx:id="imgYourPowerUpCard2" fitHeight="230.0" fitWidth="151.0" onMouseClicked="#powerUp2Clicked" pickOnBounds="true" preserveRatio="true">
                                                                                     <HBox.margin>
-                                                                                        <Insets left="17.0"
-                                                                                                right="17.0"/>
+                                                                                        <Insets left="17.0" right="17.0" />
                                                                                     </HBox.margin>
                                                                                 </ImageView>
-                                                                                <ImageView fx:id="imgYourPowerUpCard3"
-                                                                                           fitHeight="233.0"
-                                                                                           fitWidth="151.0"
-                                                                                           onMouseClicked="#powerUp3Clicked"
-                                                                                           pickOnBounds="true"
-                                                                                           preserveRatio="true">
+                                                                                <ImageView fx:id="imgYourPowerUpCard3" fitHeight="230.0" fitWidth="151.0" onMouseClicked="#powerUp3Clicked" pickOnBounds="true" preserveRatio="true">
                                                                                     <HBox.margin>
-                                                                                        <Insets left="17.0"
-                                                                                                right="17.0"/>
+                                                                                        <Insets left="17.0" right="17.0" />
                                                                                     </HBox.margin>
                                                                                 </ImageView>
-                                                                                <ImageView fx:id="imgYourPowerUpCard4"
-                                                                                           fitHeight="233.0"
-                                                                                           fitWidth="151.0"
-                                                                                           onMouseClicked="#powerUp4Clicked"
-                                                                                           pickOnBounds="true"
-                                                                                           preserveRatio="true">
+                                                                                <ImageView fx:id="imgYourPowerUpCard4" fitHeight="230.0" fitWidth="151.0" onMouseClicked="#powerUp4Clicked" pickOnBounds="true" preserveRatio="true">
                                                                                     <HBox.margin>
-                                                                                        <Insets left="17.0"
-                                                                                                right="17.0"/>
+                                                                                        <Insets left="17.0" right="17.0" />
                                                                                     </HBox.margin>
                                                                                 </ImageView>
                                                                             </children>
                                                                         </HBox>
                                                                     </children>
                                                                 </AnchorPane>
-                                                                <AnchorPane minHeight="0.0" minWidth="0.0"
-                                                                            prefHeight="100.0" prefWidth="160.0">
+                                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                                                     <children>
-                                                                        <HBox alignment="CENTER_LEFT" layoutX="374.0"
-                                                                              layoutY="81.0"
-                                                                              AnchorPane.bottomAnchor="0.0"
-                                                                              AnchorPane.leftAnchor="0.0"
-                                                                              AnchorPane.rightAnchor="0.0"
-                                                                              AnchorPane.topAnchor="0.0">
+                                                                        <HBox alignment="CENTER_LEFT" layoutX="374.0" layoutY="81.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                             <children>
-                                                                                <Text fontSmoothingType="LCD"
-                                                                                      strokeType="OUTSIDE"
-                                                                                      strokeWidth="0.0"
-                                                                                      text="YOUR &#10;WEAPONs: "
-                                                                                      textAlignment="CENTER">
+                                                                                <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="YOUR &#10;WEAPONs: " textAlignment="CENTER">
                                                                                     <HBox.margin>
-                                                                                        <Insets left="20.0"/>
+                                                                                        <Insets left="20.0" />
                                                                                     </HBox.margin>
                                                                                     <font>
-                                                                                        <Font size="25.0"/>
+                                                                                        <Font size="25.0" />
                                                                                     </font>
                                                                                 </Text>
-                                                                                <ImageView fx:id="imgYourWeaponCard1"
-                                                                                           fitHeight="233.0"
-                                                                                           fitWidth="151.0"
-                                                                                           onMouseClicked="#weaponClicked1"
-                                                                                           pickOnBounds="true"
-                                                                                           preserveRatio="true">
+                                                                                <ImageView fx:id="imgYourWeaponCard1" fitHeight="230.0" fitWidth="151.0" onMouseClicked="#weaponClicked1" pickOnBounds="true" preserveRatio="true">
                                                                                     <HBox.margin>
-                                                                                        <Insets left="32.0"
-                                                                                                right="17.0"/>
+                                                                                        <Insets left="32.0" right="17.0" />
                                                                                     </HBox.margin>
                                                                                 </ImageView>
-                                                                                <ImageView fx:id="imgYourWeaponCard2"
-                                                                                           fitHeight="233.0"
-                                                                                           fitWidth="151.0"
-                                                                                           onMouseClicked="#weaponClicked2"
-                                                                                           pickOnBounds="true"
-                                                                                           preserveRatio="true">
+                                                                                <ImageView fx:id="imgYourWeaponCard2" fitHeight="230.0" fitWidth="151.0" onMouseClicked="#weaponClicked2" pickOnBounds="true" preserveRatio="true">
                                                                                     <HBox.margin>
-                                                                                        <Insets left="17.0"
-                                                                                                right="17.0"/>
+                                                                                        <Insets left="17.0" right="17.0" />
                                                                                     </HBox.margin>
                                                                                 </ImageView>
-                                                                                <ImageView fx:id="imgYourWeaponCard3"
-                                                                                           fitHeight="233.0"
-                                                                                           fitWidth="151.0"
-                                                                                           onMouseClicked="#weaponClicked3"
-                                                                                           pickOnBounds="true"
-                                                                                           preserveRatio="true">
+                                                                                <ImageView fx:id="imgYourWeaponCard3" fitHeight="230.0" fitWidth="151.0" onMouseClicked="#weaponClicked3" pickOnBounds="true" preserveRatio="true">
                                                                                     <HBox.margin>
-                                                                                        <Insets left="17.0"
-                                                                                                right="17.0"/>
+                                                                                        <Insets left="17.0" right="17.0" />
                                                                                     </HBox.margin>
                                                                                 </ImageView>
-                                                                                <VBox alignment="CENTER"
-                                                                                      prefHeight="258.0"
-                                                                                      prefWidth="167.0">
+                                                                                <VBox alignment="CENTER" prefHeight="258.0" prefWidth="167.0">
                                                                                     <padding>
-                                                                                        <Insets bottom="8.0" left="17.0"
-                                                                                                right="17.0" top="8.0"/>
+                                                                                        <Insets bottom="8.0" left="17.0" right="17.0" top="8.0" />
                                                                                     </padding>
                                                                                     <HBox.margin>
-                                                                                        <Insets/>
+                                                                                        <Insets />
                                                                                     </HBox.margin>
                                                                                     <children>
-                                                                                        <Text fontSmoothingType="LCD"
-                                                                                              strokeType="OUTSIDE"
-                                                                                              strokeWidth="0.0"
-                                                                                              text="YOUR&#10;AMMOs:"
-                                                                                              textAlignment="CENTER">
+                                                                                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="YOUR&#10;AMMOs:" textAlignment="CENTER">
                                                                                             <font>
-                                                                                                <Font size="20.0"/>
+                                                                                                <Font size="20.0" />
                                                                                             </font>
                                                                                         </Text>
-                                                                                        <HBox alignment="CENTER"
-                                                                                              maxHeight="50.0"
-                                                                                              maxWidth="155.0"
-                                                                                              prefHeight="50.0"
-                                                                                              prefWidth="167.0">
+                                                                                        <HBox alignment="CENTER" maxHeight="50.0" maxWidth="155.0" prefHeight="50.0" prefWidth="167.0">
                                                                                             <children>
-                                                                                                <Text fill="#790606"
-                                                                                                      strokeType="OUTSIDE"
-                                                                                                      strokeWidth="0.0"
-                                                                                                      text="RED: "
-                                                                                                      underline="true">
+                                                                                                <Text fill="#790606" strokeType="OUTSIDE" strokeWidth="0.0" text="RED: " underline="true">
                                                                                                     <font>
-                                                                                                        <Font size="20.0"/>
+                                                                                                        <Font size="20.0" />
                                                                                                     </font>
                                                                                                 </Text>
-                                                                                                <Text fx:id="redAmmoText"
-                                                                                                      strokeType="OUTSIDE"
-                                                                                                      strokeWidth="0.0"
-                                                                                                      text="0">
+                                                                                                <Text fx:id="redAmmoText" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                                                                                                     <font>
-                                                                                                        <Font size="25.0"/>
+                                                                                                        <Font size="25.0" />
                                                                                                     </font>
                                                                                                 </Text>
                                                                                             </children>
                                                                                         </HBox>
-                                                                                        <HBox alignment="CENTER"
-                                                                                              maxHeight="50.0"
-                                                                                              maxWidth="155.0"
-                                                                                              prefHeight="50.0"
-                                                                                              prefWidth="167.0">
+                                                                                        <HBox alignment="CENTER" maxHeight="50.0" maxWidth="155.0" prefHeight="50.0" prefWidth="167.0">
                                                                                             <children>
-                                                                                                <Text fill="#6106ff"
-                                                                                                      strokeType="OUTSIDE"
-                                                                                                      strokeWidth="0.0"
-                                                                                                      text="BLUE: "
-                                                                                                      underline="true">
+                                                                                                <Text fill="#6106ff" strokeType="OUTSIDE" strokeWidth="0.0" text="BLUE: " underline="true">
                                                                                                     <font>
-                                                                                                        <Font size="20.0"/>
+                                                                                                        <Font size="20.0" />
                                                                                                     </font>
                                                                                                 </Text>
-                                                                                                <Text fx:id="blueAmmoText"
-                                                                                                      strokeType="OUTSIDE"
-                                                                                                      strokeWidth="0.0"
-                                                                                                      text="0">
+                                                                                                <Text fx:id="blueAmmoText" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                                                                                                     <font>
-                                                                                                        <Font size="25.0"/>
+                                                                                                        <Font size="25.0" />
                                                                                                     </font>
                                                                                                 </Text>
                                                                                             </children>
                                                                                         </HBox>
-                                                                                        <HBox alignment="CENTER"
-                                                                                              maxHeight="50.0"
-                                                                                              maxWidth="155.0"
-                                                                                              prefHeight="50.0"
-                                                                                              prefWidth="167.0">
+                                                                                        <HBox alignment="CENTER" maxHeight="50.0" maxWidth="155.0" prefHeight="50.0" prefWidth="167.0">
                                                                                             <children>
-                                                                                                <Text fill="#e4d100"
-                                                                                                      strokeType="OUTSIDE"
-                                                                                                      strokeWidth="0.0"
-                                                                                                      text="YELLOW: "
-                                                                                                      underline="true">
+                                                                                                <Text fill="#e4d100" strokeType="OUTSIDE" strokeWidth="0.0" text="YELLOW: " underline="true">
                                                                                                     <font>
-                                                                                                        <Font size="20.0"/>
+                                                                                                        <Font size="20.0" />
                                                                                                     </font>
                                                                                                 </Text>
-                                                                                                <Text fx:id="yellowAmmoText"
-                                                                                                      strokeType="OUTSIDE"
-                                                                                                      strokeWidth="0.0"
-                                                                                                      text="0">
+                                                                                                <Text fx:id="yellowAmmoText" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                                                                                                     <font>
-                                                                                                        <Font size="25.0"/>
+                                                                                                        <Font size="25.0" />
                                                                                                     </font>
                                                                                                 </Text>
                                                                                             </children>
@@ -713,81 +386,53 @@
                                                         </SplitPane>
                                                     </children>
                                                 </AnchorPane>
-                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0"
-                                                            prefWidth="100.0">
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                                     <children>
-                                                        <VBox layoutX="67.0" layoutY="166.0" prefHeight="532.0"
-                                                              prefWidth="234.0" AnchorPane.bottomAnchor="0.0"
-                                                              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                                              AnchorPane.topAnchor="0.0">
+                                                        <VBox layoutX="67.0" layoutY="166.0" prefHeight="532.0" prefWidth="234.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                             <children>
-                                                                <Button fx:id="btnDrawPowerUp" disable="true"
-                                                                        mnemonicParsing="false" onAction="#drawPowerUp"
-                                                                        prefHeight="66.5" prefWidth="234.0"
-                                                                        text="DRAW POWERUP">
+                                                                <Button fx:id="btnDrawPowerUp" disable="true" mnemonicParsing="false" onAction="#drawPowerUp" prefHeight="66.5" prefWidth="234.0" text="DRAW POWERUP">
                                                                     <font>
-                                                                        <Font size="20.0"/>
+                                                                        <Font size="20.0" />
                                                                     </font>
                                                                 </Button>
-                                                                <Button fx:id="btnSpawn" disable="true" maxHeight="66.5"
-                                                                        maxWidth="234.0" mnemonicParsing="false"
-                                                                        onAction="#spawn" prefHeight="66.5"
-                                                                        prefWidth="234.0" text="SPAWN">
+                                                                <Button fx:id="btnSpawn" disable="true" maxHeight="66.5" maxWidth="234.0" mnemonicParsing="false" onAction="#spawn" prefHeight="66.5" prefWidth="234.0" text="SPAWN">
                                                                     <font>
-                                                                        <Font size="20.0"/>
+                                                                        <Font size="20.0" />
                                                                     </font>
                                                                 </Button>
-                                                                <Button fx:id="btnRun" disable="true"
-                                                                        mnemonicParsing="false"
-                                                                        onAction="#runBtnClicked" prefHeight="66.5"
-                                                                        prefWidth="234.0" text="RUN">
+                                                                <Button fx:id="btnRun" disable="true" mnemonicParsing="false" onAction="#runBtnClicked" prefHeight="66.5" prefWidth="234.0" text="RUN">
                                                                     <font>
-                                                                        <Font size="20.0"/>
+                                                                        <Font size="20.0" />
                                                                     </font>
                                                                 </Button>
-                                                                <Button fx:id="btnGrab" disable="true"
-                                                                        mnemonicParsing="false" onAction="#grab"
-                                                                        prefHeight="66.5" prefWidth="734.0" text="GRAB">
+                                                                <Button fx:id="btnGrab" disable="true" mnemonicParsing="false" onAction="#grab" prefHeight="66.5" prefWidth="734.0" text="GRAB">
                                                                     <font>
-                                                                        <Font size="20.0"/>
+                                                                        <Font size="20.0" />
                                                                     </font>
                                                                 </Button>
-                                                                <Button fx:id="btnShoot" disable="true"
-                                                                        mnemonicParsing="false" onAction="#shoot"
-                                                                        prefHeight="66.5" prefWidth="234.0"
-                                                                        text="SHOOT">
+                                                                <Button fx:id="btnShoot" disable="true" mnemonicParsing="false" onAction="#shoot" prefHeight="66.5" prefWidth="234.0" text="SHOOT">
                                                                     <font>
-                                                                        <Font size="20.0"/>
+                                                                        <Font size="20.0" />
                                                                     </font>
                                                                 </Button>
-                                                                <Button fx:id="btnReload" disable="true"
-                                                                        mnemonicParsing="false" onAction="#reload"
-                                                                        prefHeight="66.5" prefWidth="234.0"
-                                                                        text="RELOAD">
+                                                                <Button fx:id="btnReload" disable="true" mnemonicParsing="false" onAction="#reload" prefHeight="66.5" prefWidth="234.0" text="RELOAD">
                                                                     <font>
-                                                                        <Font size="20.0"/>
+                                                                        <Font size="20.0" />
                                                                     </font>
                                                                 </Button>
-                                                                <Button fx:id="btnUsePowerUp" mnemonicParsing="false"
-                                                                        onAction="#usePowerUp" prefHeight="66.5"
-                                                                        prefWidth="234.0" text="USE POWERUP">
+                                                                <Button fx:id="btnUsePowerUp" mnemonicParsing="false" onAction="#usePowerUp" prefHeight="66.5" prefWidth="234.0" text="USE POWERUP">
                                                                     <font>
-                                                                        <Font size="20.0"/>
+                                                                        <Font size="20.0" />
                                                                     </font>
                                                                 </Button>
-                                                                <Button fx:id="btnEndSelect" disable="true"
-                                                                        mnemonicParsing="false" onAction="#endSelectTag"
-                                                                        prefHeight="66.5" prefWidth="234.0"
-                                                                        text="END SELECT TAG">
+                                                                <Button fx:id="btnEndSelect" disable="true" mnemonicParsing="false" onAction="#endSelectTag" prefHeight="66.5" prefWidth="234.0" text="END SELECT TAG">
                                                                     <font>
-                                                                        <Font size="20.0"/>
+                                                                        <Font size="20.0" />
                                                                     </font>
                                                                 </Button>
-                                                                <Button mnemonicParsing="false" prefHeight="66.5"
-                                                                        prefWidth="234.0" text="IDLE BTN"
-                                                                        visible="false">
+                                                                <Button mnemonicParsing="false" prefHeight="66.5" prefWidth="234.0" text="IDLE BTN" visible="false">
                                                                     <font>
-                                                                        <Font size="20.0"/>
+                                                                        <Font size="20.0" />
                                                                     </font>
                                                                 </Button>
                                                             </children>
@@ -804,347 +449,204 @@
                 </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                     <children>
-                        <SplitPane dividerPositions="0.5" layoutX="131.0" layoutY="116.0" orientation="VERTICAL"
-                                   prefHeight="1078.0" prefWidth="1339.0" AnchorPane.bottomAnchor="0.0"
-                                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <SplitPane dividerPositions="0.5" layoutX="131.0" layoutY="116.0" orientation="VERTICAL" prefHeight="1078.0" prefWidth="1339.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <items>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                     <children>
-                                        <GridPane fx:id="mainGridPane" layoutX="214.0" layoutY="201.0"
-                                                  prefHeight="534.0" prefWidth="1337.0" AnchorPane.bottomAnchor="0.0"
-                                                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                                  AnchorPane.topAnchor="0.0">
+                                        <GridPane fx:id="mainGridPane" layoutX="214.0" layoutY="201.0" prefHeight="534.0" prefWidth="1337.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <columnConstraints>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                             </columnConstraints>
                                             <rowConstraints>
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                             <children>
-                                                <GridPane fx:id="grid02" alignment="CENTER"
-                                                          onMouseClicked="#pane02Clicked" GridPane.halignment="CENTER"
-                                                          GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                                <GridPane fx:id="grid02" alignment="CENTER" onMouseClicked="#pane02Clicked" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                                     <columnConstraints>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
                                                     </columnConstraints>
                                                     <rowConstraints>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
                                                     </rowConstraints>
                                                 </GridPane>
-                                                <GridPane fx:id="grid01" alignment="CENTER"
-                                                          onMouseClicked="#pane01Clicked" GridPane.halignment="CENTER"
-                                                          GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                                <GridPane fx:id="grid01" alignment="CENTER" onMouseClicked="#pane01Clicked" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                                                     <columnConstraints>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
                                                     </columnConstraints>
                                                     <rowConstraints>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
                                                     </rowConstraints>
                                                 </GridPane>
-                                                <GridPane fx:id="grid00" alignment="CENTER"
-                                                          onMouseClicked="#pane00Clicked" GridPane.halignment="CENTER"
-                                                          GridPane.valignment="CENTER">
+                                                <GridPane fx:id="grid00" alignment="CENTER" onMouseClicked="#pane00Clicked" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                                     <columnConstraints>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
                                                     </columnConstraints>
                                                     <rowConstraints>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
                                                     </rowConstraints>
                                                 </GridPane>
-                                                <GridPane fx:id="grid10" alignment="CENTER"
-                                                          onMouseClicked="#pane10Clicked" GridPane.columnIndex="1"
-                                                          GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                                <GridPane fx:id="grid10" alignment="CENTER" onMouseClicked="#pane10Clicked" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                                     <columnConstraints>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
                                                     </columnConstraints>
                                                     <rowConstraints>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
                                                     </rowConstraints>
                                                     <GridPane.margin>
-                                                        <Insets/>
+                                                        <Insets />
                                                     </GridPane.margin>
                                                 </GridPane>
-                                                <GridPane fx:id="grid11" alignment="CENTER"
-                                                          onMouseClicked="#pane11Clicked" GridPane.columnIndex="1"
-                                                          GridPane.halignment="CENTER" GridPane.rowIndex="1"
-                                                          GridPane.valignment="CENTER">
+                                                <GridPane fx:id="grid11" alignment="CENTER" onMouseClicked="#pane11Clicked" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                                                     <columnConstraints>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
                                                     </columnConstraints>
                                                     <rowConstraints>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
                                                     </rowConstraints>
                                                 </GridPane>
-                                                <GridPane fx:id="grid12" alignment="CENTER"
-                                                          onMouseClicked="#pane12Clicked" GridPane.columnIndex="1"
-                                                          GridPane.halignment="CENTER" GridPane.rowIndex="2"
-                                                          GridPane.valignment="CENTER">
+                                                <GridPane fx:id="grid12" alignment="CENTER" onMouseClicked="#pane12Clicked" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                                     <columnConstraints>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
                                                     </columnConstraints>
                                                     <rowConstraints>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
                                                     </rowConstraints>
                                                 </GridPane>
-                                                <GridPane fx:id="grid20" alignment="CENTER"
-                                                          onMouseClicked="#pane20Clicked" GridPane.columnIndex="2"
-                                                          GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                                <GridPane fx:id="grid20" alignment="CENTER" onMouseClicked="#pane20Clicked" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                                     <columnConstraints>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
                                                     </columnConstraints>
                                                     <rowConstraints>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
                                                     </rowConstraints>
                                                 </GridPane>
-                                                <GridPane fx:id="grid21" alignment="CENTER"
-                                                          onMouseClicked="#pane21Clicked" GridPane.columnIndex="2"
-                                                          GridPane.halignment="CENTER" GridPane.rowIndex="1"
-                                                          GridPane.valignment="CENTER">
+                                                <GridPane fx:id="grid21" alignment="CENTER" onMouseClicked="#pane21Clicked" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                                                     <columnConstraints>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
                                                     </columnConstraints>
                                                     <rowConstraints>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
                                                     </rowConstraints>
                                                 </GridPane>
-                                                <GridPane fx:id="grid22" alignment="CENTER"
-                                                          onMouseClicked="#pane22Clicked" GridPane.columnIndex="2"
-                                                          GridPane.halignment="CENTER" GridPane.rowIndex="2"
-                                                          GridPane.valignment="CENTER">
+                                                <GridPane fx:id="grid22" alignment="CENTER" onMouseClicked="#pane22Clicked" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                                     <columnConstraints>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
                                                     </columnConstraints>
                                                     <rowConstraints>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
                                                     </rowConstraints>
                                                 </GridPane>
-                                                <GridPane fx:id="grid30" alignment="CENTER"
-                                                          onMouseClicked="#pane30Clicked" GridPane.columnIndex="3"
-                                                          GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                                <GridPane fx:id="grid30" alignment="CENTER" onMouseClicked="#pane30Clicked" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                                     <columnConstraints>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
                                                     </columnConstraints>
                                                     <rowConstraints>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
                                                     </rowConstraints>
                                                 </GridPane>
-                                                <GridPane fx:id="grid31" alignment="CENTER"
-                                                          onMouseClicked="#pane31Clicked" GridPane.columnIndex="3"
-                                                          GridPane.halignment="CENTER" GridPane.rowIndex="1"
-                                                          GridPane.valignment="CENTER">
+                                                <GridPane fx:id="grid31" alignment="CENTER" onMouseClicked="#pane31Clicked" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                                                     <columnConstraints>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
                                                     </columnConstraints>
                                                     <rowConstraints>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
                                                     </rowConstraints>
                                                 </GridPane>
-                                                <GridPane fx:id="grid32" alignment="CENTER"
-                                                          onMouseClicked="#pane32Clicked" GridPane.columnIndex="3"
-                                                          GridPane.halignment="CENTER" GridPane.rowIndex="2"
-                                                          GridPane.valignment="CENTER">
+                                                <GridPane fx:id="grid32" alignment="CENTER" onMouseClicked="#pane32Clicked" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                                     <columnConstraints>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="70.0"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
                                                     </columnConstraints>
                                                     <rowConstraints>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
-                                                                        vgrow="SOMETIMES"/>
-                                                        <RowConstraints minHeight="10.0" prefHeight="20.0"
-                                                                        vgrow="SOMETIMES"/>
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
                                                     </rowConstraints>
                                                 </GridPane>
                                             </children>
@@ -1153,25 +655,16 @@
                                 </AnchorPane>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                     <children>
-                                        <TitledPane animated="false" layoutX="256.0" layoutY="164.0" prefHeight="534.0"
-                                                    prefWidth="713.0" text="Game Comunications"
-                                                    AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                                                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                        <TitledPane animated="false" layoutX="256.0" layoutY="164.0" prefHeight="534.0" prefWidth="713.0" text="Game Comunications" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <content>
-                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0"
-                                                            prefWidth="200.0">
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                     <children>
-                                                        <ListView fx:id="gameStatusListView" layoutX="256.0"
-                                                                  layoutY="143.0" prefHeight="485.0" prefWidth="711.0"
-                                                                  AnchorPane.bottomAnchor="0.0"
-                                                                  AnchorPane.leftAnchor="0.0"
-                                                                  AnchorPane.rightAnchor="0.0"
-                                                                  AnchorPane.topAnchor="0.0"/>
+                                                        <ListView fx:id="gameStatusListView" layoutX="256.0" layoutY="143.0" prefHeight="485.0" prefWidth="711.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                                     </children>
                                                 </AnchorPane>
                                             </content>
                                             <font>
-                                                <Font size="25.0"/>
+                                                <Font size="25.0" />
                                             </font>
                                         </TitledPane>
                                     </children>
