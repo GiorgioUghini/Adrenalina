@@ -1,6 +1,6 @@
 
 # Group 17 - Software Engeneering Project
-
+![Adrenaline Logo](https://i.imgur.com/qTDyecy.png)
 GitHub Repository for the Source Code and Project Deliverables for group number 17.
 ## Table of Contents
 - [Group 17 - Software Engeneering Project](#group-17---software-engeneering-project)
