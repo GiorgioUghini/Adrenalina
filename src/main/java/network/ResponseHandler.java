@@ -1,6 +1,5 @@
 package network;
 
-import controllers.ScreenController;
 import errors.InvalidInputException;
 import errors.NotEnoughAmmoException;
 import errors.NothingToGrabException;
@@ -106,7 +105,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
     @Override
     public void handle(NewPlayerUpdate response) {
         //IF WE ARE IN MENU VIEW:
-        ((MenuView) Client.getInstance().getCurrentView()).onNewPlayer(response.getName());
+        Client.getInstance().getCurrentView().onNewPlayer(response.getName());
     }
 
     @Override

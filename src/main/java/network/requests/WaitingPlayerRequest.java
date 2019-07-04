@@ -11,6 +11,10 @@ public class WaitingPlayerRequest implements Request {
 
     private String token;
 
+    public WaitingPlayerRequest() {
+        this.token = Client.getInstance().getConnection().getToken();
+    }
+
     @Override
     public String getToken() {
         return token;
@@ -19,10 +23,6 @@ public class WaitingPlayerRequest implements Request {
     @Override
     public void setToken(String token) {
         this.token = token;
-    }
-
-    public WaitingPlayerRequest() {
-        this.token = Client.getInstance().getConnection().getToken();
     }
 
     @Override

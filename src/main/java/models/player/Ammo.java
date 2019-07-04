@@ -7,18 +7,20 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Ammo implements Serializable {
+    public int red;
+    public int blue;
+    public int yellow;
+
     public Ammo() {
         red = 0;
         blue = 0;
         yellow = 0;
     }
-
     public Ammo(int red, int blue, int yellow) {
         this.red = red;
         this.blue = blue;
         this.yellow = yellow;
     }
-
     public Ammo(PowerUpCard powerUpCard) {
         switch (powerUpCard.color) {
             case RED:
@@ -34,10 +36,6 @@ public class Ammo implements Serializable {
                 throw new InvalidAmmoException();
         }
     }
-
-    public int red;
-    public int blue;
-    public int yellow;
 
     public void remove(Ammo ammo) {
         red -= ammo.red;

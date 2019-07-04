@@ -9,9 +9,15 @@ import java.rmi.RemoteException;
 
 public class RegisterPlayerRequest implements Request {
 
-    private String token;
     public String username;
     public String password;
+    private String token;
+
+    public RegisterPlayerRequest(String username, String password) {
+        this.token = Client.getInstance().getConnection().getToken();
+        this.username = username;
+        this.password = password;
+    }
 
     @Override
     public String getToken() {
@@ -21,12 +27,6 @@ public class RegisterPlayerRequest implements Request {
     @Override
     public void setToken(String token) {
         this.token = token;
-    }
-
-    public RegisterPlayerRequest(String username, String password) {
-        this.token = Client.getInstance().getConnection().getToken();
-        this.username = username;
-        this.password = password;
     }
 
     @Override

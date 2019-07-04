@@ -1,7 +1,6 @@
 package models.map;
 
 import errors.NotWallException;
-
 import org.junit.Test;
 
 import java.util.UUID;

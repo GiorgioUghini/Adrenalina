@@ -12,29 +12,9 @@ import java.util.logging.Logger;
 
 
 public class ScreenController {
-    private Stage actualStage;
     private static ScreenController instance;
+    private Stage actualStage;
     private Scene actualScene;
-
-    /**
-     * sets the actual screen scene
-     * @param actualScene
-     */
-    public void setActualScene(Scene actualScene) {
-        this.actualScene = actualScene;
-    }
-
-    /**
-     * returns the actual screen scene
-     * @return
-     */
-    public Scene getActualScene() {
-        return actualScene;
-    }
-
-    public Stage getActualStage() {
-        return actualStage;
-    }
 
     private ScreenController(Stage main) {
         this.actualStage = main;
@@ -52,7 +32,30 @@ public class ScreenController {
     }
 
     /**
+     * returns the actual screen scene
+     *
+     * @return
+     */
+    public Scene getActualScene() {
+        return actualScene;
+    }
+
+    /**
+     * sets the actual screen scene
+     *
+     * @param actualScene
+     */
+    public void setActualScene(Scene actualScene) {
+        this.actualScene = actualScene;
+    }
+
+    public Stage getActualStage() {
+        return actualStage;
+    }
+
+    /**
      * activates the selected scene
+     *
      * @param name the name of the scene, as is in resources/fxml
      */
     public void activate(String name) {

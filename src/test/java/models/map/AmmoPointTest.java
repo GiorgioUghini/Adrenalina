@@ -1,16 +1,16 @@
 package models.map;
 
 import errors.CardAlreadyExistsException;
-import errors.NotEnoughAmmoException;
 import errors.NothingToGrabException;
 import models.card.AmmoCard;
 import models.card.Card;
 import models.card.WeaponCard;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 import java.util.UUID;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class AmmoPointTest {
     @Test

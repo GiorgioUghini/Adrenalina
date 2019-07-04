@@ -6,12 +6,12 @@ import network.ResponseHandlerInterface;
 public class NewPlayerUpdate implements Response {
     private String name;
 
-    public String getName() {
-        return name;
-    }
-
     public NewPlayerUpdate(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override

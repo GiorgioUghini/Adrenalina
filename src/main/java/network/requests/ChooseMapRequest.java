@@ -8,8 +8,8 @@ import java.rmi.RemoteException;
 
 public class ChooseMapRequest implements Request {
 
-    private String token;
     public int map;
+    private String token;
 
     public ChooseMapRequest(int map) {
         this.map = map;

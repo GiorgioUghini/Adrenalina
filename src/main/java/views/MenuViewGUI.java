@@ -44,14 +44,14 @@ public class MenuViewGUI implements Initializable, MenuView {
     private MenuController menuController;
     private String username;
 
+    public MenuViewGUI() {
+        this.menuController = new MenuController();
+    }
+
     @FXML
     private void register(final ActionEvent event) {
         event.consume();
         this.createConnection();
-    }
-
-    public MenuViewGUI() {
-        this.menuController = new MenuController();
     }
 
     @Override

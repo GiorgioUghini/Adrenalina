@@ -19,6 +19,7 @@ import utils.Observer;
 import java.util.*;
 
 public class Match implements Observer {
+    int round;
     private List<Player> playerList;
     private int actualPlayerIndex = 0;
     private int tmpActualPlayerIndex = -1;
@@ -38,7 +39,6 @@ public class Match implements Observer {
     private Timer turnTimer;
     private TimerTask turnTimerTask;
     private CardController cardController;
-    int round;
 
     //null -> noFrenzy, Type1, Type2
     public Match(List<Player> players) {

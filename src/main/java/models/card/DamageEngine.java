@@ -29,6 +29,7 @@ class DamageEngine {
 
     /**
      * calculates the damages that each player should take
+     *
      * @return a map containing for each player its damages. can be empty
      */
     Map<Player, Integer> getDamages() {
@@ -74,6 +75,7 @@ class DamageEngine {
 
     /**
      * Given a tag, returns a square
+     *
      * @param tag a string representing the tag
      * @return a square that can be null
      */

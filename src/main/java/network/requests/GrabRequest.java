@@ -10,10 +10,10 @@ import java.rmi.RemoteException;
 
 public class GrabRequest implements Request {
 
-    private String token;
     public WeaponCard drawn;
     public WeaponCard toRelease;
     public PowerUpCard powerUpCard;
+    private String token;
 
     public GrabRequest(WeaponCard drawn, WeaponCard toRelease, PowerUpCard powerUpCard) {
         this.drawn = drawn;

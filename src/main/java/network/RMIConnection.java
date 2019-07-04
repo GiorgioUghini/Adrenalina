@@ -8,7 +8,6 @@ import models.map.Square;
 import models.player.Ammo;
 import models.turn.ActionType;
 import models.turn.TurnEvent;
-import utils.Console;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -253,13 +252,13 @@ public class RMIConnection implements Connection {
     }
 
     @Override
-    public void setToken(String token) {
-        this.stringToken = token;
+    public String getToken() {
+        return stringToken;
     }
 
     @Override
-    public String getToken() {
-        return stringToken;
+    public void setToken(String token) {
+        this.stringToken = token;
     }
 
     public RemoteMethodsInterface getRemoteMethods() {

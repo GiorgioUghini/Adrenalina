@@ -8,9 +8,11 @@ import models.card.WeaponCard;
 import models.card.WeaponDeck;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class SpawnPointTest {
     @Test

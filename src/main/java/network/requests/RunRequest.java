@@ -10,9 +10,9 @@ import java.rmi.RemoteException;
 
 public class RunRequest implements Request {
 
-    private String token;
     public TurnEvent turnEvent;
     public Square square;
+    private String token;
 
     public RunRequest(TurnEvent turnEvent, Square square) {
         this.square = square;

@@ -9,8 +9,8 @@ import java.rmi.RemoteException;
 
 public class PowerUpTagElementRequest implements Request {
 
-    private String token;
     public Taggable taggable;
+    private String token;
 
     public PowerUpTagElementRequest(Taggable taggable) {
         this.taggable = taggable;

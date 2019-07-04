@@ -6,7 +6,10 @@ import models.player.Ammo;
 import models.player.Player;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -161,7 +164,7 @@ public class EffectCardTest {
                 red = s;
             }
         }
-        if (yellow == null) assert false;
+        assert yellow != null;
         gameMap.spawnPlayer(me, yellow);
         gameMap.spawnPlayer(p1, yellow);
         gameMap.spawnPlayer(p2, yellow);

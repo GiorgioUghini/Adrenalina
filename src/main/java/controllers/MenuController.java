@@ -9,6 +9,7 @@ import views.MenuView;
 public class MenuController {
     /**
      * creates a connection of the given type
+     *
      * @param type socket or rmi
      */
     public void createConnection(ConnectionType type) {
@@ -20,6 +21,7 @@ public class MenuController {
 
     /**
      * Registers a player creating a new thread
+     *
      * @param username
      * @param password
      */
@@ -36,6 +38,7 @@ public class MenuController {
 
     /**
      * Send the server a request for the map
+     *
      * @param mapNum (0-4)
      */
     public void chooseMap(int mapNum) {

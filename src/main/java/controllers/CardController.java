@@ -16,8 +16,15 @@ public class CardController {
     private PowerUpDeck powerUpDeck;
     private AmmoDeck ammoDeck;
 
+    public CardController() {
+        loadWeaponCards();
+        loadPowerUpCards();
+        loadAmmoCards();
+    }
+
     /**
      * Reads the cards from the json file, workd with all deck
+     *
      * @param filename the name of the json file containing the cards
      * @param cardType the card type
      * @return a list containing the read cards
@@ -38,6 +45,7 @@ public class CardController {
 
     /**
      * creates the right typeToken for the given card type
+     *
      * @param cardType the type of the card
      * @return the correct typeToken
      */
@@ -83,6 +91,7 @@ public class CardController {
 
     /**
      * reads the file given as param
+     *
      * @param filename the name of the file to read
      * @return
      * @throws IOException if the file does not exist
@@ -90,12 +99,6 @@ public class CardController {
     private String getJsonCardDescriptor(String filename) throws IOException {
         InputStream file = ResourceController.getResource(filename);
         return new String(file.readAllBytes());
-    }
-
-    public CardController() {
-        loadWeaponCards();
-        loadPowerUpCards();
-        loadAmmoCards();
     }
 
     /**

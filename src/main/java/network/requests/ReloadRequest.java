@@ -11,8 +11,8 @@ import java.util.Map;
 
 public class ReloadRequest implements Request {
 
-    private String token;
     public Map<WeaponCard, PowerUpCard> weaponsMap;
+    private String token;
 
     public ReloadRequest(Map<WeaponCard, PowerUpCard> weaponsMap) {
         this.weaponsMap = weaponsMap;

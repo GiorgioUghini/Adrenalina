@@ -10,9 +10,9 @@ import java.util.Objects;
 public class PowerUpCard extends EffectCard {
     public RoomColor color;
     public boolean hasPrice = false;
-    private boolean pricePaid = false;
     public String when;
     public List<Action> effects;
+    private boolean pricePaid = false;
 
     public PowerUpCard() {
         super();

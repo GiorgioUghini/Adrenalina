@@ -10,10 +10,10 @@ import java.rmi.RemoteException;
 
 public class PlayPowerUpRequest implements Request {
 
-    private String token;
     public Ammo ammo;
     public PowerUpCard powerUpAmmo;
     public String powerUpName;
+    private String token;
 
     public PlayPowerUpRequest(String powerUpName, Ammo ammo, PowerUpCard powerUpAmmo) {
         this.powerUpName = powerUpName;

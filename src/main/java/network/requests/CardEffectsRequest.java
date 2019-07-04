@@ -8,8 +8,8 @@ import java.rmi.RemoteException;
 
 public class CardEffectsRequest implements Request {
 
-    private String token;
     public String cardName;
+    private String token;
 
     public CardEffectsRequest(String cardName) {
         this.cardName = cardName;

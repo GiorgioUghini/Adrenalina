@@ -21,12 +21,12 @@ import java.util.stream.Collectors;
 
 public class Player implements Serializable, Taggable, Observable {
 
+    public PowerUpCard activePowerUp;
     private String name;
     private String password;
     private Ammo ammo;
     private List<WeaponCard> weaponList;
     private WeaponCard activeWeapon;
-    public PowerUpCard activePowerUp;
     private List<PowerUpCard> powerUpList;
     private Life life;
     private Mark marks;
@@ -41,18 +41,6 @@ public class Player implements Serializable, Taggable, Observable {
     private transient Match match;
     private String circleColor = null;
     private transient List<Observer> observers;
-
-    public void setPlayerColor(String playerColor) {
-        this.circleColor = playerColor;
-    }
-
-    public String getStringColor() {
-        return circleColor;
-    }
-
-    public List<Player> getDamagedBy() {
-        return this.life.getDamagedBy();
-    }
 
     /**
      * Creates a new player object
@@ -76,6 +64,18 @@ public class Player implements Serializable, Taggable, Observable {
         playersDamagedByMeThisTurn = new HashSet<>();
         this.observers = new ArrayList<>();
         //token generation
+    }
+
+    public void setPlayerColor(String playerColor) {
+        this.circleColor = playerColor;
+    }
+
+    public String getStringColor() {
+        return circleColor;
+    }
+
+    public List<Player> getDamagedBy() {
+        return this.life.getDamagedBy();
     }
 
     @Override
@@ -165,10 +165,6 @@ public class Player implements Serializable, Taggable, Observable {
         weaponList.add(drawn);
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public boolean hasJustStarted() {
         return hasJustStarted;
     }
@@ -181,24 +177,28 @@ public class Player implements Serializable, Taggable, Observable {
         return name;
     }
 
-    public String getPassword() {
-        return password;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setAmmo(Ammo ammo) {
-        this.ammo = ammo;
+    public String getPassword() {
+        return password;
     }
 
     public Ammo getAmmo() {
         return ammo;
     }
 
-    public void setWeaponList(List<WeaponCard> weaponList) {
-        this.weaponList = weaponList;
+    public void setAmmo(Ammo ammo) {
+        this.ammo = ammo;
     }
 
     public List<WeaponCard> getWeaponList() {
         return weaponList;
+    }
+
+    public void setWeaponList(List<WeaponCard> weaponList) {
+        this.weaponList = weaponList;
     }
 
     public WeaponCard getWeaponByName(String name) {
@@ -214,12 +214,12 @@ public class Player implements Serializable, Taggable, Observable {
         throw new WeaponCardException("User does not have this powerUp: " + name + " color: " + color);
     }
 
-    public void setPowerUpList(List<PowerUpCard> powerUpList) {
-        this.powerUpList = powerUpList;
-    }
-
     public List<PowerUpCard> getPowerUpList() {
         return powerUpList.stream().sorted(Comparator.comparing(c -> c.name)).collect(Collectors.toList());
+    }
+
+    public void setPowerUpList(List<PowerUpCard> powerUpList) {
+        this.powerUpList = powerUpList;
     }
 
     public int getPoints() {
@@ -323,14 +323,14 @@ public class Player implements Serializable, Taggable, Observable {
         return this.life.getTotalDamage();
     }
 
+    public ActionGroup getLifeState() {
+        return this.lifeState;
+    }
+
     public void setLifeState(ActionGroup lifeState) {
         if (this.lifeState != ActionGroup.FRENZY_TYPE_1 && this.lifeState != ActionGroup.FRENZY_TYPE_2) {
             this.lifeState = lifeState;
         }
-    }
-
-    public ActionGroup getLifeState() {
-        return this.lifeState;
     }
 
     public void reconnect() {
@@ -351,16 +351,12 @@ public class Player implements Serializable, Taggable, Observable {
         return Server.getInstance().getLobby().getWaitingPlayers().contains(this);
     }
 
-    public void setGameMap(GameMap gameMap) {
-        this.gameMap = gameMap;
-    }
-
     public GameMap getGameMap() {
         return gameMap;
     }
 
-    public void setMatch(Match match) {
-        this.match = match;
+    public void setGameMap(GameMap gameMap) {
+        this.gameMap = gameMap;
     }
 
     public void setDeathManager(DeathManager deathManager) {
@@ -369,6 +365,10 @@ public class Player implements Serializable, Taggable, Observable {
 
     public Match getMatch() {
         return match;
+    }
+
+    public void setMatch(Match match) {
+        this.match = match;
     }
 
     /**
@@ -574,12 +574,12 @@ public class Player implements Serializable, Taggable, Observable {
         deathManager.addPartialPointsCount(this, countPoints());
     }
 
-    public void setDeathCount(int value) {
-        deathManager.setDeathCount(this, value);
-    }
-
     public int getDeathCount() {
         return deathManager.getDeathCount(this);
+    }
+
+    public void setDeathCount(int value) {
+        deathManager.setDeathCount(this, value);
     }
 
     public int getSkullCount(List<Player> players) {

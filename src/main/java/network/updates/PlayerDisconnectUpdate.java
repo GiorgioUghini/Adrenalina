@@ -7,12 +7,12 @@ public class PlayerDisconnectUpdate implements Response {
 
     private String name;
 
-    public String getName() {
-        return name;
-    }
-
     public PlayerDisconnectUpdate(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override

@@ -192,6 +192,7 @@ public class GameViewGUI implements Initializable, GameView {
     private int maxRunDistance;
     private boolean isShooting;
     private boolean firstTurn = true;
+    private WeaponCard actualWC = null;
 
     public GameViewGUI() {
         this.gameController = new GameController();
@@ -632,7 +633,6 @@ public class GameViewGUI implements Initializable, GameView {
         }
         return -1;
     }
-
 
     private void drawPlayerToken(GridPane pane, Player p) {
         Circle circle = new Circle(0.0d, 0.0d, 17.0d);
@@ -1484,8 +1484,6 @@ public class GameViewGUI implements Initializable, GameView {
         int index = btlist.indexOf(result.get());
         return powerUpCards.get(index - 1);
     }
-
-    private WeaponCard actualWC = null;
 
     public void setActualWC(WeaponCard wc) {
         this.actualWC = wc;

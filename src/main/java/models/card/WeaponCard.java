@@ -12,9 +12,8 @@ public class WeaponCard extends EffectCard {
     public Boolean exclusive;
     public Ammo drawPrice;
     public Ammo reloadPrice;
-
-    private boolean loaded;
     public List<Effect> effects;
+    private boolean loaded;
     private List<Effect> activatedEffects;
     private Effect activeEffect;
 

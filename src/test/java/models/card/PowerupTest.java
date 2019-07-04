@@ -10,11 +10,11 @@ import models.player.Ammo;
 import models.player.Player;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import static org.junit.Assert.*;
 
 public class PowerupTest {
     @Test

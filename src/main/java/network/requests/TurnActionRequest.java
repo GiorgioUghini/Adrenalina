@@ -9,8 +9,8 @@ import java.rmi.RemoteException;
 
 public class TurnActionRequest implements Request {
 
-    private String token;
     public ActionType actionType;
+    private String token;
 
     public TurnActionRequest(ActionType actionType) {
         this.actionType = actionType;

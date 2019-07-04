@@ -68,28 +68,28 @@ public class Server {
         return lobby;
     }
 
-    public void setMaxClients(int maxClients) {
-        this.maxClients = maxClients;
-    }
-
     public int getMaxClients() {
         return maxClients;
     }
 
-    public void setDebug(boolean isDebug) {
-        this.debug = isDebug;
+    public void setMaxClients(int maxClients) {
+        this.maxClients = maxClients;
     }
 
     public boolean isDebug() {
         return debug;
     }
 
-    public void setAutoReload(boolean autoReload) {
-        this.autoReload = autoReload;
+    public void setDebug(boolean isDebug) {
+        this.debug = isDebug;
     }
 
     public boolean isAutoReload() {
         return autoReload;
+    }
+
+    public void setAutoReload(boolean autoReload) {
+        this.autoReload = autoReload;
     }
 
     public int getRegistryPort() {

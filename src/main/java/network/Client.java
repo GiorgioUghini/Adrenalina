@@ -40,12 +40,8 @@ public class Client {
 
     private int mapNum;
 
-    public int getMapNum() {
-        return mapNum;
-    }
+    private Client() {
 
-    public void setMapNum(int mapNum) {
-        this.mapNum = mapNum;
     }
 
     public static Client getInstance() {
@@ -55,8 +51,12 @@ public class Client {
         return instance;
     }
 
-    private Client() {
+    public int getMapNum() {
+        return mapNum;
+    }
 
+    public void setMapNum(int mapNum) {
+        this.mapNum = mapNum;
     }
 
     public Map<Player, Coordinate> getPlayerCoordinateMap() {
@@ -67,8 +67,16 @@ public class Client {
         return currentTurnType;
     }
 
+    public void setCurrentTurnType(TurnType type) {
+        this.currentTurnType = type;
+    }
+
     public String getPlayerUsername() {
         return me;
+    }
+
+    public void setPlayerUsername(String me) {
+        this.me = me;
     }
 
     public Player getPlayer() {
@@ -79,28 +87,20 @@ public class Client {
         players.set(players.indexOf(me), me);
     }
 
-    public void setPlayerUsername(String me) {
-        this.me = me;
+    public Map<ActionType, List<TurnEvent>> getActions() {
+        return actions;
     }
 
     public void setActions(Map<ActionType, List<TurnEvent>> actions) {
         this.actions = actions;
     }
 
-    public Map<ActionType, List<TurnEvent>> getActions() {
-        return actions;
-    }
-
-    public void setCurrentTurnType(TurnType type) {
-        this.currentTurnType = type;
+    public ActionType getCurrentActionType() {
+        return currentActionType;
     }
 
     public void setCurrentActionType(ActionType type) {
         this.currentActionType = type;
-    }
-
-    public ActionType getCurrentActionType() {
-        return currentActionType;
     }
 
     public void activateGameViewCLI() {
@@ -126,12 +126,12 @@ public class Client {
         //Thread.currentThread().join();
     }
 
-    public void setConnection(Connection connection) {
-        this.connection = connection;
-    }
-
     public Connection getConnection() {
         return connection;
+    }
+
+    public void setConnection(Connection connection) {
+        this.connection = connection;
     }
 
     public View getCurrentView() {

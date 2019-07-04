@@ -4,15 +4,6 @@ import java.util.Scanner;
 
 public class Console {
 
-    public enum COLOR {
-        WHITE,
-        BLU,
-        RED,
-        PURPLE,
-        YELLOW,
-        GREEN
-    }
-
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void print(String message) {
@@ -55,5 +46,14 @@ public class Console {
 
     public static String nextLine() {
         return scanner.nextLine();
+    }
+
+    public enum COLOR {
+        WHITE,
+        BLU,
+        RED,
+        PURPLE,
+        YELLOW,
+        GREEN
     }
 }

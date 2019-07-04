@@ -1,7 +1,5 @@
 package network;
 
-import utils.Console;
-
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
 

@@ -11,10 +11,10 @@ import java.rmi.RemoteException;
 
 public class PlayEffectRequest implements Request {
 
-    private String token;
     public Effect effect;
     public Ammo ammo;
     public PowerUpCard powerUpCard;
+    private String token;
 
     public PlayEffectRequest(Effect effect, Ammo ammo, PowerUpCard powerUpCard) {
         this.effect = effect;
