@@ -608,7 +608,6 @@ public class GameViewGUI implements Initializable, GameView {
             int i = 0;
             for (ActionType groupAction : groupActions) {
                 setTextAndEnableBtnActionGroup(groupAction, ++i);
-                showMessage("Action group: " + groupAction.name());
             }
         }
     }
