@@ -1509,8 +1509,12 @@ public class GameViewGUI implements Initializable, GameView {
         disableTurnEventButtons();
 
         for (Player player : winners) {
-            showMessage(player.getName() + " WON!");
+            showMessage(String.format("%s WON THE MATCH WITH %dPOINTS!!!!", player.getName(), pointers.get(player)));
         }
+        int toastMsgTime = 2500; //2.5 seconds
+        int fadeInTime = 300; //0.5 seconds
+        int fadeOutTime = 1000; //0.5 seconds
+        Platform.runLater(() -> Toast.makeText(ScreenController.getInstance().getActualStage(), "This match has ended!", toastMsgTime, fadeInTime, fadeOutTime));
     }
 
     @Override
