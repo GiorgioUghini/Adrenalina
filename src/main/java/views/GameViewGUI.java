@@ -1317,37 +1317,37 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     public void weaponClicked1() {
-        if (Client.getInstance().getPlayer().getWeaponList().isEmpty()) {
-            showMessage("You cannot shoot.");
-        } else if (canDoActionMap.get(ViewAction.SHOOT)) {
-            WeaponCard we = Client.getInstance().getPlayer().getWeaponList().get(0);
-            weaponClicked(we);
-        }
+        weaponClicked(0);
     }
 
     public void weaponClicked2() {
-        if (Client.getInstance().getPlayer().getWeaponList().isEmpty()) {
-            showMessage("You can't shoot.");
-        } else if (canDoActionMap.get(ViewAction.SHOOT) && Client.getInstance().getPlayer().getWeaponList().size() > 1) {
-            WeaponCard we = Client.getInstance().getPlayer().getWeaponList().get(1);
-            weaponClicked(we);
-        }
+        weaponClicked(1);
     }
 
     public void weaponClicked3() {
-        if (Client.getInstance().getPlayer().getWeaponList().isEmpty()) {
-            showMessage("No, you can't shoot.");
-        } else if (canDoActionMap.get(ViewAction.SHOOT) && Client.getInstance().getPlayer().getWeaponList().size() > 2) {
-            WeaponCard we = Client.getInstance().getPlayer().getWeaponList().get(2);
-            weaponClicked(we);
-        }
+        weaponClicked(2);
     }
 
-    private void weaponClicked(WeaponCard weaponCard){
-        canDoActionMap.put(ViewAction.SHOOT, false);
-        setActualWC(weaponCard);
-        gameController.getEffects(weaponCard);
-        showMessage("You clicked on " + weaponCard.getName());
+    /**
+     * a weapon has been clicked. If you could click on it, the correct request is sent to the server and you cannot
+     * click on it anymore
+     * @param weaponIndex the index of the clicked weapon in the player's weapon list
+     */
+    private void weaponClicked(int weaponIndex){
+        if(canDoActionMap.get(ViewAction.SHOOT)) {
+            if (Client.getInstance().getPlayer().getWeaponList().isEmpty()) {
+                showMessage("You cannot shoot.");
+                gameController.finishCard();
+                canDoActionMap.put(ViewAction.SHOOT, false);
+            } else if (Client.getInstance().getPlayer().getWeaponList().size() > weaponIndex) {
+                WeaponCard we = Client.getInstance().getPlayer().getWeaponList().get(weaponIndex);
+                setActualWC(we);
+                gameController.getEffects(we);
+                showMessage("You clicked on " + we.getName());
+                if(!we.isLoaded()) showMessage("You cannot shoot with an unloaded weapon");
+                canDoActionMap.put(ViewAction.SHOOT, false);
+            }
+        }
     }
 
     /**
