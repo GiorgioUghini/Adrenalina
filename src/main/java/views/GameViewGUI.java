@@ -200,6 +200,9 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Client.getInstance().setCurrentView(this);
         mainGridPane.setStyle(String.format("-fx-background-image: url('maps/map-%d.png'); -fx-background-repeat: stretch; -fx-background-size: stretch; -fx-background-position: center center;", Client.getInstance().getMapNum() + 1));
@@ -272,15 +275,26 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void reconnect() {
         gameController.reconnect();
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void getValidActions() {
         gameController.getValidActions();
     }
 
+    /**
+     * adds a weapon to the spawnpoint of the given color
+     * @param card the weapon to add
+     * @param color the color of the spawnPoint
+     */
     private void addWeaponOnMapSpawnPoint(WeaponCard card, RoomColor color) {
         int i = 0;
         Image img = new Image(ResourceController.getResource("weaponcards/" + card.image));
@@ -295,6 +309,10 @@ public class GameViewGUI implements Initializable, GameView {
         });
     }
 
+    /**
+     * Removes all weapons on the spawnpoint of the given color
+     * @param color the color of the spawnpoint
+     */
     private void removeWeaponOnMapSpawnPoint(RoomColor color) {
         Platform.runLater(() -> {
             for (int i = 0; i < 3; i++) {
@@ -305,7 +323,12 @@ public class GameViewGUI implements Initializable, GameView {
 
     }
 
-    public void addCardToHand(EffectCard card, List<ImageView> where) {
+    /**
+     * adds a weapon or a powerup card to the hand
+     * @param card the card to add
+     * @param where in which list the card will be added (powerups or weapons)
+     */
+    private void addCardToHand(EffectCard card, List<ImageView> where) {
         Platform.runLater(() -> {
             boolean isWeapon = card.getClass().equals(WeaponCard.class);
             int i = 0;
@@ -330,7 +353,11 @@ public class GameViewGUI implements Initializable, GameView {
         });
     }
 
-    public void removeCardsToHand(List<ImageView> where) {
+    /**
+     * Removes all cards from the player hand
+     * @param where from which list the cards will be removed
+     */
+    private void removeCardsToHand(List<ImageView> where) {
         Platform.runLater(() -> {
             for (ImageView imageView : where) {
                 imageView.setImage(null);
@@ -339,17 +366,26 @@ public class GameViewGUI implements Initializable, GameView {
         });
     }
 
+    /**
+     * clicked button to draw a powerUp, calls the server and updates the possible actions
+     */
     public void drawPowerUp() {
         gameController.drawPowerUp();
         gameController.getValidActions();
     }
 
+    /**
+     * clicked button to spawn, enables the click on a powerup card
+     */
     public void spawn() {
         showMessage("Please click on the power up card you wish to DISCARD and spawn accordingly.");
         setBtnEnabled(btnSpawn, false);
         canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, true);
     }
 
+    /**
+     * Clicked button to run, highlights all square in which the user can run
+     */
     public void runBtnClicked() {
         highlighAllSquaresAtMaxDistance(this.maxRunDistance);
         setBtnEnabled(btnRun, false);
@@ -357,12 +393,22 @@ public class GameViewGUI implements Initializable, GameView {
         showMessage("Please click on the map where you want to go.");
     }
 
+    /**
+     * called when a square is clicked, contains the square to run to and sends it to the server
+     * @param square the square to run to
+     */
     public void run(Square square) {
         TurnEvent te = Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType()).get(0);
         Client.getInstance().getConnection().run(te, square);
         gameController.getValidActions();
     }
 
+    /**
+     * called when the button grab is clicked, recognizes of you are on a spawnpoint or on an ammo point
+     * case ammo point: simply calls the server
+     * case spawn point: asks with a dialog which weapon you want to draw, how you want to pay and which weapon you want to release
+     * and send the info to the server
+     */
     public void grab() {
         disableTurnEventButtons();
         GameMap map = Client.getInstance().getMap();
@@ -384,6 +430,9 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    /**
+     * the user clicked the shoot button: enables click on weapons
+     */
     public void shoot() {
         isShooting = true;
         setBtnEnabled(btnShoot, false);
@@ -391,6 +440,9 @@ public class GameViewGUI implements Initializable, GameView {
         canDoActionMap.put(ViewAction.SHOOT, true);
     }
 
+    /**
+     * the user clicked on the reload button: shows an alert with the weapons you can reload
+     */
     public void reload() {
         setBtnEnabled(btnReload, false);
         Platform.runLater(() -> {
@@ -422,6 +474,9 @@ public class GameViewGUI implements Initializable, GameView {
         });
     }
 
+    /**
+     * @return a list of the weapons unloaded and that you have enough money to reload
+     */
     private List<WeaponCard> getReloadableWeapons() {
         Player me = Client.getInstance().getPlayer();
         List<WeaponCard> toReload = new ArrayList<>();
@@ -433,6 +488,11 @@ public class GameViewGUI implements Initializable, GameView {
         return toReload;
     }
 
+    /**
+     * Shows the alert containing the weapons you can reload, the user should select one
+     * @param reloadableWeapons the weapons the user can reload
+     * @return the chosen weapon
+     */
     private WeaponCard showReloadAlert(List<WeaponCard> reloadableWeapons) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Reload");
@@ -455,6 +515,9 @@ public class GameViewGUI implements Initializable, GameView {
         return null;
     }
 
+    /**
+     * button use powerup clicked: enables click on powerups
+     */
     public void usePowerUp() {
         isShooting = false;
         setBtnEnabled(btnUsePowerUp, false);
@@ -468,6 +531,9 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    /**
+     * Button end turn clicked: the request to end the turn is sent to the server
+     */
     public void endTurn() {
         gameController.endTurn();
         setBtnEnabled(btnEndTurn, false);
@@ -476,6 +542,9 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void startTurn(String playerName) {
         if (Client.getInstance().getPlayer().getName().equals(playerName)) {
             gameController.getValidActions();
@@ -483,11 +552,17 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void printError(String error) {
 
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void showMessage(String message) {
         if (message.equals("\n")) return;
         Platform.runLater(() -> {
@@ -496,6 +571,9 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void updateActions(Map<ActionType, List<TurnEvent>> actions) {
         Client client = Client.getInstance();
         ActionType currentActionType = client.getCurrentActionType();
@@ -521,6 +599,10 @@ public class GameViewGUI implements Initializable, GameView {
         if (actions.isEmpty()) firstTurn = false;
     }
 
+    /**
+     * Set the buttons on top of the screen, those with an image that decide the main action
+     * @param groupActions the list of the actions the user can do
+     */
     private void setActionGroupButtons(Set<ActionType> groupActions) {
         if (groupActions.size() > 1 && Client.getInstance().getCurrentActionType() == null) {
             int i = 0;
@@ -531,12 +613,19 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    /**
+     * disables the main action group button
+     */
     private void disableActionGroupButtons() {
         setBtnEnabled(btnActionGroup1, false);
         setBtnEnabled(btnActionGroup2, false);
         setBtnEnabled(btnActionGroup3, false);
     }
 
+    /**
+     * sets the turn event button, the ones enabled after you clicked on an action group button
+     * @param turnEvents
+     */
     private void setTurnEventButtons(List<TurnEvent> turnEvents) {
         for (TurnEvent turnEvent : turnEvents) {
             Button buttonToShow = null;
@@ -571,6 +660,10 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    /**
+     * color in green all the squares on map at the given max distance
+     * @param distance the max distance to color
+     */
     private void highlighAllSquaresAtMaxDistance(int distance) {
         Player me = Client.getInstance().getPlayer();
         GameMap gameMap = Client.getInstance().getMap();
@@ -581,12 +674,20 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    /**
+     * disable all turn event buttons
+     */
     private void disableTurnEventButtons() {
         for (Button button : turnEventButtons) {
             setBtnEnabled(button, false);
         }
     }
 
+    /**
+     * wrapper to enable or disable a button
+     * @param button the button to enable/disable
+     * @param isVisible if true the button is enabled
+     */
     private void setBtnEnabled(Button button, boolean isVisible) {
         if (button != null) {
             Platform.runLater(() -> {
@@ -595,6 +696,11 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    /**
+     * Adds a node on the pane with the map
+     * @param pane the pane that contains the map
+     * @param node the node to add
+     */
     private void addOnPane(GridPane pane, Node node) {
         switch (pane.getChildren().size()) {
             case 0:
@@ -618,6 +724,11 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    /**
+     * Given a player color returns its index
+     * @param color
+     * @return the index of that player
+     */
     private int getIndex(String color) {
         switch (color) {
             case "GREEN":
@@ -634,6 +745,11 @@ public class GameViewGUI implements Initializable, GameView {
         return -1;
     }
 
+    /**
+     * Draws the token of the player on the map
+     * @param pane the pane containing the map
+     * @param p the player to draw
+     */
     private void drawPlayerToken(GridPane pane, Player p) {
         Circle circle = new Circle(0.0d, 0.0d, 17.0d);
         int i = Client.getInstance().getPlayers().indexOf(p);
@@ -665,24 +781,43 @@ public class GameViewGUI implements Initializable, GameView {
         });
     }
 
+    /**
+     * highlights the circle of a clickable player
+     * @param c the circle to highlight
+     */
     private void highlightCircle(Circle c) {
         clickableObjects.add(c);
         Platform.runLater(() -> c.setStrokeWidth(7d));
     }
 
+    /**
+     * Removes highlight from the circle
+     * @param c the circle to remove the highlight from
+     */
     private void undoHighlightCircle(Circle c) {
         Platform.runLater(() -> c.setStrokeWidth(0d));
     }
 
+    /**
+     * Colors in red a grid pane to indicate that it is clickable
+     * @param gp the pane to highlight
+     */
     private void highlightGridPane(GridPane gp) {
         clickableObjects.add(gp);
         Platform.runLater(() -> gp.setStyle("-fx-background-color: green; -fx-opacity: 0.5;"));
     }
 
+    /**
+     * Removes the color layer from the given grid pane
+     * @param gp
+     */
     private void undoHighlightGridPane(GridPane gp) {
         Platform.runLater(() -> gp.setStyle(""));
     }
 
+    /**
+     * Removes the color layer from all grid panes
+     */
     private void undoHighlighAllGridPanes() {
         for (Square sq : Client.getInstance().getMap().getAllSquares()) {
             Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(sq);
@@ -690,12 +825,20 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    /**
+     * colors a square in green to show that it can be clicked
+     * @param square the square to color
+     */
     private void highlightSquare(Square square) {
         Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(square);
         GridPane clickable = paneList.get(coord.getX()).get(coord.getY());
         highlightGridPane(clickable);
     }
 
+    /**
+     * event thrown when a player is clicked
+     * @param p the clicked player
+     */
     private void playerClicked(Player p) {
         Circle clicked = circlePlayerMap.getSingleKey(p);
         if (canDoActionMap.get(ViewAction.SELECTPLAYER)) {
@@ -715,6 +858,9 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public synchronized void updateMapView(GameMap map) {
         Client client = Client.getInstance();
         //delete everything on map
@@ -780,6 +926,9 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    /**
+     * acquires lock on the semaphore and catches the exception
+     */
     private void acquireLock() {
         try {
             fxSemaphore.acquire();
@@ -790,6 +939,9 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public synchronized void updatePlayerView(Player newPlayer) {
         acquireLock();
         Platform.runLater(() -> {
@@ -821,6 +973,9 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void onMark(Player markedPlayer) {
         if (markedPlayer.hasMarks())
             Platform.runLater(() -> showMessage(markedPlayer.getName() + " has been marked"));
@@ -828,6 +983,9 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void onDamage(Player damagedPlayer) {
         showMessage(damagedPlayer.getName() + " has been damaged");
         updateDamagedAndMarkedPlayer(damagedPlayer);
@@ -851,6 +1009,11 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    /**
+     * when a damage or a mark is received, update the player tab by adding it: first remove everything and then add
+     * it back
+     * @param newPlayer
+     */
     private void updateDamagedAndMarkedPlayer(Player newPlayer) {
         List<Player> players = Client.getInstance().getPlayers();
         Player oldPlayer = players.get(players.indexOf(newPlayer));
@@ -885,6 +1048,9 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void updatePoints(Map<Player, Integer> map) {
         for (Player p : Client.getInstance().getPlayers()) {
             int points = map.get(p);
@@ -892,6 +1058,10 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    /**
+     * adds skulls on the player that has been killed, now every kill gives less points
+     * @param who
+     */
     void addSkullsOnPlayerPane(Player who) {
         int numberOfDeath = 0;
         if (who.getTotalDamage() > 10) {
@@ -907,6 +1077,10 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    /**
+     * Removes all the skulls on the pane of a player
+     * @param who the player whose skulls will be removed
+     */
     void removeAllSkullsOnPlayerPane(Player who) {
         AnchorPane anchorPane = anchorPanePlayers.get(getIndex(who.getStringColor()));
         for (int i = 0; i < anchorPane.getChildren().size(); i++) {
@@ -917,6 +1091,10 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    /**
+     * adds black squares on the skulls of the pane that contains the remaining skulls, one is added for each death
+     * @param newPlayer
+     */
     void addSkullsOnMainPane(Player newPlayer) {
         int skulls = 0;
         if (newPlayer.getTotalDamage() > 10) {
@@ -930,6 +1108,9 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    /**
+     * Removes all the black squares from the main pane
+     */
     void removeAllSkullOnMainPane() {
         for (int i = 0; i < skullPane.getChildren().size(); i++) {
             Node n = skullPane.getChildren().get(i);
@@ -939,6 +1120,10 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    /**
+     * Removes all damages on a player's board
+     * @param p
+     */
     void removeAllDamageOnPlayer(Player p) {
         if (getPlayerColor(p.getStringColor()) != null) {
             int index = getIndex(p.getStringColor());
@@ -952,6 +1137,12 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    /**
+     * draws new damage on a player board
+     * @param to the damaged players, signals will go on its board
+     * @param from the player who damages, the damage color will be his color
+     * @param position the offset from which the damage must be drawn
+     */
     void drawDamageOnPlayer(Player to, Player from, int position) {
         //When drawing a circle, first arg is X, second is Y, third is radius. 138px is the height of where the circle must be placed
         //Then, for every new damage, the circle must be on same height but trasled on X.
@@ -962,6 +1153,10 @@ public class GameViewGUI implements Initializable, GameView {
         Platform.runLater(() -> anchorPane.getChildren().add(c));
     }
 
+    /**
+     * Clears all marks on a player's board
+     * @param p the player whose board will be cleared of the marks
+     */
     void removeAllMarksOnPlayer(Player p) {
         if (getPlayerColor(p.getStringColor()) != null) {
             int index = getIndex(p.getStringColor());
@@ -975,6 +1170,12 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    /**
+     * Draws a mark on the player's boards
+     * @param to the player receiving the mark
+     * @param from the player giving the mark
+     * @param position the offset of the mark
+     */
     void drawMarkOnPlayer(Player to, Player from, int position) {
         //When drawing a circle, first arg is X, second is Y, third is radius. 138px is the height of where the circle must be placed
         //Then, for every new damage, the circle must be on same height but trasled on X.
@@ -986,11 +1187,17 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void onNewPlayer(String playerName) {
         showMessage("Player " + playerName + " connected!");
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void onPlayerDisconnected(String name) {
         showMessage("Player " + name + " disconnected!");
     }
@@ -1035,6 +1242,10 @@ public class GameViewGUI implements Initializable, GameView {
         powerUpClicked(clickedPowerUp);
     }
 
+    /**
+     * when a powerup is clicked this event is fired
+     * @param powerUpCard the powerup clicked
+     */
     private void powerUpClicked(PowerUpCard powerUpCard) {
         Player me = Client.getInstance().getPlayer();
         if (canDoActionMap.get(ViewAction.CLICKPOWERUPSPAWN)) {
@@ -1062,6 +1273,10 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    /**
+     * dialog to open when paying for a powerup, only lets you select 1 cube of any ammo color
+     * @return
+     */
     private Ammo chooseAmmoDialog() {
         if (Client.getInstance().getPlayer().getAmmo().isEmpty()) return null;
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -1102,41 +1317,43 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     public void weaponClicked1() {
-        if (Client.getInstance().getPlayer().getWeaponList().isEmpty()) {
-            showMessage("You cannot shoot.");
-        } else if (canDoActionMap.get(ViewAction.SHOOT)) {
-            canDoActionMap.put(ViewAction.SHOOT, false);
-            WeaponCard we = Client.getInstance().getPlayer().getWeaponList().get(0);
-            setActualWC(we);
-            gameController.getEffects(we);
-            showMessage("You clicked on " + we.getName());
-        }
+        weaponClicked(0);
     }
 
     public void weaponClicked2() {
-        if (Client.getInstance().getPlayer().getWeaponList().isEmpty()) {
-            showMessage("You can't shoot.");
-        } else if (canDoActionMap.get(ViewAction.SHOOT) && Client.getInstance().getPlayer().getWeaponList().size() > 1) {
-            canDoActionMap.put(ViewAction.SHOOT, false);
-            WeaponCard we = Client.getInstance().getPlayer().getWeaponList().get(1);
-            setActualWC(we);
-            gameController.getEffects(we);
-            showMessage("You clicked on " + we.getName());
-        }
+        weaponClicked(1);
     }
 
     public void weaponClicked3() {
-        if (Client.getInstance().getPlayer().getWeaponList().isEmpty()) {
-            showMessage("No, you can't shoot.");
-        } else if (canDoActionMap.get(ViewAction.SHOOT) && Client.getInstance().getPlayer().getWeaponList().size() > 2) {
-            canDoActionMap.put(ViewAction.SHOOT, false);
-            WeaponCard we = Client.getInstance().getPlayer().getWeaponList().get(2);
-            setActualWC(we);
-            gameController.getEffects(we);
-            showMessage("You clicked on " + we.getName());
+        weaponClicked(2);
+    }
+
+    /**
+     * a weapon has been clicked. If you could click on it, the correct request is sent to the server and you cannot
+     * click on it anymore
+     * @param weaponIndex the index of the clicked weapon in the player's weapon list
+     */
+    private void weaponClicked(int weaponIndex){
+        if(canDoActionMap.get(ViewAction.SHOOT)) {
+            if (Client.getInstance().getPlayer().getWeaponList().isEmpty()) {
+                showMessage("You cannot shoot.");
+                gameController.finishCard();
+                canDoActionMap.put(ViewAction.SHOOT, false);
+            } else if (Client.getInstance().getPlayer().getWeaponList().size() > weaponIndex) {
+                WeaponCard we = Client.getInstance().getPlayer().getWeaponList().get(weaponIndex);
+                setActualWC(we);
+                gameController.getEffects(we);
+                showMessage("You clicked on " + we.getName());
+                if(!we.isLoaded()) showMessage("You cannot shoot with an unloaded weapon");
+                canDoActionMap.put(ViewAction.SHOOT, false);
+            }
         }
     }
 
+    /**
+     * event fired when a square has been clicked, checks the action type and performs the right action
+     * @param s the clicked square
+     */
     private void squareClicked(Square s) {
         //check that it was clickable
         Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(s);
@@ -1224,7 +1441,13 @@ public class GameViewGUI implements Initializable, GameView {
         squareClicked(s);
     }
 
-    void weaponOnSpawnPointClicked(RoomColor color, int position) {
+    /**
+     * event fired when a weapon on a spawnpoint has been clicked, if it was clickable a dialog to pay for its grab is shown
+     * and upon valid payment the user can grab it
+     * @param color the color of the spawnpoint
+     * @param position the offset of the weapon in the list
+     */
+    private void weaponOnSpawnPointClicked(RoomColor color, int position) {
         SpawnPoint spawnPoint = (SpawnPoint) Client.getInstance().getMap().getAllSquaresInRoom(color).stream().filter(Square::isSpawnPoint).findFirst().orElse(null);
         if (spawnPoint == null) {
             return;
@@ -1248,6 +1471,11 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    /**
+     * If you are trying to grab a weapon this dialog is shown and lets you choose a weapon to discard to grab the new one
+     * @param wc the weapon card you want to draw
+     * @param payWith the powerup you want to pay with
+     */
     private void discardWeaponChoosingDialog(WeaponCard wc, PowerUpCard payWith) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -1329,6 +1557,11 @@ public class GameViewGUI implements Initializable, GameView {
         Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
     }
 
+    /**
+     * Gets the right image to put on the actions tab
+     * @param actionType
+     * @return the imageView correlated to the given action type
+     */
     private ImageView getImageView(ActionType actionType) {
         ImageView iv;
         double width = 150d;
@@ -1388,6 +1621,11 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    /**
+     * Updates the action group button by adding the right action images on each request
+     * @param actionType the current action type
+     * @param btnNum the offset of the button
+     */
     public void setTextAndEnableBtnActionGroup(ActionType actionType, int btnNum) {
         Platform.runLater(() -> {
             switch (btnNum) {
@@ -1417,6 +1655,9 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void effectChoosingDialog(LegitEffects legitEffects) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -1451,10 +1692,21 @@ public class GameViewGUI implements Initializable, GameView {
         });
     }
 
+    /**
+     * Shows a powerup dialog when you want to pay with a powerup
+     * @return the chosen powerup
+     */
     private PowerUpCard choosePowerUpDialog() {
         return choosePowerUpDialog(null, null, null);
     }
 
+    /**
+     * Shows a more flexible powerup dialog when you want to use a powerup in general
+     * @param headerText the text of the header of the dialog
+     * @param contentText the text of the content of the dialog
+     * @param powerUpCards a list of powerup cards between the user can choose
+     * @return the chosen powerup card or null
+     */
     private PowerUpCard choosePowerUpDialog(String headerText, String contentText, List<PowerUpCard> powerUpCards) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Just a question...");
@@ -1490,6 +1742,9 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void continueWeapon() {
         if (actualWC != null) {
             gameController.getEffects(actualWC);
@@ -1497,11 +1752,20 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
+    /**
+     * {@inheritDoc}
+     */
     public void onEndWeapon() {
         this.setActualWC(null);
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void onEndMatch(List<Player> winners, Map<Player, Integer> pointers) {
         disableActionGroupButtons();
         disableTurnEventButtons();
@@ -1516,6 +1780,9 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void selectTag(Selectable selectable) {
         switch (selectable.getType()) {
             case ROOM:
@@ -1551,10 +1818,17 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
+    /**
+     * The tag has been selected, send the tag to server
+     */
     public void endSelectTag() {
         onSelectDone(null);
     }
 
+    /**
+     * sends the tag to the server
+     * @param selected
+     */
     private void onSelectDone(Taggable selected) {
         clickableObjects.clear();
         setBtnEnabled(btnEndSelect, false);
@@ -1562,6 +1836,11 @@ public class GameViewGUI implements Initializable, GameView {
 
     }
 
+    /**
+     * Given a color string return the actual rgb of the color
+     * @param circleColor the color as a string
+     * @return a color object
+     */
     public Color getPlayerColor(String circleColor) {
         switch (circleColor) {
             case "GREEN":
