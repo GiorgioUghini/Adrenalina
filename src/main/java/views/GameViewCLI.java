@@ -185,9 +185,7 @@ public class GameViewCLI implements GameView {
         if (newPlayer.getTotalDamage() > 10) {
             skulls += 1;
         }
-        for (Player p : Client.getInstance().getPlayers()) {
-            skulls += p.getDeathCount();
-        }
+        skulls += newPlayer.getSkullCount(Client.getInstance().getPlayers());
         Console.println(String.format("Skulls already taken in this match from all players: %d", skulls));
     }
 
@@ -365,7 +363,7 @@ public class GameViewCLI implements GameView {
 
         int i = 1;
         try {
-            Thread.sleep(350);  //Change here
+            Thread.sleep(500);  //Change here
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             Logger.getAnonymousLogger().info(e.toString());
