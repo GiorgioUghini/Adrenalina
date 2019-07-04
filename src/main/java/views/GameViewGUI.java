@@ -1339,6 +1339,7 @@ public class GameViewGUI implements Initializable, GameView {
                 showMessage("You cannot shoot.");
                 gameController.finishCard();
                 canDoActionMap.put(ViewAction.SHOOT, false);
+                canDoActionMap.put(ViewAction.SHOOT, false);
             } else if (Client.getInstance().getPlayer().getWeaponList().size() > weaponIndex) {
                 WeaponCard we = Client.getInstance().getPlayer().getWeaponList().get(weaponIndex);
                 setActualWC(we);
