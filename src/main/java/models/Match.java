@@ -245,7 +245,10 @@ public class Match implements Observer {
             player.onTurnEnded();
         }
 
-        playerList.stream().filter(Player::isDead).forEach(p -> gameMap.removePlayer(p));
+        playerList.stream().filter(Player::isDead).forEach(p -> {
+            if(gameMap.hasPlayer(p))
+                gameMap.removePlayer(p);
+        });
 
         Player firstDeadPlayer = playerList.stream().filter(Player::isDead).findFirst().orElse(null);
 
