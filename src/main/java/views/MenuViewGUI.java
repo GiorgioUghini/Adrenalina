@@ -17,6 +17,7 @@ import utils.Console;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -202,11 +203,10 @@ public class MenuViewGUI implements Initializable, MenuView {
                 } else if (result.get() == buttonTypeFour) {
                     i = 3;
                 } else {
-                    //TODO: User closed the window
+                    i = ThreadLocalRandom.current().nextInt(0, 3 + 1);
                 }
                 menuController.chooseMap(i);
             });
         }
-        //TODO: ADD TIMER (IN SERVER), AFTER IT TIMERS CHOOSE RANDOMLY
     }
 }
