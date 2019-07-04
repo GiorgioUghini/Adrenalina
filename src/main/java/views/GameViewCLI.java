@@ -855,9 +855,20 @@ public class GameViewCLI implements GameView {
             Console.println(String.format("%s scored %d points", entry.getKey().getName(), entry.getValue()));
         }
         Console.println("\n");
+        Console.println("-------->");
+        Console.println("--------->");
+        Console.println("---------->");
+        Console.println("----------->");
         for (Player player : winners) {
-            Console.println(player.getName() + " WON!");
+            Console.print("-------------->");
+            Console.printColor(player.getName() + " WON!", COLOR.GREEN);
+            Console.println("");
         }
+        Console.println("----------->");
+        Console.println("---------->");
+        Console.println("--------->");
+        Console.println("-------->");
+        Console.println("");
         releaseLock();
     }
 
