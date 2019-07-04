@@ -2,10 +2,10 @@ package network;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import controllers.ResourceController;
 import models.Config;
 import models.Lobby;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
@@ -41,11 +41,11 @@ public class Server {
         return instance;
     }
 
-    public void start(String hostname, int socketPort, int registryPort) throws IOException {
+    public void start(String hostname, int socketPort, int registryPort, String configPath) throws IOException {
         this.registryPort = registryPort;
         this.socketPort = socketPort;
         this.hostname = hostname;
-        InputStream file = ResourceController.getResource("config.json");
+        InputStream file = new FileInputStream(configPath);
         String jsonConfig = new String(file.readAllBytes());
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();

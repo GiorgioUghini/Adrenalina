@@ -9,6 +9,7 @@ public class StartServer {
         int registryPort = Constants.REGISTRY_PORT;
         int socketPort = Constants.PORT;
         String hostname = Constants.HOSTNAME;
+        String configPath = Constants.CONFIG_PATH;
         int maxClients = 5;
         for (String s : args) {
             s = s.replace(Constants.ARG_PREFIX, "").toLowerCase();
@@ -24,9 +25,11 @@ public class StartServer {
                 socketPort = Integer.parseInt(s.replace("socketport=", ""));
             } else if (s.startsWith("registryport")) {
                 registryPort = Integer.parseInt(s.replace("registryport=", ""));
+            } else if (s.startsWith("config-path")) {
+                configPath = s.replace("config-path=", "");
             }
         }
         server.setMaxClients(maxClients);
-        server.start(hostname, socketPort, registryPort);
+        server.start(hostname, socketPort, registryPort, configPath);
     }
 }
