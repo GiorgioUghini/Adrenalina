@@ -37,6 +37,10 @@ public class GameViewCLI implements GameView {
         this.semaphore = new Semaphore(1);
     }
 
+    /**
+     * Acquires the lock
+     * @param fromWho a string representing the method which is acquiring the log, only used in debug
+     */
     private void acquireLock(String fromWho){
         try{
             semaphore.acquire();
@@ -47,6 +51,10 @@ public class GameViewCLI implements GameView {
             Thread.currentThread().interrupt();
         }
     }
+
+    /**
+     * Releases the lock on the resource
+     */
     private void releaseLock(){
         semaphore.release();
         if(Client.getInstance().isDebug())
@@ -54,16 +62,25 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void getValidActions() {
         gameController.getValidActions();
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void reconnect() {
         gameController.reconnect();
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void startTurn(String name) {
         if (Client.getInstance().getPlayer().getName().equals(name)) {
             gameController.getValidActions();
@@ -71,6 +88,9 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void updateMapView(GameMap map) {
         Client.getInstance().setMap(map);
         acquireLock("updateMapView");
@@ -122,6 +142,9 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void updatePlayerView(Player newPlayer) {
         Client.getInstance().setPlayer(newPlayer);
         acquireLock("updatePlayerView");
@@ -150,6 +173,10 @@ public class GameViewCLI implements GameView {
         releaseLock();
     }
 
+    /**
+     * Print the skulls for each player
+     * @param newPlayer the player whose skulls have just been updated
+     */
     private void addSkullsOnMainPane(Player newPlayer) {
         int skulls = 0;
         if (newPlayer.getTotalDamage() > 10) {
@@ -162,6 +189,9 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void effectChoosingDialog(LegitEffects legitEffects) {
         acquireLock("effectChoosingDialog");
         Console.println("Which effect do you want to use now?");
@@ -188,11 +218,20 @@ public class GameViewCLI implements GameView {
         }
     }
 
-    /** This should be used to pay */
+    /**
+     * Choose a powerup when you need to pay
+     * @return the powerUp chosen
+     */
     private PowerUpCard choosePowerUpDialog(){
         return choosePowerUpDialog(null, null);
     }
 
+    /**
+     * Choose a powerup, good for any usage since text can be personalized
+     * @param title The text of the question
+     * @param powerUpCards the list of powerUps between the user can choose
+     * @return the chosen powerup
+     */
     private PowerUpCard choosePowerUpDialog(String title, List<PowerUpCard> powerUpCards) {
         if(Client.getInstance().getPlayer().getPowerUpList().isEmpty()) return null;
         if(title == null) title = "Do you want to use a power up to pay for this action?";
@@ -219,6 +258,10 @@ public class GameViewCLI implements GameView {
         return powerUpCards.get(choose);
     }
 
+    /**
+     * Sets the main buttons, those that set the action
+     * @param groupActions a set containing all the possible actions
+     */
     private void setActionGroupButtons(Set<ActionType> groupActions){
         if(groupActions.size() > 1 && Client.getInstance().getCurrentActionType()==null){
             for(ActionType groupAction : groupActions){
@@ -249,6 +292,10 @@ public class GameViewCLI implements GameView {
         }
     }
 
+    /**
+     * Once chose the main action, choose the sub-action (eg run or grab for a GRAB_NORMAL)
+     * @param turnEvents the list of the possible events
+     */
     private void setTurnEventButtons(List<TurnEvent> turnEvents){
         for (TurnEvent turnEvent : turnEvents) {
             BaseActions buttonToShow = null;
@@ -287,6 +334,9 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public synchronized void updateActions(Map<ActionType, List<TurnEvent>> actions) {
         Client client = Client.getInstance();
         ActionType currentActionType = client.getCurrentActionType();
@@ -326,6 +376,9 @@ public class GameViewCLI implements GameView {
         if(actions.isEmpty()) firstTurn = false;
     }
 
+    /**
+     * shows a dialog that lets the user choose what he wants to do, automatically chooses between actions and sub-actions
+     */
     void chooseAction() {
         Console.print("\nChoose one: ");
         int choice = readConsole(baseActions.size());
@@ -383,6 +436,9 @@ public class GameViewCLI implements GameView {
         baseActions.clear();
     }
 
+    /**
+     * dialog that discards a powerup and calls the spawn method on server
+     */
     private void spawn() {
         Console.println("Choose a powerup to discard and spawn: ");
         Player me = Client.getInstance().getPlayer();
@@ -396,6 +452,9 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void onDamage(Player damagedPlayer) {
         //ADD DAMAGE
         acquireLock("onDamage");
@@ -428,6 +487,9 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void onMark(Player markedPlayer) {
         //ADD MARKS
         acquireLock("onMark");
@@ -448,6 +510,9 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void updatePoints(Map<Player, Integer> map) {
         acquireLock("updatePoints");
         for (Player p : Client.getInstance().getPlayers()) {
@@ -458,6 +523,9 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void selectTag(Selectable selectable) {
         acquireLock("selectTag");
         Console.println("Please select a " + selectable.getType());
@@ -493,6 +561,9 @@ public class GameViewCLI implements GameView {
         }
     }
 
+    /**
+     * grabs an ammo if on an ammo point, or shows a dialog asking the user which weapons he wants to draw (if any)
+     */
     private void grab(){
         Client client = Client.getInstance();
         GameMap gameMap = client.getMap();
@@ -523,6 +594,9 @@ public class GameViewCLI implements GameView {
         }
     }
 
+    /**
+     * shows the user all the possible squares he can run to and lets he choose one
+     */
     private void run(){
         Client client = Client.getInstance();
         GameMap gameMap = client.getMap();
@@ -542,10 +616,12 @@ public class GameViewCLI implements GameView {
         gameController.run(te, selected);
     }
 
+    /**
+     * Shows the loaded weapon to the user and lets him choose one, then calls continueWeapon()
+     */
     private void shoot(){
         //if you are here you surely have at least one loaded weapon.
         Client client = Client.getInstance();
-        GameMap gameMap = client.getMap();
         Player me = client.getPlayer();
 
         List<WeaponCard> loadedWeapons = getLoadedWeapons(me);
@@ -556,6 +632,9 @@ public class GameViewCLI implements GameView {
         continueWeapon();
     }
 
+    /**
+     * Asks the user which weapon he wants to reload and reloads it if possible
+     */
     private void reload(){
         Player me = Client.getInstance().getPlayer();
         if(getLoadedWeapons(me).size() == me.getWeaponList().size()){
@@ -590,6 +669,9 @@ public class GameViewCLI implements GameView {
         gameController.getValidActions();
     }
 
+    /**
+     * Asks the user which powerUp he wants to play and makes him pay with a dialog if it has a price.
+     */
     private void playPowerUp() {
         Player me = Client.getInstance().getPlayer();
         List<PowerUpCard> selectablePowerUps = getPlayablePowerUps(me);
@@ -649,6 +731,11 @@ public class GameViewCLI implements GameView {
         }
     }
 
+    /**
+     * returns the powerup the user can actually play: those he can pay and that can be played in its turn
+     * @param player your player
+     * @return a list of the powerup cards the user can play
+     */
     private List<PowerUpCard> getPlayablePowerUps(Player player){
         List<PowerUpCard> out = player.getPowerUpList();
         List<PowerUpCard> toRemove = new ArrayList<>();
@@ -661,6 +748,11 @@ public class GameViewCLI implements GameView {
         return out;
     }
 
+    /**
+     * get the weapons the user can reload: those that he can pay and that are actually unloaded
+     * @param player your player
+     * @return a list of weapons that can be reloaded
+     */
     private List<WeaponCard> getReloadableWeapons(Player player){
         List<WeaponCard> reloadable = new ArrayList<>();
         for(WeaponCard weaponCard : player.getWeaponList()){
@@ -671,11 +763,19 @@ public class GameViewCLI implements GameView {
         return reloadable;
     }
 
+    /**
+     * checks that the user has at least one loaded weapon
+     * @return true if you have something to shoot with
+     */
     private boolean canShoot(){
         Player me = Client.getInstance().getPlayer();
         return !getLoadedWeapons(me).isEmpty();
     }
 
+    /**
+     * @param player your player
+     * @return a list of loaded weapons
+     */
     private List<WeaponCard> getLoadedWeapons(Player player){
         List<WeaponCard> loadedWeapons = new ArrayList<>();
         for(WeaponCard weaponCard : player.getWeaponList()){
@@ -684,6 +784,11 @@ public class GameViewCLI implements GameView {
         return loadedWeapons;
     }
 
+    /**
+     * asks the user for a weapon to use
+     * @param weaponCards a list containing all the weapons the user can choose among
+     * @return the chosen weapon
+     */
     private WeaponCard chooseWeaponDialog(List<WeaponCard> weaponCards){
         Console.println("Choose a weapon:");
         int i = 1;
@@ -695,10 +800,18 @@ public class GameViewCLI implements GameView {
     }
 
     private WeaponCard actualWC = null;
+
+    /**
+     * Sets the weapon you are shooting with
+     * @param wc the weapon card you are using to shoot
+     */
     public void setActualWC(WeaponCard wc) {
         this.actualWC = wc;
     }
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void continueWeapon() {
         if (actualWC!=null) {
             gameController.getEffects(actualWC);
@@ -706,12 +819,18 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void onEndWeapon() {
         this.setActualWC(null);
         this.isShooting = false;
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void onEndMatch(List<Player> winners, Map<Player, Integer> pointers) {
         acquireLock("onEndMatch");
         for(Map.Entry<Player, Integer> entry : pointers.entrySet()){
@@ -725,11 +844,17 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void printError(String error) {
         Logger.getAnonymousLogger().info(error);
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void showMessage(String message) {
         acquireLock("showMessage");
         Console.printColor(message + "\n", COLOR.PURPLE);
@@ -737,17 +862,27 @@ public class GameViewCLI implements GameView {
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void onNewPlayer(String playerName) {
         showMessage("Player " + playerName + " connected!");
     }
 
     @Override
+    /**
+     * {@inheritDoc}
+     */
     public void onPlayerDisconnected(String playerName) {
         showMessage("Player " + playerName + " disconnected!");
     }
 
     //NELLA SHOOT() mettere isShooting a true, nella USEPOWERUP metterlo a false!!
 
+    /**
+     * Prints the map with the given number
+     * @param num an id between 0 and 3
+     */
     private void printMapNum(int num) {
         println("╔═══════════════════════════════════════╗");
         println("║             ADRENALINE MAP            ║");
@@ -767,6 +902,12 @@ public class GameViewCLI implements GameView {
         println("╚═════════╩═════════╩═════════╩═════════╝");
     }
 
+    /**
+     * prints the bottom of the map line that is being printed
+     * @param gameMap the map to print
+     * @param x the row of the map, starting from 0 on the top
+     * @param y the column, 0 from left
+     */
     private void printBottom(GameMap gameMap, int x, int y){
         Square s = gameMap.getSquareByCoordinate(x, y);
         boolean bottomWalk = s!=null && s.hasNextWalkable(CardinalDirection.BOTTOM);
@@ -785,6 +926,12 @@ public class GameViewCLI implements GameView {
         }
     }
 
+    /**
+     * prints the content of the line: the cell number and a wall or a door
+     * @param gameMap the map being drawn
+     * @param x the row of the map, starting from 0 on the top
+     * @param y the column, 0 from left
+     */
     private void printContent(GameMap gameMap, int x, int y){
         Square s = gameMap.getSquareByCoordinate(x, y);
 
@@ -816,6 +963,11 @@ public class GameViewCLI implements GameView {
         }
     }
 
+    /**
+     * Reads the user input in the console, from 1 to max
+     * @param max the max number the user can provide
+     * @return the read number - 1 (to be used as index)
+     */
     private int readConsole(int max){
         int x = Console.nextInt();
         while(x<1 || x > max){
