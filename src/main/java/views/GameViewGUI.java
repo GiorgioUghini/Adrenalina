@@ -1320,11 +1320,8 @@ public class GameViewGUI implements Initializable, GameView {
         if (Client.getInstance().getPlayer().getWeaponList().isEmpty()) {
             showMessage("You cannot shoot.");
         } else if (canDoActionMap.get(ViewAction.SHOOT)) {
-            canDoActionMap.put(ViewAction.SHOOT, false);
             WeaponCard we = Client.getInstance().getPlayer().getWeaponList().get(0);
-            setActualWC(we);
-            gameController.getEffects(we);
-            showMessage("You clicked on " + we.getName());
+            weaponClicked(we);
         }
     }
 
@@ -1332,11 +1329,8 @@ public class GameViewGUI implements Initializable, GameView {
         if (Client.getInstance().getPlayer().getWeaponList().isEmpty()) {
             showMessage("You can't shoot.");
         } else if (canDoActionMap.get(ViewAction.SHOOT) && Client.getInstance().getPlayer().getWeaponList().size() > 1) {
-            canDoActionMap.put(ViewAction.SHOOT, false);
             WeaponCard we = Client.getInstance().getPlayer().getWeaponList().get(1);
-            setActualWC(we);
-            gameController.getEffects(we);
-            showMessage("You clicked on " + we.getName());
+            weaponClicked(we);
         }
     }
 
@@ -1344,12 +1338,16 @@ public class GameViewGUI implements Initializable, GameView {
         if (Client.getInstance().getPlayer().getWeaponList().isEmpty()) {
             showMessage("No, you can't shoot.");
         } else if (canDoActionMap.get(ViewAction.SHOOT) && Client.getInstance().getPlayer().getWeaponList().size() > 2) {
-            canDoActionMap.put(ViewAction.SHOOT, false);
             WeaponCard we = Client.getInstance().getPlayer().getWeaponList().get(2);
-            setActualWC(we);
-            gameController.getEffects(we);
-            showMessage("You clicked on " + we.getName());
+            weaponClicked(we);
         }
+    }
+
+    private void weaponClicked(WeaponCard weaponCard){
+        canDoActionMap.put(ViewAction.SHOOT, false);
+        setActualWC(weaponCard);
+        gameController.getEffects(weaponCard);
+        showMessage("You clicked on " + weaponCard.getName());
     }
 
     /**
