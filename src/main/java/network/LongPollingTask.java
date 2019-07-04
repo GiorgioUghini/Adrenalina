@@ -29,7 +29,7 @@ public class LongPollingTask extends TimerTask {
         } catch (RemoteException e) {
             Logger logger = Logger.getAnonymousLogger();
             logger.log(Level.SEVERE, "an exception was thrown", e);
-            ScreenController.getInstance().activate("WaitingRoom.fxml");
+            ScreenController.getInstance().activate("LobbyView.fxml");
         }
     }
 }

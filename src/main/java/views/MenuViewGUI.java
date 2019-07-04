@@ -96,7 +96,7 @@ public class MenuViewGUI implements Initializable, MenuView {
      */
     @Override
     public void connectionCreated() {
-        ScreenController.getInstance().activate("WaitingRoom.fxml");
+        ScreenController.getInstance().activate("LobbyView.fxml");
     }
 
     /**
@@ -117,7 +117,7 @@ public class MenuViewGUI implements Initializable, MenuView {
         int toastMsgTime = 2500; //2.5 seconds
         int fadeInTime = 500; //0.5 seconds
         int fadeOutTime = 500; //0.5 seconds
-        Toast.makeText(ScreenController.getInstance().getActualStage(), toastMsg, toastMsgTime, fadeInTime, fadeOutTime);
+        ToastView.makeText(ScreenController.getInstance().getActualStage(), toastMsg, toastMsgTime, fadeInTime, fadeOutTime);
     }
 
     /**
@@ -141,7 +141,7 @@ public class MenuViewGUI implements Initializable, MenuView {
      */
     @Override
     public void startGame() {
-        ScreenController.getInstance().activate("GameRoom.fxml");
+        ScreenController.getInstance().activate("GameView.fxml");
     }
 
     /**
@@ -157,7 +157,7 @@ public class MenuViewGUI implements Initializable, MenuView {
         int toastMsgTime = 2500; //2.5 seconds
         int fadeInTime = 500; //0.5 seconds
         int fadeOutTime = 500; //0.5 seconds
-        Platform.runLater(() -> Toast.makeText(ScreenController.getInstance().getActualStage(), message, toastMsgTime, fadeInTime, fadeOutTime));
+        Platform.runLater(() -> ToastView.makeText(ScreenController.getInstance().getActualStage(), message, toastMsgTime, fadeInTime, fadeOutTime));
     }
 
     /**

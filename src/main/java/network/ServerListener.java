@@ -26,7 +26,7 @@ public class ServerListener implements Runnable {
                 Logger logger = Logger.getAnonymousLogger();
                 logger.log(Level.SEVERE, "an exception was thrown while in.readObject(). The connection has been killed", ex);
                 stop();
-                ScreenController.getInstance().activate("WaitingRoom.fxml");
+                ScreenController.getInstance().activate("LobbyView.fxml");
             }
             try {
                 if (response != null)

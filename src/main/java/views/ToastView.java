@@ -14,7 +14,7 @@ import javafx.util.Duration;
 
 import java.util.logging.Logger;
 
-public final class Toast {
+public final class ToastView {
     public static void makeText(Stage ownerStage, String toastMsg, int toastDelay, int fadeInDelay, int fadeOutDelay) {
         Stage toastStage = new Stage();
         toastStage.initOwner(ownerStage);

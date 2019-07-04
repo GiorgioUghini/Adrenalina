@@ -1514,7 +1514,7 @@ public class GameViewGUI implements Initializable, GameView {
         int toastMsgTime = 2500; //2.5 seconds
         int fadeInTime = 300; //0.5 seconds
         int fadeOutTime = 1000; //0.5 seconds
-        Platform.runLater(() -> Toast.makeText(ScreenController.getInstance().getActualStage(), "This match has ended!", toastMsgTime, fadeInTime, fadeOutTime));
+        Platform.runLater(() -> ToastView.makeText(ScreenController.getInstance().getActualStage(), "This match has ended!", toastMsgTime, fadeInTime, fadeOutTime));
     }
 
     @Override
