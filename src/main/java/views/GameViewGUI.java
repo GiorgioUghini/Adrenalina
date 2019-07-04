@@ -1773,10 +1773,11 @@ public class GameViewGUI implements Initializable, GameView {
         for (Player player : winners) {
             showMessage(String.format("%s WON THE MATCH WITH %dPOINTS!!!!", player.getName(), pointers.get(player)));
         }
-        int toastMsgTime = 2500; //2.5 seconds
-        int fadeInTime = 300; //0.5 seconds
-        int fadeOutTime = 1000; //0.5 seconds
-        Platform.runLater(() -> ToastView.makeText(ScreenController.getInstance().getActualStage(), "This match has ended!", toastMsgTime, fadeInTime, fadeOutTime));
+
+        int toastMsgTime = 3500; //2.5 seconds
+        int fadeInTime = 500; //0.5 seconds
+        int fadeOutTime = 500; //0.5 seconds
+        Platform.runLater(() -> ToastView.makeText(ScreenController.getInstance().getActualStage(), "This match has ended, check game messages!", toastMsgTime, fadeInTime, fadeOutTime));
     }
 
     @Override

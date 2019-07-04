@@ -262,7 +262,7 @@ public class Match implements Observer {
             actualPlayerIndex = playerList.indexOf(firstDeadPlayer);
         } else {
             if (frenzy && endMatchPlayerIndex < 0) {
-                endMatchPlayerIndex = actualPlayerIndex + 1;
+                endMatchPlayerIndex = actualPlayerIndex;
             } else if (frenzy && endMatchPlayerIndex == actualPlayerIndex) {
                 addUpdate(new EndMatchUpdate(getTotalPoints()));
                 return;
