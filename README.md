@@ -17,7 +17,7 @@ GitHub Repository for the Source Code and Project Deliverables for group number 
 
 ## Features
 
-We developped all the base features, including:
+We developed all the base features, including:
 - Complete Game Rules
 - CLI
 - GUI
@@ -26,7 +26,7 @@ We developped all the base features, including:
 
 ### Additional features
 
-We've choosen to implement a Server that can run Multiple Matches at the same time.
+We have chosen to implement a Server that can run Multiple Matches at the same time.
 
 ## Getting Started
 
@@ -54,7 +54,7 @@ Then click on `StartClientGUI.sh` or `StartClientCLI.sh` file if you are using L
 ## Launching the Application - Linux
 For Windows and Linux user you can follow the easier plug-and-play guide. 
 ### Launch Server - Linux
-The production server configuration don't use any options.
+The production server configuration does not use any options.
 
 ```
 cd deliverables/app
@@ -97,14 +97,14 @@ java --module-path ./javafx-sdk-11.0.2-linux/lib --add-modules javafx.controls,j
 ## Launching the Application - Windows
 For Windows and Linux user you can follow the easier plug-and-play guide. 
 ### Launch Server - Windows
-The production server configuration don't use any options.
+The production server configuration does not use any options.
 
 ```
 cd deliverables/app
 java -jar ing-sw-2019-17-server.jar
 ```
 
-This commands start the Adrenaline Server on localhost.
+This commands starts the Adrenaline Server on localhost.
 
 ### Launch Client with localhost connection - Windows
 
