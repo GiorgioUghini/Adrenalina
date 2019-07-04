@@ -35,7 +35,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
         Client.getInstance().setMap(response.map);
         Client.getInstance().setMapNum(response.mapIndex);
         Client.getInstance().setPlayer(response.player);
-        ScreenController.getInstance().activate("GameRoom.fxml");
+        ((MenuView) Client.getInstance().getCurrentView()).startGame();
     }
 
     @Override
