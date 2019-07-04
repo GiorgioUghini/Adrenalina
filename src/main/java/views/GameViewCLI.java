@@ -361,13 +361,11 @@ public class GameViewCLI implements GameView {
         }
 
         int i = 1;
-        if (Client.getInstance().getConnection().isRMI()) { //Eseguiamolo solo in RMI, così non imbruttiamo la socket
-            try {
-                Thread.sleep(350);  //Change here
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                Logger.getAnonymousLogger().info(e.toString());
-            }
+        try {
+            Thread.sleep(350);  //Change here
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            Logger.getAnonymousLogger().info(e.toString());
         }
         acquireLock("updateActions");
         for(BaseActions baseAction : baseActions){

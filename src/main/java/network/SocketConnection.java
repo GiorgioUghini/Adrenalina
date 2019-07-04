@@ -238,11 +238,6 @@ public class SocketConnection implements Connection {
         return this.token;
     }
 
-    @Override
-    public boolean isRMI() {
-        return false;
-    }
-
     public ObjectOutputStream getOutputStream() {
         return out;
     }

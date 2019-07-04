@@ -253,11 +253,6 @@ public class RMIConnection implements Connection {
     }
 
     @Override
-    public boolean isRMI() {
-        return true;
-    }
-
-    @Override
     public void setToken(String token) {
         this.stringToken = token;
     }
