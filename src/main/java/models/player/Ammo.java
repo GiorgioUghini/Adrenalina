@@ -16,11 +16,13 @@ public class Ammo implements Serializable {
         blue = 0;
         yellow = 0;
     }
+
     public Ammo(int red, int blue, int yellow) {
         this.red = red;
         this.blue = blue;
         this.yellow = yellow;
     }
+
     public Ammo(PowerUpCard powerUpCard) {
         switch (powerUpCard.color) {
             case RED:

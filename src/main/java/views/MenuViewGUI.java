@@ -194,17 +194,19 @@ public class MenuViewGUI implements Initializable, MenuView {
                 alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree, buttonTypeFour);
                 Optional<ButtonType> result = alert.showAndWait();
 
-                if (result.get() == buttonTypeOne) {
-                    i = 0;
-                } else if (result.get() == buttonTypeTwo) {
-                    i = 1;
-                } else if (result.get() == buttonTypeThree) {
-                    i = 2;
-                } else if (result.get() == buttonTypeFour) {
-                    i = 3;
-                } else {
+                if (!result.isPresent()) {
                     i = ThreadLocalRandom.current().nextInt(0, 3 + 1);
+                } else {
+                    //Case i=0 not present, i is already 0!
+                    if (result.get() == buttonTypeTwo) {
+                        i = 1;
+                    } else if (result.get() == buttonTypeThree) {
+                        i = 2;
+                    } else if (result.get() == buttonTypeFour) {
+                        i = 3;
+                    }
                 }
+
                 menuController.chooseMap(i);
             });
         }
