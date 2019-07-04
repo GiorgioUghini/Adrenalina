@@ -141,4 +141,4 @@ start javaw --module-path ./javafx-sdk-11.0.2-win/lib --add-modules javafx.contr
 ## UML Class Diagrams
 You can find the complete UML Class Diagram and the packages UML Class Diagrams on `deliverables/uml` folder.
 ## Generate JAR with Maven
-Open Maven command shell and execute `clean install`. You'll find a new folder nanmed `target` that contains `server.jar` and `client.jar` Java files!
+Open Maven command shell and execute `clean install`. You'll find a new folder named `target` that contains `server.jar` and `client.jar` Java files!
