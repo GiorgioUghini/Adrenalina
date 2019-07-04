@@ -631,11 +631,16 @@ public class GameViewCLI implements GameView {
         Player me = client.getPlayer();
 
         List<WeaponCard> loadedWeapons = getLoadedWeapons(me);
-        Console.println("Only the loaded weapons are shown.");
-        WeaponCard chosen = chooseWeaponDialog(loadedWeapons);
-        setActualWC(chosen);
-        isShooting = true;
-        continueWeapon();
+        if(!loadedWeapons.isEmpty()){
+            Console.println("Only the loaded weapons are shown.");
+            WeaponCard chosen = chooseWeaponDialog(loadedWeapons);
+            setActualWC(chosen);
+            isShooting = true;
+            continueWeapon();
+        }else{
+            Console.println("You cannot shoot");
+            gameController.finishCard();
+        }
     }
 
     /**
