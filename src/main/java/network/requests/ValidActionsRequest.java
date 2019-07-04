@@ -11,7 +11,7 @@ public class ValidActionsRequest implements Request {
 
     private String token;
 
-    public ValidActionsRequest(){
+    public ValidActionsRequest() {
         this.token = Client.getInstance().getConnection().getToken();
     }
 

@@ -149,7 +149,7 @@ public class SocketConnection implements Connection {
     @Override
     public void grab(WeaponCard drawn, WeaponCard toRelease, PowerUpCard powerUpCard) {
         try {
-            GrabRequest request = new GrabRequest(drawn,toRelease,powerUpCard);
+            GrabRequest request = new GrabRequest(drawn, toRelease, powerUpCard);
             write(request);
         } catch (IOException e) {
             Logger.getAnonymousLogger().info(e.toString());

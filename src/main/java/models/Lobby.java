@@ -24,7 +24,7 @@ public class Lobby {
     private List<Player> waitingPlayers = new LinkedList<>();
     private Config config;
 
-    public Lobby(Config config){
+    public Lobby(Config config) {
         this.config = config;
     }
 
@@ -62,12 +62,12 @@ public class Lobby {
 
     //SOLO PER I TEST!!
     public synchronized Player registerPlayer(String username, String password) {
-        return registerPlayer(username,password, TokenGenerator.nextToken());
+        return registerPlayer(username, password, TokenGenerator.nextToken());
     }
     //SOLO PER I TEST!!
 
     public synchronized void disconnectPlayer(Player player) {
-        if(waitingPlayers.contains(player)){
+        if (waitingPlayers.contains(player)) {
             tokenPlayerMap.removeByValue(player);
             waitingPlayers.remove(player);
         }
@@ -84,7 +84,7 @@ public class Lobby {
 
     public synchronized void chooseMapAndStartMatch() {
         Match match = new Match(waitingPlayers, config);
-        for(Player waitingPlayer : waitingPlayers){
+        for (Player waitingPlayer : waitingPlayers) {
             matchPlayerMap.add(match, waitingPlayer);
             waitingPlayer.register(match);
         }
@@ -118,8 +118,8 @@ public class Lobby {
     }
 
     public Player getPlayer(String token) {
-      Player player = tokenPlayerMap.getSingleValue(token);
-      return player;
+        Player player = tokenPlayerMap.getSingleValue(token);
+        return player;
     }
 
     public String getToken(Player player) {
@@ -127,23 +127,23 @@ public class Lobby {
         return token;
     }
 
-    public Player getPlayerByUsername(String username){
+    public Player getPlayerByUsername(String username) {
         return tokenPlayerMap.getValues().stream().filter(p -> p.getName().equals(username)).findFirst().orElse(null);
     }
 
-    public void addUpdateWaitingPlayers(Response update){
-        for(Player player : waitingPlayers){
+    public void addUpdateWaitingPlayers(Response update) {
+        for (Player player : waitingPlayers) {
             Server.getInstance().getConnection().getConnectionWrapper(Server.getInstance().getLobby().getToken(player)).addUpdate(update);
         }
     }
 
-    public List<Player> getRegisteredPlayers(){
+    public List<Player> getRegisteredPlayers() {
         List<Player> players = new ArrayList<>(tokenPlayerMap.getValues());
         players.addAll(waitingPlayers);
         return players;
     }
 
-    public List<ConnectionWrapper> getRegisteredConnectionWrappers(){
+    public List<ConnectionWrapper> getRegisteredConnectionWrappers() {
         List<Player> players = getRegisteredPlayers();
         List<ConnectionWrapper> wrappers = players.stream().map(p -> Server.getInstance().getConnection().getConnectionWrapper(getToken(p))).collect(Collectors.toList());
         return wrappers;

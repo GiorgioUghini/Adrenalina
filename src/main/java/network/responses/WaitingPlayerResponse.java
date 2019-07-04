@@ -9,11 +9,13 @@ public class WaitingPlayerResponse implements Response {
 
     private List<String> waitingPlayerUsernames;
 
-    public WaitingPlayerResponse(List<String> waitingPlayers){
+    public WaitingPlayerResponse(List<String> waitingPlayers) {
         this.waitingPlayerUsernames = waitingPlayers;
     }
 
-    public List<String> getList() { return waitingPlayerUsernames; }
+    public List<String> getList() {
+        return waitingPlayerUsernames;
+    }
 
     @Override
     public void handle(ResponseHandlerInterface handler) {

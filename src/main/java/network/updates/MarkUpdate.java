@@ -7,7 +7,7 @@ import network.ResponseHandlerInterface;
 public class MarkUpdate implements Response {
     public Player player;
 
-    public MarkUpdate (Player player) {
+    public MarkUpdate(Player player) {
         this.player = player;
     }
 

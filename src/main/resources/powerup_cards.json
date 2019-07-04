@@ -16,13 +16,15 @@
             }
           ],
           "rules": {
-            "include": ["last_damager"]
+            "include": [
+              "last_damager"
+            ]
           }
         }
       },
       {
         "type": "mark",
-        "mark":{
+        "mark": {
           "type": "player",
           "target": "damager",
           "value": 1
@@ -49,13 +51,15 @@
             }
           ],
           "rules": {
-            "include": ["last_damager"]
+            "include": [
+              "last_damager"
+            ]
           }
         }
       },
       {
         "type": "mark",
-        "mark":{
+        "mark": {
           "type": "player",
           "target": "damager",
           "value": 1
@@ -82,13 +86,15 @@
             }
           ],
           "rules": {
-            "include": ["last_damager"]
+            "include": [
+              "last_damager"
+            ]
           }
         }
       },
       {
         "type": "mark",
-        "mark":{
+        "mark": {
           "type": "player",
           "target": "damager",
           "value": 1
@@ -109,7 +115,9 @@
           "type": "player",
           "id": "enemy",
           "rules": {
-            "include": ["damaged_from_me"]
+            "include": [
+              "damaged_from_me"
+            ]
           }
         }
       },
@@ -136,7 +144,9 @@
           "type": "player",
           "id": "enemy",
           "rules": {
-            "include": ["damaged_from_me"]
+            "include": [
+              "damaged_from_me"
+            ]
           }
         }
       },
@@ -163,7 +173,9 @@
           "type": "player",
           "id": "enemy",
           "rules": {
-            "include": ["damaged_from_me"]
+            "include": [
+              "damaged_from_me"
+            ]
           }
         }
       },

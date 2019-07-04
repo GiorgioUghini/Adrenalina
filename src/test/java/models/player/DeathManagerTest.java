@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 
 public class DeathManagerTest {
     @Test
-    public void testAddPoints(){
+    public void testAddPoints() {
         DeathManager deathManager = new DeathManager();
         Player a = new Player("a", "");
         Player b = new Player("b", "");

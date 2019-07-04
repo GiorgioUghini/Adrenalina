@@ -1,7 +1,7 @@
 package errors;
 
 public class RoomAlreadyInMapException extends RuntimeException {
-    public RoomAlreadyInMapException(){
+    public RoomAlreadyInMapException() {
         super();
     }
 }

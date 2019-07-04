@@ -33,7 +33,7 @@ public class ScreenController {
     }
 
     public static ScreenController getInstance(Stage main) {
-        if (instance==null) {
+        if (instance == null) {
             instance = new ScreenController(main);
         }
         return instance;
@@ -44,7 +44,7 @@ public class ScreenController {
     }
 
     public void activate(String name) {
-        Platform.runLater( () -> {
+        Platform.runLater(() -> {
                     actualStage.setTitle(name); //Set the title you like most
                     Parent newParent = null;
                     try {
@@ -57,6 +57,6 @@ public class ScreenController {
                     actualStage.setScene(newParentScene);
                     actualStage.setResizable(true);
                 }
-            );
+        );
     }
 }

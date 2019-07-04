@@ -231,7 +231,7 @@ public class RMIConnection implements Connection {
     @Override
     public void init() {
         try {
-            System.setProperty("java.rmi.server.hostname",Client.getInstance().getHostname());
+            System.setProperty("java.rmi.server.hostname", Client.getInstance().getHostname());
             registry = LocateRegistry.getRegistry(Client.getInstance().getHostname(), Client.getInstance().getRegistryPort());
             remoteMethods = (RemoteMethodsInterface) registry.lookup("RemoteMethods");
             queue = new LinkedBlockingQueue<>(100);

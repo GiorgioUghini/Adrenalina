@@ -8,7 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
 
 public class DeckTest {
 
@@ -23,23 +24,22 @@ public class DeckTest {
         Card card1 = deck.draw();
         Card card2 = deck.draw();
         assertNotSame(card1, card2);
-        assertTrue(size == deck.size()+ 2);
+        assertTrue(size == deck.size() + 2);
     }
 
     @Test
     public void drawEmptyDeck() throws IOException {
         Deck emptyDeck = new WeaponDeck(new LinkedList<Card>());
-        try{
+        try {
             emptyDeck.draw();
             assert false;
-        }
-        catch (NoSuchElementException ex){
+        } catch (NoSuchElementException ex) {
             assert true;
         }
     }
 
     @Test
-    public void shuffleDeck(){
+    public void shuffleDeck() {
         List<Card> cards = new LinkedList<>();
         cards.add(new WeaponCard());
         cards.add(new WeaponCard());

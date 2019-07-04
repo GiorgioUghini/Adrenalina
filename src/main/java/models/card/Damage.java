@@ -8,7 +8,7 @@ public class Damage extends Mark implements Serializable {
     //exclude some player from the damage
     public List<String> except;
 
-    public Damage(){
+    public Damage() {
         super();
         except = new ArrayList<>();
     }

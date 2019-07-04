@@ -14,11 +14,11 @@ public class EffectCardTest {
     private WeaponDeck weaponDeck;
 
     @Test
-    public void testActivation(){
+    public void testActivation() {
         weaponDeck = new CardController().getWeaponDeck();
-        Ammo ammo = new Ammo(3,3,3);
+        Ammo ammo = new Ammo(3, 3, 3);
         int deckSize = weaponDeck.size();
-        for(int i = 0; i<deckSize; i++){
+        for (int i = 0; i < deckSize; i++) {
             WeaponCard weaponCard = (WeaponCard) weaponDeck.draw();
             assertEquals(0, weaponCard.getEffects(ammo, null).getLegitEffects().size());
             weaponCard.setPlayer(new Player("player1", "password"));
@@ -26,40 +26,40 @@ public class EffectCardTest {
             LegitEffects effects = weaponCard.getEffects(ammo, new ArrayList<>());
             Ammo effectPrice;
             Effect chosenEffect;
-            if(weaponCard.exclusive){
+            if (weaponCard.exclusive) {
                 assertEquals(effects.getAllEffects().size(), effects.getLegitEffects().size());
                 chosenEffect = effects.getLegitEffects().get(0);
                 effectPrice = chosenEffect.price;
                 weaponCard.playEffect(effects.getLegitEffects().get(0), ammo, null);
                 effects = weaponCard.getEffects(ammo, new ArrayList<>());
                 assertEquals(0, effects.getLegitEffects().size());
-            }else{
-                for(Effect e : effects.getLegitEffects()){
-                    assertTrue(e.orderId==0 || e.orderId==-1);
+            } else {
+                for (Effect e : effects.getLegitEffects()) {
+                    assertTrue(e.orderId == 0 || e.orderId == -1);
                 }
                 chosenEffect = effects.getLegitEffects().get(0);
                 effectPrice = chosenEffect.price;
                 weaponCard.playEffect(chosenEffect, ammo, null);
-                for(Effect e : effects.getLegitEffects()){
-                    assertTrue(e.orderId==0 || e.orderId==1 || e.orderId == -1);
+                for (Effect e : effects.getLegitEffects()) {
+                    assertTrue(e.orderId == 0 || e.orderId == 1 || e.orderId == -1);
                 }
             }
             assertEquals(ammo.blue, 3 - effectPrice.blue);
             assertEquals(ammo.red, 3 - effectPrice.red);
             assertEquals(ammo.yellow, 3 - effectPrice.yellow);
-            ammo = new Ammo(3,3,3);
+            ammo = new Ammo(3, 3, 3);
         }
     }
 
     @Test
-    public void testMandatoryFields(){
+    public void testMandatoryFields() {
         WeaponDeck deck = new CardController().getWeaponDeck();
         int deckSize = deck.size();
-        for(int i = 0; i<deckSize; i++){
+        for (int i = 0; i < deckSize; i++) {
             WeaponCard card = (WeaponCard) deck.draw();
-            for(Effect effect : card.effects){
-                for(Action action : effect.actions){
-                    switch (action.type){
+            for (Effect effect : card.effects) {
+                for (Action action : effect.actions) {
+                    switch (action.type) {
                         case SELECT:
                             assertNotNull(action.select.id);
                             assertNotNull(action.select.type);
@@ -92,9 +92,9 @@ public class EffectCardTest {
         SpawnPoint spawnPoint = (SpawnPoint) gameMap.getSpawnPoints().toArray()[0];
         gameMap.spawnPlayer(player1, spawnPoint);
         gameMap.spawnPlayer(player2, spawnPoint);
-        if(spawnPoint.hasNext(CardinalDirection.RIGHT)){
+        if (spawnPoint.hasNext(CardinalDirection.RIGHT)) {
             gameMap.movePlayer(player2, spawnPoint.getNextSquare(CardinalDirection.RIGHT));
-        }else{
+        } else {
             gameMap.movePlayer(player2, spawnPoint.getNextSquare(CardinalDirection.LEFT));
         }
         WeaponCard lanciarazzi = getWeaponCard("Lanciarazzi");
@@ -102,8 +102,8 @@ public class EffectCardTest {
         lanciarazzi.activate();
         Ammo ammo = new Ammo(3, 3, 3);
         List<Effect> effects = lanciarazzi.getEffects(ammo, new ArrayList<>()).getLegitEffects();
-        for(Effect e : effects){
-            if(e.name.equals("Effetto base")){
+        for (Effect e : effects) {
+            if (e.name.equals("Effetto base")) {
                 lanciarazzi.playEffect(e, ammo, null);
             }
         }
@@ -124,8 +124,8 @@ public class EffectCardTest {
         assertTrue(playersToDamage.containsKey(player2));
         assertEquals(1, playersToDamage.size());
         boolean effectFound = false;
-        for(Effect e : lanciarazzi.getEffects(ammo, new ArrayList<>()).getLegitEffects()){
-            if(e.name.equals("Testata a frammentazione")){
+        for (Effect e : lanciarazzi.getEffects(ammo, new ArrayList<>()).getLegitEffects()) {
+            if (e.name.equals("Testata a frammentazione")) {
                 lanciarazzi.playEffect(e, ammo, null);
                 effectFound = true;
             }
@@ -142,7 +142,7 @@ public class EffectCardTest {
     }
 
     @Test
-    public void testAreaVisibile(){
+    public void testAreaVisibile() {
         WeaponCard distruttore = getWeaponCard("Distruttore");
         List<WeaponCard> weaponCards = new ArrayList<>();
         weaponCards.add(distruttore);
@@ -154,20 +154,20 @@ public class EffectCardTest {
         Set<SpawnPoint> spawnPoints = gameMap.getSpawnPoints();
         SpawnPoint yellow = null;
         SpawnPoint red = null;
-        for(SpawnPoint s : spawnPoints){
-            if(s.getColor().equals(RoomColor.YELLOW)){
+        for (SpawnPoint s : spawnPoints) {
+            if (s.getColor().equals(RoomColor.YELLOW)) {
                 yellow = s;
-            }else if(s.getColor().equals(RoomColor.RED)){
+            } else if (s.getColor().equals(RoomColor.RED)) {
                 red = s;
             }
         }
-        if(yellow == null) assert false;
+        if (yellow == null) assert false;
         gameMap.spawnPlayer(me, yellow);
         gameMap.spawnPlayer(p1, yellow);
         gameMap.spawnPlayer(p2, yellow);
         gameMap.spawnPlayer(p3, red);
         gameMap.movePlayer(me, yellow.getNextSquare(CardinalDirection.TOP).getNextSquare(CardinalDirection.LEFT));
-        Ammo ammo = new Ammo(3,3,3);
+        Ammo ammo = new Ammo(3, 3, 3);
         me.setAmmo(ammo);
         me.setWeaponList(weaponCards);
         me.playWeapon(distruttore);
@@ -177,8 +177,8 @@ public class EffectCardTest {
         assertEquals("Effetto base", effect.name);
         me.playWeaponEffect(effect, null);
         Action nextAction;
-        while((nextAction = me.playNextWeaponAction())!=null){
-            if(nextAction.type.equals(ActionType.SELECT) && !nextAction.select.auto){
+        while ((nextAction = me.playNextWeaponAction()) != null) {
+            if (nextAction.type.equals(ActionType.SELECT) && !nextAction.select.auto) {
                 Selectable selectable = distruttore.getSelectable();
                 assertEquals(2, selectable.get().size());
                 distruttore.select(p1);
@@ -189,8 +189,8 @@ public class EffectCardTest {
         assertEquals(1, activableEffects.size());
         me.playWeaponEffect(activableEffects.get(0), null);
         assertEquals(2, me.getAmmo().red);
-        while((nextAction = me.playNextWeaponAction())!=null){
-            if(nextAction.type.equals(ActionType.SELECT) && !nextAction.select.auto){
+        while ((nextAction = me.playNextWeaponAction()) != null) {
+            if (nextAction.type.equals(ActionType.SELECT) && !nextAction.select.auto) {
                 Selectable selectable = distruttore.getSelectable();
                 assertEquals(1, selectable.get().size());
                 assertTrue(selectable.get().contains(p2));
@@ -198,13 +198,13 @@ public class EffectCardTest {
             }
         }
         assertEquals(0, p2.getTotalDamage());
-        me.setAmmo(new Ammo(3,3,3));
+        me.setAmmo(new Ammo(3, 3, 3));
         me.reloadWeapon(distruttore, null);
         me.resetWeapon();
     }
 
     @Test
-    public void testCannoneVortex(){
+    public void testCannoneVortex() {
         GameMap gameMap = MapGenerator.generate(1);
         Player me = new Player("me", "password");
         Player p1 = new Player("p1", "password");
@@ -224,7 +224,7 @@ public class EffectCardTest {
         List<WeaponCard> myWeapons = new ArrayList<>();
         myWeapons.add(cannoneVortex);
         me.setWeaponList(myWeapons);
-        me.setAmmo(new Ammo(3,3,3));
+        me.setAmmo(new Ammo(3, 3, 3));
         me.playWeapon(cannoneVortex);
         List<Effect> effects = me.getWeaponEffects().getLegitEffects();
         assertEquals(1, effects.size());
@@ -253,7 +253,7 @@ public class EffectCardTest {
     }
 
     @Test
-    public void testVulcanizzatore(){
+    public void testVulcanizzatore() {
         GameMap gameMap = MapGenerator.generate(1);
         List<Player> players = createTestPlayers(4);
         WeaponCard vulcanizzatore = getWeaponCard("Vulcanizzatore");
@@ -273,12 +273,12 @@ public class EffectCardTest {
         assertEquals(RoomColor.BLUE, gameMap.getPlayerPosition(players.get(2)).getColor());
         assertEquals(RoomColor.BLUE, gameMap.getPlayerPosition(players.get(3)).getColor());
         assertTrue(gameMap.getPlayerPosition(me).hasDoors());
-        me.setAmmo(new Ammo(3,3,3));
+        me.setAmmo(new Ammo(3, 3, 3));
         me.playWeapon(vulcanizzatore);
         List<Effect> effects = me.getWeaponEffects().getLegitEffects();
         assertEquals(2, effects.size());
-        for(Effect e : effects){
-            if(e.name.equals("Modalità base")){
+        for (Effect e : effects) {
+            if (e.name.equals("Modalità base")) {
                 me.playWeaponEffect(e, null);
             }
         }
@@ -294,7 +294,7 @@ public class EffectCardTest {
     }
 
     @Test
-    public void testNoSelection(){
+    public void testNoSelection() {
         WeaponCard razzoTermico = getWeaponCard("Razzo termico");
         List<WeaponCard> myWeapons = new ArrayList<>();
         myWeapons.add(razzoTermico);
@@ -307,7 +307,7 @@ public class EffectCardTest {
         gameMap.spawnPlayer(me, yellow);
         gameMap.spawnPlayer(players.get(1), yellow);
         gameMap.spawnPlayer(players.get(2), red);
-        me.setAmmo(new Ammo(3,3,3));
+        me.setAmmo(new Ammo(3, 3, 3));
         me.playWeapon(razzoTermico);
         Effect effect = me.getWeaponEffects().getLegitEffects().get(0);
         me.playWeaponEffect(effect, null);
@@ -316,13 +316,13 @@ public class EffectCardTest {
         assertEquals(1, selectable.get().size());
         assertTrue(selectable.get().contains(players.get(2)));
         me.playNextWeaponAction();
-        for (Player p : players){
+        for (Player p : players) {
             assertEquals(0, p.getTotalDamage());
         }
     }
 
     @Test
-    public void testPayWithPowerups(){
+    public void testPayWithPowerups() {
         //init vars
         List<Player> players = createTestPlayers(3);
         GameMap gameMap = MapGenerator.generate(1);
@@ -352,8 +352,8 @@ public class EffectCardTest {
         //chose the effect
         LegitEffects effects = me.getWeaponEffects();
         assertEquals(2, effects.getLegitEffects().size());
-        for(Effect e : effects.getLegitEffects()){
-            if(e.name.equals("Modalità barbecue")){
+        for (Effect e : effects.getLegitEffects()) {
+            if (e.name.equals("Modalità barbecue")) {
                 me.playWeaponEffect(e, powerUpCard);
             }
         }
@@ -378,7 +378,7 @@ public class EffectCardTest {
     }
 
     @Test
-    public void testCardinalDirection(){
+    public void testCardinalDirection() {
         WeaponCard fucileLaser = getWeaponCard("Fucile laser");
         List<WeaponCard> weaponCardList = new ArrayList<>();
         weaponCardList.add(fucileLaser);
@@ -387,7 +387,7 @@ public class EffectCardTest {
         GameMap gameMap = MapGenerator.generate(1);
         Player me = players.get(0);
         SpawnPoint yellow = getSpawnPoint(gameMap, RoomColor.YELLOW);
-        for(Player player : players){
+        for (Player player : players) {
             gameMap.spawnPlayer(player, yellow);
         }
         me.setWeaponList(weaponCardList);
@@ -410,7 +410,7 @@ public class EffectCardTest {
     }
 
     @Test
-    public void testRaggioSolare(){
+    public void testRaggioSolare() {
         WeaponCard raggioSolare = getWeaponCard("Raggio solare");
         List<WeaponCard> weaponCardList = new ArrayList<>();
         weaponCardList.add(raggioSolare);
@@ -420,7 +420,7 @@ public class EffectCardTest {
         Player me = players.get(0);
         Player enemy = players.get(1);
         SpawnPoint yellow = getSpawnPoint(gameMap, RoomColor.YELLOW);
-        for(Player player : players){
+        for (Player player : players) {
             gameMap.spawnPlayer(player, yellow);
         }
         me.setWeaponList(weaponCardList);
@@ -444,7 +444,7 @@ public class EffectCardTest {
     }
 
     @Test
-    public void testTorpedine(){
+    public void testTorpedine() {
         WeaponCard torpedine = getWeaponCard("Torpedine");
         List<WeaponCard> weaponCardList = new ArrayList<>();
         weaponCardList.add(torpedine);
@@ -455,14 +455,14 @@ public class EffectCardTest {
         Player enemy1 = players.get(1);
         Player enemy2 = players.get(2);
         Player enemy3 = players.get(3);
-        me.setAmmo(new Ammo(3,3,3));
+        me.setAmmo(new Ammo(3, 3, 3));
 
         SpawnPoint yellow = getSpawnPoint(gameMap, RoomColor.YELLOW);
         SpawnPoint blue = getSpawnPoint(gameMap, RoomColor.BLUE);
         SpawnPoint red = getSpawnPoint(gameMap, RoomColor.RED);
 
         gameMap.spawnPlayer(me, yellow);
-        gameMap.spawnPlayer(enemy1,blue);
+        gameMap.spawnPlayer(enemy1, blue);
         gameMap.movePlayer(enemy1, blue.getNextSquare(CardinalDirection.BOTTOM));
         gameMap.spawnPlayer(enemy2, blue);
         gameMap.movePlayer(enemy2, blue.getNextSquare(CardinalDirection.LEFT).getNextSquare(CardinalDirection.LEFT));
@@ -520,31 +520,31 @@ public class EffectCardTest {
         assertEquals(2, enemy3.getTotalDamage());
     }
 
-    private SpawnPoint getSpawnPoint(GameMap gameMap, RoomColor color){
-        for(SpawnPoint s : gameMap.getSpawnPoints()){
-            if(s.getColor().equals(color)){
+    private SpawnPoint getSpawnPoint(GameMap gameMap, RoomColor color) {
+        for (SpawnPoint s : gameMap.getSpawnPoints()) {
+            if (s.getColor().equals(color)) {
                 return s;
             }
         }
         return null;
     }
 
-    private List<Player> createTestPlayers(int number){
+    private List<Player> createTestPlayers(int number) {
         List<Player> out = new ArrayList<>();
         out.add(new Player("me", "password"));
-        for(int i = 1; i<number; i++){
-            out.add(new Player("p"+i, "password"));
+        for (int i = 1; i < number; i++) {
+            out.add(new Player("p" + i, "password"));
         }
         return out;
     }
 
-    private WeaponCard getWeaponCard(String cardName){
+    private WeaponCard getWeaponCard(String cardName) {
         weaponDeck = new CardController().getWeaponDeck();
         int deckSize = weaponDeck.size();
         WeaponCard weaponCard;
-        for(int i = 0; i<deckSize; i++){
+        for (int i = 0; i < deckSize; i++) {
             weaponCard = (WeaponCard) weaponDeck.draw();
-            if(weaponCard.name.equals(cardName)){
+            if (weaponCard.name.equals(cardName)) {
                 return weaponCard;
             }
 
@@ -552,12 +552,12 @@ public class EffectCardTest {
         return null;
     }
 
-    private PowerUpCard getPowerupCard(String cardName, RoomColor color){
+    private PowerUpCard getPowerupCard(String cardName, RoomColor color) {
         PowerUpDeck powerUpDeck = new CardController().getPowerUpDeck();
         int deckSize = powerUpDeck.size();
-        for(int i=0; i<deckSize; i++){
+        for (int i = 0; i < deckSize; i++) {
             PowerUpCard powerUpCard = (PowerUpCard) powerUpDeck.draw();
-            if(powerUpCard.name.equals(cardName) && powerUpCard.color == color){
+            if (powerUpCard.name.equals(cardName) && powerUpCard.color == color) {
                 return powerUpCard;
             }
         }

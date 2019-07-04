@@ -26,7 +26,7 @@ public class DeathManager implements Serializable {
         }
     }
 
-    public void setDeathCount(Player player, int value){
+    public void setDeathCount(Player player, int value) {
         deathMap.put(player.getName(), value);
     }
 
@@ -38,13 +38,13 @@ public class DeathManager implements Serializable {
         return points;
     }
 
-    public int getDeathCount(Player player){
+    public int getDeathCount(Player player) {
         return deathMap.get(player.getName()) != null ? deathMap.get(player.getName()) : 0;
     }
 
-    public int getSkullCount(List<Player> players){
+    public int getSkullCount(List<Player> players) {
         int count = 0;
-        for(Player p : players){
+        for (Player p : players) {
             count = count + getDeathCount(p);
         }
         return count;

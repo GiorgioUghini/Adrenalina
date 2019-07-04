@@ -11,7 +11,7 @@ public class ChooseMapRequest implements Request {
     private String token;
     public int map;
 
-    public ChooseMapRequest(int map){
+    public ChooseMapRequest(int map) {
         this.map = map;
     }
 

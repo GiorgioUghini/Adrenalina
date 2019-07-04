@@ -14,7 +14,7 @@ public class ReloadRequest implements Request {
     private String token;
     public Map<WeaponCard, PowerUpCard> weaponsMap;
 
-    public ReloadRequest(Map<WeaponCard, PowerUpCard> weaponsMap){
+    public ReloadRequest(Map<WeaponCard, PowerUpCard> weaponsMap) {
         this.weaponsMap = weaponsMap;
     }
 

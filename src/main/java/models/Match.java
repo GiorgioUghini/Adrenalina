@@ -110,14 +110,13 @@ public class Match implements Observer {
 
     /**
      * Activate frenzy from now on
-     *
      */
     public void activateFrenzy() {
         playerList.get(0).setLifeState(ActionGroup.FRENZY_TYPE_2);
-        for(int i = actualPlayerIndex; i < playerList.size(); i++){
+        for (int i = actualPlayerIndex; i < playerList.size(); i++) {
             playerList.get(i).setLifeState(ActionGroup.FRENZY_TYPE_1);
         }
-        for(int i = actualPlayerIndex-1; i > 0; i--){
+        for (int i = actualPlayerIndex - 1; i > 0; i--) {
             playerList.get(i).setLifeState(ActionGroup.FRENZY_TYPE_2);
         }
         frenzy = true;
@@ -246,7 +245,7 @@ public class Match implements Observer {
             player.onTurnEnded();
         }
 
-        playerList.stream().filter(Player::isDead).forEach(p->gameMap.removePlayer(p));
+        playerList.stream().filter(Player::isDead).forEach(p -> gameMap.removePlayer(p));
 
         Player firstDeadPlayer = playerList.stream().filter(Player::isDead).findFirst().orElse(null);
 
@@ -259,10 +258,9 @@ public class Match implements Observer {
             tmpActualPlayerIndex = actualPlayerIndex;
             actualPlayerIndex = playerList.indexOf(firstDeadPlayer);
         } else {
-            if(frenzy && endMatchPlayerIndex < 0){
+            if (frenzy && endMatchPlayerIndex < 0) {
                 endMatchPlayerIndex = actualPlayerIndex + 1;
-            }
-            else if(frenzy && endMatchPlayerIndex == actualPlayerIndex){
+            } else if (frenzy && endMatchPlayerIndex == actualPlayerIndex) {
                 addUpdate(new EndMatchUpdate(getTotalPoints()));
                 return;
             }
@@ -342,10 +340,10 @@ public class Match implements Observer {
         return playerList;
     }
 
-    public int getPlayersOnlineNumber(){
+    public int getPlayersOnlineNumber() {
         int i = 0;
-        for(Player player : playerList){
-            if(player.isOnline()) i++;
+        for (Player player : playerList) {
+            if (player.isOnline()) i++;
         }
         return i;
     }
@@ -373,7 +371,7 @@ public class Match implements Observer {
                 }
             } else {
                 AmmoPoint ammoPoint = (AmmoPoint) s;
-                if(ammoDeck.size() == 0){
+                if (ammoDeck.size() == 0) {
                     ammoDeck = new AmmoDeck(thrownAmmos);
                     thrownAmmos = new ArrayList<>();
                     ammoDeck.shuffle();
@@ -414,7 +412,7 @@ public class Match implements Observer {
         turnTimer.schedule(turnTimerTask, config.getTurnTimeout());
     }
 
-    public int getSkullCount(){
+    public int getSkullCount() {
         return deathManager.getSkullCount(playerList);
     }
 

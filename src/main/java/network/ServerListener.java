@@ -6,7 +6,7 @@ import java.io.ObjectInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ServerListener implements Runnable{
+public class ServerListener implements Runnable {
 
     private ObjectInputStream in;
     private boolean stop;
@@ -19,7 +19,7 @@ public class ServerListener implements Runnable{
     @Override
     public void run() {
         Response response = null;
-        while(!stop){
+        while (!stop) {
             try {
                 response = (Response) in.readObject();
             } catch (Exception ex) {
@@ -28,18 +28,17 @@ public class ServerListener implements Runnable{
                 stop();
                 ScreenController.getInstance().activate("WaitingRoom.fxml");
             }
-            try{
-                if(response != null)
+            try {
+                if (response != null)
                     Client.getInstance().getConnection().receiveResponse(response);
-            }
-            catch (Exception ex){
+            } catch (Exception ex) {
                 Logger logger = Logger.getAnonymousLogger();
                 logger.log(Level.SEVERE, "an exception was thrown while receiveResponse(response). The connection has not been killed", ex);
             }
         }
     }
 
-    public void stop(){
+    public void stop() {
         stop = true;
     }
 }

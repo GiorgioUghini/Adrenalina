@@ -15,7 +15,7 @@ public class GameController {
         Client.getInstance().getConnection().validActions();
     }
 
-    public void reconnect(){
+    public void reconnect() {
         Client.getInstance().getConnection().reconnect();
     }
 
@@ -39,7 +39,9 @@ public class GameController {
         Client.getInstance().getConnection().cardEffects(weaponCard.name);
     }
 
-    public void playPowerUp(PowerUpCard powerUpCard, Ammo whichAmmo, PowerUpCard payWithThis) { Client.getInstance().getConnection().playPowerUp(powerUpCard.name, whichAmmo, payWithThis);}
+    public void playPowerUp(PowerUpCard powerUpCard, Ammo whichAmmo, PowerUpCard payWithThis) {
+        Client.getInstance().getConnection().playPowerUp(powerUpCard.name, whichAmmo, payWithThis);
+    }
 
     public void playEffect(Effect effect, PowerUpCard powerUpCard) {
         Client.getInstance().getConnection().playEffect(effect, Client.getInstance().getPlayer().getAmmo(), powerUpCard);

@@ -15,10 +15,10 @@ public class GrabRequest implements Request {
     public WeaponCard toRelease;
     public PowerUpCard powerUpCard;
 
-    public GrabRequest(WeaponCard drawn, WeaponCard toRelease, PowerUpCard powerUpCard){
-        this.drawn=drawn;
-        this.toRelease=toRelease;
-        this.powerUpCard=powerUpCard;
+    public GrabRequest(WeaponCard drawn, WeaponCard toRelease, PowerUpCard powerUpCard) {
+        this.drawn = drawn;
+        this.toRelease = toRelease;
+        this.powerUpCard = powerUpCard;
     }
 
     @Override

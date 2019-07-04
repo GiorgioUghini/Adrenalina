@@ -12,7 +12,7 @@ public class Effect implements Serializable {
     public Ammo price;
     public int orderId;
 
-    public Effect(){
+    public Effect() {
         price = new Ammo();
         orderId = 0;
     }

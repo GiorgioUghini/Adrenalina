@@ -49,10 +49,10 @@ class Life implements Serializable {
         damage += additionalDamage;
         int totalDamage = myDamages.values().stream().mapToInt(Integer::intValue).sum();
         hurtMeLast = attacker;
-        if (totalDamage+damage > MAX_LIFEPOINTS) {
+        if (totalDamage + damage > MAX_LIFEPOINTS) {
             damage = MAX_LIFEPOINTS - totalDamage;
         }
-        for (int i = 0; i<damage; i++) {
+        for (int i = 0; i < damage; i++) {
             damagedBy.add(attacker);
         }
         Optional<Integer> oldDamageFrom = Optional.ofNullable(myDamages.get(attacker));
@@ -63,10 +63,15 @@ class Life implements Serializable {
         }
 
         switch (totalDamage) {
-            case 3: case 4: case 5:
+            case 3:
+            case 4:
+            case 5:
                 me.setLifeState(ActionGroup.LOW_LIFE);
                 break;
-            case 6: case 7: case 8: case 9:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
                 me.setLifeState(ActionGroup.VERY_LOW_LIFE);
                 break;
             default:

@@ -4,15 +4,12 @@ import models.player.Player;
 import org.awaitility.core.ConditionTimeoutException;
 import org.junit.Test;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.*;
-import org.awaitility.Duration;
-
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.await;
+import static org.junit.Assert.assertEquals;
 
 public class LobbyStartMatchTest {
 

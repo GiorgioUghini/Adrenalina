@@ -22,7 +22,7 @@ public class ServerConnection {
     private boolean close;
 
     public ServerConnection() throws IOException {
-        System.setProperty("java.rmi.server.hostname",Server.getInstance().getHostname());
+        System.setProperty("java.rmi.server.hostname", Server.getInstance().getHostname());
         close = false;
         pool = Executors.newCachedThreadPool();
         serverSocket = new ServerSocket(Server.getInstance().getSocketPort());
@@ -50,56 +50,56 @@ public class ServerConnection {
         UnicastRemoteObject.unexportObject(registry, true);
     }
 
-    public void addConnectionWrapper(String token, ConnectionWrapper connectionWrapper){
+    public void addConnectionWrapper(String token, ConnectionWrapper connectionWrapper) {
         connectionWrapperMap.add(token, connectionWrapper);
     }
 
-    public void removeConnection(String token){
+    public void removeConnection(String token) {
         connectionWrapperMap.removeByKey(token);
     }
 
-    public void removeConnection(ConnectionWrapper connectionWrapper){
+    public void removeConnection(ConnectionWrapper connectionWrapper) {
         connectionWrapperMap.removeByValue(connectionWrapper);
     }
 
-    public ConnectionWrapper getConnectionWrapper(String token){
+    public ConnectionWrapper getConnectionWrapper(String token) {
         ConnectionWrapper connectionWrapper = connectionWrapperMap.getSingleValue(token);
         return connectionWrapper;
     }
 
-    public SocketWrapper getSocketWrapper(String token){
+    public SocketWrapper getSocketWrapper(String token) {
         SocketWrapper socketWrapper = (SocketWrapper) connectionWrapperMap.getSingleValue(token);
         return socketWrapper;
     }
 
-    public RMIWrapper getRMIWrapper(String token){
+    public RMIWrapper getRMIWrapper(String token) {
         RMIWrapper rmiWrapper = (RMIWrapper) connectionWrapperMap.getSingleValue(token);
         return rmiWrapper;
     }
 
-    public Registry getRegistry(){
+    public Registry getRegistry() {
         return registry;
     }
 
-    public String getToken(SocketWrapper socketWrapper){
+    public String getToken(SocketWrapper socketWrapper) {
         String token = connectionWrapperMap.getSingleKey(socketWrapper);
         return token;
     }
 
-    public String getToken(RMIWrapper rmiWrapper){
+    public String getToken(RMIWrapper rmiWrapper) {
         String token = connectionWrapperMap.getSingleKey(rmiWrapper);
         return token;
     }
 
-    public List<ConnectionWrapper> getUnregisteredConnectionWrappers(){
+    public List<ConnectionWrapper> getUnregisteredConnectionWrappers() {
         List<ConnectionWrapper> registeredWrappers = Server.getInstance().getLobby().getRegisteredConnectionWrappers();
         List<ConnectionWrapper> unregisteredWrappers = connectionWrapperMap.getValues().stream().filter(c -> !registeredWrappers.contains(c)).collect(Collectors.toList());
-       return unregisteredWrappers;
+        return unregisteredWrappers;
     }
 
-    public void addUpdateUnregisteredPlayers(Response update){
+    public void addUpdateUnregisteredPlayers(Response update) {
         List<ConnectionWrapper> wrappers = getUnregisteredConnectionWrappers();
-        for(ConnectionWrapper wrapper : wrappers){
+        for (ConnectionWrapper wrapper : wrappers) {
             wrapper.addUpdate(update);
         }
     }

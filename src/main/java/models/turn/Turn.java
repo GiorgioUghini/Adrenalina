@@ -30,8 +30,7 @@ public class Turn {
         compositions.put(ActionGroup.FRENZY_TYPE_2, new HashSet<>(Arrays.asList(actionGroupGrabFrenzyType2, actionGroupShootFrenzyType2)));
     }
 
-    public Map<ActionGroup, HashSet> getCompositions()
-    {
+    public Map<ActionGroup, HashSet> getCompositions() {
         return compositions;
     }
 

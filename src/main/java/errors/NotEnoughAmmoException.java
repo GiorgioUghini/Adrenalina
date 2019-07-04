@@ -1,7 +1,7 @@
 package errors;
 
 public class NotEnoughAmmoException extends RuntimeException {
-    public NotEnoughAmmoException(){
+    public NotEnoughAmmoException() {
         super();
     }
 }

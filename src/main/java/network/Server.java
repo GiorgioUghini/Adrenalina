@@ -31,10 +31,10 @@ public class Server {
 
     /**
      * Method that creates or directly return the singleton instance
+     *
      * @return the instance of the singleton class "Server"
      */
-    public static Server getInstance()
-    {
+    public static Server getInstance() {
         if (instance == null) {
             instance = new Server();
         }
@@ -55,32 +55,32 @@ public class Server {
         connection.init();
     }
 
-    public void fatalError(Exception e){
+    public void fatalError(Exception e) {
         Logger.getAnonymousLogger().log(Level.SEVERE, e.getMessage());
         System.exit(1);
     }
-  
-    public ServerConnection getConnection(){
+
+    public ServerConnection getConnection() {
         return connection;
     }
 
-    public Lobby getLobby(){
+    public Lobby getLobby() {
         return lobby;
     }
 
-    public void setMaxClients(int maxClients){
+    public void setMaxClients(int maxClients) {
         this.maxClients = maxClients;
     }
 
-    public int getMaxClients(){
+    public int getMaxClients() {
         return maxClients;
     }
 
-    public void setDebug(boolean isDebug){
+    public void setDebug(boolean isDebug) {
         this.debug = isDebug;
     }
 
-    public boolean isDebug(){
+    public boolean isDebug() {
         return debug;
     }
 

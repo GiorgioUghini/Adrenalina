@@ -12,7 +12,7 @@ public class PowerUpTagElementRequest implements Request {
     private String token;
     public Taggable taggable;
 
-    public PowerUpTagElementRequest(Taggable taggable){
+    public PowerUpTagElementRequest(Taggable taggable) {
         this.taggable = taggable;
     }
 

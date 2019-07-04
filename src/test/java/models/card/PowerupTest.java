@@ -9,6 +9,7 @@ import models.map.SpawnPoint;
 import models.player.Ammo;
 import models.player.Player;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.Set;
 
 public class PowerupTest {
     @Test
-    public void testEquals(){
+    public void testEquals() {
         PowerUpCard teletrasporto = getPowerUpByName("Teletrasporto");
         PowerUpCard teletrasporto2 = getPowerUpByName("Teletrasporto");
         PowerUpCard raggioTraente = getPowerUpByName("Raggio traente");
@@ -30,7 +31,7 @@ public class PowerupTest {
     }
 
     @Test
-    public void testFullName(){
+    public void testFullName() {
         PowerUpCard teletrasporto = getPowerUpByName("Teletrasporto", RoomColor.RED);
         assertNotNull(teletrasporto);
         assertEquals("Teletrasporto(R)", teletrasporto.getFullName());
@@ -38,7 +39,7 @@ public class PowerupTest {
     }
 
     @Test
-    public void testPayPrice(){
+    public void testPayPrice() {
         PowerUpCard teletrasporto = getPowerUpByName("Teletrasporto");
         PowerUpCard mirino = getPowerUpByName("Mirino");
 
@@ -46,53 +47,53 @@ public class PowerupTest {
         assertNotNull(mirino);
 
         teletrasporto.payPrice(null, null, null); //does not have price
-        Ammo myAmmo = new Ammo(3,3,3);
-        Ammo whichAmmo = new Ammo(1,0,0);
+        Ammo myAmmo = new Ammo(3, 3, 3);
+        Ammo whichAmmo = new Ammo(1, 0, 0);
 
         mirino.payPrice(myAmmo, whichAmmo, null);
-        assertEquals(new Ammo(2,3,3), myAmmo);
+        assertEquals(new Ammo(2, 3, 3), myAmmo);
     }
 
     @Test
-    public void testPayPriceWrongAmmo(){
+    public void testPayPriceWrongAmmo() {
         PowerUpCard mirino = getPowerUpByName("Mirino");
         assertNotNull(mirino);
 
-        Ammo myAmmo = new Ammo(3,3,3);
-        Ammo whichAmmo = new Ammo(2,0,0);
+        Ammo myAmmo = new Ammo(3, 3, 3);
+        Ammo whichAmmo = new Ammo(2, 0, 0);
 
-        try{
+        try {
             mirino.payPrice(myAmmo, whichAmmo, null);
             assert false;
-        }catch (WeaponCardException e){
+        } catch (WeaponCardException e) {
             assertEquals("You have to pay exactly one ammo of any color", e.getMessage());
         }
     }
 
     @Test
-    public void testPayWithPowerUp(){
+    public void testPayWithPowerUp() {
         Player player = new Player("x", "");
         PowerUpCard mirino = getPowerUpByName("Mirino");
         mirino.setPlayer(player);
         assertNotNull(mirino);
-        Ammo myAmmo = new Ammo(0,0,0);
+        Ammo myAmmo = new Ammo(0, 0, 0);
         Ammo whichAmmo = null;
         PowerUpCard toPay = getPowerUpByName("Teletrasporto");
         mirino.payPrice(myAmmo, whichAmmo, toPay);
     }
 
     @Test
-    public void testMandatoryFields(){
+    public void testMandatoryFields() {
         PowerUpDeck deck = new CardController().getPowerUpDeck();
         int deckSize = deck.size();
-        for(int i =0; i<deckSize; i++){
-            PowerUpCard card = (PowerUpCard)deck.draw();
+        for (int i = 0; i < deckSize; i++) {
+            PowerUpCard card = (PowerUpCard) deck.draw();
             assertNotNull(card.name);
             assertNotNull(card.color);
             assertNotNull(card.when);
             assertNotNull(card.image);
-            for(Action action : card.effects){
-                switch (action.type){
+            for (Action action : card.effects) {
+                switch (action.type) {
                     case SELECT:
                         assertNotNull(action.select.id);
                         assertNotNull(action.select.type);
@@ -117,7 +118,7 @@ public class PowerupTest {
     }
 
     @Test
-    public void testTeletrasporto(){
+    public void testTeletrasporto() {
         Player me = new Player("me", "password");
         Player p1 = new Player("p1", "password");
         Player p2 = new Player("p2", "password");
@@ -134,16 +135,16 @@ public class PowerupTest {
         me.setPowerUpList(myPowerups);
         Set<SpawnPoint> spawnPoints = gameMap.getSpawnPoints();
         SpawnPoint destSquare = null;
-        for(SpawnPoint spawnPoint : spawnPoints){
-            if(spawnPoint.getColor().equals(RoomColor.YELLOW)){
+        for (SpawnPoint spawnPoint : spawnPoints) {
+            if (spawnPoint.getColor().equals(RoomColor.YELLOW)) {
                 gameMap.spawnPlayer(me, spawnPoint);
-            }else if(spawnPoint.getColor().equals(RoomColor.RED)){
+            } else if (spawnPoint.getColor().equals(RoomColor.RED)) {
                 destSquare = spawnPoint;
             }
         }
         match.chooseMapAndStartMatch();
         match.nextTurn();
-        while (!match.getCurrentPlayer().equals(me)){
+        while (!match.getCurrentPlayer().equals(me)) {
             match.nextTurn();
         }
         me.playPowerUp(teletrasporto, null, null);
@@ -157,7 +158,7 @@ public class PowerupTest {
     }
 
     @Test
-    public void testThrowbackGrenade(){
+    public void testThrowbackGrenade() {
         //init
         PowerUpCard granataVenom = getPowerUpByName("Granata Venom");
         assertNotNull(granataVenom);
@@ -173,11 +174,11 @@ public class PowerupTest {
         GameMap gameMap = match.getMap();
 
         //spawn players and set up turns
-        for(Player p : players){
+        for (Player p : players) {
             spawnPlayer(p, gameMap, RoomColor.YELLOW);
         }
         match.nextTurn();
-        while(!match.getCurrentPlayer().equals(offender)){
+        while (!match.getCurrentPlayer().equals(offender)) {
             match.nextTurn();
         }
 
@@ -194,36 +195,36 @@ public class PowerupTest {
         assertEquals(1, offender.getMarksFromPlayer(me));
     }
 
-    private List<Player> createTestPlayers(int number){
+    private List<Player> createTestPlayers(int number) {
         List<Player> out = new ArrayList<>();
         out.add(new Player("me", "password"));
-        for(int i = 1; i<number; i++){
-            out.add(new Player("p"+i, "password"));
+        for (int i = 1; i < number; i++) {
+            out.add(new Player("p" + i, "password"));
         }
         return out;
     }
 
-    private PowerUpCard getPowerUpByName(String name, RoomColor color){
+    private PowerUpCard getPowerUpByName(String name, RoomColor color) {
         PowerUpDeck powerUpDeck = new CardController().getPowerUpDeck();
         int deckSize = powerUpDeck.size();
-        for(int i=0; i<deckSize; i++){
+        for (int i = 0; i < deckSize; i++) {
             PowerUpCard card = (PowerUpCard) powerUpDeck.draw();
-            if(card.name.equals(name)){
-                if(color==null) return card;
-                if(color.equals(card.color)) return card;
+            if (card.name.equals(name)) {
+                if (color == null) return card;
+                if (color.equals(card.color)) return card;
             }
         }
         return null;
     }
 
-    private PowerUpCard getPowerUpByName(String name){
+    private PowerUpCard getPowerUpByName(String name) {
         return getPowerUpByName(name, null);
     }
 
-    private void spawnPlayer(Player player, GameMap gameMap, RoomColor spawnPointColor){
+    private void spawnPlayer(Player player, GameMap gameMap, RoomColor spawnPointColor) {
         Set<SpawnPoint> spawnPoints = gameMap.getSpawnPoints();
-        for(SpawnPoint s : spawnPoints){
-            if(s.getColor().equals(spawnPointColor)){
+        for (SpawnPoint s : spawnPoints) {
+            if (s.getColor().equals(spawnPointColor)) {
                 gameMap.spawnPlayer(player, s);
             }
         }

@@ -8,7 +8,7 @@ public class SelectResponse implements Response {
 
     public Selectable selectable;
 
-    public SelectResponse(Selectable selectable){
+    public SelectResponse(Selectable selectable) {
         this.selectable = selectable;
     }
 

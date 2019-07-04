@@ -10,7 +10,7 @@ public class Select implements Serializable {
     public Rules rules;
     public boolean auto;
 
-    public Select(){
+    public Select() {
         auto = false;
         optional = false;
     }

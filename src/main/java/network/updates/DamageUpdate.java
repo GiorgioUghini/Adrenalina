@@ -7,7 +7,7 @@ import network.ResponseHandlerInterface;
 public class DamageUpdate implements Response {
     public Player player;
 
-    public DamageUpdate (Player player) {
+    public DamageUpdate(Player player) {
         this.player = player;
     }
 

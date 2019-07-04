@@ -10,7 +10,7 @@ public class StartGameUpdate implements Response {
 
     public List<Player> players;
 
-    public StartGameUpdate(List<Player> players){
+    public StartGameUpdate(List<Player> players) {
         this.players = players;
     }
 

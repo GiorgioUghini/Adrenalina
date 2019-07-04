@@ -13,17 +13,17 @@ public enum BaseActions {
 
     private String friendlyName;
 
-    BaseActions(String friendlyName){
+    BaseActions(String friendlyName) {
         this.friendlyName = friendlyName;
     }
 
-    public String toString(){
+    public String toString() {
         return friendlyName;
     }
 
-    public BaseActions fromString(String str){
-        for(BaseActions baseActions : BaseActions.values()){
-            if(str.equals(baseActions.toString())) return baseActions;
+    public BaseActions fromString(String str) {
+        for (BaseActions baseActions : BaseActions.values()) {
+            if (str.equals(baseActions.toString())) return baseActions;
         }
         return null;
     }

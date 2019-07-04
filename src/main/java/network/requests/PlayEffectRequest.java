@@ -16,7 +16,7 @@ public class PlayEffectRequest implements Request {
     public Ammo ammo;
     public PowerUpCard powerUpCard;
 
-    public PlayEffectRequest(Effect effect, Ammo ammo, PowerUpCard powerUpCard){
+    public PlayEffectRequest(Effect effect, Ammo ammo, PowerUpCard powerUpCard) {
         this.effect = effect;
         this.ammo = ammo;
         this.powerUpCard = powerUpCard;

@@ -12,7 +12,7 @@ public class SpawnPlayerRequest implements Request {
     public String token;
     public PowerUpCard powerUpCard;
 
-    public SpawnPlayerRequest(PowerUpCard powerUpCard){
+    public SpawnPlayerRequest(PowerUpCard powerUpCard) {
         this.powerUpCard = powerUpCard;
     }
 

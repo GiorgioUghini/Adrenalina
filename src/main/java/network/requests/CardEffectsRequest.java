@@ -11,7 +11,7 @@ public class CardEffectsRequest implements Request {
     private String token;
     public String cardName;
 
-    public CardEffectsRequest(String cardName){
+    public CardEffectsRequest(String cardName) {
         this.cardName = cardName;
     }
 

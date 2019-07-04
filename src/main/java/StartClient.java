@@ -10,21 +10,17 @@ public class StartClient {
         int socketPort = Constants.PORT;
         int registryPort = Constants.REGISTRY_PORT;
         boolean debug = false;
-        for (String s: args) {
+        for (String s : args) {
             s = s.replace(Constants.ARG_PREFIX, "").toLowerCase();
             if (s.equals("gui")) {
                 viewType = ViewType.GUI;
-            }
-            else if(s.equals("debug")){
+            } else if (s.equals("debug")) {
                 debug = true;
-            }
-            else if(s.startsWith("hostname")){
+            } else if (s.startsWith("hostname")) {
                 hostname = s.replace("hostname=", "");
-            }
-            else if(s.startsWith("socketport")){
+            } else if (s.startsWith("socketport")) {
                 socketPort = Integer.parseInt(s.replace("socketport=", ""));
-            }
-            else if(s.startsWith("registryport")){
+            } else if (s.startsWith("registryport")) {
                 registryPort = Integer.parseInt(s.replace("registryport=", ""));
             }
         }

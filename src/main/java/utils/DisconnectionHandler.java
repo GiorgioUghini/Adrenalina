@@ -11,18 +11,18 @@ import network.updates.MapUpdate;
 import network.updates.PlayerDisconnectUpdate;
 
 public class DisconnectionHandler {
-    public static void handle(Player player){
+    public static void handle(Player player) {
         player.disconnect();
         Match match = Server.getInstance().getLobby().getMatch(player);
 
-        if(match.getPlayersOnlineNumber()<3){
+        if (match.getPlayersOnlineNumber() < 3) {
             match.addUpdate(new EndMatchUpdate(match.getTotalPoints()));
             return;
         }
 
-        if(match.getCurrentPlayer().getName().equals(player.getName())){
-            if(player.hasJustStarted()){
-                while (player.getPowerUpList().size() < 2){
+        if (match.getCurrentPlayer().getName().equals(player.getName())) {
+            if (player.hasJustStarted()) {
+                while (player.getPowerUpList().size() < 2) {
                     player.drawPowerUp();
                 }
                 PowerUpCard powerUpCard = player.getPowerUpList().get(0);

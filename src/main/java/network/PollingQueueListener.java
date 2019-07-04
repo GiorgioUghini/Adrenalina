@@ -28,7 +28,7 @@ public class PollingQueueListener implements Runnable {
         }
     }
 
-    public void stop(){
+    public void stop() {
         stop = true;
     }
 }

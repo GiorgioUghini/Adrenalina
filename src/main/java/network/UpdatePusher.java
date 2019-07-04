@@ -21,7 +21,7 @@ public class UpdatePusher implements Runnable {
         while (!stop) {
             try {
                 update = queue.take();
-                if(stop)
+                if (stop)
                     break;
                 socketWrapper.write(update);
             } catch (Exception e) {
@@ -30,7 +30,7 @@ public class UpdatePusher implements Runnable {
         }
     }
 
-    public void stop(){
+    public void stop() {
         stop = true;
     }
 }

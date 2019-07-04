@@ -1,10 +1,11 @@
 package errors;
 
-public class NoDirectionException extends RuntimeException{
-    public NoDirectionException(){
+public class NoDirectionException extends RuntimeException {
+    public NoDirectionException() {
         super("Cannot find a direction");
     }
-    public NoDirectionException(String message){
+
+    public NoDirectionException(String message) {
         super(message);
     }
 }

@@ -12,7 +12,7 @@ public class TurnActionRequest implements Request {
     private String token;
     public ActionType actionType;
 
-    public TurnActionRequest(ActionType actionType){
+    public TurnActionRequest(ActionType actionType) {
         this.actionType = actionType;
     }
 

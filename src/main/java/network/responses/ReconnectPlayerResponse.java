@@ -14,7 +14,7 @@ public class ReconnectPlayerResponse implements Response {
     public List<Player> players;
     public int mapIndex;
 
-    public ReconnectPlayerResponse(Player player, GameMap map, List<Player> players, int mapIndex){
+    public ReconnectPlayerResponse(Player player, GameMap map, List<Player> players, int mapIndex) {
         this.player = player;
         this.map = map;
         this.players = players;

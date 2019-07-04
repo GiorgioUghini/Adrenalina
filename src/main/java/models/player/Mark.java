@@ -28,7 +28,7 @@ class Mark implements Serializable {
         otherPlayersMarksOnMyLife.remove(fromWho);
     }
 
-    Map<Player, Integer> getAllMarks(){
+    Map<Player, Integer> getAllMarks() {
         return otherPlayersMarksOnMyLife;
     }
 }

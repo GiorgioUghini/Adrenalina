@@ -15,7 +15,7 @@ public class PlayPowerUpRequest implements Request {
     public PowerUpCard powerUpAmmo;
     public String powerUpName;
 
-    public PlayPowerUpRequest(String powerUpName, Ammo ammo, PowerUpCard powerUpAmmo){
+    public PlayPowerUpRequest(String powerUpName, Ammo ammo, PowerUpCard powerUpAmmo) {
         this.powerUpName = powerUpName;
         this.ammo = ammo;
         this.powerUpAmmo = powerUpAmmo;

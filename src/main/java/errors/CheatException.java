@@ -1,10 +1,11 @@
 package errors;
 
 public class CheatException extends RuntimeException {
-    public CheatException(){
+    public CheatException() {
         super("Busted!");
     }
-    public CheatException(String message){
+
+    public CheatException(String message) {
         super(message);
     }
 }

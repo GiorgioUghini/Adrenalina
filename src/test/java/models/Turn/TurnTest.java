@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 public class TurnTest {
     @Test
-    public void testCreation(){
+    public void testCreation() {
         Turn turn = new Turn();
 
         assertFalse(turn.hasFinished());

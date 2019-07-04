@@ -14,62 +14,77 @@ public abstract class Square implements Taggable, Serializable {
     private int id;
     private UUID mapId;
 
-    public Square(RoomColor color, boolean isSpawnPoint, int id, UUID mapId){
+    public Square(RoomColor color, boolean isSpawnPoint, int id, UUID mapId) {
         this.color = color;
         this.isSpawnPoint = isSpawnPoint;
         links = new EnumMap<>(CardinalDirection.class);
         this.id = id;
         this.mapId = mapId;
     }
-    public void connectToSquare(Square square, CardinalDirection side){
+
+    public void connectToSquare(Square square, CardinalDirection side) {
         LinkType linkType;
-        if(getColor().equals(square.getColor())){
+        if (getColor().equals(square.getColor())) {
             linkType = LinkType.NOTHING;
-        }else {
+        } else {
             linkType = LinkType.WALL;
         }
         SquareLink newConnection = new SquareLink(square, linkType);
         links.put(side, newConnection);
     }
-    public void addDoor(CardinalDirection side) throws NotWallException{
+
+    public void addDoor(CardinalDirection side) throws NotWallException {
         SquareLink link = links.get(side);
         links.get(side).upgradeToDoor();
     }
 
-    public boolean isSpawnPoint(){
+    public boolean isSpawnPoint() {
         return isSpawnPoint;
     }
-    public RoomColor getColor(){
+
+    public RoomColor getColor() {
         return this.color;
     }
-    public Square getNextSquare(CardinalDirection direction){
-        if(hasNext(direction)){
+
+    public Square getNextSquare(CardinalDirection direction) {
+        if (hasNext(direction)) {
             return getLink(direction).getNextSquare();
         }
         return null;
 
     }
-    public boolean hasNext(CardinalDirection direction){
+
+    public boolean hasNext(CardinalDirection direction) {
         return (this.links.get(direction) != null);
     }
-    public boolean hasNext(CardinalDirection direction, boolean inSameRoom){
-        if(!inSameRoom) return hasNext(direction);
-        if(!hasNext(direction)) return false;
+
+    public boolean hasNext(CardinalDirection direction, boolean inSameRoom) {
+        if (!inSameRoom) return hasNext(direction);
+        if (!hasNext(direction)) return false;
         return this.links.get(direction).isSameRoom();
     }
-    public boolean hasNextWalkable(CardinalDirection direction){
+
+    public boolean hasNextWalkable(CardinalDirection direction) {
         return hasNext(direction) && !getLink(direction).isWall();
     }
-    public SquareLink getLink(CardinalDirection direction){
+
+    public SquareLink getLink(CardinalDirection direction) {
         return this.links.get(direction);
     }
-    public int getId(){return id;}
-    public UUID getMapId(){return mapId;}
-    public boolean hasDoors(){
+
+    public int getId() {
+        return id;
+    }
+
+    public UUID getMapId() {
+        return mapId;
+    }
+
+    public boolean hasDoors() {
         Iterator iterator = links.values().iterator();
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             SquareLink link = (SquareLink) iterator.next();
-            if(link.isDoor())return true;
+            if (link.isDoor()) return true;
         }
         return false;
     }
@@ -89,7 +104,7 @@ public abstract class Square implements Taggable, Serializable {
             return false;
         Square sq = (Square) o;
         // field comparison
-        return (getId() == (sq.getId()) && (getMapId().equals(sq.getMapId())) );
+        return (getId() == (sq.getId()) && (getMapId().equals(sq.getMapId())));
     }
 
     @Override

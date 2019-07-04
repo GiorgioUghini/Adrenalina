@@ -8,7 +8,7 @@ public class CardEffectsResponse implements Response {
 
     public LegitEffects legitEffects;
 
-    public CardEffectsResponse(LegitEffects legitEffects){
+    public CardEffectsResponse(LegitEffects legitEffects) {
         this.legitEffects = legitEffects;
     }
 

@@ -1,10 +1,11 @@
 package errors;
 
 public class InvalidInputException extends RuntimeException {
-    public InvalidInputException(){
+    public InvalidInputException() {
         super();
     }
-    public InvalidInputException(String message){
+
+    public InvalidInputException(String message) {
         super(message);
     }
 }

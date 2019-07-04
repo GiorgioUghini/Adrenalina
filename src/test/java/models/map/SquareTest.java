@@ -13,19 +13,21 @@ public class SquareTest {
     private UUID uuid = UUID.randomUUID();
 
     @Test
-    public void ammoPoint(){
+    public void ammoPoint() {
         square = new AmmoPoint(RoomColor.BLUE, 0, UUID.randomUUID());
         assertEquals(square.getColor(), RoomColor.BLUE);
         assertFalse(square.isSpawnPoint());
     }
+
     @Test
-    public void spawnPoint(){
+    public void spawnPoint() {
         square = new SpawnPoint(RoomColor.GREEN, 0, UUID.randomUUID());
         assertEquals(square.getColor(), RoomColor.GREEN);
         assertTrue(square.isSpawnPoint());
     }
+
     @Test
-    public void connectSameRoom(){
+    public void connectSameRoom() {
         Square s1 = new AmmoPoint(RoomColor.GREEN, 0, uuid);
         Square s2 = new AmmoPoint(RoomColor.GREEN, 1, uuid);
 
@@ -45,8 +47,9 @@ public class SquareTest {
         assertNull(s1.getNextSquare(CardinalDirection.LEFT));
         assertFalse(s1.hasDoors());
     }
+
     @Test
-    public void connectDifferentRoomThroughWall(){
+    public void connectDifferentRoomThroughWall() {
         Square s1 = new AmmoPoint(RoomColor.GREEN, 0, uuid);
         Square s2 = new AmmoPoint(RoomColor.BLUE, 1, uuid);
 
@@ -82,8 +85,9 @@ public class SquareTest {
         assertTrue(s1.getLink(CardinalDirection.RIGHT).isVisible());
         assertTrue(s1.hasDoors());
     }
+
     @Test
-    public void hasNextInSameRoom(){
+    public void hasNextInSameRoom() {
         Square s1 = new AmmoPoint(RoomColor.GREEN, 0, uuid);
         Square s2 = new AmmoPoint(RoomColor.BLUE, 1, uuid);
         s1.connectToSquare(s2, CardinalDirection.RIGHT);

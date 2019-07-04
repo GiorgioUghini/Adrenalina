@@ -8,13 +8,16 @@ import models.player.Player;
 import models.turn.ActionGroup;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
 public class MatchTest {
     @Test
-    public void testEquals(){
+    public void testEquals() {
         List<Player> players = new ArrayList<>();
         players.add(new Player("A", ""));
 
@@ -29,7 +32,7 @@ public class MatchTest {
     }
 
     @Test
-    public void testActivateFrenzy(){
+    public void testActivateFrenzy() {
         Match match = generateMatch(3);
         match.activateFrenzy();
 
@@ -38,17 +41,17 @@ public class MatchTest {
         assertEquals(players.get(0), match.getCurrentPlayer());
         assertEquals("a", players.get(0).getName());
 
-        for(Player player : players){
-            if(player.getName().equals("a")){
+        for (Player player : players) {
+            if (player.getName().equals("a")) {
                 assertEquals(ActionGroup.FRENZY_TYPE_2, player.getLifeState());
-            }else{
+            } else {
                 assertEquals(ActionGroup.FRENZY_TYPE_1, player.getLifeState());
             }
         }
     }
 
     @Test
-    public void testSetFirstPlayer(){
+    public void testSetFirstPlayer() {
         Player a = new Player("a", "");
         Player b = new Player("b", "");
         Match match = generateMatch(2);
@@ -60,7 +63,7 @@ public class MatchTest {
     }
 
     @Test
-    public void testAddRemove(){
+    public void testAddRemove() {
         Match match = generateMatch(0);
         match.addPlayer(new Player("a", ""));
         match.addPlayer(new Player("b", ""));
@@ -70,9 +73,9 @@ public class MatchTest {
     }
 
     @Test
-    public void testDrawPowerUp(){
+    public void testDrawPowerUp() {
         Match match = generateMatch(1);
-        for(int i=0;i<100;i++){
+        for (int i = 0; i < 100; i++) {
             PowerUpCard powerUpCard = (PowerUpCard) match.drawPowerUp();
             match.throwPowerUp(powerUpCard);
             assertNotNull(powerUpCard);
@@ -82,8 +85,8 @@ public class MatchTest {
     @Test
     public void startTurnNextTurnEndTurnPossibleActions() {
         Player pl1 = new Player("Cosimo", "");
-        Player pl2 = new Player( "Giorgio", "");
-        Player pl3 = new Player( "Vila", "");
+        Player pl2 = new Player("Giorgio", "");
+        Player pl3 = new Player("Vila", "");
         List<Player> players = new LinkedList<>();
         players.add(pl2);
         players.add(pl3);
@@ -108,7 +111,7 @@ public class MatchTest {
     }
 
     @Test
-    public void testRefillCards(){
+    public void testRefillCards() {
         Match match = generateMatch(3);
         match.createMap(0);
         GameMap gameMap = match.getMap();
@@ -125,7 +128,7 @@ public class MatchTest {
     }
 
     @Test
-    public void testGetters(){
+    public void testGetters() {
         Match match = generateMatch(3);
         match.createMap(0);
         assertEquals(0, match.getMapIndex());
@@ -134,10 +137,10 @@ public class MatchTest {
         assertEquals(0, match.getSkullCount());
     }
 
-    private Match generateMatch(int howManyPlayers){
+    private Match generateMatch(int howManyPlayers) {
         List<Player> players = new ArrayList<>();
         String[] names = {"a", "b", "c", "d", "e"};
-        for(int i =0; i<howManyPlayers; i++){
+        for (int i = 0; i < howManyPlayers; i++) {
             players.add(new Player(names[i], ""));
         }
         Match match = new Match(players);

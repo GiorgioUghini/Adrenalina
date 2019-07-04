@@ -9,8 +9,9 @@ import static org.junit.Assert.*;
 
 public class PlayerSquareTest {
     private UUID uuid = UUID.randomUUID();
+
     @Test
-    public void PlayerOnSquare(){
+    public void PlayerOnSquare() {
         Player player = new Player("a", "");
         Square square = new SpawnPoint(RoomColor.GREEN, 0, uuid);
 
@@ -21,9 +22,10 @@ public class PlayerSquareTest {
         assertEquals(square, playerSquare.getSquare(player));
         assertTrue(playerSquare.getPlayers(square).contains(player));
     }
+
     @Test
-    public void multiplePlayers(){
-        Player p1 = new Player( "a", "");
+    public void multiplePlayers() {
+        Player p1 = new Player("a", "");
         Player p2 = new Player("a", "");
         Square square = new SpawnPoint(RoomColor.GREEN, 0, uuid);
 
@@ -37,8 +39,9 @@ public class PlayerSquareTest {
         assertTrue(playerSquare.getPlayers(square).contains(p1));
         assertTrue(playerSquare.getPlayers(square).contains(p2));
     }
+
     @Test
-    public void movePlayerInSameRoom(){
+    public void movePlayerInSameRoom() {
         Player p = new Player("a", "");
         Square s1 = new SpawnPoint(RoomColor.GREEN, 0, uuid);
         Square s2 = new AmmoPoint(RoomColor.GREEN, 1, uuid);
@@ -54,8 +57,9 @@ public class PlayerSquareTest {
         assertEquals(s1, oldSquare);
         assertNotEquals(s1, playerSquare.getSquare(p));
     }
+
     @Test
-    public void addSamePlayerTwice(){
+    public void addSamePlayerTwice() {
         Player p = new Player("a", "");
         Square s1 = new SpawnPoint(RoomColor.GREEN, 0, uuid);
         Square s2 = new AmmoPoint(RoomColor.PURPLE, 1, uuid);
@@ -69,8 +73,9 @@ public class PlayerSquareTest {
         assertTrue(playerSquare.getPlayers(s1).contains(p));
         assertFalse(playerSquare.getPlayers(s2).contains(p));
     }
+
     @Test
-    public void getPlayersNumber(){
+    public void getPlayersNumber() {
         PlayerSquare playerSquare = new PlayerSquare();
         assertEquals(0, playerSquare.getPlayersNumber());
         Player p = new Player("a", "");

@@ -1,7 +1,7 @@
 package errors;
 
 public class MapNotExistsException extends RuntimeException {
-    public MapNotExistsException(){
+    public MapNotExistsException() {
         super();
     }
 }

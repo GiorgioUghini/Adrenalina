@@ -18,7 +18,7 @@ class DamageEngine {
     private GameMap gameMap;
     private Player me;
 
-    DamageEngine(Mark markOrDamage, Map<String, Player> selectedPlayers, Map<String, Square> selectedSquares, Map<String, RoomColor> selectedRooms, GameMap gameMap, Player me){
+    DamageEngine(Mark markOrDamage, Map<String, Player> selectedPlayers, Map<String, Square> selectedSquares, Map<String, RoomColor> selectedRooms, GameMap gameMap, Player me) {
         this.markOrDamage = markOrDamage;
         this.selectedPlayers = selectedPlayers;
         this.selectedSquares = selectedSquares;
@@ -27,27 +27,27 @@ class DamageEngine {
         this.me = me;
     }
 
-    Map<Player, Integer> getDamages(){
+    Map<Player, Integer> getDamages() {
         Map<Player, Integer> out = new HashMap<>();
-        switch (markOrDamage.type){
+        switch (markOrDamage.type) {
             case PLAYER:
                 Player player = selectedPlayers.get(markOrDamage.target);
-                if(player==null) return out;
+                if (player == null) return out;
                 out.put(selectedPlayers.get(markOrDamage.target), markOrDamage.value);
                 break;
             case SQUARE:
                 Square target = getSquareByTag(markOrDamage.target);
-                if(target==null) return out;
+                if (target == null) return out;
                 Set<Player> playersOnSquare = gameMap.getPlayersOnSquare(target);
-                for(Player p : playersOnSquare){
+                for (Player p : playersOnSquare) {
                     out.put(p, markOrDamage.value);
                 }
                 out.remove(me);
                 break;
             case ROOM:
                 Set<Square> squaresInRoom = gameMap.getAllSquaresInRoom(selectedRooms.get(markOrDamage.target));
-                for(Square s : squaresInRoom){
-                    for(Player p : gameMap.getPlayersOnSquare(s)){
+                for (Square s : squaresInRoom) {
+                    for (Player p : gameMap.getPlayersOnSquare(s)) {
                         out.put(p, markOrDamage.value);
                     }
                 }
@@ -56,10 +56,10 @@ class DamageEngine {
                 throw new WeaponCardException("The damage type is not valid: " + markOrDamage.type);
         }
 
-        if(markOrDamage instanceof Damage){
+        if (markOrDamage instanceof Damage) {
             Damage damage = (Damage) markOrDamage;
-            if(!damage.except.isEmpty()){
-                for(String tag : damage.except){
+            if (!damage.except.isEmpty()) {
+                for (String tag : damage.except) {
                     out.remove(selectedPlayers.get(tag));
                 }
             }
@@ -68,12 +68,12 @@ class DamageEngine {
         return out;
     }
 
-    private Square getSquareByTag(String tag){
-        if(tag.equals("me")){
+    private Square getSquareByTag(String tag) {
+        if (tag.equals("me")) {
             return gameMap.getPlayerPosition(me);
-        }else if(selectedSquares.containsKey(tag)){
+        } else if (selectedSquares.containsKey(tag)) {
             return selectedSquares.get(tag);
-        }else if(selectedPlayers.containsKey(tag)){
+        } else if (selectedPlayers.containsKey(tag)) {
             return gameMap.getPlayerPosition(selectedPlayers.get(tag));
         }
         return null;

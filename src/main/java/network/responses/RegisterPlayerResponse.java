@@ -7,7 +7,7 @@ public class RegisterPlayerResponse implements Response {
 
     private String me;
 
-    public RegisterPlayerResponse(String name){
+    public RegisterPlayerResponse(String name) {
         me = name;
     }
 

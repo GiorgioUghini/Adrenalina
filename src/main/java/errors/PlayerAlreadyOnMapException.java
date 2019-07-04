@@ -1,7 +1,7 @@
 package errors;
 
 public class PlayerAlreadyOnMapException extends RuntimeException {
-    public PlayerAlreadyOnMapException(){
+    public PlayerAlreadyOnMapException() {
         super();
     }
 }

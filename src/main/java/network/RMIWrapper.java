@@ -11,13 +11,13 @@ public class RMIWrapper implements ConnectionWrapper {
     private String token;
     private BlockingQueue<Response> updates;
 
-    public RMIWrapper(){
+    public RMIWrapper() {
         this.token = TokenGenerator.nextToken();
         updates = new LinkedBlockingQueue<>();
         Server.getInstance().getConnection().addConnectionWrapper(token, this);
     }
 
-    public void setRMIStatusTask(RMIStatusTask rmiStatusTask){
+    public void setRMIStatusTask(RMIStatusTask rmiStatusTask) {
         this.rmiStatusTask = rmiStatusTask;
     }
 
@@ -25,8 +25,8 @@ public class RMIWrapper implements ConnectionWrapper {
         rmiStatusTask.cancel();
     }
 
-    public void ping(){
-        if(rmiStatusTask != null) {
+    public void ping() {
+        if (rmiStatusTask != null) {
             rmiStatusTask.ping();
         }
     }

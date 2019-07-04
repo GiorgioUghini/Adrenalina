@@ -13,17 +13,17 @@ public class Console {
         GREEN
     }
 
-    private static final Scanner scanner  = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
 
-    public static void print(String message){
+    public static void print(String message) {
         System.out.print(message);
     }
 
-    public static void println(String message){
+    public static void println(String message) {
         System.out.println(message);
     }
 
-    public static void printColor(String message, COLOR color){
+    public static void printColor(String message, COLOR color) {
         switch (color) {
             case BLU:
                 print("\u001B[34m" + message);
@@ -47,13 +47,13 @@ public class Console {
         print("\u001B[0m");
     }
 
-    public static int nextInt(){
+    public static int nextInt() {
         int n = scanner.nextInt();
         scanner.nextLine();
         return n;
     }
 
-    public static String nextLine(){
+    public static String nextLine() {
         return scanner.nextLine();
     }
 }

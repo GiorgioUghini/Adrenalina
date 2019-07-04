@@ -48,8 +48,7 @@ public class Client {
         this.mapNum = mapNum;
     }
 
-    public static Client getInstance()
-    {
+    public static Client getInstance() {
         if (instance == null) {
             instance = new Client();
         }
@@ -64,7 +63,7 @@ public class Client {
         return playerCoordinateMap;
     }
 
-    public TurnType getCurrentTurnType(){
+    public TurnType getCurrentTurnType() {
         return currentTurnType;
     }
 
@@ -73,7 +72,7 @@ public class Client {
     }
 
     public Player getPlayer() {
-        return players != null ? players.stream().filter(p->p.getName().equals(getPlayerUsername())).findFirst().orElse(null) : null;
+        return players != null ? players.stream().filter(p -> p.getName().equals(getPlayerUsername())).findFirst().orElse(null) : null;
     }
 
     public void setPlayer(Player me) {
@@ -84,25 +83,25 @@ public class Client {
         this.me = me;
     }
 
-    public void setActions(Map<ActionType, List<TurnEvent>> actions){
+    public void setActions(Map<ActionType, List<TurnEvent>> actions) {
         this.actions = actions;
     }
 
-    public Map<ActionType, List<TurnEvent>> getActions(){
+    public Map<ActionType, List<TurnEvent>> getActions() {
         return actions;
     }
 
-    public void setCurrentTurnType(TurnType type){
+    public void setCurrentTurnType(TurnType type) {
         this.currentTurnType = type;
     }
 
-    public void setCurrentActionType(ActionType type){
+    public void setCurrentActionType(ActionType type) {
         this.currentActionType = type;
     }
 
-    public ActionType getCurrentActionType(){
-            return currentActionType;
-        }
+    public ActionType getCurrentActionType() {
+        return currentActionType;
+    }
 
     public void activateGameViewCLI() {
         gameView = new GameViewCLI();
@@ -115,13 +114,11 @@ public class Client {
         this.hostname = hostname;
         this.socketPort = socketPort;
         this.registryPort = registryPort;
-        if(viewType == ViewType.CLI){
+        if (viewType == ViewType.CLI) {
             menuView = new MenuViewCLI();
-        }
-        else if(viewType == ViewType.GUI){
+        } else if (viewType == ViewType.GUI) {
             menuView = new MenuViewGUI();
-        }
-        else{
+        } else {
             throw new InvalidViewTypeException();
         }
         currentView = menuView;
@@ -129,15 +126,15 @@ public class Client {
         //Thread.currentThread().join();
     }
 
-    public void setConnection(Connection connection){
+    public void setConnection(Connection connection) {
         this.connection = connection;
     }
 
-    public Connection getConnection(){
+    public Connection getConnection() {
         return connection;
     }
 
-    public View getCurrentView(){
+    public View getCurrentView() {
         return currentView;
     }
 

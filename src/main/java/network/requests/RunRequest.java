@@ -14,7 +14,7 @@ public class RunRequest implements Request {
     public TurnEvent turnEvent;
     public Square square;
 
-    public RunRequest(TurnEvent turnEvent, Square square){
+    public RunRequest(TurnEvent turnEvent, Square square) {
         this.square = square;
         this.turnEvent = turnEvent;
     }

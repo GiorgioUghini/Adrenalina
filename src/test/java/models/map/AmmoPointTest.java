@@ -7,52 +7,59 @@ import models.card.AmmoCard;
 import models.card.Card;
 import models.card.WeaponCard;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 import java.util.UUID;
 
 public class AmmoPointTest {
     @Test
-    public void testAddCard(){
+    public void testAddCard() {
         AmmoPoint ammoPoint = new AmmoPoint(RoomColor.YELLOW, 1, UUID.randomUUID());
         assertNull(ammoPoint.showCard());
-        Card card = new AmmoCard(1,1,1, true);
+        Card card = new AmmoCard(1, 1, 1, true);
         ammoPoint.addCard(card);
         assertEquals(card, ammoPoint.showCard());
     }
+
     @Test
-    public void testAddCardWithError(){
+    public void testAddCardWithError() {
         AmmoPoint ammoPoint = new AmmoPoint(RoomColor.YELLOW, 1, UUID.randomUUID());
         Card card1 = new WeaponCard();
-        Card card2 = new AmmoCard(1,1,1,false);
-        Card card3 = new AmmoCard(2,2,2,true);
-        try{
+        Card card2 = new AmmoCard(1, 1, 1, false);
+        Card card3 = new AmmoCard(2, 2, 2, true);
+        try {
             ammoPoint.addCard(card1);
             assert false;
-        }catch (ClassCastException e){
+        } catch (ClassCastException e) {
             assert true;
         }
-        try{
+        try {
             ammoPoint.addCard(null);
             assert false;
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             assert true;
         }
-        try{
+        try {
             ammoPoint.addCard(card2);
             ammoPoint.addCard(card3);
             assert false;
-        }catch (CardAlreadyExistsException e){assert true;}
+        } catch (CardAlreadyExistsException e) {
+            assert true;
+        }
     }
+
     @Test
-    public void testDrawCard(){
+    public void testDrawCard() {
         AmmoPoint ammoPoint = new AmmoPoint(RoomColor.YELLOW, 1, UUID.randomUUID());
-        Card card = new AmmoCard(1,1,1, true);
+        Card card = new AmmoCard(1, 1, 1, true);
         ammoPoint.addCard(card);
         assertEquals(card, ammoPoint.drawCard());
-        try{
+        try {
             ammoPoint.drawCard();
             assert false;
-        }catch(NothingToGrabException e){assert true;}
+        } catch (NothingToGrabException e) {
+            assert true;
+        }
     }
 }

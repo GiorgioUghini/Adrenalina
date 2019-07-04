@@ -12,7 +12,7 @@ public class TagElementRequest implements Request {
     private String token;
     public Taggable taggable;
 
-    public TagElementRequest(Taggable taggable){
+    public TagElementRequest(Taggable taggable) {
         this.taggable = taggable;
     }
 
@@ -23,7 +23,7 @@ public class TagElementRequest implements Request {
 
     @Override
     public void setToken(String token) {
-    this.token = token;
+        this.token = token;
     }
 
     @Override

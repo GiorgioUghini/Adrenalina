@@ -6,12 +6,12 @@ import static org.junit.Assert.*;
 
 public class MapGeneratorTest {
     @Test
-    public void generateMap0(){
+    public void generateMap0() {
         GameMap map1 = MapGenerator.generate(0);
         assertEquals(10, map1.getAllSquares().size());
         Square tmp = map1.getSquareById(0);
         assertTrue(tmp.getLink(CardinalDirection.BOTTOM).isDoor());
-        for(int i=0;i<2;i++){
+        for (int i = 0; i < 2; i++) {
             assertEquals(RoomColor.BLUE, tmp.getColor());
             tmp = tmp.getNextSquare(CardinalDirection.RIGHT);
         }
@@ -34,8 +34,9 @@ public class MapGeneratorTest {
         assertEquals(RoomColor.WHITE, tmp.getColor());
         assertTrue(tmp.getLink(CardinalDirection.TOP).isDoor());
     }
+
     @Test
-    public void map1(){
+    public void map1() {
         GameMap map1 = MapGenerator.generate(1);
 
         Square s = map1.getSquareById(0);

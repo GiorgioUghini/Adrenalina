@@ -7,7 +7,7 @@ public class ErrorResponse implements Response {
 
     public Exception exception;
 
-    public ErrorResponse(Exception exception){
+    public ErrorResponse(Exception exception) {
         this.exception = exception;
     }
 

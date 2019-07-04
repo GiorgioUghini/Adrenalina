@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
 
 public class CircularArrayListTest {
     @Test
-    public void testCreation(){
+    public void testCreation() {
         List<Object> list = new ArrayList<>();
         Object a = new Object();
         list.add(a);
@@ -24,13 +24,13 @@ public class CircularArrayListTest {
     }
 
     @Test
-    public void testGet(){
+    public void testGet() {
         CircularArrayList<Player> circularArrayList = new CircularArrayList<>();
 
-        try{
+        try {
             circularArrayList.get(1);
             assert false;
-        }catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             assert true;
         }
 

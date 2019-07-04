@@ -10,22 +10,19 @@ public class StartServer {
         int socketPort = Constants.PORT;
         String hostname = Constants.HOSTNAME;
         int maxClients = 5;
-        for (String s: args) {
+        for (String s : args) {
             s = s.replace(Constants.ARG_PREFIX, "").toLowerCase();
-            if(s.startsWith("max-clients")){
+            if (s.startsWith("max-clients")) {
                 maxClients = Integer.parseInt(s.replace("max-clients=", ""));
-            }else if(s.equals("debug")){
+            } else if (s.equals("debug")) {
                 server.setDebug(true);
-            }else if(s.equals("autoreload")){
+            } else if (s.equals("autoreload")) {
                 server.setAutoReload(true);
-            }
-            else if(s.startsWith("hostname")){
+            } else if (s.startsWith("hostname")) {
                 hostname = s.replace("hostname=", "");
-            }
-            else if(s.startsWith("socketport")){
+            } else if (s.startsWith("socketport")) {
                 socketPort = Integer.parseInt(s.replace("socketport=", ""));
-            }
-            else if(s.startsWith("registryport")){
+            } else if (s.startsWith("registryport")) {
                 registryPort = Integer.parseInt(s.replace("registryport=", ""));
             }
         }

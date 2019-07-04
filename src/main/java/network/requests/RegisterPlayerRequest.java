@@ -23,7 +23,7 @@ public class RegisterPlayerRequest implements Request {
         this.token = token;
     }
 
-    public RegisterPlayerRequest(String username, String password){
+    public RegisterPlayerRequest(String username, String password) {
         this.token = Client.getInstance().getConnection().getToken();
         this.username = username;
         this.password = password;

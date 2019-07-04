@@ -4,9 +4,9 @@ import java.util.*;
 
 public class TurnEngine {
 
-    public Map<ActionType,  List<TurnEvent>> getValidActions(TurnType turnType, ActionGroup actionGroup){
-        Map<ActionType,  List<TurnEvent>> map = new HashMap<>();
-        switch (turnType){
+    public Map<ActionType, List<TurnEvent>> getValidActions(TurnType turnType, ActionGroup actionGroup) {
+        Map<ActionType, List<TurnEvent>> map = new HashMap<>();
+        switch (turnType) {
             case START_GAME:
                 map.put(ActionType.START, new LinkedList<>(Arrays.asList(TurnEvent.DRAW, TurnEvent.DRAW, TurnEvent.SPAWN)));
                 break;
@@ -14,7 +14,7 @@ public class TurnEngine {
                 map.put(ActionType.START, new LinkedList<>(Arrays.asList(TurnEvent.DRAW, TurnEvent.SPAWN)));
                 break;
             case IN_GAME:
-                switch (actionGroup){
+                switch (actionGroup) {
                     case NORMAL:
                         map.put(ActionType.RUN_NORMAL, new LinkedList<>(Collections.singletonList(TurnEvent.RUN_3)));
                         map.put(ActionType.GRAB_NORMAL, new LinkedList<>(Arrays.asList(TurnEvent.RUN_1, TurnEvent.GRAB)));
@@ -39,10 +39,10 @@ public class TurnEngine {
                         map.put(ActionType.SHOOT_FRENZY_2, new LinkedList<>(Arrays.asList(TurnEvent.RUN_2, TurnEvent.RELOAD, TurnEvent.SHOOT)));
                         map.put(ActionType.GRAB_FRENZY_2, new LinkedList<>(Arrays.asList(TurnEvent.RUN_3, TurnEvent.GRAB)));
                         break;
-                        default:
+                    default:
                 }
                 break;
         }
-        return  map;
+        return map;
     }
 }

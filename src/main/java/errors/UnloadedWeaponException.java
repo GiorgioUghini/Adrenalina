@@ -1,7 +1,7 @@
 package errors;
 
 public class UnloadedWeaponException extends RuntimeException {
-    public UnloadedWeaponException(){
+    public UnloadedWeaponException() {
         super("Weapon is not loaded");
     }
 }

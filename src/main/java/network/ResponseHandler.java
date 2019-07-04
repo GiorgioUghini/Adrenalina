@@ -11,11 +11,12 @@ import models.turn.ActionType;
 import models.turn.TurnType;
 import network.responses.*;
 import network.updates.*;
-import utils.Console;
 import views.GameView;
 import views.MenuView;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class ResponseHandler implements ResponseHandlerInterface {
 
@@ -66,10 +67,10 @@ public class ResponseHandler implements ResponseHandlerInterface {
             Client.getInstance().getCurrentView().printError(error);
         } catch (WeaponCardException ex) {
             Client.getInstance().getConnection().finishCard();
-        }catch(NotEnoughAmmoException e) {
+        } catch (NotEnoughAmmoException e) {
             Client.getInstance().getCurrentView().showMessage("You need more ammos to do this");
             Client.getInstance().getConnection().validActions();
-        } catch(NothingToGrabException e){
+        } catch (NothingToGrabException e) {
             Client.getInstance().getCurrentView().showMessage("Nothing to grab here. Maybe you do not have enough ammos?");
             Client.getInstance().getConnection().validActions();
         } catch (Exception ex) {
@@ -125,7 +126,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
         Client client = Client.getInstance();
         client.setMyTurn(response.name.equals(client.getPlayerUsername()));
         try {
-            ((GameView)client.getCurrentView()).startTurn(response.name);
+            ((GameView) client.getCurrentView()).startTurn(response.name);
         } catch (Exception e) {
             Client.getInstance();
         }
@@ -263,13 +264,13 @@ public class ResponseHandler implements ResponseHandlerInterface {
         Map<Player, Integer> points = response.points;
         List<Player> winners = new ArrayList<>();
         int maxPoints = 0;
-        for(Player p : points.keySet()){
+        for (Player p : points.keySet()) {
             int x = points.get(p);
-            if(x>maxPoints) {
+            if (x > maxPoints) {
                 winners.clear();
                 winners.add(p);
                 maxPoints = x;
-            }else if(x==maxPoints){
+            } else if (x == maxPoints) {
                 winners.add(p);
             }
         }

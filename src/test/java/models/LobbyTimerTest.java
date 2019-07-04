@@ -9,7 +9,7 @@ import java.util.concurrent.Callable;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class LobbyTimerTest {
 
@@ -17,8 +17,8 @@ public class LobbyTimerTest {
     public void lobbyTimerAbortTest() {
         Lobby lobby = new Lobby(new Config(7000, 60000));
         lobby.registerPlayer("Cosimo", "", "a");
-        Player player1 = lobby.registerPlayer("Giorgio","", "b");
-        lobby.registerPlayer("Vila","", "c");
+        Player player1 = lobby.registerPlayer("Giorgio", "", "b");
+        lobby.registerPlayer("Vila", "", "c");
         List activeMatches = lobby.getActiveMatches();
         assertEquals(0, activeMatches.size());
 

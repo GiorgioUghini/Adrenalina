@@ -18,7 +18,7 @@ public class SocketWrapper implements ConnectionWrapper {
     private String token;
     private BlockingQueue<Response> updates;
 
-    public SocketWrapper(Socket socket){
+    public SocketWrapper(Socket socket) {
         this.socket = socket;
         try {
             this.in = new ObjectInputStream(socket.getInputStream());
@@ -35,7 +35,7 @@ public class SocketWrapper implements ConnectionWrapper {
         return in;
     }
 
-    public Socket getSocket(){
+    public Socket getSocket() {
         return socket;
     }
 
@@ -45,12 +45,12 @@ public class SocketWrapper implements ConnectionWrapper {
         out.reset();
     }
 
-    public void setUpdatePusher(UpdatePusher updatePusher){
+    public void setUpdatePusher(UpdatePusher updatePusher) {
         this.updatePusher = updatePusher;
     }
 
     public void stop() {
-        if(updatePusher != null)
+        if (updatePusher != null)
             updatePusher.stop();
         try {
             out.close();

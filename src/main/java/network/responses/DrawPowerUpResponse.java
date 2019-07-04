@@ -8,7 +8,7 @@ public class DrawPowerUpResponse implements Response {
 
     private PowerUpCard card;
 
-    public DrawPowerUpResponse(PowerUpCard card){
+    public DrawPowerUpResponse(PowerUpCard card) {
         this.card = card;
     }
 

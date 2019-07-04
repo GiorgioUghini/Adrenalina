@@ -20,11 +20,14 @@ public abstract class EffectCard extends Card {
     protected Map<String, RoomColor> selectedRooms;
     protected GameMap gameMap;
     protected Player me;
+
     public EffectCard() {
         init();
     }
 
-    /** Initializes the card, making it ready to use again, but keeps it unloaded */
+    /**
+     * Initializes the card, making it ready to use again, but keeps it unloaded
+     */
     protected void init() {
         activeAction = null;
         selectedPlayers = new HashMap<>();
@@ -33,10 +36,15 @@ public abstract class EffectCard extends Card {
         activated = false;
     }
 
-    /** Activates the card and make it usable. a Player should already have been set at this point */
+    /**
+     * Activates the card and make it usable. a Player should already have been set at this point
+     */
     public abstract void activate();
-    /** Set the player who owns the card */
-    public void setPlayer(Player player){
+
+    /**
+     * Set the player who owns the card
+     */
+    public void setPlayer(Player player) {
         this.me = player;
     }
 
@@ -61,11 +69,11 @@ public abstract class EffectCard extends Card {
      */
     public void select(Taggable taggable) {
         checkActiveAction(ActionType.SELECT);
-        if(taggable == null) return;
+        if (taggable == null) return;
         switch (activeAction.select.type) {
             case PLAYER:
                 Player taggedPlayer = (Player) taggable;
-                if(me.getMatch()!=null){
+                if (me.getMatch() != null) {
                     taggedPlayer = me.getMatch().getPlayerByUsername(taggedPlayer.getName());
                 }
                 selectedPlayers.put(activeAction.select.id, taggedPlayer);

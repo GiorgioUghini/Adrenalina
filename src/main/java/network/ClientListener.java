@@ -1,11 +1,6 @@
 package network;
 
-import models.Match;
-import models.card.PowerUpCard;
-import models.map.GameMap;
-import models.map.SpawnPoint;
 import models.player.Player;
-import network.updates.MapUpdate;
 import network.updates.PlayerDisconnectUpdate;
 import utils.Console;
 import utils.DisconnectionHandler;
@@ -13,7 +8,7 @@ import utils.DisconnectionHandler;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-public class ClientListener implements Runnable{
+public class ClientListener implements Runnable {
 
     private ObjectInputStream in;
     private RequestHandlerInterface requestHandler;
@@ -31,7 +26,7 @@ public class ClientListener implements Runnable{
     public void run() {
         String token = Server.getInstance().getConnection().getToken(socketWrapper);
         try {
-            while (!stop){
+            while (!stop) {
                 Request request = (Request) in.readObject();
                 request.setToken(token);
                 Response response = request.handle(requestHandler);
@@ -40,14 +35,13 @@ public class ClientListener implements Runnable{
         } catch (Exception socketEx) {
             Console.println("Socket " + token + " disconnected!");
             Player player = Server.getInstance().getLobby().getPlayer(token);
-            if(player != null){
+            if (player != null) {
                 socketWrapper.stop();
                 Server.getInstance().getConnection().addUpdateUnregisteredPlayers(new PlayerDisconnectUpdate(player.getName()));
-                if(player.isWaiting()){
+                if (player.isWaiting()) {
                     Server.getInstance().getLobby().addUpdateWaitingPlayers(new PlayerDisconnectUpdate(player.getName()));
                     Server.getInstance().getLobby().disconnectPlayer(player);
-                }
-                else{
+                } else {
                     DisconnectionHandler.handle(player);
                 }
             }
@@ -55,7 +49,7 @@ public class ClientListener implements Runnable{
         }
     }
 
-    public void stop(){
+    public void stop() {
         stop = true;
     }
 }

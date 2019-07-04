@@ -227,14 +227,14 @@ public class GameViewGUI implements Initializable, GameView {
         actualPointsList.add(actualPoints4);
 
 
-        for (int i=0; i<5; i++) {
+        for (int i = 0; i < 5; i++) {
             String imageName = String.format("tabs/tab%d.png", i);
             Image image = new Image(imageName);
             ImageView imageView = new ImageView(image);
             imageView.setFitWidth(949);
             imageView.setFitHeight(234);
             AnchorPane anchorPane = anchorPanePlayers.get(i);
-            Platform.runLater( () -> anchorPane.getChildren().add(imageView));
+            Platform.runLater(() -> anchorPane.getChildren().add(imageView));
         }
 
         canDoActionMap.put(ViewAction.USEPOWERUP, false);
@@ -248,20 +248,20 @@ public class GameViewGUI implements Initializable, GameView {
 
         this.turnEventButtons = new ArrayList<>(Arrays.asList(btnDrawPowerUp, btnGrab, btnSpawn, btnRun, btnShoot, btnReload, btnUsePowerUp));
 
-        ArrayList<GridPane> x0 = new ArrayList<>(Arrays.asList(grid00,grid01,grid02));
-        ArrayList<GridPane> x1 = new ArrayList<>(Arrays.asList(grid10,grid11,grid12));
-        ArrayList<GridPane> x2 = new ArrayList<>(Arrays.asList(grid20,grid21,grid22));
-        ArrayList<GridPane> x3 = new ArrayList<>(Arrays.asList(grid30,grid31,grid32));
-        paneList = new ArrayList<>(Arrays.asList(x0,x1,x2,x3));
+        ArrayList<GridPane> x0 = new ArrayList<>(Arrays.asList(grid00, grid01, grid02));
+        ArrayList<GridPane> x1 = new ArrayList<>(Arrays.asList(grid10, grid11, grid12));
+        ArrayList<GridPane> x2 = new ArrayList<>(Arrays.asList(grid20, grid21, grid22));
+        ArrayList<GridPane> x3 = new ArrayList<>(Arrays.asList(grid30, grid31, grid32));
+        paneList = new ArrayList<>(Arrays.asList(x0, x1, x2, x3));
 
-        ArrayList<ImageView> redSPImages = new ArrayList<>(Arrays.asList(weaponSPRed1,weaponSPRed2,weaponSPRed3));
-        ArrayList<ImageView> blueSPImages = new ArrayList<>(Arrays.asList(weaponSPBlue1,weaponSPBlue2,weaponSPBlue3));
-        ArrayList<ImageView> yellowSPImages = new ArrayList<>(Arrays.asList(weaponSPYellow1,weaponSPYellow2,weaponSPYellow3));
+        ArrayList<ImageView> redSPImages = new ArrayList<>(Arrays.asList(weaponSPRed1, weaponSPRed2, weaponSPRed3));
+        ArrayList<ImageView> blueSPImages = new ArrayList<>(Arrays.asList(weaponSPBlue1, weaponSPBlue2, weaponSPBlue3));
+        ArrayList<ImageView> yellowSPImages = new ArrayList<>(Arrays.asList(weaponSPYellow1, weaponSPYellow2, weaponSPYellow3));
         weaponOnSpawnPointMap.put(RoomColor.RED, redSPImages);
         weaponOnSpawnPointMap.put(RoomColor.BLUE, blueSPImages);
         weaponOnSpawnPointMap.put(RoomColor.YELLOW, yellowSPImages);
 
-        if(Client.getInstance().isReconnecting()){
+        if (Client.getInstance().isReconnecting()) {
             Client.getInstance().setReconnecting(false);
             Platform.runLater(this::reconnect);
         }
@@ -283,20 +283,20 @@ public class GameViewGUI implements Initializable, GameView {
     private void addWeaponOnMapSpawnPoint(WeaponCard card, RoomColor color) {
         int i = 0;
         Image img = new Image(ResourceController.getResource("weaponcards/" + card.image));
-        for(i = 0; i < weaponOnSpawnPointMap.get(color).size() && weaponOnSpawnPointMap.get(color).get(i).getImage() != null; i++){
+        for (i = 0; i < weaponOnSpawnPointMap.get(color).size() && weaponOnSpawnPointMap.get(color).get(i).getImage() != null; i++) {
 
         }
-        if (i>2) return;
+        if (i > 2) return;
         final int j = i;
-        Platform.runLater( () -> {
+        Platform.runLater(() -> {
             weaponOnSpawnPointMap.get(color).get(j).setImage(img);
             fxSemaphore.release();
         });
     }
 
     private void removeWeaponOnMapSpawnPoint(RoomColor color) {
-        Platform.runLater( () -> {
-            for (int i=0; i<3; i++) {
+        Platform.runLater(() -> {
+            for (int i = 0; i < 3; i++) {
                 weaponOnSpawnPointMap.get(color).get(i).setImage(null);
             }
             fxSemaphore.release();
@@ -305,7 +305,7 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     public void addCardToHand(EffectCard card, List<ImageView> where) {
-        Platform.runLater( () -> {
+        Platform.runLater(() -> {
             boolean isWeapon = card.getClass().equals(WeaponCard.class);
             int i = 0;
             Image img = new Image(ResourceController.getResource((isWeapon ? "weaponcards/" + card.image : "powerupcards/" + card.image)));
@@ -317,11 +317,11 @@ public class GameViewGUI implements Initializable, GameView {
                 return;
             }
             where.get(i).setImage(img);
-            if(isWeapon){
+            if (isWeapon) {
                 WeaponCard weaponCard = (WeaponCard) card;
-                if(!weaponCard.isLoaded()){
+                if (!weaponCard.isLoaded()) {
                     where.get(i).setStyle("-fx-opacity: 0.5;");
-                }else{
+                } else {
                     where.get(i).setStyle("-fx-opacity: 1;");
                 }
             }
@@ -330,8 +330,8 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     public void removeCardsToHand(List<ImageView> where) {
-        Platform.runLater( () -> {
-            for(ImageView imageView : where){
+        Platform.runLater(() -> {
+            for (ImageView imageView : where) {
                 imageView.setImage(null);
             }
             fxSemaphore.release();
@@ -348,17 +348,20 @@ public class GameViewGUI implements Initializable, GameView {
         setBtnEnabled(btnSpawn, false);
         canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, true);
     }
+
     public void runBtnClicked() {
         highlighAllSquaresAtMaxDistance(this.maxRunDistance);
         setBtnEnabled(btnRun, false);
         canDoActionMap.put(ViewAction.RUN, true);
         showMessage("Please click on the map where you want to go.");
     }
+
     public void run(Square square) {
         TurnEvent te = Client.getInstance().getActions().get(Client.getInstance().getCurrentActionType()).get(0);
         Client.getInstance().getConnection().run(te, square);
         gameController.getValidActions();
     }
+
     public void grab() {
         disableTurnEventButtons();
         GameMap map = Client.getInstance().getMap();
@@ -367,10 +370,10 @@ public class GameViewGUI implements Initializable, GameView {
         if (myPosition.isSpawnPoint()) {
             //Spawn Point
             SpawnPoint spawnPoint = (SpawnPoint) myPosition;
-            if(spawnPoint.showCards().isEmpty()){
+            if (spawnPoint.showCards().isEmpty()) {
                 showMessage("Nothing to grab here");
                 gameController.grab(null, null, null);
-            }else{
+            } else {
                 showMessage("Please select which weapon you want to draw.");
                 canDoActionMap.put(ViewAction.CHOOSESPAWNPOINTWEAPON, true);
             }
@@ -386,49 +389,50 @@ public class GameViewGUI implements Initializable, GameView {
         showMessage("Select which weapon you'd like to use.");
         canDoActionMap.put(ViewAction.SHOOT, true);
     }
+
     public void reload() {
         setBtnEnabled(btnReload, false);
         Platform.runLater(() -> {
             Map<WeaponCard, PowerUpCard> reloadingWeapons = new HashMap<>();
             Player me = Client.getInstance().getPlayer();
             List<WeaponCard> reloadableWeapons;
-            while( !(reloadableWeapons = getReloadableWeapons()).isEmpty() ){
+            while (!(reloadableWeapons = getReloadableWeapons()).isEmpty()) {
                 WeaponCard toReload = showReloadAlert(reloadableWeapons);
-                if(toReload == null) break;
+                if (toReload == null) break;
                 PowerUpCard powerUpToPay = null;
-                if(!me.getPowerUpList().isEmpty()){
+                if (!me.getPowerUpList().isEmpty()) {
                     powerUpToPay = choosePowerUpDialog();
                 }
-                if(!me.canReloadWeapon(toReload, powerUpToPay)){
-                    if(powerUpToPay==null){
+                if (!me.canReloadWeapon(toReload, powerUpToPay)) {
+                    if (powerUpToPay == null) {
                         showMessage("You need to use a powerup to reload this weapon");
-                    }else{
+                    } else {
                         showMessage("You cannot reload " + toReload.getName() + " with powerup " + powerUpToPay.getFullName());
                     }
-                }else{
+                } else {
                     reloadingWeapons.put(toReload, powerUpToPay);
                     me.reloadWeapon(toReload, powerUpToPay);
                 }
             }
             Client.getInstance().getConnection().reload(reloadingWeapons);
-            for(WeaponCard weaponCard : reloadingWeapons.keySet()){
+            for (WeaponCard weaponCard : reloadingWeapons.keySet()) {
                 showMessage("Successfully reloaded " + weaponCard.getName());
             }
         });
     }
 
-    private List<WeaponCard> getReloadableWeapons(){
+    private List<WeaponCard> getReloadableWeapons() {
         Player me = Client.getInstance().getPlayer();
         List<WeaponCard> toReload = new ArrayList<>();
-        for(WeaponCard weaponCard : me.getWeaponList()){
-            if(!weaponCard.isLoaded() && me.canReloadWeapon(weaponCard)){
+        for (WeaponCard weaponCard : me.getWeaponList()) {
+            if (!weaponCard.isLoaded() && me.canReloadWeapon(weaponCard)) {
                 toReload.add(weaponCard);
             }
         }
         return toReload;
     }
 
-    private WeaponCard showReloadAlert(List<WeaponCard> reloadableWeapons){
+    private WeaponCard showReloadAlert(List<WeaponCard> reloadableWeapons) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Reload");
         alert.setHeaderText("Choose a weapon to reload");
@@ -443,7 +447,7 @@ public class GameViewGUI implements Initializable, GameView {
         alert.getButtonTypes().setAll(btlist);
         Optional<ButtonType> result = alert.showAndWait();
 
-        if(result.isPresent()){
+        if (result.isPresent()) {
             int index = btlist.indexOf(result.get());
             return reloadableWeapons.get(index);
         }
@@ -455,10 +459,10 @@ public class GameViewGUI implements Initializable, GameView {
         setBtnEnabled(btnUsePowerUp, false);
         Player me = Client.getInstance().getPlayer();
 
-        if(!me.getPowerUpList().isEmpty()){
+        if (!me.getPowerUpList().isEmpty()) {
             showMessage("Select which power up you'd like to use.");
             canDoActionMap.put(ViewAction.USEPOWERUP, true);
-        }else{
+        } else {
             showMessage("You do not have any powerUp");
         }
     }
@@ -485,13 +489,13 @@ public class GameViewGUI implements Initializable, GameView {
     @Override
     public void showMessage(String message) {
         if (message.equals("\n")) return;
-        Platform.runLater( () -> {
+        Platform.runLater(() -> {
             gameStatusListView.getItems().add(message);
         });
     }
 
     @Override
-    public void updateActions(Map<ActionType, List<TurnEvent>> actions){
+    public void updateActions(Map<ActionType, List<TurnEvent>> actions) {
         Client client = Client.getInstance();
         ActionType currentActionType = client.getCurrentActionType();
 
@@ -504,34 +508,35 @@ public class GameViewGUI implements Initializable, GameView {
         //this must be called before setTurnEventButtons or it breaks the frenzy reload
         setBtnEnabled(btnReload, !firstTurn && turnIsEnding);
 
-        if(currentActionType==null){
+        if (currentActionType == null) {
             setActionGroupButtons(actions.keySet());
-            if(client.isMyTurn() && !firstTurn){
+            if (client.isMyTurn() && !firstTurn) {
                 setBtnEnabled(btnUsePowerUp, true);
             }
-        }else {
+        } else {
             setTurnEventButtons(actions.get(currentActionType));
         }
 
-        if(actions.isEmpty()) firstTurn = false;
+        if (actions.isEmpty()) firstTurn = false;
     }
 
-    private void setActionGroupButtons(Set<ActionType> groupActions){
-        if(groupActions.size() > 1 && Client.getInstance().getCurrentActionType()==null){
+    private void setActionGroupButtons(Set<ActionType> groupActions) {
+        if (groupActions.size() > 1 && Client.getInstance().getCurrentActionType() == null) {
             int i = 0;
-            for(ActionType groupAction : groupActions){
+            for (ActionType groupAction : groupActions) {
                 setTextAndEnableBtnActionGroup(groupAction, ++i);
                 showMessage("Action group: " + groupAction.name());
             }
         }
     }
 
-    private void disableActionGroupButtons(){
+    private void disableActionGroupButtons() {
         setBtnEnabled(btnActionGroup1, false);
         setBtnEnabled(btnActionGroup2, false);
         setBtnEnabled(btnActionGroup3, false);
     }
-    private void setTurnEventButtons(List<TurnEvent> turnEvents){
+
+    private void setTurnEventButtons(List<TurnEvent> turnEvents) {
         for (TurnEvent turnEvent : turnEvents) {
             Button buttonToShow = null;
             switch (turnEvent) {
@@ -552,7 +557,7 @@ public class GameViewGUI implements Initializable, GameView {
                     buttonToShow = btnReload;
                     break;
                 case SPAWN:
-                    if(turnEvents.size()==1){
+                    if (turnEvents.size() == 1) {
                         buttonToShow = btnSpawn;
                     }
                     break;
@@ -565,25 +570,27 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
-    private void highlighAllSquaresAtMaxDistance(int distance){
+    private void highlighAllSquaresAtMaxDistance(int distance) {
         Player me = Client.getInstance().getPlayer();
         GameMap gameMap = Client.getInstance().getMap();
         Square mySquare = gameMap.getPlayerPosition(me);
         Set<Square> squares = gameMap.getAllSquaresAtDistanceLessThanOrEquals(mySquare, distance);
-        for(Square square : squares){
+        for (Square square : squares) {
             highlightSquare(square);
         }
     }
 
-    private void disableTurnEventButtons(){
-        for(Button button : turnEventButtons){
+    private void disableTurnEventButtons() {
+        for (Button button : turnEventButtons) {
             setBtnEnabled(button, false);
         }
     }
 
-    private void setBtnEnabled(Button button, boolean isVisible){
-        if(button!=null){
-            Platform.runLater( () -> { button.setDisable(!isVisible); });
+    private void setBtnEnabled(Button button, boolean isVisible) {
+        if (button != null) {
+            Platform.runLater(() -> {
+                button.setDisable(!isVisible);
+            });
         }
     }
 
@@ -611,19 +618,24 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     private int getIndex(String color) {
-        switch (color){
-            case "GREEN": return 0;
-            case "BLUE": return 1;
-            case "PURPLE": return 2;
-            case "WHITE": return 3;
-            case "YELLOW": return 4;
+        switch (color) {
+            case "GREEN":
+                return 0;
+            case "BLUE":
+                return 1;
+            case "PURPLE":
+                return 2;
+            case "WHITE":
+                return 3;
+            case "YELLOW":
+                return 4;
         }
         return -1;
     }
 
 
     private void drawPlayerToken(GridPane pane, Player p) {
-        Circle circle = new Circle(0.0d,0.0d,17.0d);
+        Circle circle = new Circle(0.0d, 0.0d, 17.0d);
         int i = Client.getInstance().getPlayers().indexOf(p);
         circle.setFill(getPlayerColor(p.getStringColor()));
         final String t = p.getStringColor();
@@ -640,7 +652,7 @@ public class GameViewGUI implements Initializable, GameView {
                 tab.setText("## YOU: Player " + t);
             });
         }
-        circle.setOnMouseClicked( e -> {
+        circle.setOnMouseClicked(e -> {
             playerClicked(p);
             e.consume();
         });
@@ -655,30 +667,30 @@ public class GameViewGUI implements Initializable, GameView {
 
     private void highlightCircle(Circle c) {
         clickableObjects.add(c);
-        Platform.runLater( () -> c.setStrokeWidth(7d));
+        Platform.runLater(() -> c.setStrokeWidth(7d));
     }
 
     private void undoHighlightCircle(Circle c) {
-        Platform.runLater( () -> c.setStrokeWidth(0d));
+        Platform.runLater(() -> c.setStrokeWidth(0d));
     }
 
     private void highlightGridPane(GridPane gp) {
         clickableObjects.add(gp);
-        Platform.runLater( () -> gp.setStyle("-fx-background-color: green; -fx-opacity: 0.5;"));
+        Platform.runLater(() -> gp.setStyle("-fx-background-color: green; -fx-opacity: 0.5;"));
     }
 
     private void undoHighlightGridPane(GridPane gp) {
-        Platform.runLater( () -> gp.setStyle(""));
+        Platform.runLater(() -> gp.setStyle(""));
     }
 
-    private void undoHighlighAllGridPanes(){
+    private void undoHighlighAllGridPanes() {
         for (Square sq : Client.getInstance().getMap().getAllSquares()) {
             Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(sq);
             undoHighlightGridPane(paneList.get(coord.getX()).get(coord.getY()));
         }
     }
 
-    private void highlightSquare(Square square){
+    private void highlightSquare(Square square) {
         Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(square);
         GridPane clickable = paneList.get(coord.getX()).get(coord.getY());
         highlightGridPane(clickable);
@@ -687,11 +699,11 @@ public class GameViewGUI implements Initializable, GameView {
     private void playerClicked(Player p) {
         Circle clicked = circlePlayerMap.getSingleKey(p);
         if (canDoActionMap.get(ViewAction.SELECTPLAYER)) {
-            if(!clickableObjects.contains(clicked)){
+            if (!clickableObjects.contains(clicked)) {
                 showMessage("You cannot click this player");
                 return;
             }
-            for(Circle circle : circlePlayerMap.getKeys()){
+            for (Circle circle : circlePlayerMap.getKeys()) {
                 undoHighlightCircle(circle);
             }
             canDoActionMap.put(ViewAction.SELECTPLAYER, false);
@@ -706,8 +718,8 @@ public class GameViewGUI implements Initializable, GameView {
     public synchronized void updateMapView(GameMap map) {
         Client client = Client.getInstance();
         //delete everything on map
-        for(List<GridPane> paneRow : paneList){
-            for(GridPane gridPane : paneRow){
+        for (List<GridPane> paneRow : paneList) {
+            for (GridPane gridPane : paneRow) {
                 acquireLock();
                 Platform.runLater(() -> {
                     gridPane.getChildren().clear();
@@ -725,8 +737,7 @@ public class GameViewGUI implements Initializable, GameView {
                 Coordinate c = map.getPlayerCoordinates(p);
                 drawPlayerToken(paneList.get(c.getX()).get(c.getY()), p);   //INSIDE IT RELEASE LOCKS
                 client.getPlayerCoordinateMap().put(p, c);
-            }
-            catch (PlayerNotOnMapException e) {
+            } catch (PlayerNotOnMapException e) {
                 fxSemaphore.release();
                 Logger.getAnonymousLogger().info("Player " + p.getName() + " is not on map");
                 client.getPlayerCoordinateMap().put(p, null);
@@ -738,8 +749,8 @@ public class GameViewGUI implements Initializable, GameView {
             removeWeaponOnMapSpawnPoint(sp.getColor());    //INSIDE IT RELEASE LOCKS
         }
         //UPDATE AMMO'S AND WEAPONS ON MAP
-        for (int x = 0; x<4; x++) {
-            for (int y=0; y<3; y++) {
+        for (int x = 0; x < 4; x++) {
+            for (int y = 0; y < 3; y++) {
                 Square square = map.getSquareByCoordinate(x, y);
                 if (square == null) continue;
                 if (square.isSpawnPoint()) {
@@ -752,7 +763,7 @@ public class GameViewGUI implements Initializable, GameView {
                 } else {
                     AmmoPoint ammoPoint = (AmmoPoint) square;
                     AmmoCard ammoCard = ammoPoint.showCard();
-                    if (ammoCard==null) continue;
+                    if (ammoCard == null) continue;
                     acquireLock();
                     String imageName = String.format("ammo/%d%d%d%s.png", ammoCard.getRed(), ammoCard.getBlue(), ammoCard.getYellow(), ammoCard.hasPowerup() ? "y" : "n");
                     Image image = new Image(imageName);
@@ -777,6 +788,7 @@ public class GameViewGUI implements Initializable, GameView {
             Thread.currentThread().interrupt();
         }
     }
+
     @Override
     public synchronized void updatePlayerView(Player newPlayer) {
         acquireLock();
@@ -809,30 +821,30 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     @Override
-    public void onMark(Player markedPlayer){
-        if(markedPlayer.hasMarks())
+    public void onMark(Player markedPlayer) {
+        if (markedPlayer.hasMarks())
             Platform.runLater(() -> showMessage(markedPlayer.getName() + " has been marked"));
         updateDamagedAndMarkedPlayer(markedPlayer);
     }
 
     @Override
-    public void onDamage(Player damagedPlayer){
+    public void onDamage(Player damagedPlayer) {
         showMessage(damagedPlayer.getName() + " has been damaged");
         updateDamagedAndMarkedPlayer(damagedPlayer);
 
         Player me = Client.getInstance().getPlayer();
-        if(damagedPlayer.equals(me)){
+        if (damagedPlayer.equals(me)) {
             List<PowerUpCard> playable = new ArrayList<>();
-            for(PowerUpCard powerUpCard : me.getPowerUpList()){
-                if(powerUpCard.when.equals("on_damage_received")){
+            for (PowerUpCard powerUpCard : me.getPowerUpList()) {
+                if (powerUpCard.when.equals("on_damage_received")) {
                     playable.add(powerUpCard);
                 }
             }
-            if(playable.isEmpty()) return;
-            if(me.getLastDamager()==null) return;
+            if (playable.isEmpty()) return;
+            if (me.getLastDamager() == null) return;
             Platform.runLater(() -> {
                 PowerUpCard powerUpCard = choosePowerUpDialog("You have been damaged by " + me.getLastDamager().getName(), "Would you like to mark him?", playable);
-                if(powerUpCard!=null){
+                if (powerUpCard != null) {
                     Client.getInstance().getConnection().playPowerUp(powerUpCard.name, null, null);
                 }
             });
@@ -843,7 +855,7 @@ public class GameViewGUI implements Initializable, GameView {
         List<Player> players = Client.getInstance().getPlayers();
         Player oldPlayer = players.get(players.indexOf(newPlayer));
         //REMOVE DAMAGE
-        if(oldPlayer != null) {
+        if (oldPlayer != null) {
             removeAllDamageOnPlayer(oldPlayer);
         }
         //ADD DAMAGE
@@ -853,7 +865,7 @@ public class GameViewGUI implements Initializable, GameView {
             i++;
         }
         //REMOVE MARKS
-        if(oldPlayer != null) {
+        if (oldPlayer != null) {
             removeAllMarksOnPlayer(oldPlayer);
         }
         //ADD MARKS
@@ -886,18 +898,18 @@ public class GameViewGUI implements Initializable, GameView {
             numberOfDeath += 1;
         }
         numberOfDeath += who.getDeathCount();
-        for (int i=0; i<numberOfDeath; i++) {
+        for (int i = 0; i < numberOfDeath; i++) {
             Ellipse ellipse = new Ellipse(222 + i * 51, 197, 20, 25);
-            ellipse.setFill(Color.rgb(0,0,0));
+            ellipse.setFill(Color.rgb(0, 0, 0));
             int index = getIndex(who.getStringColor());
             AnchorPane anchorPane = anchorPanePlayers.get(index);
-            Platform.runLater( () -> anchorPane.getChildren().add(ellipse));
+            Platform.runLater(() -> anchorPane.getChildren().add(ellipse));
         }
     }
 
     void removeAllSkullsOnPlayerPane(Player who) {
         AnchorPane anchorPane = anchorPanePlayers.get(getIndex(who.getStringColor()));
-        for (int i = 0; i<anchorPane.getChildren().size(); i++) {
+        for (int i = 0; i < anchorPane.getChildren().size(); i++) {
             Node n = anchorPane.getChildren().get(i);
             if (n.getClass().equals(Ellipse.class)) {
                 Platform.runLater(() -> anchorPane.getChildren().remove(n));
@@ -911,15 +923,15 @@ public class GameViewGUI implements Initializable, GameView {
             skulls += 1;
         }
         skulls += newPlayer.getSkullCount(Client.getInstance().getPlayers());
-        for (int position=0; position<skulls; position++) {
+        for (int position = 0; position < skulls; position++) {
             Rectangle c = new Rectangle((double) (42 + position * 97), 100d, 60d, 105d);
-            c.setFill(Color.rgb(0,0,0));
-            Platform.runLater( () -> skullPane.getChildren().add(c));
+            c.setFill(Color.rgb(0, 0, 0));
+            Platform.runLater(() -> skullPane.getChildren().add(c));
         }
     }
 
     void removeAllSkullOnMainPane() {
-        for (int i = 0; i<skullPane.getChildren().size(); i++) {
+        for (int i = 0; i < skullPane.getChildren().size(); i++) {
             Node n = skullPane.getChildren().get(i);
             if (n.getClass().equals(Circle.class)) {
                 Platform.runLater(() -> skullPane.getChildren().remove(n));
@@ -931,7 +943,7 @@ public class GameViewGUI implements Initializable, GameView {
         if (getPlayerColor(p.getStringColor()) != null) {
             int index = getIndex(p.getStringColor());
             AnchorPane anchorPane = anchorPanePlayers.get(index);
-            for (int i = 0; i<anchorPane.getChildren().size(); i++) {
+            for (int i = 0; i < anchorPane.getChildren().size(); i++) {
                 Node n = anchorPane.getChildren().get(i);
                 if (n.getClass().equals(Circle.class)) {
                     Platform.runLater(() -> anchorPane.getChildren().remove(n));
@@ -947,14 +959,14 @@ public class GameViewGUI implements Initializable, GameView {
         c.setFill(getPlayerColor(from.getStringColor()));
         int index = getIndex(to.getStringColor());
         AnchorPane anchorPane = anchorPanePlayers.get(index);
-        Platform.runLater( () -> anchorPane.getChildren().add(c));
+        Platform.runLater(() -> anchorPane.getChildren().add(c));
     }
 
     void removeAllMarksOnPlayer(Player p) {
         if (getPlayerColor(p.getStringColor()) != null) {
             int index = getIndex(p.getStringColor());
             AnchorPane anchorPane = anchorPanePlayers.get(index);
-            for (int i = 0; i<anchorPane.getChildren().size(); i++) {
+            for (int i = 0; i < anchorPane.getChildren().size(); i++) {
                 Node n = anchorPane.getChildren().get(i);
                 if (n.getClass().equals(Rectangle.class)) {
                     Platform.runLater(() -> anchorPane.getChildren().remove(n));
@@ -966,11 +978,11 @@ public class GameViewGUI implements Initializable, GameView {
     void drawMarkOnPlayer(Player to, Player from, int position) {
         //When drawing a circle, first arg is X, second is Y, third is radius. 138px is the height of where the circle must be placed
         //Then, for every new damage, the circle must be on same height but trasled on X.
-        Rectangle rectangle = new Rectangle((470d+ position * 42),14d,27d,27d); //X,Y,L,H
+        Rectangle rectangle = new Rectangle((470d + position * 42), 14d, 27d, 27d); //X,Y,L,H
         rectangle.setFill(getPlayerColor(from.getStringColor()));
         int index = getIndex(to.getStringColor());
         AnchorPane anchorPane = anchorPanePlayers.get(index);
-        Platform.runLater( () -> anchorPane.getChildren().add(rectangle));
+        Platform.runLater(() -> anchorPane.getChildren().add(rectangle));
     }
 
     @Override
@@ -985,34 +997,37 @@ public class GameViewGUI implements Initializable, GameView {
 
     public void powerUp1Clicked() {
         List<PowerUpCard> powerUpCards = Client.getInstance().getPlayer().getPowerUpList();
-        if(powerUpCards.isEmpty()) {
+        if (powerUpCards.isEmpty()) {
             showMessage("Cannot click here");
             return;
         }
         PowerUpCard clickedPowerUp = powerUpCards.get(0);
         powerUpClicked(clickedPowerUp);
     }
+
     public void powerUp2Clicked() {
         List<PowerUpCard> powerUpCards = Client.getInstance().getPlayer().getPowerUpList();
-        if(powerUpCards.size() < 2) {
+        if (powerUpCards.size() < 2) {
             showMessage("Cannot click here");
             return;
         }
         PowerUpCard clickedPowerUp = powerUpCards.get(1);
         powerUpClicked(clickedPowerUp);
     }
+
     public void powerUp3Clicked() {
         List<PowerUpCard> powerUpCards = Client.getInstance().getPlayer().getPowerUpList();
-        if(powerUpCards.size() < 3) {
+        if (powerUpCards.size() < 3) {
             showMessage("Cannot click here");
             return;
         }
         PowerUpCard clickedPowerUp = powerUpCards.get(2);
         powerUpClicked(clickedPowerUp);
     }
+
     public void powerUp4Clicked() {
         List<PowerUpCard> powerUpCards = Client.getInstance().getPlayer().getPowerUpList();
-        if(powerUpCards.size() < 4) {
+        if (powerUpCards.size() < 4) {
             showMessage("Cannot click here");
             return;
         }
@@ -1020,7 +1035,7 @@ public class GameViewGUI implements Initializable, GameView {
         powerUpClicked(clickedPowerUp);
     }
 
-    private void powerUpClicked(PowerUpCard powerUpCard){
+    private void powerUpClicked(PowerUpCard powerUpCard) {
         Player me = Client.getInstance().getPlayer();
         if (canDoActionMap.get(ViewAction.CLICKPOWERUPSPAWN)) {
             canDoActionMap.put(ViewAction.CLICKPOWERUPSPAWN, false);
@@ -1030,12 +1045,12 @@ public class GameViewGUI implements Initializable, GameView {
                 setBtnEnabled(btnUsePowerUp, true);
                 Ammo ammoToPay = null;
                 PowerUpCard powerUpCardToPay = null;
-                if(powerUpCard.hasPrice){
+                if (powerUpCard.hasPrice) {
                     ammoToPay = chooseAmmoDialog();
-                    if(ammoToPay == null || ammoToPay.isEmpty()){
+                    if (ammoToPay == null || ammoToPay.isEmpty()) {
                         List<PowerUpCard> payable = new ArrayList<>(me.getPowerUpList());
                         payable.remove(powerUpCard);
-                        if(!payable.isEmpty()){
+                        if (!payable.isEmpty()) {
                             powerUpCardToPay = choosePowerUpDialog(null, null, payable);
                         }
                     }
@@ -1047,8 +1062,8 @@ public class GameViewGUI implements Initializable, GameView {
         }
     }
 
-    private Ammo chooseAmmoDialog(){
-        if(Client.getInstance().getPlayer().getAmmo().isEmpty()) return null;
+    private Ammo chooseAmmoDialog() {
+        if (Client.getInstance().getPlayer().getAmmo().isEmpty()) return null;
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Pay this powerup");
         alert.setHeaderText("This powerup costs 1 ammo of your choice");
@@ -1059,26 +1074,29 @@ public class GameViewGUI implements Initializable, GameView {
         Player me = Client.getInstance().getPlayer();
         Ammo myAmmos = me.getAmmo();
 
-        if(myAmmos.yellow>0){
+        if (myAmmos.yellow > 0) {
             btlist.add(new ButtonType("Yellow"));
         }
-        if(myAmmos.red>0){
+        if (myAmmos.red > 0) {
             btlist.add(new ButtonType("Red"));
         }
-        if(myAmmos.blue>0){
+        if (myAmmos.blue > 0) {
             btlist.add(new ButtonType("Blue"));
         }
 
         alert.getButtonTypes().setAll(btlist);
         Optional<ButtonType> result = alert.showAndWait();
-        if(!result.isPresent() || result.get() == btlist.get(0)) return null;
+        if (!result.isPresent() || result.get() == btlist.get(0)) return null;
 
         String stringResult = result.get().getText();
 
-        switch (stringResult){
-            case "Yellow": return new Ammo(0,0,1);
-            case "Blue": return new Ammo(0,1,0);
-            case "Red": return new Ammo(1,0,0);
+        switch (stringResult) {
+            case "Yellow":
+                return new Ammo(0, 0, 1);
+            case "Blue":
+                return new Ammo(0, 1, 0);
+            case "Red":
+                return new Ammo(1, 0, 0);
         }
         return null;
     }
@@ -1094,6 +1112,7 @@ public class GameViewGUI implements Initializable, GameView {
             showMessage("You clicked on " + we.getName());
         }
     }
+
     public void weaponClicked2() {
         if (Client.getInstance().getPlayer().getWeaponList().isEmpty()) {
             showMessage("You can't shoot.");
@@ -1105,6 +1124,7 @@ public class GameViewGUI implements Initializable, GameView {
             showMessage("You clicked on " + we.getName());
         }
     }
+
     public void weaponClicked3() {
         if (Client.getInstance().getPlayer().getWeaponList().isEmpty()) {
             showMessage("No, you can't shoot.");
@@ -1121,7 +1141,7 @@ public class GameViewGUI implements Initializable, GameView {
         //check that it was clickable
         Coordinate coord = Client.getInstance().getMap().getSquareCoordinates(s);
         GridPane gridPane = paneList.get(coord.getX()).get(coord.getY());
-        if(!clickableObjects.contains(gridPane)){
+        if (!clickableObjects.contains(gridPane)) {
             showMessage("You cannot click on this pane");
             return;
         }
@@ -1130,13 +1150,13 @@ public class GameViewGUI implements Initializable, GameView {
         if (canDoActionMap.get(ViewAction.RUN)) {
             canDoActionMap.put(ViewAction.RUN, false);
             run(s);
-        } else{
+        } else {
             Taggable tagged = s;
-            if(canDoActionMap.get(ViewAction.SELECTROOM)){
+            if (canDoActionMap.get(ViewAction.SELECTROOM)) {
                 RoomColor rc = s.getColor();
                 tagged = rc;
                 canDoActionMap.put(ViewAction.SELECTROOM, false);
-            }else{
+            } else {
                 canDoActionMap.put(ViewAction.SELECTSQUARE, false);
             }
             onSelectDone(tagged);
@@ -1211,7 +1231,7 @@ public class GameViewGUI implements Initializable, GameView {
         }
         Iterator<WeaponCard> it = spawnPoint.showCards().iterator();
         WeaponCard wc = null;
-        while (position!=0) {
+        while (position != 0) {
             wc = it.next();
             position--;
         }
@@ -1258,27 +1278,35 @@ public class GameViewGUI implements Initializable, GameView {
     public void blueWeaponClicked1() {
         weaponOnSpawnPointClicked(RoomColor.BLUE, 1);
     }
+
     public void blueWeaponClicked2() {
         weaponOnSpawnPointClicked(RoomColor.BLUE, 2);
     }
+
     public void blueWeaponClicked3() {
         weaponOnSpawnPointClicked(RoomColor.BLUE, 3);
     }
+
     public void redWeaponClicked1() {
         weaponOnSpawnPointClicked(RoomColor.RED, 1);
     }
+
     public void redWeaponClicked2() {
         weaponOnSpawnPointClicked(RoomColor.RED, 2);
     }
+
     public void redWeaponClicked3() {
         weaponOnSpawnPointClicked(RoomColor.RED, 3);
     }
+
     public void yellowWeaponClicked1() {
         weaponOnSpawnPointClicked(RoomColor.YELLOW, 1);
     }
+
     public void yellowWeaponClicked2() {
         weaponOnSpawnPointClicked(RoomColor.YELLOW, 2);
     }
+
     public void yellowWeaponClicked3() {
         weaponOnSpawnPointClicked(RoomColor.YELLOW, 3);
     }
@@ -1288,11 +1316,13 @@ public class GameViewGUI implements Initializable, GameView {
         Client.getInstance().setCurrentActionType(tipo);
         Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
     }
+
     public void btnActionGroup2Clicked() {
         ActionType tipo = buttonActionTypeMap.get(2);
         Client.getInstance().setCurrentActionType(tipo);
         Client.getInstance().getConnection().action(Client.getInstance().getCurrentActionType());
     }
+
     public void btnActionGroup3Clicked() {
         ActionType tipo = buttonActionTypeMap.get(3);
         Client.getInstance().setCurrentActionType(tipo);
@@ -1359,7 +1389,7 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     public void setTextAndEnableBtnActionGroup(ActionType actionType, int btnNum) {
-        Platform.runLater( () -> {
+        Platform.runLater(() -> {
             switch (btnNum) {
                 case 1:
                     btnActionGroup1.setVisible(true);
@@ -1408,28 +1438,28 @@ public class GameViewGUI implements Initializable, GameView {
                 gameController.finishCard();
             } else {
                 int index = btlist.indexOf(result.get());
-                if (index == btlist.size()-1) {
+                if (index == btlist.size() - 1) {
                     gameController.finishCard();
-                } else  {
+                } else {
                     Effect chosenEffect = legitEffects.getLegitEffects().get(index);
                     //Would you like to pay with power up?
                     PowerUpCard toPay = null;
-                    if(!chosenEffect.price.isEmpty()) toPay = choosePowerUpDialog();
+                    if (!chosenEffect.price.isEmpty()) toPay = choosePowerUpDialog();
                     gameController.playEffect(chosenEffect, toPay);
                 }
             }
         });
     }
 
-    private PowerUpCard choosePowerUpDialog(){
+    private PowerUpCard choosePowerUpDialog() {
         return choosePowerUpDialog(null, null, null);
     }
 
-    private PowerUpCard choosePowerUpDialog(String headerText, String contentText, List<PowerUpCard> powerUpCards){
+    private PowerUpCard choosePowerUpDialog(String headerText, String contentText, List<PowerUpCard> powerUpCards) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Just a question...");
-        if(headerText==null) headerText = "Do you want to use a power up to pay for this action?";
-        if(contentText==null) contentText = "If yes, select one of yours, if not, please click no.";
+        if (headerText == null) headerText = "Do you want to use a power up to pay for this action?";
+        if (contentText == null) contentText = "If yes, select one of yours, if not, please click no.";
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
 
@@ -1438,10 +1468,10 @@ public class GameViewGUI implements Initializable, GameView {
         btlist.add(new ButtonType("No, I don't."));
         Player me = Client.getInstance().getPlayer();
 
-        if(powerUpCards == null){
+        if (powerUpCards == null) {
             powerUpCards = me.getPowerUpList();
         }
-        if(powerUpCards == null || powerUpCards.isEmpty()) return null;
+        if (powerUpCards == null || powerUpCards.isEmpty()) return null;
 
         for (PowerUpCard powerUpCard : powerUpCards) {
             btlist.add(new ButtonType(powerUpCard.getFullName()));
@@ -1449,19 +1479,21 @@ public class GameViewGUI implements Initializable, GameView {
 
         alert.getButtonTypes().setAll(btlist);
         Optional<ButtonType> result = alert.showAndWait();
-        if(!result.isPresent() || result.get() == btlist.get(0)) return null;
+        if (!result.isPresent() || result.get() == btlist.get(0)) return null;
 
         int index = btlist.indexOf(result.get());
         return powerUpCards.get(index - 1);
     }
 
     private WeaponCard actualWC = null;
+
     public void setActualWC(WeaponCard wc) {
         this.actualWC = wc;
     }
+
     @Override
     public void continueWeapon() {
-        if (actualWC!=null) {
+        if (actualWC != null) {
             gameController.getEffects(actualWC);
         }
     }
@@ -1476,7 +1508,7 @@ public class GameViewGUI implements Initializable, GameView {
         disableActionGroupButtons();
         disableTurnEventButtons();
 
-        for(Player player : winners){
+        for (Player player : winners) {
             showMessage(player.getName() + " WON!");
         }
     }
@@ -1506,13 +1538,13 @@ public class GameViewGUI implements Initializable, GameView {
             case SQUARE:
                 showMessage("Please click on a SQUARE highlighted in green.");
                 for (Taggable t : selectable.get()) {
-                    highlightSquare((Square)t);
+                    highlightSquare((Square) t);
                 }
                 canDoActionMap.put(ViewAction.SELECTSQUARE, true);
                 break;
         }
 
-        if(selectable.isOptional()){
+        if (selectable.isOptional()) {
             setBtnEnabled(btnEndSelect, true);
         }
     }
@@ -1521,7 +1553,7 @@ public class GameViewGUI implements Initializable, GameView {
         onSelectDone(null);
     }
 
-    private void onSelectDone(Taggable selected){
+    private void onSelectDone(Taggable selected) {
         clickableObjects.clear();
         setBtnEnabled(btnEndSelect, false);
         gameController.tagElement(selected, isShooting);
@@ -1529,7 +1561,7 @@ public class GameViewGUI implements Initializable, GameView {
     }
 
     public Color getPlayerColor(String circleColor) {
-        switch (circleColor){
+        switch (circleColor) {
             case "GREEN":
                 return Color.rgb(50, 190, 55);
             case "BLUE":

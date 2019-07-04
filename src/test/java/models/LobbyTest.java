@@ -10,7 +10,7 @@ import java.util.concurrent.Callable;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.awaitility.Awaitility.await;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class LobbyTest {
 
@@ -35,8 +35,8 @@ public class LobbyTest {
     }
 
     @Test
-    public void testGetters(){
-        Lobby lobby = new Lobby(new Config(100,100));
+    public void testGetters() {
+        Lobby lobby = new Lobby(new Config(100, 100));
         String token = TokenGenerator.nextToken();
         Player a = lobby.registerPlayer("a", "", token);
         lobby.registerPlayer("b", "");
@@ -57,8 +57,8 @@ public class LobbyTest {
     }
 
     @Test
-    public void testReconnection(){
-        Lobby lobby = new Lobby(new Config(100,100));
+    public void testReconnection() {
+        Lobby lobby = new Lobby(new Config(100, 100));
         String token = TokenGenerator.nextToken();
         Player a = lobby.registerPlayer("a", "", token);
         lobby.registerPlayer("b", "");
