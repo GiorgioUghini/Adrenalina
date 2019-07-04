@@ -114,6 +114,10 @@ public class GameViewCLI implements GameView {
             }
         }
 
+        for(Player p : map.getAllPlayers()){
+            printPlayerDamages(p);
+        }
+
         //ADD NEW WEAPONS
         for (SpawnPoint sp : map.getSpawnPoints()) {
             Console.println(String.format("Spawn point %s contains the following weapons:", sp.getColor()));
@@ -458,11 +462,7 @@ public class GameViewCLI implements GameView {
     public void onDamage(Player damagedPlayer) {
         //ADD DAMAGE
         acquireLock("onDamage");
-        Console.print(String.format("Player %s was hurt by: ", damagedPlayer.getStringColor()));
-        for (Player from : damagedPlayer.getDamagedBy()) {
-            Console.print(String.format("%s ", from.getStringColor()));
-        }
-        Console.println("\n");
+        printPlayerDamages(damagedPlayer);
         //UPDATE SKULLS IN MAIN PANE
         addSkullsOnMainPane(damagedPlayer);
 
@@ -484,6 +484,14 @@ public class GameViewCLI implements GameView {
             }
         }
         releaseLock();
+    }
+
+    private void printPlayerDamages(Player player){
+        Console.print(String.format("Player %s was hurt by: ", player.getStringColor()));
+        for (Player from : player.getDamagedBy()) {
+            Console.print(String.format("%s ", from.getStringColor()));
+        }
+        Console.print("\n");
     }
 
     @Override
