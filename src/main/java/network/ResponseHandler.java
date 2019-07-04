@@ -123,6 +123,7 @@ public class ResponseHandler implements ResponseHandlerInterface {
     @Override
     public void handle(NextTurnUpdate response) {
         Client client = Client.getInstance();
+        client.getCurrentView().showMessage("Turn has ended. Now it's time for " + response.name + " to play.");
         client.setMyTurn(response.name.equals(client.getPlayerUsername()));
         try {
             ((GameView) client.getCurrentView()).startTurn(response.name);
