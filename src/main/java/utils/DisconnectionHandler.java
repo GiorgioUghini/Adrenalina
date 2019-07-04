@@ -11,6 +11,10 @@ import network.updates.MapUpdate;
 import network.updates.PlayerDisconnectUpdate;
 
 public class DisconnectionHandler {
+    /**
+     * handles the disconnection of the given player. If less than 3 players remain the game ends
+     * @param player the player disconnected
+     */
     public static void handle(Player player) {
         player.disconnect();
         Match match = Server.getInstance().getLobby().getMatch(player);
