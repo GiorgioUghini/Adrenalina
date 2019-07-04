@@ -16,6 +16,12 @@ public class CardController {
     private PowerUpDeck powerUpDeck;
     private AmmoDeck ammoDeck;
 
+    /**
+     * Reads the cards from the json file, workd with all deck
+     * @param filename the name of the json file containing the cards
+     * @param cardType the card type
+     * @return a list containing the read cards
+     */
     private List<Card> getDeserializedCards(String filename, CardType cardType) {
         try {
             String json = getJsonCardDescriptor(filename);
@@ -30,6 +36,11 @@ public class CardController {
         return null;
     }
 
+    /**
+     * creates the right typeToken for the given card type
+     * @param cardType the type of the card
+     * @return the correct typeToken
+     */
     private Type getType(CardType cardType) {
         switch (cardType) {
             case AMMO:
@@ -46,21 +57,36 @@ public class CardController {
         }
     }
 
+    /**
+     * Reads the weapons cards and sets the deck
+     */
     private void loadWeaponCards() {
         List<Card> cards = getDeserializedCards("weapon_cards.json", CardType.WEAPON);
         weaponDeck = new WeaponDeck(cards);
     }
 
+    /**
+     * Reads the powerUp cards and sets the deck
+     */
     private void loadPowerUpCards() {
         List<Card> cards = getDeserializedCards("powerup_cards.json", CardType.POWERUP);
         powerUpDeck = new PowerUpDeck(cards);
     }
 
+    /**
+     * Reads the ammo cards and sets the deck
+     */
     private void loadAmmoCards() {
         List<Card> cards = getDeserializedCards("ammo_cards.json", CardType.AMMO);
         ammoDeck = new AmmoDeck(cards);
     }
 
+    /**
+     * reads the file given as param
+     * @param filename the name of the file to read
+     * @return
+     * @throws IOException if the file does not exist
+     */
     private String getJsonCardDescriptor(String filename) throws IOException {
         InputStream file = ResourceController.getResource(filename);
         return new String(file.readAllBytes());
@@ -72,14 +98,23 @@ public class CardController {
         loadAmmoCards();
     }
 
+    /**
+     * @return the weapon deck
+     */
     public WeaponDeck getWeaponDeck() {
         return weaponDeck;
     }
 
+    /**
+     * @return the powerUp deck
+     */
     public PowerUpDeck getPowerUpDeck() {
         return powerUpDeck;
     }
 
+    /**
+     * @return the ammo deck
+     */
     public AmmoDeck getAmmoDeck() {
         return ammoDeck;
     }

@@ -16,10 +16,18 @@ public class ScreenController {
     private static ScreenController instance;
     private Scene actualScene;
 
+    /**
+     * sets the actual screen scene
+     * @param actualScene
+     */
     public void setActualScene(Scene actualScene) {
         this.actualScene = actualScene;
     }
 
+    /**
+     * returns the actual screen scene
+     * @return
+     */
     public Scene getActualScene() {
         return actualScene;
     }
@@ -43,6 +51,10 @@ public class ScreenController {
         return instance;
     }
 
+    /**
+     * activates the selected scene
+     * @param name the name of the scene, as is in resources/fxml
+     */
     public void activate(String name) {
         Platform.runLater(() -> {
                     actualStage.setTitle(name); //Set the title you like most
