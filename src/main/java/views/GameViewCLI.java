@@ -378,7 +378,6 @@ public class GameViewCLI implements GameView {
             chooseAction();
         }
         releaseLock();
-        if (actions.isEmpty()) firstTurn = false;
     }
 
     /**
@@ -435,6 +434,7 @@ public class GameViewCLI implements GameView {
                 playPowerUp();
                 break;
             case END_TURN:
+                firstTurn = false;
                 gameController.endTurn();
                 Console.println("Your turn ended!");
         }
