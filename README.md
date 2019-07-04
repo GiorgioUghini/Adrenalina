@@ -9,8 +9,10 @@ GitHub Repository for the Source Code and Project Deliverables for group number 
   * [Getting Started](#getting-started)
     + [Prerequisites](#prerequisites)
   * [Launching the Application (easy) - Windows & Linux](#launching-the-application---windows---linux)
-  * [Launching the Application (expert) - Linux](#launching-the-application---linux)
-  * [Launching the Application (expert) - Windows](#launching-the-application---windows)
+    + [Launching the Application (easy) - Windows & Linux](#launching-the-application---windows---linux)
+    + [Launching the Application (expert) - Linux](#launching-the-application---linux)
+    + [Launching the Application (expert) - Windows](#launching-the-application---windows)
+  * [UML Class Diagrams](#uml-class-diagrams)
 
 
 ## Features
@@ -135,3 +137,5 @@ start javaw --module-path ./javafx-sdk-11.0.2-win/lib --add-modules javafx.contr
 cd deliverables/app
 start javaw --module-path ./javafx-sdk-11.0.2-win/lib --add-modules javafx.controls,javafx.fxml -jar ing-sw-2019-17-client.jar --hostname <server-ip>
 ```  
+## UML Class Diagrams
+You can find the complete UML Class Diagram and the packages UML Class Diagrams on `deliverables/app` folder.
