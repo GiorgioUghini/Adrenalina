@@ -138,7 +138,7 @@ public class GameViewCLI implements GameView {
                 Console.print(String.format("%s (%s) - ", powerUpCard.name, powerUpCard.color));
             }
         }
-        Console.print("\nWEAPONS: You have: ");
+        Console.print("\nWEAPONS: You have:" + (newPlayer.getWeaponList().size()==0 ? "\n" : " "));
         //ADD NEW WEAPONS
         for (WeaponCard weaponCard : newPlayer.getWeaponList()) {
             if (newPlayer.getWeaponList().indexOf(weaponCard) == newPlayer.getWeaponList().size()-1) {
@@ -307,6 +307,14 @@ public class GameViewCLI implements GameView {
         }
 
         int i = 1;
+        if (Client.getInstance().getConnection().isRMI()) { //Eseguiamolo solo in RMI, così non imbruttiamo la socket
+            try {
+                Thread.sleep(350);  //Change here
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                Logger.getAnonymousLogger().info(e.toString());
+            }
+        }
         acquireLock("updateActions");
         for(BaseActions baseAction : baseActions){
             Console.println(i++ + " - " + baseAction.toString());

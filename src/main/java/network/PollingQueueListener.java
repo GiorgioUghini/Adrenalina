@@ -1,5 +1,7 @@
 package network;
 
+import utils.Console;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
 
@@ -20,6 +22,7 @@ public class PollingQueueListener implements Runnable {
         while (!stop) {
             try {
                 update = queue.take();
+                Console.printColor(update.getClass().getName()+"\n", Console.COLOR.RED);
                 update.handle(updateHandler);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
