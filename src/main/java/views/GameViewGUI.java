@@ -899,7 +899,7 @@ public class GameViewGUI implements Initializable, GameView {
         }
         numberOfDeath += who.getDeathCount();
         for (int i = 0; i < numberOfDeath; i++) {
-            Ellipse ellipse = new Ellipse(222 + i * 51, 197, 20, 25);
+            Ellipse ellipse = new Ellipse(222d + i * 51, 197, 20, 25);
             ellipse.setFill(Color.rgb(0, 0, 0));
             int index = getIndex(who.getStringColor());
             AnchorPane anchorPane = anchorPanePlayers.get(index);
