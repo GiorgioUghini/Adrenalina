@@ -1,28 +1,26 @@
 package network;
 
-import utils.Console;
-
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
 
-public class PollingQueueListener implements Runnable {
+public class ThreadQueueConsumer implements Runnable {
 
-    private BlockingQueue<Response> queue;
+    private BlockingQueue<Thread> queue;
     private boolean stop;
 
-    public PollingQueueListener(BlockingQueue<Response> queue) {
+    public ThreadQueueConsumer(BlockingQueue<Thread> queue) {
         this.queue = queue;
         this.stop = false;
     }
 
     @Override
     public void run() {
-        ResponseHandler updateHandler = new ResponseHandler();
-        Response update = null;
+        Thread t = null;
         while (!stop) {
             try {
-                update = queue.take();
-                update.handle(updateHandler);
+                t = queue.take();
+                t.start();
+                t.join();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 Logger.getAnonymousLogger().info(e.toString());
@@ -30,7 +28,7 @@ public class PollingQueueListener implements Runnable {
         }
     }
 
-    public void stop() {
+    public void stop(){
         stop = true;
     }
 }

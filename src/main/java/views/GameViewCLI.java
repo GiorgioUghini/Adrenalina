@@ -12,14 +12,16 @@ import network.Client;
 import utils.Console;
 
 import java.util.*;
+import java.util.concurrent.Semaphore;
 import java.util.logging.Logger;
 
 import static utils.Console.*;
+import static utils.Console.println;
 
 public class GameViewCLI implements GameView {
 
     private int maxRunDistance;
-    private HashMap<Integer, ActionType> buttonActionTypeMap = new HashMap<>();
+    private Semaphore semaphore;
     private boolean isShooting;
     private boolean firstTurn = true;
 
@@ -32,6 +34,23 @@ public class GameViewCLI implements GameView {
         printMapNum(Client.getInstance().getMapNum());
         this.gameController = new GameController();
         actionTypeMap = new EnumMap<>(BaseActions.class);
+        this.semaphore = new Semaphore(1);
+    }
+
+    private void acquireLock(String fromWho){
+        try{
+            semaphore.acquire();
+            if(Client.getInstance().isDebug())
+                Console.println("--> acquired "+ semaphore.availablePermits() + " from: "+ fromWho);
+        }catch (InterruptedException e){
+            Logger.getAnonymousLogger().severe(e.getMessage());
+            Thread.currentThread().interrupt();
+        }
+    }
+    private void releaseLock(){
+        semaphore.release();
+        if(Client.getInstance().isDebug())
+            Console.println("--> released "+ semaphore.availablePermits());
     }
 
     @Override
@@ -53,6 +72,8 @@ public class GameViewCLI implements GameView {
 
     @Override
     public void updateMapView(GameMap map) {
+        Client.getInstance().setMap(map);
+        acquireLock("updateMapView");
         Console.println("");
         Console.println("");
         printMapNum(Client.getInstance().getMapNum());
@@ -61,8 +82,14 @@ public class GameViewCLI implements GameView {
         for (Player p : client.getPlayers()) {
             try {
                 Coordinate c = map.getPlayerCoordinates(p);
-                Console.println(String.format("Player %s is on CELL%d%d", p.getStringColor(), c.getX(), c.getY()));
-            } catch (PlayerNotOnMapException e) {
+                if(p.equals(client.getPlayer())){
+                    Console.println(String.format("Player %s (you) is on CELL%d%d", p.getStringColor(), c.getX(), c.getY()));
+                }else{
+                    Console.println(String.format("Player %s is on CELL%d%d", p.getStringColor(), c.getX(), c.getY()));
+                }
+
+            }
+            catch (PlayerNotOnMapException e) {
                 //Nothing to do, just don't draw it.
             }
         }
@@ -77,25 +104,27 @@ public class GameViewCLI implements GameView {
         }
 
         //UPDATE AMMOs
-        for (int x = 0; x < 4; x++) {
-            for (int y = 0; y < 3; y++) {
+        for (int x = 0; x<4; x++) {
+            for (int y=0; y<3; y++) {
                 Square square = map.getSquareByCoordinate(x, y);
                 if (square == null || square.isSpawnPoint()) continue;
                 Console.print(String.format("CELL%d%d contains the following ammos: ", x, y));
                 AmmoPoint ammoPoint = (AmmoPoint) square;
                 AmmoCard ammoCard = ammoPoint.showCard();
-                if (ammoCard != null) {
+                if (ammoCard!=null) {
                     Console.print(String.format("Red: %d, Blue: %d, Yellow: %d", ammoCard.getRed(), ammoCard.getBlue(), ammoCard.getYellow()));
-                    if (ammoCard.hasPowerup()) Console.print(" and a PowerUp");
+                    if(ammoCard.hasPowerup()) Console.print(" and a PowerUp");
                 }
                 Console.println("");
             }
         }
+        releaseLock();
     }
 
     @Override
     public void updatePlayerView(Player newPlayer) {
         Client.getInstance().setPlayer(newPlayer);
+        acquireLock("updatePlayerView");
         //UPDATE AMMO
         Ammo myAmmo = newPlayer.getAmmo();
         Console.print("\nAMMO: You have ");
@@ -103,21 +132,22 @@ public class GameViewCLI implements GameView {
         //ADD NEW POWERUP
         Console.print("\nPOWER UP: You have ");
         for (PowerUpCard powerUpCard : newPlayer.getPowerUpList()) {
-            if (newPlayer.getPowerUpList().indexOf(powerUpCard) == newPlayer.getPowerUpList().size() - 1) {
+            if (newPlayer.getPowerUpList().indexOf(powerUpCard) == newPlayer.getPowerUpList().size()-1) {
                 Console.print(String.format("%s (%s)", powerUpCard.name, powerUpCard.color));
             } else {
                 Console.print(String.format("%s (%s) - ", powerUpCard.name, powerUpCard.color));
             }
         }
-        Console.print("\nWEAPONS: You have: ");
+        Console.print("\nWEAPONS: You have:" + (newPlayer.getWeaponList().size()==0 ? "\n" : " "));
         //ADD NEW WEAPONS
         for (WeaponCard weaponCard : newPlayer.getWeaponList()) {
-            if (newPlayer.getWeaponList().indexOf(weaponCard) == newPlayer.getWeaponList().size() - 1) {
+            if (newPlayer.getWeaponList().indexOf(weaponCard) == newPlayer.getWeaponList().size()-1) {
                 Console.println(weaponCard.name);
             } else {
                 Console.print(weaponCard.name + " - ");
             }
         }
+        releaseLock();
     }
 
     private void addSkullsOnMainPane(Player newPlayer) {
@@ -133,6 +163,7 @@ public class GameViewCLI implements GameView {
 
     @Override
     public void effectChoosingDialog(LegitEffects legitEffects) {
+        acquireLock("effectChoosingDialog");
         Console.println("Which effect do you want to use now?");
 
         int i = 1;
@@ -142,13 +173,14 @@ public class GameViewCLI implements GameView {
         }
         Console.println(i + ") I don't want to use any effect. ");
         int choose = readConsole(i);
+        releaseLock();
 
         if (choose == effectsNumber) {
             gameController.finishCard();
         } else {
             Effect chosenEffect = legitEffects.getLegitEffects().get(choose);
             PowerUpCard toPay = null;
-            if (!chosenEffect.price.isEmpty()) {
+            if(!chosenEffect.price.isEmpty()){
                 //Would you like to pay with power up?
                 toPay = choosePowerUpDialog();
             }
@@ -156,48 +188,46 @@ public class GameViewCLI implements GameView {
         }
     }
 
-    /**
-     * This should be used to pay
-     */
-    private PowerUpCard choosePowerUpDialog() {
+    /** This should be used to pay */
+    private PowerUpCard choosePowerUpDialog(){
         return choosePowerUpDialog(null, null);
     }
 
     private PowerUpCard choosePowerUpDialog(String title, List<PowerUpCard> powerUpCards) {
-        if (Client.getInstance().getPlayer().getPowerUpList().isEmpty()) return null;
-        if (title == null) title = "Do you want to use a power up to pay for this action?";
+        if(Client.getInstance().getPlayer().getPowerUpList().isEmpty()) return null;
+        if(title == null) title = "Do you want to use a power up to pay for this action?";
         Console.println(title);
 
         Player me = Client.getInstance().getPlayer();
-        if (powerUpCards == null) powerUpCards = me.getPowerUpList();
+        if(powerUpCards == null) powerUpCards = me.getPowerUpList();
 
         int i = 0;
-        for (; i < powerUpCards.size(); i++) {
+        for (; i<powerUpCards.size(); i++) {
             PowerUpCard powerUpCard = powerUpCards.get(i);
             Console.println(String.format("%d) %s", i, powerUpCard.getFullName()));
         }
         Console.println(i + ") I don't want to pay with power up. ");
         Console.println("Choose one.");
         int choose = Console.nextInt();
-        while ((choose > powerUpCards.size() + 1) || choose < 0) {
+        while ((choose > powerUpCards.size()+1) || choose<0) {
             Console.print("Number not valid. Choose one.");
             choose = Console.nextInt();
         }
 
-        if (choose == powerUpCards.size()) return null;
+        if(choose == powerUpCards.size()) return null;
 
         return powerUpCards.get(choose);
     }
 
-    private void setActionGroupButtons(Set<ActionType> groupActions) {
-        if (groupActions.size() > 1 && Client.getInstance().getCurrentActionType() == null) {
-            for (ActionType groupAction : groupActions) {
-                switch (groupAction) {
+    private void setActionGroupButtons(Set<ActionType> groupActions){
+        if(groupActions.size() > 1 && Client.getInstance().getCurrentActionType()==null){
+            for(ActionType groupAction : groupActions){
+                switch (groupAction){
                     case SHOOT_VERY_LOW_LIFE:
                     case SHOOT_FRENZY_2:
                     case SHOOT_FRENZY_1:
                     case SHOOT_NORMAL:
-                        if (canShoot()) {
+                        if(canShoot()){
                             baseActions.add(BaseActions.SHOOT);
                             actionTypeMap.put(BaseActions.SHOOT, groupAction);
                         }
@@ -219,7 +249,7 @@ public class GameViewCLI implements GameView {
         }
     }
 
-    private void setTurnEventButtons(List<TurnEvent> turnEvents) {
+    private void setTurnEventButtons(List<TurnEvent> turnEvents){
         for (TurnEvent turnEvent : turnEvents) {
             BaseActions buttonToShow = null;
             switch (turnEvent) {
@@ -240,7 +270,7 @@ public class GameViewCLI implements GameView {
                     buttonToShow = BaseActions.RELOAD;
                     break;
                 case SPAWN:
-                    if (turnEvents.size() == 1) {
+                    if(turnEvents.size()==1){
                         buttonToShow = BaseActions.SPAWN;
                     }
                     break;
@@ -249,7 +279,7 @@ public class GameViewCLI implements GameView {
                     break;
                 default:
             }
-            if (buttonToShow != null) {
+            if(buttonToShow!=null){
                 baseActions.add(buttonToShow);
             }
 
@@ -263,13 +293,13 @@ public class GameViewCLI implements GameView {
 
         boolean turnIsEnding = actions.isEmpty() && client.isMyTurn();
 
-        if (turnIsEnding) baseActions.add(BaseActions.END_TURN);
+        if(turnIsEnding) baseActions.add(BaseActions.END_TURN);
         //this must be called before setTurnEventButtons or it breaks the frenzy reload
-        if (turnIsEnding && !firstTurn) baseActions.add(BaseActions.RELOAD);
+        if(turnIsEnding && !firstTurn) baseActions.add(BaseActions.RELOAD);
 
-        if (currentActionType == null) {
+        if(currentActionType==null){
             setActionGroupButtons(actions.keySet());
-            if (actions.size() != 1 && Client.getInstance().isMyTurn() && !firstTurn) {
+            if(actions.size()!=1  && Client.getInstance().isMyTurn() && !firstTurn){
                 baseActions.add(BaseActions.USE_POWERUP);
             }
         } else {
@@ -277,13 +307,23 @@ public class GameViewCLI implements GameView {
         }
 
         int i = 1;
-        for (BaseActions baseAction : baseActions) {
+        if (Client.getInstance().getConnection().isRMI()) { //Eseguiamolo solo in RMI, così non imbruttiamo la socket
+            try {
+                Thread.sleep(350);  //Change here
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                Logger.getAnonymousLogger().info(e.toString());
+            }
+        }
+        acquireLock("updateActions");
+        for(BaseActions baseAction : baseActions){
             Console.println(i++ + " - " + baseAction.toString());
         }
-        if (!baseActions.isEmpty()) {
+        if(!baseActions.isEmpty()){
             chooseAction();
         }
-        if (actions.isEmpty()) firstTurn = false;
+        releaseLock();
+        if(actions.isEmpty()) firstTurn = false;
     }
 
     void chooseAction() {
@@ -298,22 +338,22 @@ public class GameViewCLI implements GameView {
                 gameController.getValidActions();
                 break;
             case RUN:
-                if (currentActionType == null) {
+                if(currentActionType == null){
                     ActionType actionType = actionTypeMap.get(chosenAction);
                     Client.getInstance().setCurrentActionType(actionType);
                     Client.getInstance().getConnection().action(actionType);
                     actionTypeMap.clear();
-                } else {
+                }else{
                     run();
                 }
                 break;
             case SHOOT:
-                if (currentActionType == null) {
+                if(currentActionType == null){
                     ActionType actionType = actionTypeMap.get(chosenAction);
                     Client.getInstance().setCurrentActionType(actionType);
                     Client.getInstance().getConnection().action(actionType);
                     actionTypeMap.clear();
-                } else {
+                }else{
                     shoot();
                 }
                 break;
@@ -324,12 +364,12 @@ public class GameViewCLI implements GameView {
                 spawn();
                 break;
             case GRAB:
-                if (currentActionType == null) {
+                if(currentActionType == null){
                     ActionType actionType = actionTypeMap.get(chosenAction);
                     Client.getInstance().setCurrentActionType(actionType);
                     Client.getInstance().getConnection().action(actionType);
                     actionTypeMap.clear();
-                } else {
+                }else{
                     grab();
                 }
                 break;
@@ -347,7 +387,7 @@ public class GameViewCLI implements GameView {
         Console.println("Choose a powerup to discard and spawn: ");
         Player me = Client.getInstance().getPlayer();
         int i = 1;
-        for (PowerUpCard powerUpCard : me.getPowerUpList()) {
+        for(PowerUpCard powerUpCard : me.getPowerUpList()){
             Console.println(i++ + ") " + powerUpCard.getFullName());
         }
         int choice = readConsole(me.getPowerUpList().size());
@@ -358,61 +398,75 @@ public class GameViewCLI implements GameView {
     @Override
     public void onDamage(Player damagedPlayer) {
         //ADD DAMAGE
-        Console.println(String.format("Player %s was hurt by ", damagedPlayer.getStringColor()));
+        acquireLock("onDamage");
+        Console.print(String.format("Player %s was hurt by: ", damagedPlayer.getStringColor()));
         for (Player from : damagedPlayer.getDamagedBy()) {
-            Console.print(String.format("Player %s ", from.getStringColor()));
+            Console.print(String.format("%s ", from.getStringColor()));
         }
+        Console.println("\n");
         //UPDATE SKULLS IN MAIN PANE
         addSkullsOnMainPane(damagedPlayer);
 
         Player me = Client.getInstance().getPlayer();
-        if (damagedPlayer.equals(me)) {
+        if(damagedPlayer.equals(me)){
             List<PowerUpCard> playable = new ArrayList<>();
-            for (PowerUpCard powerUpCard : me.getPowerUpList()) {
-                if (powerUpCard.when.equals("on_damage_received")) {
+            for(PowerUpCard powerUpCard : me.getPowerUpList()){
+                if(powerUpCard.when.equals("on_damage_received")){
                     playable.add(powerUpCard);
                 }
             }
-            if (playable.isEmpty()) return;
-            if (me.getLastDamager() == null) return;
+            if(playable.isEmpty() || me.getLastDamager()==null) {
+                releaseLock();
+                return;
+            }
             PowerUpCard powerUpCard = choosePowerUpDialog("You have been damaged by " + me.getLastDamager().getName() + " would you like to mark him?", playable);
-            if (powerUpCard != null) {
+            if(powerUpCard!=null){
                 Client.getInstance().getConnection().playPowerUp(powerUpCard.name, null, null);
             }
         }
+        releaseLock();
     }
 
     @Override
     public void onMark(Player markedPlayer) {
         //ADD MARKS
-        if (!markedPlayer.hasMarks()) return;
-        Console.println(String.format("Player %s is marked by ", markedPlayer.getStringColor()));
+        acquireLock("onMark");
+        if(!markedPlayer.hasMarks()) {
+            releaseLock();
+            return;
+        }
+        Console.print(String.format("Player %s is marked by: ", markedPlayer.getStringColor()));
         for (Player from : Client.getInstance().getPlayers()) {
             for (int k = 0; k < markedPlayer.getMarksFromPlayer(from); k++) {
-                Console.print("Player " + from.getStringColor() + " ");
+                Console.print(from.getStringColor() + " ");
             }
         }
+        Console.println("\n");
         //UPDATE SKULLS IN MAIN PANE
         addSkullsOnMainPane(markedPlayer);
+        releaseLock();
     }
 
     @Override
     public void updatePoints(Map<Player, Integer> map) {
+        acquireLock("updatePoints");
         for (Player p : Client.getInstance().getPlayers()) {
             int points = map.get(p);
             Console.println(String.format("Player %s has %d points.", p.getStringColor(), points));
         }
+        releaseLock();
     }
 
     @Override
     public void selectTag(Selectable selectable) {
+        acquireLock("selectTag");
         Console.println("Please select a " + selectable.getType());
         List<Taggable> taggables = new ArrayList<>(selectable.get());
         int i = 1;
         int max = taggables.size();
-        for (Taggable taggable : taggables) {
+        for(Taggable taggable : taggables){
             String tag = null;
-            switch (selectable.getType()) {
+            switch (selectable.getType()){
                 case ROOM:
                     tag = taggable.toString();
                     break;
@@ -425,50 +479,51 @@ public class GameViewCLI implements GameView {
             }
             Console.println(i++ + ") " + tag);
         }
-        if (selectable.isOptional()) {
+        if(selectable.isOptional()){
             Console.println(i + ") Nothing");
             max++;
         }
         int result = readConsole(max);
-        if (result == taggables.size()) {
+        releaseLock();
+        if(result == taggables.size()){
             gameController.tagElement(null, isShooting);
-        } else {
+        }else{
             Taggable tagged = taggables.get(result);
             gameController.tagElement(tagged, isShooting);
         }
     }
 
-    private void grab() {
+    private void grab(){
         Client client = Client.getInstance();
         GameMap gameMap = client.getMap();
         Player me = client.getPlayer();
 
         Square mySquare = gameMap.getPlayerPosition(me);
-        if (mySquare.isSpawnPoint()) {
+        if(mySquare.isSpawnPoint()){
             SpawnPoint spawnPoint = (SpawnPoint) mySquare;
             int i = 1;
             Console.println("Which weapon do you want to draw?");
-            for (WeaponCard weaponCard : spawnPoint.showCards()) {
+            for(WeaponCard weaponCard : spawnPoint.showCards()){
                 Console.println(i++ + " " + weaponCard.name + ", price: " + weaponCard.drawPrice);
             }
             int result = readConsole(spawnPoint.showCards().size());
             WeaponCard toDraw = spawnPoint.showCards().get(result);
             PowerUpCard powerUpToPay = null;
             WeaponCard toRelease = null;
-            if (!toDraw.drawPrice.isEmpty()) {
+            if(!toDraw.drawPrice.isEmpty()){
                 powerUpToPay = choosePowerUpDialog();
             }
-            if (me.getWeaponList().size() == 3) {
+            if(me.getWeaponList().size() == 3){
                 Console.println("You have to leave one of your weapons to draw this one");
                 toRelease = chooseWeaponDialog(me.getWeaponList());
             }
             gameController.grab(toDraw, toRelease, powerUpToPay);
-        } else {
+        }else{
             gameController.grab(null, null, null);
         }
     }
 
-    private void run() {
+    private void run(){
         Client client = Client.getInstance();
         GameMap gameMap = client.getMap();
         Player me = client.getPlayer();
@@ -477,7 +532,7 @@ public class GameViewCLI implements GameView {
         List<Square> runnableList = new ArrayList<>(runnableSet);
         Console.println("Where do you want to go?");
         int i = 1;
-        for (Square s : runnableList) {
+        for(Square s : runnableList){
             Coordinate c = gameMap.getSquareCoordinates(s);
             Console.println(i++ + ") CELL " + c.getX() + c.getY());
         }
@@ -487,7 +542,7 @@ public class GameViewCLI implements GameView {
         gameController.run(te, selected);
     }
 
-    private void shoot() {
+    private void shoot(){
         //if you are here you surely have at least one loaded weapon.
         Client client = Client.getInstance();
         GameMap gameMap = client.getMap();
@@ -501,34 +556,34 @@ public class GameViewCLI implements GameView {
         continueWeapon();
     }
 
-    private void reload() {
+    private void reload(){
         Player me = Client.getInstance().getPlayer();
-        if (getLoadedWeapons(me).size() == me.getWeaponList().size()) {
-            showMessage("Nothing to reload");
-        } else {
+        if(getLoadedWeapons(me).size() == me.getWeaponList().size()){
+            Console.println("Nothing to reload");
+        }else{
             List<WeaponCard> reloadableWeapons;
             Map<WeaponCard, PowerUpCard> reloads = new HashMap<>();
-            while (!(reloadableWeapons = getReloadableWeapons(me)).isEmpty()) {
+            while(!(reloadableWeapons= getReloadableWeapons(me)).isEmpty()){
                 Console.println("Choose which weapon you want to reload: ");
                 int i = 1;
-                for (WeaponCard weaponCard : reloadableWeapons) {
+                for(WeaponCard weaponCard : reloadableWeapons){
                     Console.println(i++ + ") " + weaponCard.getName() + ", price: " + weaponCard.getReloadPrice());
                 }
                 Console.println(i + ") Nothing");
                 int result = readConsole(i);
-                if (result == reloadableWeapons.size()) {
+                if(result == reloadableWeapons.size()){
                     break;
                 }
                 WeaponCard toReload = reloadableWeapons.get(result);
                 PowerUpCard toPay = null;
-                if (!me.getPowerUpList().isEmpty()) {
+                if(!me.getPowerUpList().isEmpty()){
                     toPay = choosePowerUpDialog();
                 }
                 reloads.put(toReload, toPay);
                 me.reloadWeapon(toReload, toPay);
             }
-            if (reloadableWeapons.isEmpty()) {
-                showMessage("You cannot reload anything else");
+            if(reloadableWeapons.isEmpty()) {
+                Console.println("You cannot reload anything else");
             }
             Client.getInstance().getConnection().reload(reloads);
         }
@@ -538,21 +593,21 @@ public class GameViewCLI implements GameView {
     private void playPowerUp() {
         Player me = Client.getInstance().getPlayer();
         List<PowerUpCard> selectablePowerUps = getPlayablePowerUps(me);
-        if (selectablePowerUps.isEmpty()) {
-            showMessage("You cannot play any powerUp");
-        } else {
+        if(selectablePowerUps.isEmpty()){
+            Console.println("You cannot play any powerUp!");
+        }else{
             PowerUpCard powerUpCard = choosePowerUpDialog("Which powerup do you want to use?", selectablePowerUps);
             Ammo ammoToPay = null;
             PowerUpCard powerUpToPay = null;
-            if (powerUpCard != null) {
-                if (powerUpCard.getHasPrice()) {
+            if(powerUpCard!=null){
+                if(powerUpCard.getHasPrice()){
                     ammoToPay = chooseOneAmmoDialog(me);
-                    if (ammoToPay == null) {
+                    if(ammoToPay == null){
                         List<PowerUpCard> powerUpsToPay = me.getPowerUpList();
                         powerUpsToPay.remove(powerUpCard);
                         powerUpToPay = choosePowerUpDialog("Choose a powerUp to pay", powerUpsToPay);
-                        if (powerUpToPay == null) {
-                            showMessage("You must pay to use this powerUp");
+                        if(powerUpToPay==null) {
+                            Console.println("You must pay to use this powerUp");
                             gameController.getValidActions();
                             return;
                         }
@@ -565,42 +620,40 @@ public class GameViewCLI implements GameView {
         gameController.getValidActions();
     }
 
-    /**
-     * Shows all ammo colors of which you have at least one cube and an option to pay with a powerup instead
-     */
+    /** Shows all ammo colors of which you have at least one cube and an option to pay with a powerup instead */
     private Ammo chooseOneAmmoDialog(Player player) {
         Ammo myAmmo = player.getAmmo();
-        if (myAmmo.isEmpty()) return null;
+        if(myAmmo.isEmpty()) return null;
         Console.println("Choose one ammo cube of any color:");
         List<String> options = new ArrayList<>();
-        if (myAmmo.red > 0) options.add("Red");
-        if (myAmmo.blue > 0) options.add("Blue");
-        if (myAmmo.yellow > 0) options.add("Yellow");
+        if(myAmmo.red>0)options.add("Red");
+        if(myAmmo.blue>0)options.add("Blue");
+        if(myAmmo.yellow>0)options.add("Yellow");
         options.add("I want to pay with a powerUp");
 
-        int i = 1;
-        for (String s : options) {
+        int i =1;
+        for(String s : options){
             Console.println(i++ + ") " + s);
         }
         int choice = readConsole(options.size());
         String chosenOption = options.get(choice);
-        switch (chosenOption) {
+        switch (chosenOption){
             case "Red":
-                return new Ammo(1, 0, 0);
+                return new Ammo(1,0,0);
             case "Blue":
-                return new Ammo(0, 1, 0);
+                return new Ammo(0,1,0);
             case "Yellow":
-                return new Ammo(0, 0, 1);
+                return new Ammo(0,0,1);
             default:
                 return null;
         }
     }
 
-    private List<PowerUpCard> getPlayablePowerUps(Player player) {
+    private List<PowerUpCard> getPlayablePowerUps(Player player){
         List<PowerUpCard> out = player.getPowerUpList();
         List<PowerUpCard> toRemove = new ArrayList<>();
-        for (PowerUpCard powerUpCard : out) {
-            if (powerUpCard.when.equals("on_damage_received") || (powerUpCard.getHasPrice() && player.getAmmo().isEmpty() && player.getPowerUpList().size() == 1)) {
+        for(PowerUpCard powerUpCard : out){
+            if(powerUpCard.when.equals("on_damage_received") || (powerUpCard.getHasPrice() && player.getAmmo().isEmpty() && player.getPowerUpList().size()==1) ) {
                 toRemove.add(powerUpCard);
             }
         }
@@ -608,33 +661,33 @@ public class GameViewCLI implements GameView {
         return out;
     }
 
-    private List<WeaponCard> getReloadableWeapons(Player player) {
+    private List<WeaponCard> getReloadableWeapons(Player player){
         List<WeaponCard> reloadable = new ArrayList<>();
-        for (WeaponCard weaponCard : player.getWeaponList()) {
-            if (!weaponCard.isLoaded() && weaponCard.canReload(player.getAmmo(), player.getPowerUpList())) {
+        for(WeaponCard weaponCard : player.getWeaponList()){
+            if(!weaponCard.isLoaded() && weaponCard.canReload(player.getAmmo(), player.getPowerUpList())){
                 reloadable.add(weaponCard);
             }
         }
         return reloadable;
     }
 
-    private boolean canShoot() {
+    private boolean canShoot(){
         Player me = Client.getInstance().getPlayer();
         return !getLoadedWeapons(me).isEmpty();
     }
 
-    private List<WeaponCard> getLoadedWeapons(Player player) {
+    private List<WeaponCard> getLoadedWeapons(Player player){
         List<WeaponCard> loadedWeapons = new ArrayList<>();
-        for (WeaponCard weaponCard : player.getWeaponList()) {
-            if (weaponCard.isLoaded()) loadedWeapons.add(weaponCard);
+        for(WeaponCard weaponCard : player.getWeaponList()){
+            if(weaponCard.isLoaded()) loadedWeapons.add(weaponCard);
         }
         return loadedWeapons;
     }
 
-    private WeaponCard chooseWeaponDialog(List<WeaponCard> weaponCards) {
+    private WeaponCard chooseWeaponDialog(List<WeaponCard> weaponCards){
         Console.println("Choose a weapon:");
         int i = 1;
-        for (WeaponCard weaponCard : weaponCards) {
+        for(WeaponCard weaponCard : weaponCards){
             Console.println(i++ + ") " + weaponCard.name);
         }
         int result = readConsole(weaponCards.size());
@@ -642,14 +695,12 @@ public class GameViewCLI implements GameView {
     }
 
     private WeaponCard actualWC = null;
-
     public void setActualWC(WeaponCard wc) {
         this.actualWC = wc;
     }
-
     @Override
     public void continueWeapon() {
-        if (actualWC != null) {
+        if (actualWC!=null) {
             gameController.getEffects(actualWC);
         }
     }
@@ -662,13 +713,15 @@ public class GameViewCLI implements GameView {
 
     @Override
     public void onEndMatch(List<Player> winners, Map<Player, Integer> pointers) {
-        for (Map.Entry<Player, Integer> entry : pointers.entrySet()) {
+        acquireLock("onEndMatch");
+        for(Map.Entry<Player, Integer> entry : pointers.entrySet()){
             Console.println(String.format("%s scored %d points", entry.getKey().getName(), entry.getValue()));
         }
         Console.println("\n");
-        for (Player player : winners) {
+        for(Player player : winners){
             Console.println(player.getName() + " WON!");
         }
+        releaseLock();
     }
 
     @Override
@@ -678,7 +731,9 @@ public class GameViewCLI implements GameView {
 
     @Override
     public void showMessage(String message) {
+        acquireLock("showMessage");
         Console.printColor(message + "\n", COLOR.PURPLE);
+        releaseLock();
     }
 
     @Override
@@ -700,44 +755,44 @@ public class GameViewCLI implements GameView {
 
         GameMap gameMap = MapGenerator.generate(num);
 
-        for (int j = 0; j < 5; j++) {
-            for (int i = 0; i < 4; i++) {
-                if (j % 2 == 0) {
-                    printContent(gameMap, i, j / 2);
-                } else {
-                    printBottom(gameMap, i, (j - 1) / 2);
+        for(int j = 0; j<5; j++){
+            for(int i = 0; i<4; i++){
+                if(j%2 ==0){
+                    printContent(gameMap, i, j/2);
+                }else{
+                    printBottom(gameMap, i, (j-1)/2);
                 }
             }
         }
         println("╚═════════╩═════════╩═════════╩═════════╝");
     }
 
-    private void printBottom(GameMap gameMap, int x, int y) {
+    private void printBottom(GameMap gameMap, int x, int y){
         Square s = gameMap.getSquareByCoordinate(x, y);
-        boolean bottomWalk = s != null && s.hasNextWalkable(CardinalDirection.BOTTOM);
-        if (x == 0) {
+        boolean bottomWalk = s!=null && s.hasNextWalkable(CardinalDirection.BOTTOM);
+        if(x==0){
             print("╠═══");
-        } else {
+        }else{
             print("╬═══");
         }
-        if (bottomWalk) {
+        if(bottomWalk){
             print("   ═══");
-        } else {
+        }else{
             print("══════");
         }
-        if (x == 3) {
+        if(x==3){
             print("╣\n");
         }
     }
 
-    private void printContent(GameMap gameMap, int x, int y) {
+    private void printContent(GameMap gameMap, int x, int y){
         Square s = gameMap.getSquareByCoordinate(x, y);
 
-        if (s == null) {
+        if(s==null){
             print("║         ");
-        } else {
+        }else{
             boolean leftWalk = s.hasNextWalkable(CardinalDirection.LEFT);
-            if (leftWalk)
+            if(leftWalk)
                 print(" ");
             else
                 print("║");
@@ -746,34 +801,27 @@ public class GameViewCLI implements GameView {
             COLOR color = getColor(s.getColor());
             printColor(text, color);
         }
-        if (x == 3) print("║\n");
+        if(x==3) print("║\n");
     }
 
-    private COLOR getColor(RoomColor color) {
-        switch (color) {
-            case YELLOW:
-                return COLOR.YELLOW;
-            case BLUE:
-                return COLOR.BLU;
-            case RED:
-                return COLOR.RED;
-            case GREEN:
-                return COLOR.GREEN;
-            case WHITE:
-                return COLOR.WHITE;
-            case PURPLE:
-                return COLOR.PURPLE;
-            default:
-                return null;
+    private COLOR getColor(RoomColor color){
+        switch (color){
+            case YELLOW: return COLOR.YELLOW;
+            case BLUE: return COLOR.BLU;
+            case RED: return COLOR.RED;
+            case GREEN: return COLOR.GREEN;
+            case WHITE: return COLOR.WHITE;
+            case PURPLE: return COLOR.PURPLE;
+            default: return null;
         }
     }
 
-    private int readConsole(int max) {
+    private int readConsole(int max){
         int x = Console.nextInt();
-        while (x < 1 || x > max) {
+        while(x<1 || x > max){
             Console.println("Invalid input. Try again:");
             x = Console.nextInt();
         }
-        return x - 1;
+        return x-1;
     }
 }

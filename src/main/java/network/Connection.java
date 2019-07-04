@@ -14,6 +14,8 @@ import java.util.Map;
 public interface Connection {
     void init();
 
+    boolean isRMI();
+
     String getToken();
 
     void setToken(String token);
