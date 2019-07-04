@@ -245,7 +245,7 @@ public class GameViewCLI implements GameView {
             PowerUpCard powerUpCard = powerUpCards.get(i);
             Console.println(String.format("%d) %s", i, powerUpCard.getFullName()));
         }
-        Console.println(i + ") I don't want to pay with power up. ");
+        Console.println(i + ") None ");
         Console.println("Choose one.");
         int choose = Console.nextInt();
         while ((choose > powerUpCards.size()+1) || choose<0) {
