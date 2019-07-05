@@ -28,27 +28,31 @@ public class Console {
      * @param color the color of the message to write
      */
     public static void printColor(String message, COLOR color) {
-        switch (color) {
-            case BLU:
-                print("\u001B[34m" + message);
-                break;
-            case RED:
-                print("\u001B[31m" + message);
-                break;
-            case WHITE:
-                print(message);
-                break;
-            case PURPLE:
-                print("\u001B[35m" + message);
-                break;
-            case YELLOW:
-                print("\u001B[33m" + message);
-                break;
-            case GREEN:
-                print("\u001B[32m" + message);
-                break;
+        if (OsProperties.isWindows()) {
+            print(message);
+        } else {
+            switch (color) {
+                case BLU:
+                    print("\u001B[34m" + message);
+                    break;
+                case RED:
+                    print("\u001B[31m" + message);
+                    break;
+                case WHITE:
+                    print(message);
+                    break;
+                case PURPLE:
+                    print("\u001B[35m" + message);
+                    break;
+                case YELLOW:
+                    print("\u001B[33m" + message);
+                    break;
+                case GREEN:
+                    print("\u001B[32m" + message);
+                    break;
+            }
+            print("\u001B[0m");
         }
-        print("\u001B[0m");
     }
 
     /**
