@@ -14,7 +14,7 @@ GitHub Repository for the Source Code and Project Deliverables for group number 
     + [Launching the Application (expert) - Windows](#launching-the-application---windows)
   * [UML Class Diagrams](#uml-class-diagrams)
   * [Generate JAR with Maven](#generate-jar-with-maven)
-  * [Browse JavaDOC] (#javadoc)
+  * [Browse JavaDOC](#javadoc)
 
 
 ## Features
