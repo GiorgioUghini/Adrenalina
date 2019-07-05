@@ -102,7 +102,7 @@ The production server configuration does not use any options.
 
 ```
 cd deliverables/app
-java -jar ing-sw-2019-17-server.jar
+java -jar server.jar
 ```
 
 This commands starts the Adrenaline Server on localhost.
