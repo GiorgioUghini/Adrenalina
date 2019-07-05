@@ -42,6 +42,7 @@ These instructions will get you a copy of the project up and running on your loc
 git clone git@github.com:CosimoRusso/ing-sw-2019-17.git
 ```
 ## Launching the Application - Windows & Linux
+Browse to `deliverables/` folder and unzip the file `app.7z`
 ### Plug and Play configuration - Server
 Browse to `deliverables/app`  and click on `StartServer.sh` file if you are using Linux or on  `StartServer.bat` for Windows users.
 
@@ -59,7 +60,7 @@ The production server configuration does not use any options.
 
 ```
 cd deliverables/app
-java -jar ing-sw-2019-17-server.jar
+java -jar server.jar
 ```
 
 This commands start the Adrenaline Server on localhost.
@@ -72,12 +73,12 @@ If you would like to launch Adrenaline Clients **on the same machine** where the
 #### For localhost GUI:
 ```
 cd deliverables/app
-java --module-path ./javafx-sdk-11.0.2-linux/lib --add-modules javafx.controls,javafx.fxml -jar ing-sw-2019-17-client.jar --gui
+java --module-path ./javafx-sdk-11.0.2-linux/lib --add-modules javafx.controls,javafx.fxml -jar client.jar --gui
 ```
 #### For localhost CLI:
 ```
 cd deliverables/app
-java --module-path ./javafx-sdk-11.0.2-linux/lib --add-modules javafx.controls,javafx.fxml -jar ing-sw-2019-17-client.jar
+java --module-path ./javafx-sdk-11.0.2-linux/lib --add-modules javafx.controls,javafx.fxml -jar client.jar
 ```  
 
 ### Launch Client to connect Remotely - Linux
@@ -88,12 +89,12 @@ If you would like to launch Adrenaline Clients **on a different machine** where 
 #### For localhost GUI:
 ```
 cd deliverables/app
-java --module-path ./javafx-sdk-11.0.2-linux/lib --add-modules javafx.controls,javafx.fxml -jar ing-sw-2019-17-client.jar --gui --hostname <server-ip>
+java --module-path ./javafx-sdk-11.0.2-linux/lib --add-modules javafx.controls,javafx.fxml -jar client.jar --gui --hostname <server-ip>
 ```
 #### For localhost CLI:
 ```
 cd deliverables/app
-java --module-path ./javafx-sdk-11.0.2-linux/lib --add-modules javafx.controls,javafx.fxml -jar ing-sw-2019-17-client.jar --hostname <server-ip>
+java --module-path ./javafx-sdk-11.0.2-linux/lib --add-modules javafx.controls,javafx.fxml -jar client.jar --hostname <server-ip>
 ```  
 ## Launching the Application - Windows
 For Windows and Linux user you can follow the easier plug-and-play guide. 
@@ -115,12 +116,12 @@ If you would like to launch Adrenaline Clients **on the same machine** where the
 #### For localhost GUI:
 ```
 cd deliverables/app
-start javaw --module-path ./javafx-sdk-11.0.2-win/lib --add-modules javafx.controls,javafx.fxml -jar ing-sw-2019-17-client.jar --gui
+start javaw --module-path ./javafx-sdk-11.0.2-win/lib --add-modules javafx.controls,javafx.fxml -jar client.jar --gui
 ```
 #### For localhost CLI:
 ```
 cd deliverables/app
-start javaw --module-path ./javafx-sdk-11.0.2-win/lib --add-modules javafx.controls,javafx.fxml -jar ing-sw-2019-17-client.jar
+start javaw --module-path ./javafx-sdk-11.0.2-win/lib --add-modules javafx.controls,javafx.fxml -jar client.jar
 ```  
 
 ### Launch Client to connect Remotely - Windows
@@ -131,12 +132,12 @@ If you would like to launch Adrenaline Clients **on a different machine** where 
 #### For localhost GUI:
 ```
 cd deliverables/app
-start javaw --module-path ./javafx-sdk-11.0.2-win/lib --add-modules javafx.controls,javafx.fxml -jar ing-sw-2019-17-client.jar --gui --hostname <server-ip>
+start javaw --module-path ./javafx-sdk-11.0.2-win/lib --add-modules javafx.controls,javafx.fxml -jar client.jar --gui --hostname <server-ip>
 ```
 #### For localhost CLI:
 ```
 cd deliverables/app
-start javaw --module-path ./javafx-sdk-11.0.2-win/lib --add-modules javafx.controls,javafx.fxml -jar ing-sw-2019-17-client.jar --hostname <server-ip>
+start javaw --module-path ./javafx-sdk-11.0.2-win/lib --add-modules javafx.controls,javafx.fxml -jar client.jar --hostname <server-ip>
 ```  
 ## UML Class Diagrams
 You can find the complete UML Class Diagram and the packages UML Class Diagrams on `deliverables/uml` folder.
