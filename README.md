@@ -28,7 +28,8 @@ We developed all the base features, including:
 
 ### Additional features
 
-We have chosen to implement a Server that can run Multiple Matches at the same time.
+- Implement a Server that can run Multiple Matches at the same time.
+- We created an hand-written UML schema that will be shown and explained on our presentation.
 
 ## Getting Started
 
