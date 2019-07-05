@@ -14,6 +14,7 @@ GitHub Repository for the Source Code and Project Deliverables for group number 
     + [Launching the Application (expert) - Windows](#launching-the-application---windows)
   * [UML Class Diagrams](#uml-class-diagrams)
   * [Generate JAR with Maven](#generate-jar-with-maven)
+  * [Browse JavaDOC] (#javadoc)
 
 
 ## Features
@@ -142,3 +143,5 @@ start javaw --module-path ./javafx-sdk-11.0.2-win/lib --add-modules javafx.contr
 You can find the complete UML Class Diagram and the packages UML Class Diagrams on `deliverables/uml` folder.
 ## Generate JAR with Maven
 Open Maven command shell and execute `package`. You'll find a new folder named `target` that contains `server.jar` and `client.jar` Java files!
+## JavaDOC
+You can browse our complete JavaDOC by visiting `/deliverables/JavaDoc/index.html` in your web browser.
