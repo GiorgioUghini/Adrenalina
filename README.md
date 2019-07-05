@@ -36,13 +36,12 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 - Java FX SDK 11 dependency for your Operating System (for Windows and Linux user you can use the one from deliverables/app folder)
-- The complete deliverables/app folder
+- Browse to `deliverables/` folder and unzip the file `app.7z`
 
 ```
 git clone git@github.com:CosimoRusso/ing-sw-2019-17.git
 ```
 ## Launching the Application - Windows & Linux
-Browse to `deliverables/` folder and unzip the file `app.7z`
 ### Plug and Play configuration - Server
 Browse to `deliverables/app`  and click on `StartServer.sh` file if you are using Linux or on  `StartServer.bat` for Windows users.
 
